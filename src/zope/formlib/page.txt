@@ -1,0 +1,121 @@
+=====
+Pages
+=====
+
+This is an experimental facility for defining pages in Python.
+
+A page is a view that's implemented in Python and registered in ZCML.
+
+The goal of pages is to put definitions in Python, rather than in
+ZCML.
+
+Pages are simply objects that implement views.  There are a number of
+mix-in classes that make this easier.
+
+There are different kinds of pages:
+
+- Adapters, which provide some interface
+
+- Pages, which provide published objects
+
+What are the sorts of facilities we need?
+
+- Browser Publishing -- A browser-published object needs to provide
+  IBrowserPublisher.
+
+- Widget management
+
+  - Widget set up
+
+    - We can set up widgets for input, editing, or display
+
+      - select widget type
+
+      - initialize widgets with existing data in edit case
+
+  - Input processing
+
+ - Actions/buttons 
+
+A major goal is to make creating pages simple and explicit
+
+Creating simple pages
+=====================
+
+To create a page, which is an object that is published as a page, 
+you need to provide an object that:
+
+- has a __call__ method and that
+
+- provides IBrowserPublisher, and
+
+If ZPT is going to be used, then your object should also provide
+request and context attributes.
+
+The Page base class provides a standard constructor
+and a simple implementation of IBrowserPublisher:
+
+    >>> import zope.formlib
+    >>> class MyPage(zope.formlib.Page):
+    ...     pass
+
+    >>> from zope.publisher.browser import TestRequest
+    >>> request = TestRequest()
+    >>> context = object()
+    >>> page = MyPage(context, request)
+
+    >>> from zope.publisher.interfaces.browser import IBrowserPublisher
+    >>> IBrowserPublisher.providedBy(page)
+    True
+
+    >>> page.browserDefault(request) == (page, ())
+    True
+
+    >>> page.publishTraverse(request, 'bob') # doctest: +ELLIPSIS
+    Traceback (most recent call last):
+    ...
+    NotFound: Object: <MyPage object at ...>, name: 'bob'
+
+    >>> page.request is request
+    True
+
+    >>> page.context is context
+    True
+
+But it doesn't supply a __call__ method:
+
+    >>> page()
+    Traceback (most recent call last):
+    ...
+    TypeError: 'MyPage' object is not callable
+
+It is the subclass' responsibility to do that.
+
+If we want to use a page template, we will normally store that
+template in a file and use a ViewPageTemplateFile to add it to a
+class:
+
+    >>> from zope.app.pagetemplate import ViewPageTemplateFile
+    >>> class MyPage(zope.formlib.Page):
+    ...     __call__ = ViewPageTemplateFile('sample.pt')
+
+(See sample.pt in this directory to see the sample template.)
+
+Now, we'll create a content object and use it with our new page:
+
+    >>> class MyContent:
+    ...     def __init__(self, name):
+    ...         self.name = name
+
+    >>> context = MyContent('bob')
+
+    >>> page = MyPage(context, request)
+    >>> print page(1, 2, x=3, y=4)
+    <html><body>
+    Hello bob
+    The URL is http://127.0.0.1
+    The positional arguments were (1, 2)
+    The keyword argument x is 3
+    </body></html>
+    <BLANKLINE>
+

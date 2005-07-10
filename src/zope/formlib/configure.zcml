@@ -1,0 +1,18 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:zc="http://namespaces.zope.com/zc"
+    i18n_domain="zc.page">
+
+  <adapter factory=".form.default_page_template" name="default" />
+  <adapter factory=".form.default_subpage_template" name="default" />
+  <adapter factory=".form.render_submit_button" name="render" />
+
+  <!-- TALES namespace allows view/template:default etc -->
+  <adapter
+      for="*"
+      factory=".namedtemplate.NamedTemplatePathAdapter"
+      name="template" 
+      />
+
+
+</configure>
