@@ -41,7 +41,7 @@ function toggleFormFieldHelp(ob,state) {
 //-->
 </script>
 
-<div id="viewspace">
+<div id="viewspace" metal:define-slot="viewspace">
 
   <h1  i18n:translate=""
        tal:condition="view/label"
@@ -49,34 +49,29 @@ function toggleFormFieldHelp(ob,state) {
        metal:define-slot="heading"
        >Do something</h1>
 
-  <div class="form-status"
-     tal:define="status view/status"
-     tal:condition="status">
+  <metal:block define-macro="header">
 
-    <div class="summary"
-         i18n:translate=""
-         tal:content="view/status">
-      Form status summary
+    <div class="form-status"
+       tal:define="status view/status"
+       tal:condition="status">
+  
+      <div class="summary"
+           i18n:translate=""
+           tal:content="view/status">
+        Form status summary
+      </div>
+  
+      <ul class="errors" tal:condition="view/errors">
+         <li tal:repeat="error view/error_views">
+            <span tal:replace="structure error">Error Type</span>
+         </li>
+      </ul>
     </div>
 
-    <ul class="errors" tal:condition="view/errors">
-       <li tal:repeat="error view/error_views">
-          <span tal:replace="structure error">Error Type</span>
-       </li>
-    </ul>
-  </div>
+  </metal:block>
 
   <div metal:define-slot="extra_info" tal:replace="nothing">
   </div>
-
-<!--
-  <div class="form-controls" tal:condition="view/availableActions"
-       metal:define-slot="top_buttons">
-    <input tal:repeat="action view/actions"
-           tal:replace="structure action/render"
-           />
-  </div>
--->
 
   <table class="form-fields">
     <tr class="row" metal:define-slot="extra_top" tal:replace="nothing">

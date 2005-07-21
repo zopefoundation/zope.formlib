@@ -1530,3 +1530,60 @@ Note that the function passed must take a form as an argument.  The
 `setUpWidgets` function takes an optional 'form' argument, which
 **must** be passed if any fields use the get_rendered option.  The
 form base classes always pass the form to `setUpWidgets`.
+
+Advanced Usage Hints
+====================
+
+This section documents patterns for advanced usage of the formlib package.
+
+Multiple button groups
+----------------------
+
+Multiple button groups can be accomplished many ways, but the way we've found
+that reuses the most code is the following:
+
+    >>> import zope.cachedescriptors.property
+    >>> class MyForm(form.Form):
+    ...     form_fields = form.Fields(IOrder)
+    ...     primary_actions = form.Actions()
+    ...     secondary_actions = form.Actions()
+    ...     @zope.cachedescriptors.property.Lazy
+    ...     def actions(self):
+    ...         return list(self.primary_actions) + list(self.secondary_actions)
+    ...     @form.action(u'Edit', primary_actions)
+    ...     def handle_edit_action(self, action, data):
+    ...         if form.applyChanges(self.context, self.form_fields, data):
+    ...             self.status = 'Object updated'
+    ...         else:
+    ...             self.status = 'No changes'
+    ...     @form.action(u'Submit for review...', secondary_actions)
+    ...     def handle_review_action(self, action, data):
+    ...         print "do something here"
+    ...
+
+The template then can render the button groups separately--something like the
+following, for instance:
+
+    <input tal:repeat="action view/primary_actions"
+       tal:replace="structure action/render"
+       />
+
+and
+
+    <input tal:repeat="action view/secondary_actions"
+       tal:replace="structure action/render"
+       />
+
+But the form machinery can still find the correct button. # TODO: demo
+
+Dividing display of widget errors and invariant errors
+------------------------------------------------------
+
+Even though the form machinery only has a single errors attribute, if designers
+wish to render widget errors differently than invariant errors, they can be
+separated reasonably easily.  The separation takes advantage of the fact that
+all widget errors should implement zope.app.form.interfaces.IWidgetInputError,
+and invariant errors shouldn't, because they don't come from a widget.
+Therefore, a simple division such as the following should suffice.
+
+# TODO

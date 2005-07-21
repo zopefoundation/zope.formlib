@@ -699,7 +699,7 @@ class FormBase(zope.formlib.page.Page):
         return availableActions(self, self.actions)
 
     def resetForm(self):
-        self.setUpWidgets(ignore_request=False)
+        self.setUpWidgets(ignore_request=True)
         
     form_result = None
     form_reset = True
@@ -716,8 +716,8 @@ class FormBase(zope.formlib.page.Page):
             self.status = _('There were errors')
             result = action.failure(data, errors)
         elif errors is not None:
-            result = action.success(data)
             self.form_reset = True
+            result = action.success(data)
         else:
             result = None
 
