@@ -81,12 +81,19 @@ function toggleFormFieldHelp(ob,state) {
     <tbody metal:define-slot="formbody" tal:omit-tag="">
       <tr tal:repeat="widget view/widgets">
         <td class="label" tal:define="hint widget/hint"
-          onmousedown="toggleFormFieldHelp(this,1)"
-          onmouseup="toggleFormFieldHelp(this,0)"
-          onmouseout="toggleFormFieldHelp(this,0)"
           metal:define-macro="labelcell">
-          <label tal:attributes="for widget/name;
-                                 style python:hint and 'cursor: help';">
+          <label tal:condition="python:hint"
+                 tal:attributes="for widget/name"
+                 onmousedown="toggleFormFieldHelp(this,1)"
+                 onmouseup="toggleFormFieldHelp(this,0)"
+                 onmouseout="toggleFormFieldHelp(this,0)"
+                 style="cursor: help">
+            <span class="required" tal:condition="widget/required"
+            >*</span><span i18n:translate=""
+                           tal:content="widget/label">label</span>
+          </label>
+          <label tal:condition="python:not hint"
+                 tal:attributes="for widget/name">
             <span class="required" tal:condition="widget/required"
             >*</span><span i18n:translate=""
                            tal:content="widget/label">label</span>
