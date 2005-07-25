@@ -11,13 +11,17 @@ the examples, we will show "forms" that are generated with simple
 print statements to keep the examples simpler.  Most forms will use
 templates in practice.
 
-This documents starts with low-level APIs.  We eventually build up to
+This document starts with low-level APIs.  We eventually build up to
 higherlevel APIs that allow forms to be defined with just a little bit
 of meta data.  Impatiant readers may wish to skip to the later
 sections, especially the section on `Helpful base classes`_. :)
 
-A form class can define ordered collections of form fields using
-the `Fields` constructor:
+A form class can define ordered collections of "form fields" using
+the `Fields` constructor. Form fields are distinct from and build on
+schema fields.  A schema field specified attribute values.  Form
+fields specify how a schema field should be used in a form.  The
+simplest way to define a collection onf form fields is by passing a
+schema to the `Fields` constructor:
 
     >>> from zope import interface, schema
     >>> class IOrder(interface.Interface):
@@ -31,7 +35,7 @@ the `Fields` constructor:
     >>> class MyForm:
     ...     form_fields = form.Fields(IOrder)
 
-This sets up a set of widgets from the interface, IOrder.
+This sets up a set of form fields from the interface, IOrder.
 
     >>> len(MyForm.form_fields)
     5
@@ -39,7 +43,7 @@ This sets up a set of widgets from the interface, IOrder.
     >>> [w.__name__ for w in MyForm.form_fields]
     ['identifier', 'name', 'min_size', 'max_size', 'now']
 
-We can access individual widgets by name:
+We can access individual form fields by name:
 
     >>> MyForm.form_fields['name'].__name__
     'name'
@@ -66,9 +70,9 @@ setting up the fields:
 Getting HTML
 ============
 
-Having defined widgets, we need to use them. typically, this is done
-at run time by form class instances. Let's look at an example
-that displays some input widgets:
+Having defined form fields, we can use them to generate HTML
+forms. Typically, this is done at run time by form class
+instances. Let's look at an example that displays some input widgets:
 
     >>> class MyForm:
     ...     form_fields = form.Fields(IOrder, omit_readonly=True)
@@ -77,10 +81,10 @@ that displays some input widgets:
     ...         self.context, self.request = context, request
     ...
     ...     def __call__(self, ignore_request=False):
-    ...         form_fields = form.setUpWidgets(
+    ...         widgets = form.setUpWidgets(
     ...             self.form_fields, 'form', self.context, self.request,
     ...             ignore_request=ignore_request)
-    ...         return '\n'.join([w() for w in form_fields])
+    ...         return '\n'.join([w() for w in widgets])
     
 Here we used form.setUpWidgets to create widget instances from our
 form-field specifications.  The second argument to `setUpWidgets` is a
@@ -569,15 +573,15 @@ complicated if there were multiple submit buttons.
 
 We can use action objects to provide some distribution of application logic.
 
-A action is an object that represents a handler for a submit button.
+An action is an object that represents a handler for a submit button.
 
-In the most common case, a action accepts a label and zero or more options
+In the most common case, an action accepts a label and zero or more options
 provided as keyword parameters:
 
 condition
   A callable or name of a method to call to test whether the action is
   applicable.  if the value is a method name, then the method will be
-  passed the action when called, otherwise, the callables will be
+  passed the action when called, otherwise, the callable will be
   passed the form and the action.
 
 validator
@@ -585,9 +589,9 @@ validator
   inputs.  This is called only if the action was submitted and if the
   action either has no condition, or the condition evaluates to a true
   value.  If the validator is provided as a method name, the method
-  will be called the action and a dictionary in which to save data.
+  will be called with the action and a dictionary in which to save data.
   If the validator is provided as a callable, the callable will be
-  called the form, the action, and a dictionary in which to save data.
+  called with the form, the action, and a dictionary in which to save data.
   The validator normally returns a (usually empty) list of widget
   input errors.  It may also return None to behave as if the action
   wasn't submitted.
@@ -596,9 +600,9 @@ success
   A handler, called when the the action was submitted and there are no
   validation errors.  The handler may be provided as either a callable
   or a method name.  If the handler is provided as a method name, the
-  method will be called the action and a dictionary containing the
+  method will be called with the action and a dictionary containing the
   form data.  If the success handler is provided as a callable, the
-  callable will be called the form, the action, and a dictionary
+  callable will be called with the form, the action, and a dictionary
   containing the data.  The handler may return a form result
   (e.g. page), or may return None to indicate that the form should
   generate it's own output.
@@ -607,9 +611,9 @@ failure
   A handler, called when the the action was submitted and there are
   validation errors.  The handler may be provided as either a callable
   or a method name.  If the handler is provided as a method name, the
-  method will be called the action, a dictionary containing the form
+  method will be called with the action, a dictionary containing the form
   data, and a list of errors.  If the failure handler is provided as a
-  callable, the callable will be called the form, the action, a
+  callable, the callable will be called with the form, the action, a
   dictionary containing the data, and a list of errors.  The handler
   may return a form result (e.g. page), or may return None to indicate
   that the form should generate it's own output.
@@ -630,12 +634,7 @@ data
   A bag of extra information that can be used by handlers, validators,
   or conditions.
 
-For the success, failure, condition and validator options, if the
-values are method names, then the methods will be passed the action
-when called, otherwise, the callables will be passed the form and the
-actions. 
-
-Let's update our edit form to use a action. We are also going to
+Let's update our edit form to use an action. We are also going to
 rearrange our form quite a bit to make things more modular:
 
 - We've created a separate `validation` method to validate inputs and
