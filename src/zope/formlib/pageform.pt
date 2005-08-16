@@ -16,14 +16,25 @@
 <script type="text/javascript"><!--
 
 function toggleFormFieldHelp(ob,state) {
-  // ob is the label element
-  var field = ob.form[ob.htmlFor];
-  if (field) {
-    field.style.visibility = state && 'hidden' || 'visible';
-    var help = document.getElementById("field-help-for-" + field.name);
-    if (help) {
-      help.style.visibility = state && 'visible' || 'hidden';
-    }
+  ob = ob.nextSibling;
+  while (ob && ob.className != 'field') {
+    ob = ob.nextSibling;
+  }
+  var td = ob;
+
+  ob = ob.firstChild;
+  while (ob && ob.className != 'form-fields-help')
+    ob = ob.nextSibling;
+  if (ob) {
+    ob.style.visibility = state && 'visible' || 'hidden';
+  }
+
+  ob = td.firstChild;
+  while (ob && ob.className != 'widget') {
+    ob = ob.nextSibling;
+  }
+  if (ob) {
+    ob.style.visibility = state && 'hidden' || 'visible';
   }
 }
 
@@ -94,7 +105,6 @@ function toggleFormFieldHelp(ob,state) {
                i18n:translate=""
                tal:content="hint"
                tal:condition="hint"
-               tal:attributes="id string:field-help-for-${widget/name}"
                onclick="this.style.visibility='hidden';"
                >Title of this content object.</div>
           <div class="widget" tal:content="structure widget">
