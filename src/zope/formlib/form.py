@@ -837,15 +837,15 @@ class AddFormBase(FormBase):
         raise NotImplementedError(
             "concrete classes must implement create() or createAndAdd()")
 
-    __finished_add = False
+    _finished_add = False
 
     def add(self, object):
         ob = self.context.add(object)
-        self.__finished_add = True
+        self._finished_add = True
         return ob
 
     def render(self):
-        if self.__finished_add:
+        if self._finished_add:
             self.request.response.redirect(self.nextURL())
             return ""
         return super(AddFormBase, self).render()
