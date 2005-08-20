@@ -1,4 +1,4 @@
-<html metal:use-macro="context/@@standard_macros/view"
+<html metal:extend-macro="context/@@standard_macros/view"
       metal:define-macro="main">
 <head>
 <!-- XXX Need test -->
