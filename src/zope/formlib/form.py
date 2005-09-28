@@ -724,14 +724,13 @@ class FormBase(zope.formlib.page.Page):
         self.form_result = result 
 
     def render(self):
-        if self.form_reset:
-            # we reset, in case data has changed in a way that
-            # causes the widgets to have different data
-            self.resetForm()
-            self.form_reset = False
-            
-        # if the form has been updated, it will already have a reult
+        # if the form has been updated, it will already have a result
         if self.form_result is None:
+            if self.form_reset:
+                # we reset, in case data has changed in a way that
+                # causes the widgets to have different data
+                self.resetForm()
+                self.form_reset = False
             self.form_result = self.template()
 
         return self.form_result
