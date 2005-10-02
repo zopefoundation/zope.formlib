@@ -85,7 +85,8 @@ function toggleFormFieldHelp(ob,state) {
                tal:condition="hint"
                tal:attributes="id string:field-help-for-${widget/name}"
                onclick="this.style.visibility='hidden';"
-               i18n:translate="" 
+               i18n:translate=""
+               style="visibility: hidden; position: absolute;"
                >Title of this content object.</div>
           <div class="widget" tal:content="structure widget">
           <input type="text" /></div>
