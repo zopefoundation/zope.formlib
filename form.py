@@ -18,6 +18,7 @@ $Id$
 import datetime
 import re
 import sys
+import pytz
 
 import zope.event
 import zope.i18n
@@ -776,12 +777,16 @@ class EditFormBase(FormBase):
                 zope.app.event.objectevent.ObjectModifiedEvent(self.context))
             formatter = self.request.locale.dates.getFormatter(
                 'dateTime', 'medium')
+
+            try:
+                time_zone = idatetime.ITZInfo(self.request)
+            except TypeError:
+                time_zone = type(pytz.UTC)
+
             status = _("Updated on ${date_time}",
                        mapping={'date_time':
                                 formatter.format(
-                                   datetime.datetime.now(
-                                       idatetime.ITZInfo(self.request)
-                                       )
+                                   datetime.datetime.now(time_zone)
                                    )
                         }
                        )
