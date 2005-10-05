@@ -85,7 +85,7 @@ instances. Let's look at an example that displays some input widgets:
     ...             self.form_fields, 'form', self.context, self.request,
     ...             ignore_request=ignore_request)
     ...         return '\n'.join([w() for w in widgets])
-    
+
 Here we used form.setUpWidgets to create widget instances from our
 form-field specifications.  The second argument to `setUpWidgets` is a
 form prefix.  All of the widgets on this form are given the same
@@ -99,35 +99,35 @@ Now, we can display the form:
     >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value=""  />
-    <input class="textType" id="form.min_size" name="form.min_size" size="10" 
+    <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value=""  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value=""  />
 
 If the request contains any form data, that will be reflected in the
-output: 
+output:
 
     >>> request.form['form.name'] = u'bob'
     >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
-    <input class="textType" id="form.min_size" name="form.min_size" size="10" 
+    <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value=""  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value=""  />
 
 Sometimes we don't want this behavior: we want to ignore the request values,
 particularly after a form has been processed and before it is drawn again.
-This can be accomplished with the 'ignore_request' argument in 
+This can be accomplished with the 'ignore_request' argument in
 setUpWidgets.
 
     >>> print MyForm(None, request)(ignore_request=True)
     ... # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value=""  />
-    <input class="textType" id="form.min_size" name="form.min_size" size="10" 
+    <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value=""  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value=""  />
 
 Reading data
@@ -156,7 +156,7 @@ input data.  We can use getWidgetsData for that:
     ...                     print error
     ...         else:
     ...             data = None
-    ...                 
+    ...
     ...         for w in widgets:
     ...             print w()
     ...             error = w.error()
@@ -172,7 +172,7 @@ to get the data, and errors.  We call `getWidgetsData`, passing:
 
 - The form prefix, and
 
-- A data dictionary to contain input values found 
+- A data dictionary to contain input values found
 
 The keys in the data dictionary have the form prefix stripped off.
 
@@ -204,10 +204,10 @@ and max size.  If we provide an invalid value, we'll get an error too:
     >>> request.form['form.min_size'] = u'bob'
     >>> MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
     There were errors:
-    (u'Invalid floating point data', 
+    (u'Invalid floating point data',
      <exceptions.ValueError instance at ...>)
     ('max_size', u'Maximum size', )
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="bob"  />
@@ -226,7 +226,7 @@ If we provide valid data, we'll get the data back:
            type="text" value="bob"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="42.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="142.0"  />
     {'max_size': 142.0,
      'min_size': 42.0,
@@ -271,7 +271,7 @@ We can update our form to check the invariant using 'checkInvariants':
     ...         if 'submit' in self.request:
     ...             data = {}
     ...             errors = form.getWidgetsData(widgets, 'form', data)
-    ...             invariant_errors = form.checkInvariants(self.form_fields, 
+    ...             invariant_errors = form.checkInvariants(self.form_fields,
     ...                                                     data)
     ...             if errors:
     ...                 print 'There were field errors:'
@@ -300,7 +300,7 @@ If we display the form again, we'll get the same result:
            type="text" value="bob"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="42.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="142.0"  />
     {'max_size': 142.0,
      'min_size': 42.0,
@@ -319,7 +319,7 @@ error:
            type="text" value="bob"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="42.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="14.0"  />
     {'max_size': 14.0,
      'min_size': 42.0,
@@ -339,7 +339,7 @@ We can have field errors and invariant errors:
     <span class="error">Required input is missing.</span>
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="42.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="14.0"  />
     {'max_size': 14.0,
      'min_size': 42.0}
@@ -358,7 +358,7 @@ invariants are ignored:
     <span class="error">Required input is missing.</span>
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="42.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value=""  />
     <span class="error">Required input is missing.</span>
     {'min_size': 42.0}
@@ -411,7 +411,7 @@ that uses it:
     ...         return '\n'.join([w() for w in widgets])
 
     >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="" />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="42.0" />
@@ -419,7 +419,7 @@ that uses it:
            type="text" value="" />
 
 Note that, in this case, we got the values from the request, because
-we used an old request.  If we want to redraw the form after processing a 
+we used an old request.  If we want to redraw the form after processing a
 request, it is safest to pass ignore_request = True to setUpWidgets so that
 the form is redrawn with the values as found in the object, not on the request.
 
@@ -495,11 +495,11 @@ object. We can use the `applyChanges` function for that:
     ...                 print 'There were invariant errors:'
     ...                 for error in invariant_errors:
     ...                     print error
-    ...                
+    ...
     ...             if not errors and not invariant_errors:
     ...                 changed = form.applyChanges(
     ...                     self.context, self.form_fields, data)
-    ...                 
+    ...
     ...         else:
     ...             data = changed = None
     ...
@@ -549,7 +549,7 @@ changes were applied:
 
     >>> pprint(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     1
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="42.0"  />
@@ -563,7 +563,7 @@ changes were applied:
 because the new and old values are the same.
 
 The code we included in `MyForm` above is generic: it applies to any
-edit form.  
+edit form.
 
 Actions
 =======
@@ -694,7 +694,7 @@ Here's the new version:
     ...             result.append('There were errors:')
     ...             for error in self.errors:
     ...                 result.append(str(error))
-    ...            
+    ...
     ...         for w in self.widgets:
     ...             result.append(w())
     ...             error = w.error()
@@ -761,13 +761,13 @@ Let's try the new version of our form:
 
     >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
     1
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
-    <input class="textType" id="form.min_size" name="form.min_size" size="10" 
+    <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="42.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="142.0"  />
-    <input type="submit" id="form.actions.edit" name="form.actions.edit" 
+    <input type="submit" id="form.actions.edit" name="form.actions.edit"
            value="Edit" class="button" />
 
 In this case, we didn't get any output about changes because the
@@ -778,17 +778,17 @@ action definition. Let's add one and try again:
     >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
     No changes
     1
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
-    <input class="textType" id="form.min_size" name="form.min_size" size="10" 
+    <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="42.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="142.0"  />
     <input type="submit" id="form.actions.edit" name="form.actions.edit"
            value="Edit" class="button" />
 
 This time, we got a status message indicating that there weren't any
-changes. 
+changes.
 
 Let's try changing some data:
 
@@ -798,11 +798,11 @@ Let's try changing some data:
     There were errors:
     (u'Invalid floating point data', <exceptions.ValueError instance at ...>)
     1
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
-    <input class="textType" id="form.min_size" name="form.min_size" size="10" 
+    <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="42.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="10,0"  />
     <span class="error">Invalid floating point data</span>
     <input type="submit" id="form.actions.edit" name="form.actions.edit"
@@ -815,11 +815,11 @@ Oops, we had a typo, let's fix it:
     There were errors:
     Maximum is less than Minimum
     1
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
-    <input class="textType" id="form.min_size" name="form.min_size" size="10" 
+    <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="42.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="10.0"  />
     <input type="submit" id="form.actions.edit" name="form.actions.edit"
            value="Edit" class="button" />
@@ -830,11 +830,11 @@ Oh yeah, we need to reduce the minimum too: :)
     >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
     Object updated
     1
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
-    <input class="textType" id="form.min_size" name="form.min_size" size="10" 
+    <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="1.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="10.0"  />
     <input type="submit" id="form.actions.edit" name="form.actions.edit"
            value="Edit" class="button" />
@@ -863,7 +863,7 @@ It provides:
   A constructor
 
 `validate`
-  A default validation method 
+  A default validation method
 
 `__call__`
   To render the form
@@ -893,7 +893,7 @@ Subclasses need to:
 
 Subclasses may:
 
-- Provide a label function or message id to produce 
+- Provide a label function or message id to produce
   a form label.
 
 - Override the setUpWidgets method to control how widgets are
@@ -901,7 +901,7 @@ Subclasses may:
 
 - Override the template.  The form defines variables:
 
-  status 
+  status
      providing a short summary of the operation performed.
 
   widgets
@@ -925,11 +925,11 @@ Let's update our example to use the base class:
     ...         else:
     ...             self.status = 'No changes'
 
-We inherited most of our behavior from the base class.  
+We inherited most of our behavior from the base class.
 
 We also used the `action` decorator.  The action decorator:
 
-- creates an `actions` variable if one isn't aleady created, 
+- creates an `actions` variable if one isn't aleady created,
 
 - defines an action with the given label and any other arguments, and
 
@@ -946,11 +946,11 @@ Now we can try out our form:
     >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
     No changes
     1
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
-    <input class="textType" id="form.min_size" name="form.min_size" size="10" 
+    <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="1.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="10.0"  />
     <input type="submit" id="form.actions.edit" name="form.actions.edit"
            value="Edit" class="button" />
@@ -960,11 +960,11 @@ Now we can try out our form:
     There were errors
     Invalid: Maximum is less than Minimum
     1
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
-    <input class="textType" id="form.min_size" name="form.min_size" size="10" 
+    <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="20.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="10.0"  />
     <input type="submit" id="form.actions.edit" name="form.actions.edit"
            value="Edit" class="button" />
@@ -973,11 +973,11 @@ Now we can try out our form:
     >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
     Object updated
     1
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
-    <input class="textType" id="form.min_size" name="form.min_size" size="10" 
+    <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="20.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="30.0"  />
     <input type="submit" id="form.actions.edit" name="form.actions.edit"
            value="Edit" class="button" />
@@ -1005,11 +1005,11 @@ option.
     >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
     No changes
     1
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
-    <input class="textType" id="form.min_size" name="form.min_size" size="10" 
+    <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="20.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="30.0"  />
     <input type="submit" id="form.actions.apply" name="form.actions.apply"
            value="Apply" class="button" />
@@ -1019,25 +1019,25 @@ option.
     There were errors
     Invalid: Maximum is less than Minimum
     1
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
-    <input class="textType" id="form.min_size" name="form.min_size" size="10" 
+    <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="40.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="30.0"  />
     <input type="submit" id="form.actions.apply" name="form.actions.apply"
            value="Apply" class="button" />
 
     >>> request.form['form.max_size'] = u'50.0'
-    >>> print MyForm(order, request)() 
+    >>> print MyForm(order, request)()
     ... # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
     Updated on ... ... ...  ...:...:...
     1
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
-    <input class="textType" id="form.min_size" name="form.min_size" size="10" 
+    <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="40.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" size="10" 
+    <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="50.0"  />
     <input type="submit" id="form.actions.apply" name="form.actions.apply"
            value="Apply" class="button" />
@@ -1047,7 +1047,7 @@ option.
 
     >>> order.min_size
     40.0
- 
+
 Note that `EditForm` shows the date and time when content are
 modified.
 
@@ -1118,10 +1118,10 @@ the descriptive data:
            type="text" value="50.0"  />
     <input class="textType" id="form.title" name="form.title" size="20"
            type="text" value=""  />
-    <input class="textType" id="form.description" name="form.description" 
+    <input class="textType" id="form.description" name="form.description"
            size="20"
            type="text" value=""  />
-    <input type="submit" id="form.actions.apply" name="form.actions.apply" 
+    <input type="submit" id="form.actions.apply" name="form.actions.apply"
            value="Apply" class="button" />
 
     >>> request.form['form.name'] = u'bob'
@@ -1143,12 +1143,12 @@ the descriptive data:
            type="text" value="20.0"  />
     <input class="textType" id="form.title" name="form.title" size="20"
            type="text" value="Widgets"  />
-    <input class="textType" id="form.description" name="form.description" 
+    <input class="textType" id="form.description" name="form.description"
            size="20"
            type="text" value="Need more widgets"  />
     <input type="submit" id="form.actions.apply" name="form.actions.apply"
            value="Apply" class="button" />
-    
+
     >>> order.min_size
     10.0
 
@@ -1181,7 +1181,7 @@ If you aren't using `EditForm`, you can get a dictionary populated in
 the same way by `setUpWidgets` by passing the dictionary as an
 `adapters` keyword argument.
 
-    
+
 Named Widget Access
 ===================
 
@@ -1215,29 +1215,29 @@ form that collects just the name from `IOrder` and the title from
 `IDescriptive`:
 
     >>> class MyForm(form.EditForm):
-    ...     form_fields = form.Fields(IOrder['name'], 
+    ...     form_fields = form.Fields(IOrder['name'],
     ...                               IDescriptive['title'])
     ...     actions = ()
 
     >>> print MyForm(order, TestRequest())() # doctest: +NORMALIZE_WHITESPACE
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
-    <input class="textType" id="form.title" name="form.title" size="20" 
+    <input class="textType" id="form.title" name="form.title" size="20"
            type="text" value="Widgets"  />
 
 You can also use stand-alone fields:
 
     >>> class MyForm(form.EditForm):
     ...     form_fields = form.Fields(
-    ...         schema.TextLine(__name__='name', title=u"Who?"), 
+    ...         schema.TextLine(__name__='name', title=u"Who?"),
     ...         IDescriptive['title'],
     ...         )
     ...     actions = ()
 
     >>> print MyForm(order, TestRequest())() # doctest: +NORMALIZE_WHITESPACE
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
-    <input class="textType" id="form.title" name="form.title" size="20" 
+    <input class="textType" id="form.title" name="form.title" size="20"
            type="text" value="Widgets"  />
 
 But make sure the fields have a '__name__', as was done above.
@@ -1251,19 +1251,19 @@ combine field definitions:
 
     >>> class MyExpandedForm(form.Form):
     ...     form_fields = (
-    ...         MyForm.form_fields 
+    ...         MyForm.form_fields
     ...         +
     ...         form.Fields(IDescriptive['description'])
     ...         )
     ...     actions = ()
 
-    >>> print MyExpandedForm(order, TestRequest())() 
+    >>> print MyExpandedForm(order, TestRequest())()
     ... # doctest: +NORMALIZE_WHITESPACE
-    <input class="textType" id="form.name" name="form.name" 
+    <input class="textType" id="form.name" name="form.name"
            size="20" type="text" value=""  />
-    <input class="textType" id="form.title" name="form.title" 
+    <input class="textType" id="form.title" name="form.title"
            size="20" type="text" value=""  />
-    <input class="textType" id="form.description" name="form.description" 
+    <input class="textType" id="form.description" name="form.description"
            size="20" type="text" value=""  />
 
 Using fields for display
@@ -1279,13 +1279,13 @@ this using the `for_display` option when setting up form_fields:
     ...         +
     ...         form.Fields(IOrder).select('min_size', 'max_size')
     ...         )
-    
+
 
     >>> print MyForm(order, TestRequest())() # doctest: +NORMALIZE_WHITESPACE
     bob
-    <input class="textType" id="form.min_size" name="form.min_size" 
+    <input class="textType" id="form.min_size" name="form.min_size"
            size="10" type="text" value="10.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" 
+    <input class="textType" id="form.max_size" name="form.max_size"
            size="10" type="text" value="20.0"  />
     <input type="submit" id="form.actions.apply" name="form.actions.apply"
            value="Apply" class="button" />
@@ -1295,7 +1295,7 @@ Note that if all of the fields in an edit form are for display:
     >>> class MyForm(form.EditForm):
     ...     form_fields = form.Fields(IOrder, for_display=True
     ...                               ).select('name', 'min_size', 'max_size')
-    
+
     >>> print MyForm(order, TestRequest())() # doctest: +NORMALIZE_WHITESPACE
     bob
     10.0
@@ -1313,7 +1313,7 @@ if the underlying schema field is readonly. We can do this using the
 `for_input` option when setting up form_fields:
 
     >>> class MyForm(form.Form):
-    ...     form_fields = form.Fields(IOrder, for_input=True, 
+    ...     form_fields = form.Fields(IOrder, for_input=True,
     ...                                   render_context=True)
     ...     form_fields = form_fields.omit('now')
     ...
@@ -1321,13 +1321,13 @@ if the underlying schema field is readonly. We can do this using the
 
 
     >>> print MyForm(order, TestRequest())() # doctest: +NORMALIZE_WHITESPACE
-    <input class="textType" id="form.identifier" name="form.identifier" 
+    <input class="textType" id="form.identifier" name="form.identifier"
            size="10" type="text" value="1"  />
-    <input class="textType" id="form.name" name="form.name" 
+    <input class="textType" id="form.name" name="form.name"
            size="20" type="text" value="bob"  />
-    <input class="textType" id="form.min_size" name="form.min_size" 
+    <input class="textType" id="form.min_size" name="form.min_size"
            size="10" type="text" value="10.0"  />
-    <input class="textType" id="form.max_size" name="form.max_size" 
+    <input class="textType" id="form.max_size" name="form.max_size"
            size="10" type="text" value="20.0"  />
 
 Displaying or editing raw data
@@ -1358,11 +1358,11 @@ the fields we didn't supply data for:
 
     >>> print MyForm(None, TestRequest())() # doctest: +NORMALIZE_WHITESPACE
     42
-    <input class="textType" id="form.name" name="form.name" 
+    <input class="textType" id="form.name" name="form.name"
            size="20" type="text" value="sally"  />
-    <input class="textType" id="form.min_size" name="form.min_size" 
+    <input class="textType" id="form.min_size" name="form.min_size"
            size="10" type="text" value=""  />
-    <input class="textType" id="form.max_size" name="form.max_size" 
+    <input class="textType" id="form.max_size" name="form.max_size"
            size="10" type="text" value=""  />
 
 If data are passed in the request, they override initial data for
@@ -1374,11 +1374,11 @@ input fields:
     >>> request.form['form.max_size'] = u'100'
     >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
     42
-    <input class="textType" id="form.name" name="form.name" 
+    <input class="textType" id="form.name" name="form.name"
            size="20" type="text" value="fred"  />
-    <input class="textType" id="form.min_size" name="form.min_size" 
+    <input class="textType" id="form.min_size" name="form.min_size"
            size="10" type="text" value=""  />
-    <input class="textType" id="form.max_size" name="form.max_size" 
+    <input class="textType" id="form.max_size" name="form.max_size"
            size="10" type="text" value="100.0"  />
 
 We'll get display fields if we ask for display fields when setting up
@@ -1429,11 +1429,11 @@ fake that quickly by forcing ignore_request to be `True`.
 
     >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
     42
-    <input class="textType" id="form.name" name="form.name" 
+    <input class="textType" id="form.name" name="form.name"
            size="20" type="text" value="sally"  />
-    <input class="textType" id="form.min_size" name="form.min_size" 
+    <input class="textType" id="form.min_size" name="form.min_size"
            size="10" type="text" value=""  />
-    <input class="textType" id="form.max_size" name="form.max_size" 
+    <input class="textType" id="form.max_size" name="form.max_size"
            size="10" type="text" value=""  />
 
 
@@ -1517,11 +1517,11 @@ a function for getting the needed initial value:
 
     >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
     <BLANKLINE>
-    <input class="textType" id="form.name" name="form.name" 
+    <input class="textType" id="form.name" name="form.name"
            size="20" type="text" value="fred"  />
-    <input class="textType" id="form.min_size" name="form.min_size" 
+    <input class="textType" id="form.min_size" name="form.min_size"
            size="10" type="text" value=""  />
-    <input class="textType" id="form.max_size" name="form.max_size" 
+    <input class="textType" id="form.max_size" name="form.max_size"
            size="10" type="text" value="100.0"  />
     <span class="dateTime">2002 12 2  12:30:00 </span>
 

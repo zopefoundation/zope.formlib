@@ -93,7 +93,7 @@ class FormFields(object):
                 if not name:
                         raise ValueError(
                             "Field has no name")
-                    
+
                 fields.append((name, arg))
             elif isinstance(arg, FormFields):
                 for form_field in arg:
@@ -102,7 +102,7 @@ class FormFields(object):
                 fields.append((arg.__name__, arg))
             else:
                 raise TypeError("Unrecognized argument type", arg)
-                
+
 
         seq = []
         byname = {}
@@ -126,7 +126,7 @@ class FormFields(object):
 
     def __len__(self):
         return len(self.__FormFields_seq__)
-        
+
     def __iter__(self):
         return iter(self.__FormFields_seq__)
 
@@ -140,7 +140,7 @@ class FormFields(object):
         if not isinstance(other, FormFields):
             return NotImplemented
         return self.__class__(self, other)
-        
+
 
     def select(self, *names):
         """Return a modified instance with an ordered subset of fields."""
@@ -151,7 +151,7 @@ class FormFields(object):
         return self.__class__(*[ff for ff in self if ff.__name__ not in names])
 
 Fields = FormFields
-    
+
 def fields_initkw(keep_all_readonly=False, **other):
     return keep_all_readonly, other
 
@@ -272,12 +272,12 @@ def setUpWidgets(form_fields,
                 widget.setRenderedValue(field.get(adapter))
             else:
                 widget.setRenderedValue(field.default)
-                
+
         widgets.append((not readonly, widget))
 
     return Widgets(widgets, len(form_prefix)+1)
 
-def setUpInputWidgets(form_fields, form_prefix, context, request, 
+def setUpInputWidgets(form_fields, form_prefix, context, request,
                       ignore_request=False):
     widgets = []
     for form_field in form_fields:
@@ -310,12 +310,12 @@ def getWidgetsData(widgets, form_prefix, data):
 
             if not widget.hasInput():
                 raise interfaces.FormError("No input", name)
-            
+
             try:
                 data[name] = widget.getInputValue()
             except InputErrors, error:
                 errors.append(error)
-        
+
     return errors
 
 def _widgetKey(widget, form_prefix):
@@ -327,7 +327,7 @@ def _widgetKey(widget, form_prefix):
     return name
 
 def setUpEditWidgets(form_fields, form_prefix, context, request,
-                     adapters=None, for_display=False, 
+                     adapters=None, for_display=False,
                      ignore_request=False):
     if adapters is None:
         adapters = {}
@@ -399,7 +399,7 @@ def setUpDataWidgets(form_fields, form_prefix, context, request, data=(),
             widget.setRenderedValue(data[form_field.__name__])
 
         widgets.append((not readonly, widget))
-        
+
     return Widgets(widgets, len(form_prefix)+1)
 
 
@@ -413,7 +413,7 @@ class NoInputData(interface.Invalid):
     - It was entered by the user, but the value entered was invalid
 
     This exception is part of the internal implementation of checkInvariants.
-    
+
     """
 
 class FormData:
@@ -443,7 +443,7 @@ class FormData:
             setattr(self, name, v)
             return v
         raise AttributeError(name)
-            
+
 
 def checkInvariants(form_fields, form_data):
 
@@ -522,11 +522,11 @@ class Action(object):
          ) = _action_options(**options)
 
         self.label = label
-        
+
         [self.success_handler, self.failure_handler,
          self.condition, self.validator] = [
             _callify(f) for f in (success, failure, condition, validator)]
-            
+
         if name is None:
             if _identifier.match(label):
                 name = unicode(label).lower()
@@ -534,7 +534,7 @@ class Action(object):
                 name = label.encode('hex')
 
         self.__name__ = prefix + '.' + name
-                
+
         if data is None:
             data = {}
         self.data = data
@@ -644,7 +644,7 @@ class Actions(object):
         if inst is None:
             return self
         return self.__class__(*[a.__get__(inst) for a in self.actions])
-            
+
 def handleSubmit(actions, data, default_validate=None):
 
     for action in actions:
@@ -675,7 +675,7 @@ class FormBase(zope.formlib.page.Page):
     prefix = 'form'
 
     status = ''
-    
+
     errors = ()
 
     interface.implements(interfaces.IForm)
@@ -701,14 +701,14 @@ class FormBase(zope.formlib.page.Page):
 
     def resetForm(self):
         self.setUpWidgets(ignore_request=True)
-        
+
     form_result = None
     form_reset = True
 
     def update(self):
         self.setUpWidgets()
         self.form_reset = False
-        
+
         data = {}
         errors, action = handleSubmit(self.actions, data, self.validate)
         self.errors = errors
@@ -722,7 +722,7 @@ class FormBase(zope.formlib.page.Page):
         else:
             result = None
 
-        self.form_result = result 
+        self.form_result = result
 
     def render(self):
         # if the form has been updated, it will already have a result
@@ -746,7 +746,7 @@ class FormBase(zope.formlib.page.Page):
                 yield error
             else:
                 view = component.getMultiAdapter(
-                    (error, self.request), 
+                    (error, self.request),
                     zope.app.form.browser.interfaces.IWidgetInputErrorView)
                 title = getattr(error, 'widget_title', None) # XXX duck typing
                 if title:
@@ -793,14 +793,14 @@ class EditFormBase(FormBase):
             self.status = status
         else:
             self.status = _('No changes')
-    
+
 class DisplayFormBase(FormBase):
 
     def setUpWidgets(self, ignore_request=False):
         self.adapters = {}
         self.widgets = setUpEditWidgets(
             self.form_fields, self.prefix, self.context, self.request,
-            adapters=self.adapters, for_display=True, 
+            adapters=self.adapters, for_display=True,
             ignore_request=ignore_request
             )
 

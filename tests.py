@@ -55,7 +55,7 @@ def TestTemplate(self):
         if getattr(status, 'mapping', 0):
             status = zope.i18n.interpolate(status, status.mapping)
         print status
-        
+
     result = []
 
     if self.errors:

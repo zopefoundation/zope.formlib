@@ -48,7 +48,7 @@ class implementation:
 
     def __call__(self, descriptor):
         return NamedTemplateImplementation(descriptor, self.view_type)
-            
+
 
 class NamedTemplate(object):
 
@@ -62,7 +62,7 @@ class NamedTemplate(object):
 
     def __call__(self, instance, *args, **kw):
         self.__get__(instance)(*args, **kw)
-        
+
 
 # XXX need test
 class NamedTemplatePathAdapter(object):

@@ -34,7 +34,7 @@ class IPage(zope.publisher.interfaces.browser.IBrowserPublisher):
 
 def reConstraint(pat, explanation):
     pat = re.compile(pat)
-    
+
     def constraint(value):
         if prefix_re.match(value):
             return True
@@ -85,7 +85,7 @@ class IFormAPI(interface.Interface):
 
         prefix
           The form-field prefix.
-          
+
         for_display
           A flag indicating whether the form-field is to be used
           for display. See IFormField.
@@ -106,7 +106,7 @@ class IFormAPI(interface.Interface):
            rendered value.  See IFormField.
 
         """
-        
+
 
     def Fields(*arguments, **options):
         """Create form-fields collection (IFormFields)
@@ -132,13 +132,13 @@ class IFormAPI(interface.Interface):
           The form-field prefix for new form-fields created.
           When form-field collections are passed, their contents keep
           their existing prefixes are retained.
-          
+
         for_display
           A flag indicating whether the form-fiellds are to be used
           for display.  This value is used for for_display attributes
           of all created form fields.  This option does not effect
           input from form-field collections.
-          
+
         for_input
           A flag indicating whether the form-fiellds are to be used
           for input.  This value is used for for_input attributes
@@ -148,10 +148,10 @@ class IFormAPI(interface.Interface):
         render_context
            A flag indicating whether the default values to render
            should come from the form context. See IFormField.
-          
+
         """
 
-    def setUpInputWidgets(form_fields, form_prefix, context, request, 
+    def setUpInputWidgets(form_fields, form_prefix, context, request,
                           ignore_request=False):
         """Set up widgets for input
 
@@ -173,7 +173,7 @@ class IFormAPI(interface.Interface):
         """
 
     def setUpEditWidgets(form_fields, form_prefix, context, request,
-                         adapters=None, for_display=False, 
+                         adapters=None, for_display=False,
                          ignore_request=False):
         """Set up widgets for editing or displaying content
 
@@ -197,7 +197,7 @@ class IFormAPI(interface.Interface):
 
         If the ignore_request option is passed a true value, then
         widget's rendered data will be set from the context, and user
-        inputs will be ignored.        
+        inputs will be ignored.
         """
 
     def setUpDataWidgets(form_fields, form_prefix, context, request, data=(),
@@ -222,7 +222,7 @@ class IFormAPI(interface.Interface):
         If the ignore_request option is passed a true value, then
         widget's rendered data will be set from the passed data or
         from field defaults, and user inputs will be ignored.
-        
+
         """
 
     def getWidgetsData(widgets, form_prefix, data):
@@ -232,7 +232,7 @@ class IFormAPI(interface.Interface):
         are added to the data argument, which must be a mapping
         argument.  The keys in the output mapping are
         widget/form-field names without the form prefix.
-        
+
         """
 
     def checkInvariants(form_fields, form_data):
@@ -254,7 +254,7 @@ class IFormAPI(interface.Interface):
         each field.  If an adapters mapping is passed, it will be used
         as a cache.  Typically, it would be a mapping object populated
         when setUpEditWidgets was called.
-        
+
         """
 
     def Action(label, **options):
@@ -294,7 +294,7 @@ class IFormAPI(interface.Interface):
           or may return None to indicate that the form should generate
           it's own output.
 
-        failure        
+        failure
           A handler, called when the the action was submitted and
           there are validation errors.  The handler may be provided as
           either a callable or a method name.  If the handler is
@@ -328,7 +328,7 @@ class IFormAPI(interface.Interface):
         data
           A bag of extra information that can be used by handlers,
           validators, or conditions.
-        
+
         """
 
     def action(label, **options):
@@ -346,7 +346,7 @@ class IFormAPI(interface.Interface):
         def handle_edit(self, action, data):
             ...
 
-        
+
         """
 
     # XXX should rename this to something like "submitted".
@@ -380,7 +380,7 @@ class IFormAPI(interface.Interface):
     The FormBase class provides reuasable implementation for creating
     forms.  It implements ISubPage, IPage, and IFormBaseCustomization.
     Subclasses will override or use attributes defined by
-    IFormBaseCustomization. 
+    IFormBaseCustomization.
     """)
 
 class IFormBaseCustomization(ISubPage, IPage):
@@ -391,7 +391,7 @@ class IFormBaseCustomization(ISubPage, IPage):
     Note that the update and render methods are designed to to work
     together.  If you override one, you probably need to override the
     other, unless you use original versions in your override.
-    
+
     """
 
     label = interface.Attribute("A label to display at the top of a form")
@@ -453,7 +453,7 @@ class IFormBaseCustomization(ISubPage, IPage):
 
         2. You can register an alternate named template, named
            "default" for your form.
-        
+
         """)
 
     def resetForm():
@@ -576,7 +576,7 @@ class IFormField(interface.Interface):
     render_context = schema.Choice(
         title=u"Should the rendered value come from the form context?",
         description=u"""\
-        
+
         If this attribute has a true value, and there is no other
         source of rendered data, then use data from the form context
         to set the rendered value for the widget.  This attribute is
@@ -624,10 +624,10 @@ class IFormField(interface.Interface):
         - There is user input and user input is not being ignored, or
 
         - Data for the value is passed to setUpWidgets.
-        
+
         """
         )
-        
+
 class IWidgets(interface.Interface):
     """A widget collection
 
@@ -669,7 +669,7 @@ class IWidgets(interface.Interface):
 
         Widgets should have different names in the two collections.
         The bahavior is undefined if the names overlap.
-        
+
         """
 
 class IForm(interface.Interface):
@@ -677,7 +677,7 @@ class IForm(interface.Interface):
 
     This exists primarily to provide something for which to register
     form-related conponents.
-    
+
     """
 
 class ISubPageForm(IForm, ISubPage):
@@ -685,7 +685,7 @@ class ISubPageForm(IForm, ISubPage):
 
     The rendered output must not have a form tag.  It is the
     responsibility of the surrounding page to supply a form tag.
-    
+
     """
 
 class IPageForm(IForm, IPage):
@@ -708,7 +708,7 @@ class IAction(ISubPage):
         This is a callable object that will be passed a form and an
         action and that returns a boolean to indicate whether the
         action is available.
-        
+
         """)
 
     validator = interface.Attribute(
@@ -717,7 +717,7 @@ class IAction(ISubPage):
         This is a callable object that will be passed a form and an
         action and that returns a (possibly empty) list of widget
         input errors.
-        
+
         """)
 
     def available():
@@ -758,7 +758,7 @@ class IAction(ISubPage):
         Note that the other methods defined in this interface are
         valid only after the action has been bound to a form.
         """
-        
+
 class IActions(interface.Interface):
     """An action collection
 
@@ -787,7 +787,7 @@ class IActions(interface.Interface):
 
         Actions should have different names in the two collections.
         The bahavior is undefined if the names overlap.
-        
+
         """
 
 class IBoundAction(IAction):

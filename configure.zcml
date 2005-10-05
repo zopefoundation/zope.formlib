@@ -11,7 +11,7 @@
   <adapter
       for="*"
       factory=".namedtemplate.NamedTemplatePathAdapter"
-      name="template" 
+      name="template"
       />
 
 

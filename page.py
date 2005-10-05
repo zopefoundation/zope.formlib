@@ -22,7 +22,7 @@ from zope.formlib.interfaces import IPage
 
 class Page(BrowserView):
     """Simple page-support class
-    """ 
+    """
 
     interface.implements(IPage)
 

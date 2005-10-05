@@ -44,13 +44,13 @@ function toggleFormFieldHelp(ob,state) {
     <div class="form-status"
        tal:define="status view/status"
        tal:condition="status">
-  
+
       <div class="summary"
            i18n:translate=""
            tal:content="view/status">
         Form status summary
       </div>
-  
+
       <ul class="errors" tal:condition="view/errors">
          <li tal:repeat="error view/error_views">
             <span tal:replace="structure error">Error Type</span>
@@ -121,8 +121,8 @@ function toggleFormFieldHelp(ob,state) {
   <metal:block define-slot="above_buttons" />
 </div>
 <div id="actionsView">
-  <span class="actionButtons" 
-        tal:condition="view/availableActions" 
+  <span class="actionButtons"
+        tal:condition="view/availableActions"
         metal:define-slot="bottom_buttons">
     <input tal:repeat="action view/actions"
            tal:replace="structure action/render"

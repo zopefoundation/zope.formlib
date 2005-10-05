@@ -35,14 +35,14 @@ What are the sorts of facilities we need?
 
   - Input processing
 
- - Actions/buttons 
+ - Actions/buttons
 
 A major goal is to make creating pages simple and explicit
 
 Creating simple pages
 =====================
 
-To create a page, which is an object that is published as a page, 
+To create a page, which is an object that is published as a page,
 you need to provide an object that:
 
 - has a __call__ method and that
