@@ -781,7 +781,7 @@ class EditFormBase(FormBase):
             try:
                 time_zone = idatetime.ITZInfo(self.request)
             except TypeError:
-                time_zone = type(pytz.UTC)
+                time_zone = pytz.UTC
 
             status = _("Updated on ${date_time}",
                        mapping={'date_time':
