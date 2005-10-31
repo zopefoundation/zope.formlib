@@ -1,5 +1,6 @@
+=====================================
 Zope Public License (ZPL) Version 2.1
------------------------------------------------
+=====================================
 
 A copyright notice accompanies this license document that
 identifies the copyright holders.
@@ -36,9 +37,11 @@ following conditions are met:
       files to carry prominent notices stating that you changed the
       files and the date of any change.
 
-Disclaimer
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ``AS IS''
+Disclaimer
+----------
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS "AS IS"
 AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
 FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
