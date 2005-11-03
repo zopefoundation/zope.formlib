@@ -7,7 +7,16 @@ function toggleFormFieldHelp(ob,state) {
   // ob is the label element
   var field = ob.form[ob.htmlFor];
   if (field) {
-    field.style.visibility = state && 'hidden' || 'visible';
+    var viz = state && 'hidden' || 'visible';
+    if (field.length == null) {
+      field.style.visibility = viz;
+    }
+    else {
+      for (var i = 0; i < field.length; ++i) {
+        var e = field.item(i);
+        e.style.visibility = viz;
+      }
+    }
     var help = document.getElementById("field-help-for-" + field.name);
     if (help) {
       help.style.visibility = state && 'visible' || 'hidden';
