@@ -586,7 +586,7 @@ def render_submit_button(self):
         return ''
     label = self.label
     if isinstance(label, (zope.i18n.Message, zope.i18n.MessageID)):
-        label = zope.i18n.translate(self.label, self.form.request)
+        label = zope.i18n.translate(self.label, context=self.form.request)
     return ('<input type="submit" id="%s" name="%s" value="%s"'
             ' class="button" />' %
             (self.__name__, self.__name__, label)
