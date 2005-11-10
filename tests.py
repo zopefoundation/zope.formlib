@@ -171,6 +171,58 @@ def makeSureRenderCanBeCalledWithoutCallingUpdate():
     <input type="submit" id="form.actions.apply" name="form.actions.apply"
            value="Apply" class="button" />
 
+"""
+
+def make_sure_i18n_is_called_correctly_for_actions():
+    """\
+
+We want to make sure that i18n is called correctly.  This is in
+response to a bug that occurred because actions called i18n.translate
+with incorrect positional arguments.
+
+We'll start by setting up an action:
+
+    >>> import zope.i18nmessageid
+    >>> _ = zope.i18nmessageid.MessageFactory('my.domain')
+    >>> action = form.Action(_("MyAction"))
+
+Actions get bound to forms.  We'll set up a test request, create a
+form for it and bind the action to the form:
+
+    >>> myform = form.FormBase(None, 42)
+    >>> action = action.__get__(myform)
+
+Button labels are rendered by form.render_submit_button, passing the
+bound action.  Before we call this however, we need to set up a dummy
+translation domain.  We'll create one for our needs:
+
+    >>> import zope.i18n.interfaces
+    >>> class MyDomain:
+    ...     interface.implements(zope.i18n.interfaces.ITranslationDomain)
+    ...
+    ...     def translate(self, msgid, mapping=None, context=None,
+    ...                   target_language=None, default=None):
+    ...         print msgid
+    ...         print mapping
+    ...         print context
+    ...         print target_language
+    ...         print default
+    ...         return msgid
+
+    >>> component.provideUtility(MyDomain(), name='my.domain')
+
+Now, if we call render_submit_button, we should be able to verify the
+data passed to translate:
+
+    >>> form.render_submit_button(action)() # doctest: +NORMALIZE_WHITESPACE
+    MyAction
+    None
+    42
+    None
+    MyAction
+    u'<input type="submit" id="form.actions.myaction"
+       name="form.actions.myaction" value="MyAction" class="button" />'
+
 
 """
 
