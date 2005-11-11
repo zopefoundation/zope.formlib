@@ -226,6 +226,168 @@ data passed to translate:
 
 """
 
+def test_form_template_i18n():
+    """\
+Let's try to check that the formlib templates handle i18n correctly.
+We'll define a simple form:
+
+    >>> from zope.app.pagetemplate import ViewPageTemplateFile
+    >>> import zope.i18nmessageid
+    >>> _ = zope.i18nmessageid.MessageFactory('my.domain')
+
+    >>> from zope import schema
+    >>> class MyForm(form.Form):
+    ...     label = _('The label')
+    ...     status = _('Success!')
+    ...     form_fields = form.Fields(
+    ...         schema.TextLine(__name__='name',
+    ...                         title=_("Name"),
+    ...                         description=_("Enter your name"),
+    ...                         ),
+    ...         )
+    ...     @form.action(_('Ok'))
+    ...     def ok(self, action, data):
+    ...         pass
+    ...     page = ViewPageTemplateFile("pageform.pt")
+    ...     subpage = ViewPageTemplateFile("subpageform.pt")
+
+Now, we should be able to create a form instance:
+
+    >>> from zope.publisher.browser import TestRequest
+    >>> request = TestRequest()
+    >>> form = MyForm(object(), request)
+
+Unfortunately, the "page" template uses a page macro. We need to
+provide a template that it can get one from.  Here, we'll set up a
+view that provides the necessary macros:
+
+    >>> from zope.pagetemplate.pagetemplate import PageTemplate
+    >>> macro_template = PageTemplate()
+    >>> macro_template.write('''\
+    ... <html metal:define-macro="view">
+    ... <body metal:define-slot="body" />
+    ... </html>
+    ... ''')
+    
+We also need to provide a traversal adapter for the view namespace
+that lets us look up the macros.
+
+    >>> import zope.app.traversing.interfaces
+    >>> class view:
+    ...     component.adapts(None, None)
+    ...     interface.implements(zope.app.traversing.interfaces.ITraversable)
+    ...     def __init__(self, ob, r=None):
+    ...         pass
+    ...     def traverse(*args):
+    ...         return macro_template.macros
+
+    >>> component.provideAdapter(view, name='view')
+
+And we have to register the default traversable adapter (I wish we had
+push templates):
+
+    >>> from zope.app.traversing.adapters import DefaultTraversable
+    >>> component.provideAdapter(DefaultTraversable, [None])
+
+We need to set up the translation framework. We'll just provide a
+negotiator that always decides to use the test language:
+
+    >>> import zope.i18n.interfaces
+    >>> class Negotiator:
+    ...     interface.implements(zope.i18n.interfaces.INegotiator)
+    ...     def getLanguage(*ignored):
+    ...         return 'test'
+
+    >>> component.provideUtility(Negotiator())
+
+And we'll set up the fallback-domain factory, which provides the test
+language for all domains:
+
+    >>> from zope.i18n.testmessagecatalog import TestMessageFallbackDomain
+    >>> component.provideUtility(TestMessageFallbackDomain)
+    
+OK, so let's see what the page form looks like. First, we'll compute
+the page:
+
+    >>> form.update()
+    >>> page = form.page()
+
+We want to make sure that the page has the translations we expect and
+that it doesn't double translate anything.  We'll write a generator
+that extracts the translations, complaining if any are nested:
+
+    >>> def find_translations(text):
+    ...     l = 0
+    ...     while 1:
+    ...         lopen = text.find('[[', l)
+    ...         lclose = text.find(']]', l)
+    ...         if lclose >= 0 and lclose < lopen:
+    ...             raise ValueError(lopen, lclose, text)
+    ...         if lopen < 0:
+    ...             break
+    ...         l = lopen + 2
+    ...         lopen = text.find('[[', l)
+    ...         lclose = text.find(']]', l)
+    ...         if lopen >= 0 and lopen < lclose:
+    ...             raise ValueError(lopen, lclose, text)
+    ...         if lclose < 0:
+    ...             raise ValueError(l, text)
+    ...         yield text[l-2:lclose+2]
+    ...         l = lclose + 2
+
+    >>> for t in find_translations(page):
+    ...     print t
+    [[my.domain][The label]]
+    [[my.domain][Success!]]
+    [[my.domain][Name]]
+    [[my.domain][Enter your name]]
+    [[my.domain][Ok]]
+
+Now, let's try the same thing with the sub-page form:
+
+    >>> for t in find_translations(form.subpage()):
+    ...     print t
+    [[my.domain][The label]]
+    [[my.domain][Success!]]
+    [[my.domain][Name]]
+    [[my.domain][Enter your name]]
+    [[my.domain][Ok]]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
+
 def test_suite():
     from zope.testing import doctest
     return unittest.TestSuite((
