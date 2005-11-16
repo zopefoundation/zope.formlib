@@ -661,10 +661,8 @@ def availableActions(form, actions):
     result = []
     for action in actions:
         condition = action.condition
-        if condition is not None:
-            if not condition(form, action):
-                continue
-        result.append(action)
+        if (condition is None) or condition(form, action):
+            result.append(action)
     return result
 
 
@@ -755,11 +753,11 @@ class FormBase(zope.formlib.page.Page):
                     yield view.snippet()
 
 def haveInputWidgets(form, action):
-    return bool([input
-                 for (input, widget)
-                 in form.widgets.__iter_input_and_widget__()
-                 if input
-                 ])
+    for input, widget in form.widgets.__iter_input_and_widget__():
+        if input:
+            return True
+    else:
+        return False
 
 class EditFormBase(FormBase):
 
