@@ -30,7 +30,7 @@ function toggleFormFieldHelp(ob,state) {
         e.style.visibility = viz;
       }
     }
-    var help = document.getElementById("field-help-for-" + field.name);
+    var help = document.getElementById("field-help-for-" + ob.htmlFor);
     if (help) {
       help.style.visibility = state && 'visible' || 'hidden';
     }
