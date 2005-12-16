@@ -178,7 +178,7 @@ class Widgets(object):
     def __getitem__(self, name):
         return self.__Widgets_widgets_dict__[name]
 
-    # XXX no test
+    # TODO need test
     def get(self, name):
         return self.__Widgets_widgets_dict__.get(name)
 
@@ -186,7 +186,7 @@ class Widgets(object):
         return iter(self.__Widgets_widgets_items__)
 
 
-    # XXX need test
+    # TODO need test
     def __add__(self, other):
         widgets = self.__class__([], 0)
         widgets.__Widgets_widgets_items__ = (
@@ -633,7 +633,7 @@ class Actions(object):
         self.actions += (action, )
         self.byname[action.__name__] = action
 
-    # XXX need test
+    # TODO need test
     def __add__(self, other):
         return self.__class__(*(self.actions + other.actions))
 
@@ -656,7 +656,7 @@ def handleSubmit(actions, data, default_validate=None):
 
     return None, None
 
-# XXX need test for this
+# TODO need test for this
 def availableActions(form, actions):
     result = []
     for action in actions:
@@ -693,7 +693,7 @@ class FormBase(zope.formlib.page.Page):
 
     template = namedtemplate.NamedTemplate('default')
 
-    # XXX also need to be able to show disabled actions
+    # TODO also need to be able to show disabled actions
     def availableActions(self):
         return availableActions(self, self.actions)
 
@@ -746,7 +746,7 @@ class FormBase(zope.formlib.page.Page):
                 view = component.getMultiAdapter(
                     (error, self.request),
                     zope.app.form.browser.interfaces.IWidgetInputErrorView)
-                title = getattr(error, 'widget_title', None) # XXX duck typing
+                title = getattr(error, 'widget_title', None) # duck typing
                 if title:
                     yield '%s: %s' % (title, view.snippet())
                 else:

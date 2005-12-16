@@ -349,7 +349,6 @@ class IFormAPI(interface.Interface):
 
         """
 
-    # XXX should rename this to something like "submitted".
     def validate(form, actions, form_prefix, data, default_validate=None):
         """Process a submitted action, if any
 
@@ -592,14 +591,14 @@ class IFormField(interface.Interface):
         DISPLAY_UNWRITEABLE
             If the field isn't writable, then use a display widget
 
-            XXX untested
+            TODO untested
 
 
         SKIP_UNAUTHORIZED
             If the user is not priviledges to perfoem the requested
             operation, then omit a widget.
 
-            XXX unimplemented
+            TODO unimplemented
 
         """,
         vocabulary=schema.vocabulary.SimpleVocabulary.fromValues((

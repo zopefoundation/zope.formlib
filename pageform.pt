@@ -1,7 +1,6 @@
 <html metal:extend-macro="context/@@standard_macros/view"
       metal:define-macro="main">
 <head>
-<!-- XXX Need test -->
 </head>
 
 <body>
@@ -113,7 +112,7 @@ function toggleFormFieldHelp(ob,state) {
           <div class="error"
                tal:condition="widget/error"
                >
-            <!-- XXX Put this back, the Zope3 way.
+            <!-- TODO Put this back, the Zope3 way.
             <img src="alert.gif" alt="Error"
             tal:replace="structure context/alert.gif" />
             -->

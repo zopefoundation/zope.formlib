@@ -103,7 +103,7 @@ function toggleFormFieldHelp(ob,state) {
                define="error widget/error"
                tal:condition="widget/error"
                >
-            <!-- XXX Put this back, the Zope3 way.
+            <!-- TODO Put this back, the Zope3 way.
             <img src="alert.gif" alt="Error"
             tal:replace="structure context/alert.gif" />
             -->
