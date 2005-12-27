@@ -226,6 +226,35 @@ data passed to translate:
 
 """
 
+
+def test_error_views_i18n():
+    """\
+
+    >>> from zope.i18n.simpletranslationdomain import SimpleTranslationDomain
+    >>> from zope.i18n.interfaces import ITranslationDomain
+    >>> messageDic = {('ja', u'Summary'): u'MatomeYaken'}
+    >>> sd = SimpleTranslationDomain('KansaiBen.domain', messageDic)
+    >>> component.provideUtility(provides=ITranslationDomain,
+    ...                          component=sd,
+    ...                          name='KansaiBen.domain')
+    >>> from zope.i18n.negotiator import negotiator
+    >>> component.provideUtility(negotiator)
+    >>> _ = zope.i18nmessageid.MessageFactory('KansaiBen.domain')
+    >>> myError = zope.app.form.interfaces.WidgetInputError(
+    ...     field_name='summary',
+    ...     widget_title=_(u'Summary'))
+    >>> from zope.publisher.browser import TestRequest
+    >>> req = TestRequest()
+    >>> req._environ['HTTP_ACCEPT_LANGUAGE'] = 'ja; q=1.0'
+    >>> mybase = form.FormBase(None, req)
+    >>> mybase.errors = (myError,)
+    >>> save = mybase.error_views()
+    >>> save.next()
+    u'MatomeYaken: <span class="error"></span>'
+    
+"""
+
+
 def test_form_template_i18n():
     """\
 Let's try to check that the formlib templates handle i18n correctly.

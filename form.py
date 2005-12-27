@@ -748,6 +748,8 @@ class FormBase(zope.formlib.page.Page):
                     zope.app.form.browser.interfaces.IWidgetInputErrorView)
                 title = getattr(error, 'widget_title', None) # duck typing
                 if title:
+                    if isinstance(title, zope.i18nmessageid.Message):
+                        title = zope.i18n.translate(title, context=self.request)
                     yield '%s: %s' % (title, view.snippet())
                 else:
                     yield view.snippet()
