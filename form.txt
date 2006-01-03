@@ -86,8 +86,8 @@ instances. Let's look at an example that displays some input widgets:
     ...             ignore_request=ignore_request)
     ...         return '\n'.join([w() for w in widgets])
 
-Here we used form.setUpWidgets to create widget instances from our
-form-field specifications.  The second argument to `setUpWidgets` is a
+Here we used ``form.setUpWidgets`` to create widget instances from our
+form-field specifications.  The second argument to ``setUpWidgets`` is a
 form prefix.  All of the widgets on this form are given the same
 prefix.  This allows multiple forms to be used within a single form
 tag, assuming that each form uses a different form prefix.
@@ -994,7 +994,7 @@ EditForm
 Our `handle_edit_action` action is common to edit forms.  An
 `EditForm` base class captures this commonality.  It also sets up
 widget widgets a bit differently.  The `EditForm` base class sets up
-widgets as if the form fields had been set up with the render_context`
+widgets as if the form fields had been set up with the `render_context`
 option.
 
     >>> class MyForm(form.EditForm):
