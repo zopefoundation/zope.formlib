@@ -12,15 +12,15 @@ print statements to keep the examples simpler.  Most forms will use
 templates in practice.
 
 This document starts with low-level APIs.  We eventually build up to
-higherlevel APIs that allow forms to be defined with just a little bit
-of meta data.  Impatiant readers may wish to skip to the later
+higher-level APIs that allow forms to be defined with just a little bit
+of meta data.  Impatient readers may wish to skip to the later
 sections, especially the section on `Helpful base classes`_. :)
 
 A form class can define ordered collections of "form fields" using
 the `Fields` constructor. Form fields are distinct from and build on
 schema fields.  A schema field specified attribute values.  Form
 fields specify how a schema field should be used in a form.  The
-simplest way to define a collection onf form fields is by passing a
+simplest way to define a collection of form fields is by passing a
 schema to the `Fields` constructor:
 
     >>> from zope import interface, schema
@@ -53,7 +53,7 @@ We can also select and order subsets using the select method of form fields:
     >>> [w.__name__ for w in MyForm.form_fields.select('name', 'identifier')]
     ['name', 'identifier']
 
-or by omiting fields:
+or by omitting fields:
 
     >>> [w.__name__ for w in MyForm.form_fields.omit('now', 'identifier')]
     ['name', 'min_size', 'max_size']
@@ -654,7 +654,7 @@ rearrange our form quite a bit to make things more modular:
   - `status` is a string that, if set, is displayed at the top of the
     form.
 
-  - `errors` is the set of errors found when valiadting.
+  - `errors` is the set of errors found when validating.
 
   - `widgets` is a list of set-up widgets
 
@@ -850,7 +850,7 @@ Ah, much better.  And our order has been updated:
 Helpful base classes
 ====================
 
-Our form has a lot of repetative code. A number of helpful base
+Our form has a lot of repetitive code. A number of helpful base
 classes provide standard form implementation.
 
 Form
@@ -869,7 +869,7 @@ It provides:
   To render the form
 
 `template`
-  A default template.  Note that this a NamedTemplate named "default",
+  A default template.  Note that this is a NamedTemplate named "default",
   so the template may also be overridden by registering an alternate
   default template.
 
@@ -929,7 +929,7 @@ We inherited most of our behavior from the base class.
 
 We also used the `action` decorator.  The action decorator:
 
-- creates an `actions` variable if one isn't aleady created,
+- creates an `actions` variable if one isn't already created,
 
 - defines an action with the given label and any other arguments, and
 
@@ -1204,7 +1204,7 @@ Form-field manipulations
 ========================
 
 The form-field constructor is very flexible.  We've already seen that
-we can sppply multiple schemas.  Here are some other things you can
+we can supply multiple schemas.  Here are some other things you can
 do.
 
 Specifying individual fields
@@ -1242,11 +1242,11 @@ You can also use stand-alone fields:
 
 But make sure the fields have a '__name__', as was done above.
 
-Concatinating field collections
+Concatenating field collections
 -------------------------------
 
 It is sometimes convenient to combine multiple field collections.
-Field collections support concatination. For example, we may want to
+Field collections support concatenation. For example, we may want to
 combine field definitions:
 
     >>> class MyExpandedForm(form.Form):
@@ -1309,7 +1309,7 @@ Using fields for input
 ----------------------
 
 We may want to indicate that some fields should be used for input even
-if the underlying schema field is readonly. We can do this using the
+if the underlying schema field is read-only. We can do this using the
 `for_input` option when setting up form_fields:
 
     >>> class MyForm(form.Form):
