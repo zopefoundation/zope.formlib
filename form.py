@@ -506,7 +506,7 @@ def _action_options(success=None, failure=None, condition=None, validator=None,
 
 def _callify(f):
     if isinstance(f, str):
-        callable = lambda form, action, data: getattr(form, f)(action, data)
+        callable = lambda form, *args: getattr(form, f)(*args)
     else:
         callable = f
 
