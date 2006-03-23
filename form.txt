@@ -918,12 +918,15 @@ Let's update our example to use the base class:
     ...     form_fields = form.Fields(IOrder, render_context=True)
     ...     form_fields = form_fields.omit('now')
     ...
-    ...     @form.action("Edit")
+    ...     @form.action("Edit", failure='handle_edit_action_failure')
     ...     def handle_edit_action(self, action, data):
     ...         if form.applyChanges(self.context, self.form_fields, data):
     ...             self.status = 'Object updated'
     ...         else:
     ...             self.status = 'No changes'
+    ...
+    ...     def handle_edit_action_failure(self, action, data, errors):
+    ...         self.status = 'There were %d errors.' % len(errors)
 
 We inherited most of our behavior from the base class.
 
@@ -957,7 +960,7 @@ Now we can try out our form:
 
     >>> request.form['form.min_size'] = u'20.0'
     >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
-    There were errors
+    There were 1 errors.
     Invalid: Maximum is less than Minimum
     1
     <input class="textType" id="form.name" name="form.name" size="20"
