@@ -382,40 +382,60 @@ Now, let's try the same thing with the sub-page form:
     [[my.domain][Enter your name]]
     [[my.domain][Ok]]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 """
+
+
+def test_setUpWidgets_prefix():
+    """This is a regression test for field prefix handling in setUp*Widgets.
+
+    Let's set up fields with some interface and a prefix on fields:
+
+        >>> from zope.formlib import form
+        >>> from zope import interface, schema
+
+        >>> class ITrivial(interface.Interface):
+        ...     name = schema.TextLine(title=u"Name")
+
+        >>> form_fields = form.Fields(ITrivial, prefix='one')
+        >>> form_fields += form.Fields(ITrivial, prefix='two')
+        >>> form_fields += form.Fields(ITrivial, prefix='three')
+
+    Let's call setUpDataWidgets and see their names:
+
+        >>> class Trivial(object):
+        ...     interface.implements(ITrivial)
+        ...     name = 'foo'
+        >>> context = Trivial()
+
+        >>> from zope.publisher.browser import TestRequest
+        >>> request = TestRequest()
+
+        >>> widgets = form.setUpDataWidgets(form_fields, 'form', context,
+        ...                                 request, {})
+        >>> [w.name for w in widgets]
+        ['form.one.name', 'form.two.name', 'form.three.name']
+
+    Let's try the same with setUpEditWidgets:
+
+        >>> widgets = form.setUpEditWidgets(form_fields, 'form', context,
+        ...                                  request)
+        >>> [w.name for w in widgets]
+        ['form.one.name', 'form.two.name', 'form.three.name']
+
+    And setUpInputWidgets:
+
+        >>> widgets = form.setUpInputWidgets(form_fields, 'form', context,
+        ...                                  request)
+        >>> [w.name for w in widgets]
+        ['form.one.name', 'form.two.name', 'form.three.name']
+
+    And setUpWidgets:
+
+        >>> widgets = form.setUpWidgets(form_fields, 'form', context, request)
+        >>> [w.name for w in widgets]
+        ['form.one.name', 'form.two.name', 'form.three.name']
+
+    """
 
 def test_suite():
     from zope.testing import doctest
