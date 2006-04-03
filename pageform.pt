@@ -71,61 +71,65 @@ function toggleFormFieldHelp(ob,state) {
   <div metal:define-slot="extra_info" tal:replace="nothing">
   </div>
 
-  <table class="form-fields">
-    <tr class="row" metal:define-slot="extra_top" tal:replace="nothing">
-        <td class="label">Extra top</td>
-        <td class="label"><input type="text" /></td>
-    </tr>
-    <tbody metal:define-slot="formbody" tal:omit-tag="">
-      <tr tal:repeat="widget view/widgets">
-        <td class="label" tal:define="hint widget/hint"
-          metal:define-macro="labelcell">
-          <label tal:condition="python:hint"
-                 tal:attributes="for widget/name"
-                 onmousedown="toggleFormFieldHelp(this,1)"
-                 onmouseup="toggleFormFieldHelp(this,0)"
-                 onmouseout="toggleFormFieldHelp(this,0)"
-                 style="cursor: help">
-            <span class="required" tal:condition="widget/required"
-            >*</span><span i18n:translate=""
-                           tal:content="widget/label">label</span>
-          </label>
-          <label tal:condition="python:not hint"
-                 tal:attributes="for widget/name">
-            <span class="required" tal:condition="widget/required"
-            >*</span><span i18n:translate=""
-                           tal:content="widget/label">label</span>
-          </label>
-        </td>
-        <td class="field" tal:define="hint widget/hint"
-            metal:define-macro="widgetcell">
-          <div class="form-fields-help"
-               i18n:translate=""
-               tal:content="hint"
-               tal:condition="hint"
-               tal:attributes="id string:field-help-for-${widget/name}"
-               onclick="this.style.visibility='hidden';"
-               style="visibility: hidden; position: absolute;"
-               >Title of this content object.</div>
-          <div class="widget" tal:content="structure widget">
-          <input type="text" /></div>
-          <div class="error"
-               tal:condition="widget/error"
-               >
-            <!-- TODO Put this back, the Zope3 way.
-            <img src="alert.gif" alt="Error"
-            tal:replace="structure context/alert.gif" />
-            -->
-            <span tal:replace="structure widget/error">error</span>
-          </div>
-        </td>
+  <div metal:define-slot="main_form">
+    <table class="form-fields" metal:define-macro="formtable">
+      <tr class="row" metal:define-slot="extra_top" tal:replace="nothing">
+          <td class="label">Extra top</td>
+          <td class="field"><input type="text" /></td>
       </tr>
-    </tbody>
-    <tr class="row" metal:define-slot="extra_bottom" tal:replace="nothing">
-      <td class="label">Extra bottom</td>
-      <td class="label"><input type="text" /></td>
-    </tr>
-  </table>
+      <tbody metal:define-slot="formbody" tal:omit-tag="">
+        <tal:block omit-tag="" repeat="widget view/widgets">
+          <tr metal:define-macro="formrow">
+            <td class="label" tal:define="hint widget/hint"
+              metal:define-macro="labelcell">
+              <label tal:condition="python:hint"
+                     tal:attributes="for widget/name"
+                     onmousedown="toggleFormFieldHelp(this,1)"
+                     onmouseup="toggleFormFieldHelp(this,0)"
+                     onmouseout="toggleFormFieldHelp(this,0)"
+                     style="cursor: help">
+                <span class="required" tal:condition="widget/required"
+                >*</span><span i18n:translate=""
+                               tal:content="widget/label">label</span>
+              </label>
+              <label tal:condition="python:not hint"
+                     tal:attributes="for widget/name">
+                <span class="required" tal:condition="widget/required"
+                >*</span><span i18n:translate=""
+                               tal:content="widget/label">label</span>
+              </label>
+            </td>
+            <td class="field" tal:define="hint widget/hint"
+                metal:define-macro="widgetcell">
+              <div class="form-fields-help"
+                   i18n:translate=""
+                   tal:content="hint"
+                   tal:condition="hint"
+                   tal:attributes="id string:field-help-for-${widget/name}"
+                   onclick="this.style.visibility='hidden';"
+                   style="visibility: hidden; position: absolute;"
+                   >Title of this content object.</div>
+              <div class="widget" tal:content="structure widget">
+              <input type="text" /></div>
+              <div class="error"
+                   tal:condition="widget/error"
+                   >
+                <!-- TODO Put this back, the Zope3 way.
+                <img src="alert.gif" alt="Error"
+                tal:replace="structure context/alert.gif" />
+                -->
+                <span tal:replace="structure widget/error">error</span>
+              </div>
+            </td>
+          </tr>
+        </tal:block>
+      </tbody>
+      <tr class="row" metal:define-slot="extra_bottom" tal:replace="nothing">
+        <td class="label">Extra bottom</td>
+        <td class="label"><input type="text" /></td>
+      </tr>
+    </table>
+  </div>
   <metal:block define-slot="above_buttons" />
 </div>
 <div id="actionsView">
