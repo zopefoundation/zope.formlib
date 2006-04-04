@@ -132,7 +132,8 @@ function toggleFormFieldHelp(ob,state) {
   </div>
   <metal:block define-slot="above_buttons" />
 </div>
-<div id="actionsView">
+<div id="actionsView"
+     metal:define-macro="form_actions">
   <span class="actionButtons"
         tal:condition="view/availableActions"
         metal:define-slot="bottom_buttons">
