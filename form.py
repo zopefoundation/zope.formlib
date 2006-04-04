@@ -254,11 +254,9 @@ def setUpWidgets(form_fields,
                 widget = component.getMultiAdapter((field, request),
                                                    IInputWidget)
 
-        prefix = form_field.prefix
-        if prefix:
-            prefix = form_prefix + '.' + prefix
-        else:
-            prefix = form_prefix
+        prefix = form_prefix
+        if form_field.prefix:
+            prefix += '.' + form_field.prefix
 
         widget.setPrefix(prefix)
 
@@ -283,12 +281,17 @@ def setUpInputWidgets(form_fields, form_prefix, context, request,
     for form_field in form_fields:
         field = form_field.field.bind(context)
         widget = _createWidget(form_field, field, request, IInputWidget)
+
+        prefix = form_prefix
         if form_field.prefix:
-            form_prefix = form_prefix + '.' + form_field.prefix
+            prefix += '.' + form_field.prefix
+
+        widget.setPrefix(prefix)
+
         if ignore_request:
             value = field.default
             widget.setRenderedValue(value)
-        widget.setPrefix(form_prefix)
+
         widgets.append((True, widget))
     return Widgets(widgets, len(form_prefix)+1)
 
@@ -363,10 +366,11 @@ def setUpEditWidgets(form_fields, form_prefix, context, request,
             iface = IInputWidget
         widget = _createWidget(form_field, field, request, iface)
 
+        prefix = form_prefix
         if form_field.prefix:
-            form_prefix = form_prefix + '.' + form_field.prefix
+            prefix += '.' + form_field.prefix
 
-        widget.setPrefix(form_prefix)
+        widget.setPrefix(prefix)
 
         if ignore_request or readonly or not widget.hasInput():
             # Get the value to render
@@ -389,9 +393,10 @@ def setUpDataWidgets(form_fields, form_prefix, context, request, data=(),
             iface = IInputWidget
         widget = _createWidget(form_field, field, request, iface)
 
+        prefix = form_prefix
         if form_field.prefix:
-            form_prefix = form_prefix + '.' + form_field.prefix
-        widget.setPrefix(form_prefix)
+            prefix += '.' + form_field.prefix
+        widget.setPrefix(prefix)
 
         if ((form_field.__name__ in data)
             and (ignore_request or readonly or not widget.hasInput())
@@ -506,7 +511,7 @@ def _action_options(success=None, failure=None, condition=None, validator=None,
 
 def _callify(f):
     if isinstance(f, str):
-        callable = lambda form, action, data: getattr(form, f)(action, data)
+        callable = lambda form, *args: getattr(form, f)(*args)
     else:
         callable = f
 
