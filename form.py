@@ -39,7 +39,6 @@ from zope.app.form.interfaces import IInputWidget, IDisplayWidget
 from zope.app.form.interfaces import WidgetsError, MissingInputError
 from zope.app.form.interfaces import InputErrors
 from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.app.publisher.browser import BrowserView
 
 import zope.formlib.page
 from zope.formlib import interfaces, namedtemplate
