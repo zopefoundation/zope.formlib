@@ -26,14 +26,14 @@ import zope.publisher.interfaces.browser
 
 from zope import component, interface, schema
 
+import zope.security
+import zope.interface.interfaces
 from zope.interface.common import idatetime
 from zope.interface.interface import InterfaceClass
-import zope.interface.interfaces
 from zope.schema.interfaces import IField
-import zope.security
+from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 
 import zope.app.container.interfaces
-import zope.app.event.objectevent
 import zope.app.form.browser.interfaces
 from zope.app.form.interfaces import IInputWidget, IDisplayWidget
 from zope.app.form.interfaces import WidgetsError, MissingInputError
@@ -777,8 +777,7 @@ class EditFormBase(FormBase):
     @action(_("Apply"), condition=haveInputWidgets)
     def handle_edit_action(self, action, data):
         if applyChanges(self.context, self.form_fields, data, self.adapters):
-            zope.event.notify(
-                zope.app.event.objectevent.ObjectModifiedEvent(self.context))
+            zope.event.notify(ObjectModifiedEvent(self.context))
             formatter = self.request.locale.dates.getFormatter(
                 'dateTime', 'medium')
 
@@ -837,8 +836,7 @@ class AddFormBase(FormBase):
 
     def createAndAdd(self, data):
         ob = self.create(data)
-        zope.event.notify(
-            zope.app.event.objectevent.ObjectCreatedEvent(ob))
+        zope.event.notify(ObjectCreatedEvent(ob))
         return self.add(ob)
 
     def create(self, data):
