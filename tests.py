@@ -19,17 +19,17 @@ import pytz
 
 from zope import component, interface
 import zope.interface.common.idatetime
-import zope.i18n
+import zope.i18n.testing
 import zope.publisher.interfaces
 import zope.publisher.interfaces.browser
 import zope.schema.interfaces
 import zope.traversing.adapters
+import zope.component.testing
 
 import zope.app.form.browser
 import zope.app.form.browser.exception
 import zope.app.form.browser.interfaces
 import zope.app.form.interfaces
-from zope.app.testing import placelesssetup
 
 from zope.formlib import interfaces, namedtemplate, form
 
@@ -39,7 +39,7 @@ def requestToTZInfo(request):
     return pytz.timezone('US/Hawaii')
 
 def pageSetUp(test):
-    placelesssetup.setUp(test)
+    zope.component.testing.setUp(test)
     component.provideAdapter(
         zope.traversing.adapters.DefaultTraversable,
         [None],
@@ -75,7 +75,8 @@ def TestTemplate(self):
     return '\n'.join(result)
 
 def formSetUp(test):
-    placelesssetup.setUp(test)
+    zope.component.testing.setUp(test)
+    zope.i18n.testing.setUp(test)
     component.provideAdapter(
         zope.app.form.browser.TextWidget,
         [zope.schema.interfaces.ITextLine,
@@ -443,14 +444,14 @@ def test_suite():
     return unittest.TestSuite((
         doctest.DocFileSuite(
             'form.txt',
-            setUp=formSetUp, tearDown=placelesssetup.tearDown,
+            setUp=formSetUp, tearDown=zope.component.testing.tearDown,
             ),
         doctest.DocTestSuite(
-            setUp=formSetUp, tearDown=placelesssetup.tearDown,
+            setUp=formSetUp, tearDown=zope.component.testing.tearDown,
             ),
         doctest.DocFileSuite(
             'namedtemplate.txt',
-            setUp=pageSetUp, tearDown=placelesssetup.tearDown,
+            setUp=pageSetUp, tearDown=zope.component.testing.tearDown,
             ),
         ))
 
