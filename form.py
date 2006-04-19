@@ -10,7 +10,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""Forms
 
 $Id$
 """
@@ -22,12 +22,11 @@ import pytz
 import zope.event
 import zope.i18n
 import zope.i18nmessageid
-import zope.publisher.interfaces.browser
-
-from zope import component, interface, schema
-
 import zope.security
 import zope.interface.interfaces
+import zope.publisher.browser
+import zope.publisher.interfaces.browser
+from zope import component, interface, schema
 from zope.interface.common import idatetime
 from zope.interface.interface import InterfaceClass
 from zope.schema.interfaces import IField
@@ -40,7 +39,6 @@ from zope.app.form.interfaces import WidgetsError, MissingInputError
 from zope.app.form.interfaces import InputErrors
 from zope.app.pagetemplate import ViewPageTemplateFile
 
-import zope.formlib.page
 from zope.formlib import interfaces, namedtemplate
 from zope.formlib.i18n import _
 
@@ -670,7 +668,7 @@ def availableActions(form, actions):
     return result
 
 
-class FormBase(zope.formlib.page.Page):
+class FormBase(zope.publisher.browser.BrowserPage):
 
     label = u''
 

@@ -10,12 +10,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Simple Page support
-
-This module has been deprecated and will be gone in Zope 3.5.
-
+"""
 $Id$
 """
+
 # BBB 2006/04/19 -- to be removed after 12 months
 import zope.deferredimport
 zope.deferredimport.deprecated(

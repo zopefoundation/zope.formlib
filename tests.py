@@ -442,10 +442,6 @@ def test_suite():
     from zope.testing import doctest
     return unittest.TestSuite((
         doctest.DocFileSuite(
-            'page.txt',
-            setUp=pageSetUp, tearDown=placelesssetup.tearDown,
-            ),
-        doctest.DocFileSuite(
             'form.txt',
             setUp=formSetUp, tearDown=placelesssetup.tearDown,
             ),
