@@ -30,6 +30,7 @@ from zope.interface.common import idatetime
 from zope.interface.interface import InterfaceClass
 import zope.interface.interfaces
 from zope.schema.interfaces import IField
+from zope.schema.interfaces import ValidationError
 import zope.security
 
 import zope.app.container.interfaces
@@ -316,6 +317,10 @@ def getWidgetsData(widgets, form_prefix, data):
 
             try:
                 data[name] = widget.getInputValue()
+            except ValidationError, error:
+                # convert field ValidationError to WidgetInputError
+                error = WidgetInputError(widget.name, widget.label, error)
+                errors.append(error)
             except InputErrors, error:
                 errors.append(error)
 
