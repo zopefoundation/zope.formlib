@@ -10,27 +10,29 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""Form interfaces
 
 $Id$
 """
-
 import re
 from zope import interface, schema
-import zope.publisher.interfaces.browser
-import zope.schema.vocabulary
+from zope.publisher.interfaces.browser import IBrowserPage
+
+##############################################################################
+# BBB 2006/04/19 -- to be removed after 12 months
+
+import zope.deferredimport
+zope.deferredimport.deprecated(
+    "It has moved to zope.publisher.interfaces.browser.IBrowserPage.  "
+    "This reference will be gone in Zope 3.5.",
+    IPage = 'zope.publisher.interfaces.browser:IBrowserPage',
+    )
+
+##############################################################################
 
 class FormError(Exception):
     """There was an error in managing the form
     """
-
-class IPage(zope.publisher.interfaces.browser.IBrowserPublisher):
-    """Web page
-    """
-
-    def __call__(*args, **kw):
-        """Compute a response body
-        """
 
 def reConstraint(pat, explanation):
     pat = re.compile(pat)
@@ -377,12 +379,12 @@ class IFormAPI(interface.Interface):
     FormBase = interface.Attribute("""Base class for creating forms
 
     The FormBase class provides reuasable implementation for creating
-    forms.  It implements ISubPage, IPage, and IFormBaseCustomization.
+    forms.  It implements ISubPage, IBrowserPage, and IFormBaseCustomization.
     Subclasses will override or use attributes defined by
     IFormBaseCustomization.
     """)
 
-class IFormBaseCustomization(ISubPage, IPage):
+class IFormBaseCustomization(ISubPage, IBrowserPage):
     """Attributes provided by the Form base class
 
     These attributes may be used or overridden.
@@ -687,7 +689,7 @@ class ISubPageForm(IForm, ISubPage):
 
     """
 
-class IPageForm(IForm, IPage):
+class IPageForm(IForm, IBrowserPage):
     """A component that displays a form as a page.
     """
 

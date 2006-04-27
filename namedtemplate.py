@@ -16,7 +16,7 @@ $Id$
 """
 
 from zope import component, interface
-import zope.app.traversing.interfaces
+import zope.traversing.interfaces
 
 class INamedTemplate(interface.Interface):
     """A template that is looked up by name
@@ -67,7 +67,7 @@ class NamedTemplate(object):
 # TODO need test
 class NamedTemplatePathAdapter(object):
 
-    interface.implements(zope.app.traversing.interfaces.IPathAdapter)
+    interface.implements(zope.traversing.interfaces.IPathAdapter)
 
     def __init__(self, context):
         self.context = context

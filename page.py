@@ -12,22 +12,14 @@
 ##############################################################################
 """Simple Page support
 
+This module has been deprecated and will be gone in Zope 3.5.
+
 $Id$
 """
-
-from zope import interface
-from zope.publisher.interfaces import NotFound
-from zope.app.publisher.browser import BrowserView
-from zope.formlib.interfaces import IPage
-
-class Page(BrowserView):
-    """Simple page-support class
-    """
-
-    interface.implements(IPage)
-
-    def browserDefault(self, request):
-        return self, ()
-
-    def publishTraverse(self, request, name):
-        raise NotFound(self, name, request)
+# BBB 2006/04/19 -- to be removed after 12 months
+import zope.deferredimport
+zope.deferredimport.deprecated(
+    "It has moved to zope.publisher.browser.BrowserPage.  This reference "
+    "will be gone in Zope 3.5.",
+    Page = 'zope.publisher.browser:BrowserPage',
+    )

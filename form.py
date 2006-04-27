@@ -10,11 +10,10 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
+"""Forms
 
 $Id$
 """
-
 import datetime
 import re
 import sys
@@ -22,27 +21,26 @@ import pytz
 
 import zope.event
 import zope.i18n
+import zope.i18nmessageid
+import zope.security
+import zope.interface.interfaces
+import zope.publisher.browser
 import zope.publisher.interfaces.browser
-
 from zope import component, interface, schema
-
 from zope.interface.common import idatetime
 from zope.interface.interface import InterfaceClass
-import zope.interface.interfaces
 from zope.schema.interfaces import IField
 from zope.schema.interfaces import ValidationError
 import zope.security
+from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 
 import zope.app.container.interfaces
-import zope.app.event.objectevent
 import zope.app.form.browser.interfaces
 from zope.app.form.interfaces import IInputWidget, IDisplayWidget
 from zope.app.form.interfaces import WidgetsError, MissingInputError
 from zope.app.form.interfaces import InputErrors, WidgetInputError
 from zope.app.pagetemplate import ViewPageTemplateFile
-from zope.app.publisher.browser import BrowserView
 
-import zope.formlib.page
 from zope.formlib import interfaces, namedtemplate
 from zope.formlib.i18n import _
 
@@ -595,7 +593,7 @@ def render_submit_button(self):
     if not self.available():
         return ''
     label = self.label
-    if isinstance(label, (zope.i18n.Message, zope.i18n.MessageID)):
+    if isinstance(label, zope.i18nmessageid.Message):
         label = zope.i18n.translate(self.label, context=self.form.request)
     return ('<input type="submit" id="%s" name="%s" value="%s"'
             ' class="button" />' %
@@ -676,7 +674,7 @@ def availableActions(form, actions):
     return result
 
 
-class FormBase(zope.formlib.page.Page):
+class FormBase(zope.publisher.browser.BrowserPage):
 
     label = u''
 
@@ -783,8 +781,7 @@ class EditFormBase(FormBase):
     @action(_("Apply"), condition=haveInputWidgets)
     def handle_edit_action(self, action, data):
         if applyChanges(self.context, self.form_fields, data, self.adapters):
-            zope.event.notify(
-                zope.app.event.objectevent.ObjectModifiedEvent(self.context))
+            zope.event.notify(ObjectModifiedEvent(self.context))
             formatter = self.request.locale.dates.getFormatter(
                 'dateTime', 'medium')
 
@@ -843,8 +840,7 @@ class AddFormBase(FormBase):
 
     def createAndAdd(self, data):
         ob = self.create(data)
-        zope.event.notify(
-            zope.app.event.objectevent.ObjectCreatedEvent(ob))
+        zope.event.notify(ObjectCreatedEvent(ob))
         return self.add(ob)
 
     def create(self, data):
