@@ -257,6 +257,58 @@ def test_error_views_i18n():
 """
 
 
+def test_error_handling():
+    """\
+
+Let's test the getWidgetsData method which is responsible for handling widget
+erros raised by the widgets getInputValue method.
+
+    >>> from zope.interface import implements
+    >>> from zope.app.form.interfaces import IInputWidget
+    >>> class Widget(object):
+    ...     implements(IInputWidget)
+    ...     def __init__(self):
+    ...         self.name = 'form.summary'
+    ...         self.label = 'Summary'
+    ...     def hasInput(self):
+    ...         return True
+    ...     def getInputValue(self):
+    ...         raise zope.app.form.interfaces.WidgetInputError(
+    ...         field_name='summary',
+    ...         widget_title=u'Summary')
+    >>> widget = Widget()
+    >>> inputs = [(True, widget)]
+    >>> widgets = form.Widgets(inputs, 5)
+    >>> errors = form.getWidgetsData(widgets, 'form', {'summary':'value'})
+    >>> errors #doctest: +ELLIPSIS
+    [<zope.app.form.interfaces.WidgetInputError instance at ...>]
+
+Let's see what happens if a widget doesn't convert a ValidationError 
+raised by a field to a WidgetInputError. This should not happen if a widget 
+converts ValidationErrors to WidgetInputErrors. But since I just fixed 
+yesterday the sequence input widget, I decided to catch ValidationError also
+in the formlib as a fallback if some widget doen't handle errors correct. (ri)
+
+    >>> from zope.schema.interfaces import ValidationError
+    >>> class Widget(object):
+    ...     implements(IInputWidget)
+    ...     def __init__(self):
+    ...         self.name = 'form.summary'
+    ...         self.label = 'summary'
+    ...     def hasInput(self):
+    ...         return True
+    ...     def getInputValue(self):
+    ...         raise ValidationError('A error message')
+    >>> widget = Widget()
+    >>> inputs = [(True, widget)]
+    >>> widgets = form.Widgets(inputs, 5)
+    >>> errors = form.getWidgetsData(widgets, 'form', {'summary':'value'})
+    >>> errors #doctest: +ELLIPSIS
+    [<zope.app.form.interfaces.WidgetInputError instance at ...>]
+    
+"""
+
+
 def test_form_template_i18n():
     """\
 Let's try to check that the formlib templates handle i18n correctly.
