@@ -42,7 +42,9 @@ from zope.app.form.interfaces import InputErrors, WidgetInputError
 from zope.app.pagetemplate import ViewPageTemplateFile
 
 from zope.formlib import interfaces, namedtemplate
-from zope.formlib.i18n import _
+from zope.i18nmessageid import MessageFactory
+_ = MessageFactory("zope")
+
 
 interface.moduleProvides(interfaces.IFormAPI)
 
