@@ -127,6 +127,13 @@ def formSetUp(test):
         zope.app.form.interfaces.IDisplayWidget,
         )
     component.provideAdapter(
+        zope.app.form.browser.DatetimeWidget,
+        [zope.schema.interfaces.IDatetime,
+         zope.publisher.interfaces.browser.IBrowserRequest,
+         ],
+        zope.app.form.interfaces.IInputWidget,
+        )
+    component.provideAdapter(
         zope.app.form.browser.exception.WidgetInputErrorView,
         [zope.app.form.interfaces.IWidgetInputError,
          zope.publisher.interfaces.browser.IBrowserRequest,
