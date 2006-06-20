@@ -554,6 +554,8 @@ def test_suite():
             'namedtemplate.txt',
             setUp=pageSetUp, tearDown=zope.component.testing.tearDown,
             ),
+        doctest.DocTestSuite(
+            'zope.formlib.errors')
         ))
 
 if __name__ == '__main__':
