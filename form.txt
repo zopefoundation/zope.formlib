@@ -1554,7 +1554,7 @@ Now try the same with the AddFormBase which uses a setUpInputWidget:
     <input class="textType" id="form.max_size" name="form.max_size" 
            size="10" type="text" value=""  />
     <input class="textType" id="form.now" name="form.now" size="20" 
-           type="text" value="2002-12-02 12:30:00"  />
+           type="text" value="2002 12 2  12:30:00 "  />
 
 Note that a EditForm can't make use of a get_rendered method. The get_rendered
 method does only set initial values.
