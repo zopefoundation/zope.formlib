@@ -27,7 +27,7 @@ template, use the NamedTemplate constructor, and give a template name:
 
 Normally, we'd register a named template for a view interface, to
 allow it to be registered for multiple views.  We'll just register it
-forour view class.
+for our view class.
 
     >>> from zope import component
     >>> from zope.formlib import interfaces
@@ -49,7 +49,7 @@ Now, with this in place, we should be able to use our view:
     </body></html>
     <BLANKLINE>
 
-The view type that a named template is to be used for for can be supplied
+The view type that a named template is to be used for can be supplied
 when the named template is created:
 
     >>> from zope import interface
