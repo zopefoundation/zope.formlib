@@ -147,7 +147,7 @@ class FormFields(object):
         return self.__class__(*[self[name] for name in names])
 
     def omit(self, *names):
-        """Return a modified instance with an ordered subset of fields."""
+        """Return a modified instance omitting given fields."""
         return self.__class__(*[ff for ff in self if ff.__name__ not in names])
 
 Fields = FormFields
