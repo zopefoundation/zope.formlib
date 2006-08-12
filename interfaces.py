@@ -515,6 +515,10 @@ class IFormFields(interface.Interface):
         IFormFields that has the named fields in the specified order.
         """
 
+    def omit(*names):
+        """Omit fields with given names
+        """
+
 SKIP_UNAUTHORIZED = 2
 DISPLAY_UNWRITEABLE = 4
 
