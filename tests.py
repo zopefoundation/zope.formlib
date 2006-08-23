@@ -546,6 +546,7 @@ def test_suite():
         doctest.DocFileSuite(
             'form.txt',
             setUp=formSetUp, tearDown=zope.component.testing.tearDown,
+            optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
             ),
         doctest.DocTestSuite(
             setUp=formSetUp, tearDown=zope.component.testing.tearDown,

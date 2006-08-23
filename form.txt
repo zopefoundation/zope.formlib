@@ -1620,3 +1620,69 @@ and invariant errors shouldn't, because they don't come from a widget.
 Therefore, a simple division such as the following should suffice.
 
 # TODO
+
+Additional Cases
+================
+
+
+Automatic Context Adaptation
+----------------------------
+
+As you may know already, the formlib will automatically adapt the context to
+find a widget and data for a particular field. In an early version of
+``zope.formlib``, it simply used ``field.interface`` to get the interface to
+adapt to. Unfortunately, this call returns the interface the field has been
+defined in and not the interface you got the field from. The following lines
+demonstrate the correct behavior:
+
+  >>> import zope.interface
+  >>> import zope.schema
+
+  >>> class IFoo(zope.interface.Interface):
+  ...     title = zope.schema.TextLine()
+
+  >>> class IFooBar(IFoo):
+  ...     pass
+
+Here is the unexpected behavior that caused formlib to do the wrong thing:
+
+  >>> IFooBar['title'].interface
+  <InterfaceClass __builtin__.IFoo>
+
+Note: If this behavior ever changes, the formlib can be simplified again.
+
+  >>> class FooBar(object):
+  ...     zope.interface.implements(IFooBar)
+  ...     title = u'initial'
+  >>> foobar = FooBar()
+
+  >>> class Blah(object):
+  ...     def __conform__(self, iface):
+  ...         if iface is IFooBar:
+  ...             return foobar
+  >>> blah = Blah()
+
+Let's now generate the form fields and instantiate the widgets:
+
+  >>> from zope.formlib import form
+
+  >>> form_fields = form.FormFields(IFooBar)
+
+  >>> request = TestRequest()
+  >>> widgets = form.setUpEditWidgets(form_fields, 'form', blah, request)
+  >>> print widgets.get('title')()
+  <input class="textType" id="form.title" name="form.title"
+         size="20" type="text" value="initial" />
+
+Here are some more places where the behavior was incorrect:
+
+  >>> widgets = form.setUpWidgets(form_fields, 'form', blah, request)
+  >>> print widgets.get('title')()
+  <input class="textType" id="form.title" name="form.title"
+         size="20" type="text" value="" />
+
+  >>> form.checkInvariants(form_fields, {'title': 'new'})
+  []
+
+  >>> form.applyChanges(blah, form_fields, {'title': 'new'})
+  True

@@ -56,7 +56,7 @@ class FormField:
 
     def __init__(self, field, name=None, prefix='',
                  for_display=None, for_input=None, custom_widget=None,
-                 render_context=False, get_rendered=None,
+                 render_context=False, get_rendered=None, interface=None
                  ):
         self.field = field
         if name is None:
@@ -66,6 +66,9 @@ class FormField:
             name = prefix + '.' + name
         self.__name__ = name
         self.prefix = prefix
+        if interface is None:
+            interface = field.interface
+        self.interface = interface
         self.for_display = for_display
         self.for_input = for_input
         self.custom_widget = custom_widget
@@ -88,33 +91,34 @@ class FormFields(object):
         for arg in args:
             if isinstance(arg, InterfaceClass):
                 for name, field in schema.getFieldsInOrder(arg):
-                    fields.append((name, field))
+                    fields.append((name, field, arg))
             elif IField.providedBy(arg):
                 name = arg.__name__
                 if not name:
                         raise ValueError(
                             "Field has no name")
 
-                fields.append((name, arg))
+                fields.append((name, arg, arg.interface))
             elif isinstance(arg, FormFields):
                 for form_field in arg:
-                    fields.append((form_field.__name__, form_field))
+                    fields.append(
+                        (form_field.__name__, form_field, form_field.interface))
             elif isinstance(arg, FormField):
-                fields.append((arg.__name__, arg))
+                fields.append((arg.__name__, arg, arg.interface))
             else:
                 raise TypeError("Unrecognized argument type", arg)
 
 
         seq = []
         byname = {}
-        for name, field in fields:
+        for name, field, iface in fields:
             if isinstance(field, FormField):
                 form_field = field
             else:
                 if field.readonly:
                     if omit_readonly and (name not in keep_readonly):
                         continue
-                form_field = FormField(field, **defaults)
+                form_field = FormField(field, interface=iface, **defaults)
                 name = form_field.__name__
 
             if name in byname:
@@ -224,7 +228,7 @@ def setUpWidgets(form_fields,
                 adapters = {}
 
             # Adapt context, if necessary
-            interface = field.interface
+            interface = form_field.interface
             adapter = adapters.get(interface)
             if adapter is None:
                 if interface is None:
@@ -347,7 +351,7 @@ def setUpEditWidgets(form_fields, form_prefix, context, request,
     for form_field in form_fields:
         field = form_field.field
         # Adapt context, if necessary
-        interface = field.interface
+        interface = form_field.interface
         adapter = adapters.get(interface)
         if adapter is None:
             if interface is None:
@@ -463,7 +467,7 @@ def checkInvariants(form_fields, form_data):
     # First, collect the data for the various schemas
     schema_data = {}
     for form_field in form_fields:
-        schema = form_field.field.interface
+        schema = form_field.interface
         if schema is None:
             continue
 
@@ -493,7 +497,7 @@ def applyChanges(context, form_fields, data, adapters=None):
     for form_field in form_fields:
         field = form_field.field
         # Adapt context, if necessary
-        interface = field.interface
+        interface = form_field.interface
         adapter = adapters.get(interface)
         if adapter is None:
             if interface is None:
@@ -663,7 +667,7 @@ def handleSubmit(actions, data, default_validate=None):
     for action in actions:
         if action.submitted():
             errors = action.validate(data)
-            if errors is None:
+            if errors is None and default_validate is not None:
                 errors = default_validate(action, data)
             return errors, action
 
