@@ -5,24 +5,40 @@
 
 function toggleFormFieldHelp(ob,state) {
   // ob is the label element
-  var field = ob.form[ob.htmlFor];
+  var field = findWidgetDiv(ob);
   if (field) {
-    var viz = state && 'hidden' || 'visible';
-    if (field.length == null) {
-      field.style.visibility = viz;
-    }
-    else {
-      for (var i = 0; i < field.length; ++i) {
-        var e = field.item(i);
-        e.style.visibility = viz;
-      }
-    }
-    var help = document.getElementById("field-help-for-" + field.name);
+    field.style.visibility = state && 'hidden' || 'visible';
+    var help = document.getElementById("field-help-for-" + ob.htmlFor);
     if (help) {
       help.style.visibility = state && 'visible' || 'hidden';
     }
   }
 }
+
+function findWidgetDiv(label) {
+  var element = findFormField(label);
+  while (element) {
+    element = element.parentNode;
+    if (element.tagName == 'DIV' && element.getAttribute('class') == 'widget')
+      return element;
+  }
+}
+
+function findFormField(label) {
+  var name = label.htmlFor;
+  var field = label.form[name];
+  // Multiple fields with the same name, such as radiobuttons
+  if (field) {
+    if (field.length)
+      field = field[0];
+    return field;
+  }
+  // No field with the exact name; find one that starts with the name
+  for (var i = 0; field = label.form[i++];) {
+    if (field.name.substr(0, name.length) == name)
+      return field;
+  }
+} 
 
 //-->
 </script>
