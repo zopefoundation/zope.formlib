@@ -30,6 +30,7 @@ from zope.interface.common import idatetime
 from zope.interface.interface import InterfaceClass
 import zope.interface.interfaces
 from zope.schema.interfaces import IField
+from zope.schema.interfaces import ValidationError
 import zope.security
 
 import zope.app.container.interfaces
@@ -37,7 +38,7 @@ import zope.app.event.objectevent
 import zope.app.form.browser.interfaces
 from zope.app.form.interfaces import IInputWidget, IDisplayWidget
 from zope.app.form.interfaces import WidgetsError, MissingInputError
-from zope.app.form.interfaces import InputErrors
+from zope.app.form.interfaces import InputErrors, WidgetInputError
 from zope.app.pagetemplate import ViewPageTemplateFile
 from zope.app.publisher.browser import BrowserView
 
@@ -316,6 +317,10 @@ def getWidgetsData(widgets, form_prefix, data):
 
             try:
                 data[name] = widget.getInputValue()
+            except ValidationError, error:
+                # convert field ValidationError to WidgetInputError
+                error = WidgetInputError(widget.name, widget.label, error)
+                errors.append(error)
             except InputErrors, error:
                 errors.append(error)
 
@@ -753,6 +758,8 @@ class FormBase(zope.formlib.page.Page):
                     zope.app.form.browser.interfaces.IWidgetInputErrorView)
                 title = getattr(error, 'widget_title', None) # duck typing
                 if title:
+                    if isinstance(title, zope.i18n.Message):
+                        title = zope.i18n.translate(title, context=self.request)
                     yield '%s: %s' % (title, view.snippet())
                 else:
                     yield view.snippet()
