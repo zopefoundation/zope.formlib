@@ -722,7 +722,13 @@ class FormBase(zope.formlib.page.Page):
 
         data = {}
         errors, action = handleSubmit(self.actions, data, self.validate)
-        self.errors = errors
+        # the following part will make sure that previous error not
+        # get overriden by new errors. This is usefull for subforms. (ri)
+        if self.errors is None:
+            self.errors = errors
+        else:
+            if errors is not None:
+                self.errors += tuple(errors)
 
         if errors:
             self.status = _('There were errors')
@@ -755,6 +761,14 @@ class FormBase(zope.formlib.page.Page):
         for error in self.errors:
             if isinstance(error, basestring):
                 yield error
+            elif isinstance(error, interface.Invalid):
+                # convert invariants Invalid exception into usefull error
+                # message strings rather then end in component lookup error
+                msg = error.args[0]
+                if isinstance(msg, zope.i18n.Message):
+                    msg = zope.i18n.translate(msg, context=self.request, 
+                        default=msg)
+                yield u'<span class="error">%s</span>' % msg
             else:
                 view = component.getMultiAdapter(
                     (error, self.request),
