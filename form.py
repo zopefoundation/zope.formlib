@@ -277,7 +277,7 @@ def setUpWidgets(form_fields,
     return Widgets(widgets, len(form_prefix)+1)
 
 def setUpInputWidgets(form_fields, form_prefix, context, request,
-                      ignore_request=False):
+                      form=None, ignore_request=False):
     widgets = []
     for form_field in form_fields:
         field = form_field.field.bind(context)
@@ -290,7 +290,10 @@ def setUpInputWidgets(form_fields, form_prefix, context, request,
         widget.setPrefix(prefix)
 
         if ignore_request:
-            value = field.default
+            if form_field.get_rendered is not None:
+                value = form_field.get_rendered(form)
+            else:
+                value = field.default
             widget.setRenderedValue(value)
 
         widgets.append((True, widget))

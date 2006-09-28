@@ -1528,6 +1528,37 @@ a function for getting the needed initial value:
            size="10" type="text" value="100.0"  />
     <span class="dateTime">2002 12 2  12:30:00 </span>
 
+Now try the same with the AddFormBase which uses a setUpInputWidget:
+
+    >>> class MyAddForm(form.AddFormBase):
+    ...     actions = ()
+    ...
+    ...     def now(self):
+    ...         return datetime.datetime(2002, 12, 2, 12, 30)
+    ...
+    ...     form_fields = form.Fields(
+    ...         form.Fields(IOrder).omit('now'),
+    ...         form.Field(IOrder['now'], get_rendered=now),
+    ...         )
+    ...
+    ...     def setUpWidgets(self, ignore_request=True):
+    ...         super(MyAddForm, self).setUpWidgets(ignore_request)
+
+    >>> print MyAddForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    <input class="textType" id="form.identifier" name="form.identifier" 
+           size="10" type="text" value=""  />
+    <input class="textType" id="form.name" name="form.name" size="20" 
+           type="text" value=""  />
+    <input class="textType" id="form.min_size" name="form.min_size" 
+           size="10" type="text" value=""  />
+    <input class="textType" id="form.max_size" name="form.max_size" 
+           size="10" type="text" value=""  />
+    <input class="textType" id="form.now" name="form.now" size="20" 
+           type="text" value="2002-12-02 12:30:00"  />
+
+Note that a EditForm can't make use of a get_rendered method. The get_rendered
+method does only set initial values.
+
 Note that the function passed must take a form as an argument.  The
 `setUpWidgets` function takes an optional 'form' argument, which
 **must** be passed if any fields use the get_rendered option.  The
