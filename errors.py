@@ -18,17 +18,22 @@ __docformat__ = 'restructuredtext'
 
 from cgi import escape
 
+from zope.component import adapts
 from zope.interface import implements
+from zope.interface import Invalid
+from zope.i18n import Message
 from zope.i18n import translate
 
-from zope.app.form.interfaces import IWidgetInputError
 from zope.app.form.browser.interfaces import IWidgetInputErrorView
+from zope.publisher.interfaces.browser import IBrowserRequest
+
 
 class InvalidErrorView(object):
-    """Display a validation error as a snippet of text."""
-    implements(IWidgetInputErrorView)
 
-    __used_for__ = IWidgetInputError
+    """Display a validation error as a snippet of text."""
+
+    implements(IWidgetInputErrorView)
+    adapts(Invalid, IBrowserRequest)
 
     def __init__(self, context, request):
         self.context = context
@@ -42,7 +47,7 @@ class InvalidErrorView(object):
         >>> InvalidErrorView(error, None).snippet()
         u'<span class="error">You made an error!</span>'
         """
-        message = str(self.context)
-        translated = translate(message, context=self.request, default=message)
-        return u'<span class="error">%s</span>' % escape(translated)
-
+        msg = self.context.args[0]
+        if isinstance(msg, Message):
+            msg = translate(msg, context=self.request)
+        return u'<span class="error">%s</span>' % escape(msg)
