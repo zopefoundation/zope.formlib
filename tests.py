@@ -235,35 +235,6 @@ data passed to translate:
 
 """
 
-
-def test_error_views_i18n():
-    """\
-
-    >>> from zope.i18n.simpletranslationdomain import SimpleTranslationDomain
-    >>> from zope.i18n.interfaces import ITranslationDomain
-    >>> messageDic = {('ja', u'Summary'): u'MatomeYaken'}
-    >>> sd = SimpleTranslationDomain('KansaiBen.domain', messageDic)
-    >>> component.provideUtility(provides=ITranslationDomain,
-    ...                          component=sd,
-    ...                          name='KansaiBen.domain')
-    >>> from zope.i18n.negotiator import negotiator
-    >>> component.provideUtility(negotiator)
-    >>> _ = zope.i18nmessageid.MessageFactory('KansaiBen.domain')
-    >>> myError = zope.app.form.interfaces.WidgetInputError(
-    ...     field_name='summary',
-    ...     widget_title=_(u'Summary'))
-    >>> from zope.publisher.browser import TestRequest
-    >>> req = TestRequest()
-    >>> req._environ['HTTP_ACCEPT_LANGUAGE'] = 'ja; q=1.0'
-    >>> mybase = form.FormBase(None, req)
-    >>> mybase.errors = (myError,)
-    >>> save = mybase.error_views()
-    >>> save.next()
-    u'MatomeYaken: <span class="error"></span>'
-    
-"""
-
-
 def test_error_handling():
     """\
 
@@ -314,49 +285,6 @@ in the formlib as a fallback if some widget doen't handle errors correct. (ri)
     [<zope.app.form.interfaces.WidgetInputError instance at ...>]
     
 """
-
-
-def test_invariants():
-    """\
-
-Let's also test the invariant error handling. Interface invariant methods 
-raise zope.schem.Invalid exception. Test if this exception get handled by the 
-error_views.
-
-    >>> from zope.interface import Invalid
-    >>> myError = Invalid('My error message')
-    >>> from zope.publisher.browser import TestRequest
-    >>> req = TestRequest()
-    >>> mybase = form.FormBase(None, req)
-    >>> mybase.errors = (myError,)
-    >>> save = mybase.error_views()
-    >>> save.next()
-    u'<span class="error">My error message</span>'
-
-And yes, we can even handle a i18n message in a Invalid exception:
-
-    >>> from zope.i18n.simpletranslationdomain import SimpleTranslationDomain
-    >>> from zope.i18n.interfaces import ITranslationDomain
-    >>> messageDic = {('ja', u'My i18n error message'): u'Mein Fehler'}
-    >>> sd = SimpleTranslationDomain('foobar.domain', messageDic)
-    >>> component.provideUtility(provides=ITranslationDomain,
-    ...                          component=sd,
-    ...                          name='foobar.domain')
-    >>> from zope.i18n.negotiator import negotiator
-    >>> component.provideUtility(negotiator)
-    >>> _ = zope.i18nmessageid.MessageFactory('foobar.domain')
-    >>> myError = Invalid(_('My i18n error message'))
-    >>> from zope.publisher.browser import TestRequest
-    >>> req = TestRequest()
-    >>> req._environ['HTTP_ACCEPT_LANGUAGE'] = 'ja; q=1.0'
-    >>> mybase = form.FormBase(None, req)
-    >>> mybase.errors = (myError,)
-    >>> save = mybase.error_views()
-    >>> save.next()
-    u'<span class="error">Mein Fehler</span>'
-
-"""
-
 
 def test_form_template_i18n():
     """\

@@ -765,14 +765,6 @@ class FormBase(zope.publisher.browser.BrowserPage):
         for error in self.errors:
             if isinstance(error, basestring):
                 yield error
-            elif isinstance(error, interface.Invalid):
-                # convert invariants Invalid exception into usefull error
-                # message strings rather then end in component lookup error
-                msg = error.args[0]
-                if isinstance(msg, zope.i18n.Message):
-                    msg = zope.i18n.translate(msg, context=self.request, 
-                        default=msg)
-                yield u'<span class="error">%s</span>' % msg
             else:
                 view = component.getMultiAdapter(
                     (error, self.request),
@@ -784,6 +776,7 @@ class FormBase(zope.publisher.browser.BrowserPage):
                     yield '%s: %s' % (title, view.snippet())
                 else:
                     yield view.snippet()
+
 
 def haveInputWidgets(form, action):
     for input, widget in form.widgets.__iter_input_and_widget__():
