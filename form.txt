@@ -29,6 +29,7 @@ schema to the `Fields` constructor:
     ...     name = schema.TextLine(title=u"Name")
     ...     min_size = schema.Float(title=u"Minimum size")
     ...     max_size = schema.Float(title=u"Maximum size")
+    ...     color = schema.TextLine(title=u"Color", required=False)
     ...     now = schema.Datetime(title=u"Now", readonly=True)
 
     >>> from zope.formlib import form
@@ -38,10 +39,10 @@ schema to the `Fields` constructor:
 This sets up a set of form fields from the interface, IOrder.
 
     >>> len(MyForm.form_fields)
-    5
+    6
 
     >>> [w.__name__ for w in MyForm.form_fields]
-    ['identifier', 'name', 'min_size', 'max_size', 'now']
+    ['identifier', 'name', 'min_size', 'max_size', 'color', 'now']
 
 We can access individual form fields by name:
 
@@ -56,7 +57,7 @@ We can also select and order subsets using the select method of form fields:
 or by omitting fields:
 
     >>> [w.__name__ for w in MyForm.form_fields.omit('now', 'identifier')]
-    ['name', 'min_size', 'max_size']
+    ['name', 'min_size', 'max_size', 'color']
 
 We can omit read-only fields using the omit_readonly option when
 setting up the fields:
@@ -64,7 +65,7 @@ setting up the fields:
     >>> class MyForm:
     ...     form_fields = form.Fields(IOrder, omit_readonly=True)
     >>> [w.__name__ for w in MyForm.form_fields]
-    ['name', 'min_size', 'max_size']
+    ['name', 'min_size', 'max_size', 'color']
 
 
 Getting HTML
@@ -103,6 +104,9 @@ Now, we can display the form:
            type="text" value=""  />
     <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value=""  />
+    <input class="textType" id="form.color" name="form.color" size="20"
+           type="text" value=""  />
+
 
 If the request contains any form data, that will be reflected in the
 output:
@@ -115,6 +119,9 @@ output:
            type="text" value=""  />
     <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value=""  />
+    <input class="textType" id="form.color" name="form.color"
+           size="20" type="text" value=""  />
+
 
 Sometimes we don't want this behavior: we want to ignore the request values,
 particularly after a form has been processed and before it is drawn again.
@@ -129,6 +136,9 @@ setUpWidgets.
            type="text" value=""  />
     <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value=""  />
+    <input class="textType" id="form.color" name="form.color" size="20"
+           type="text" value=""  />
+
 
 Reading data
 ============
@@ -195,6 +205,8 @@ variable:
     <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value=""  />
     <span class="error">Required input is missing.</span>
+    <input class="textType" id="form.color" name="form.color" size="20"
+           type="text" value=""  />
     {'name': u'bob'}
 
 
@@ -215,6 +227,8 @@ and max size.  If we provide an invalid value, we'll get an error too:
     <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value=""  />
     <span class="error">Required input is missing.</span>
+    <input class="textType" id="form.color" name="form.color" size="20" 
+           type="text" value=""  />
     {'name': u'bob'}
 
 If we provide valid data, we'll get the data back:
@@ -228,6 +242,8 @@ If we provide valid data, we'll get the data back:
            type="text" value="42.0"  />
     <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="142.0"  />
+    <input class="textType" id="form.color" name="form.color" size="20"
+           type="text" value=""  />
     {'max_size': 142.0,
      'min_size': 42.0,
      'name': u'bob'}
