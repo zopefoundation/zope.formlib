@@ -316,7 +316,7 @@ def getWidgetsData(widgets, form_prefix, data):
             name = _widgetKey(widget, form_prefix)
 
             if not widget.hasInput():
-                raise interfaces.FormError("No input", name)
+                continue
 
             try:
                 data[name] = widget.getInputValue()
