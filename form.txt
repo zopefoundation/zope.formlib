@@ -1636,3 +1636,103 @@ and invariant errors shouldn't, because they don't come from a widget.
 Therefore, a simple division such as the following should suffice.
 
 # TODO
+
+Omitting the form prefix
+------------------------
+
+For certain use cases (e.g. forms that post data to a different server whose
+software you do not control) it is important to be able to generate forms
+*without* a prefix. Using an empty string for the prefix omits it entirely.
+
+    >>> form_fields = form.Fields(IOrder).select('name')
+    >>> request = TestRequest()
+    >>> widgets = form.setUpWidgets(form_fields, '', None, request)
+    >>> print widgets['name']() # doctest: +NORMALIZE_WHITESPACE
+    <input class="textType" id="name" name="name" size="20"
+           type="text" value=""  />
+
+Of course, getting the widget data still works.
+
+    >>> request.form['name'] = 'foo'
+    >>> widgets = form.setUpWidgets(form_fields, '', None, request)
+    >>> data = {}
+    >>> form.getWidgetsData(widgets, '', data)
+    []
+    >>> data
+    {'name': u'foo'}
+
+And the value from the request is also visible in the rendered form.
+
+    >>> print widgets['name']() # doctest: +NORMALIZE_WHITESPACE
+    <input class="textType" id="name" name="name" size="20"
+           type="text" value="foo"  />
+
+The same is true when using the other setup*Widgets helpers.
+
+    >>> widgets = form.setUpInputWidgets(form_fields, '', None, request)
+    >>> print widgets['name']() # doctest: +NORMALIZE_WHITESPACE
+    <input class="textType" id="name" name="name" size="20"
+           type="text" value="foo"  />
+
+    >>> order = Order(42)
+    >>> widgets = form.setUpEditWidgets(form_fields, '', order, request)
+    >>> print widgets['name']() # doctest: +NORMALIZE_WHITESPACE
+    <input class="textType" id="name" name="name" size="20"
+           type="text" value="foo"  />
+
+    >>> widgets = form.setUpDataWidgets(form_fields, '', None, request)
+    >>> print widgets['name']() # doctest: +NORMALIZE_WHITESPACE
+    <input class="textType" id="name" name="name" size="20"
+           type="text" value="foo"  />
+
+Form actions have their own prefix in addition to the form prefix. This can be
+suppressed for each action by passing the empty string as the 'prefix'
+argument.
+
+    >>> class MyForm(form.Form):
+    ...
+    ...     prefix = ''
+    ...     form_fields = form.Fields()
+    ...
+    ...     @form.action('Button 1', name='button1')
+    ...     def handle_button1(self, action, data):
+    ...         self.status = 'Button 1 detected'
+    ...
+    ...     @form.action('Button 2', prefix='', name='button2')
+    ...     def handle_button2(self, action, data):
+    ...         self.status = 'Button 2 detected'
+    ...
+    >>> request = TestRequest()
+    >>> request.form['actions.button1'] = ''
+    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    Button 1 detected
+    <input type="submit" id="actions.button1" name="actions.button1"
+           value="Button 1" class="button" />
+    <input type="submit" id="button2" name="button2"
+           value="Button 2" class="button" />
+    >>> request = TestRequest()
+    >>> request.form['button2'] = ''
+    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    Button 2 detected
+    <input type="submit" id="actions.button1" name="actions.button1"
+           value="Button 1" class="button" />
+    <input type="submit" id="button2" name="button2"
+           value="Button 2" class="button" />
+
+It is also possible to keep the form prefix and just suppress the 'actions' prefix.
+
+    >>> class MyForm(form.Form):
+    ...
+    ...     form_fields = form.Fields()
+    ...
+    ...     @form.action('Button', prefix='', name='button')
+    ...     def handle_button(self, action, data):
+    ...         self.status = 'Button detected'
+    ...
+    >>> request = TestRequest()
+    >>> request.form['form.button'] = ''
+    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    Button detected
+    <input type="submit" id="form.button" name="form.button"
+           value="Button" class="button" />
+
