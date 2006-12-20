@@ -50,6 +50,15 @@ interface.moduleProvides(interfaces.IFormAPI)
 
 _identifier = re.compile('[A-Za-z][a-zA-Z0-9_]*$')
 
+def expandPrefix(prefix):
+    """Expand prefix string by adding a trailing period if needed.
+
+    expandPrefix(p) should be used instead of p+'.' in most contexts.
+    """
+    if prefix and not prefix.endswith('.'):
+        return prefix + '.'
+    return prefix
+
 class FormField:
 
     interface.implements(interfaces.IFormField)
@@ -62,9 +71,7 @@ class FormField:
         if name is None:
             name = field.__name__
         assert name
-        if prefix:
-            name = prefix + '.' + name
-        self.__name__ = name
+        self.__name__ = expandPrefix(prefix) + name
         self.prefix = prefix
         if interface is None:
             interface = field.interface
@@ -170,12 +177,23 @@ class Widgets(object):
 
     interface.implements(interfaces.IWidgets)
 
-    def __init__(self, widgets, prefix_length):
+    def __init__(self, widgets, prefix_length=None, prefix=None):
         self.__Widgets_widgets_items__ = widgets
         self.__Widgets_widgets_list__ = [w for (i, w) in widgets]
-        self.__Widgets_widgets_dict__ = dict(
-            [(w.name[prefix_length:], w) for (i, w) in widgets]
-            )
+        if prefix is None:
+            # BBB Allow old code using the prefix_length argument.
+            if prefix_length is None:
+                raise TypeError(
+                    "One of 'prefix_length' and 'prefix' is required."
+                    )
+            self.__Widgets_widgets_dict__ = dict(
+                [(w.name[prefix_length:], w) for (i, w) in widgets]
+                )
+        else:
+            prefix = expandPrefix(prefix)
+            self.__Widgets_widgets_dict__ = dict(
+                [(_widgetKey(w, prefix), w) for (i, w) in widgets]
+                )
 
     def __iter__(self):
         return iter(self.__Widgets_widgets_list__)
@@ -261,7 +279,7 @@ def setUpWidgets(form_fields,
 
         prefix = form_prefix
         if form_field.prefix:
-            prefix += '.' + form_field.prefix
+            prefix = expandPrefix(prefix) + form_field.prefix
 
         widget.setPrefix(prefix)
 
@@ -278,7 +296,7 @@ def setUpWidgets(form_fields,
 
         widgets.append((not readonly, widget))
 
-    return Widgets(widgets, len(form_prefix)+1)
+    return Widgets(widgets, prefix=form_prefix)
 
 def setUpInputWidgets(form_fields, form_prefix, context, request,
                       form=None, ignore_request=False):
@@ -289,7 +307,7 @@ def setUpInputWidgets(form_fields, form_prefix, context, request,
 
         prefix = form_prefix
         if form_field.prefix:
-            prefix += '.' + form_field.prefix
+            prefix = expandPrefix(prefix) + form_field.prefix
 
         widget.setPrefix(prefix)
 
@@ -301,7 +319,7 @@ def setUpInputWidgets(form_fields, form_prefix, context, request,
             widget.setRenderedValue(value)
 
         widgets.append((True, widget))
-    return Widgets(widgets, len(form_prefix)+1)
+    return Widgets(widgets, prefix=form_prefix)
 
 
 def _createWidget(form_field, field, request, iface):
@@ -313,7 +331,7 @@ def _createWidget(form_field, field, request, iface):
 
 def getWidgetsData(widgets, form_prefix, data):
     errors = []
-    form_prefix += '.'
+    form_prefix = expandPrefix(form_prefix)
 
     for input, widget in widgets.__iter_input_and_widget__():
         if input and IInputWidget.providedBy(widget):
@@ -380,7 +398,7 @@ def setUpEditWidgets(form_fields, form_prefix, context, request,
 
         prefix = form_prefix
         if form_field.prefix:
-            prefix += '.' + form_field.prefix
+            prefix = expandPrefix(prefix) + form_field.prefix
 
         widget.setPrefix(prefix)
 
@@ -391,7 +409,7 @@ def setUpEditWidgets(form_fields, form_prefix, context, request,
 
         widgets.append((not readonly, widget))
 
-    return Widgets(widgets, len(form_prefix)+1)
+    return Widgets(widgets, prefix=form_prefix)
 
 def setUpDataWidgets(form_fields, form_prefix, context, request, data=(),
                      for_display=False, ignore_request=False):
@@ -407,7 +425,8 @@ def setUpDataWidgets(form_fields, form_prefix, context, request, data=(),
 
         prefix = form_prefix
         if form_field.prefix:
-            prefix += '.' + form_field.prefix
+            prefix = expandPrefix(prefix) + form_field.prefix
+
         widget.setPrefix(prefix)
 
         if ((form_field.__name__ in data)
@@ -417,7 +436,7 @@ def setUpDataWidgets(form_fields, form_prefix, context, request, data=(),
 
         widgets.append((not readonly, widget))
 
-    return Widgets(widgets, len(form_prefix)+1)
+    return Widgets(widgets, prefix=form_prefix)
 
 
 class NoInputData(interface.Invalid):
@@ -550,7 +569,7 @@ class Action(object):
             else:
                 name = label.encode('hex')
 
-        self.__name__ = prefix + '.' + name
+        self.__name__ = expandPrefix(prefix) + name
 
         if data is None:
             data = {}
@@ -562,20 +581,13 @@ class Action(object):
         result = self.__class__.__new__(self.__class__)
         result.__dict__.update(self.__dict__)
         result.form = form
-        result.__name__ = form.prefix + '.' + result.__name__
+        result.__name__ = expandPrefix(form.prefix) + result.__name__
         interface.alsoProvides(result, interfaces.IBoundAction)
         return result
 
     def available(self):
         condition = self.condition
         return (condition is None) or condition(self.form, self)
-
-    def submitted(self):
-        if not self.available():
-            return False
-        form = self.form
-        name = "%s.%s" % (form.prefix, self.__name__)
-        return name in form.request.form
 
     def validate(self, data):
         if self.validator is not None:
