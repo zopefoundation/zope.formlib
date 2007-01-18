@@ -1,2 +1,0 @@
-- test coverage
-- return error icon to templates (or remove XXX comment, but icon is nice)
