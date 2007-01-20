@@ -15,10 +15,16 @@
 """
 __docformat__ = "reStructuredText"
 
+import os
 import unittest
 
-import zope.app.testing.functional
+from zope.app.testing import functional
+
+FormlibLayer = functional.ZCMLLayer(
+    os.path.join(os.path.split(__file__)[0], 'ftesting.zcml'),
+    __name__, 'FormlibLayer')
 
 def test_suite():
-    return zope.app.testing.functional.FunctionalDocFileSuite(
-            "errors.txt")
+    errors = functional.FunctionalDocFileSuite("errors.txt")
+    errors.layer = FormlibLayer
+    return unittest.TestSuite((errors,))
