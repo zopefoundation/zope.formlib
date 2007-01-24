@@ -22,7 +22,7 @@ from zope.app.testing import functional
 
 FormlibLayer = functional.ZCMLLayer(
     os.path.join(os.path.split(__file__)[0], 'ftesting.zcml'),
-    __name__, 'FormlibLayer')
+    __name__, 'FormlibLayer', allow_teardown=True)
 
 def test_suite():
     errors = functional.FunctionalDocFileSuite("errors.txt")
