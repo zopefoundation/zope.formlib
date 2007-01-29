@@ -20,4 +20,17 @@
       permission="zope.Public"
       />
 
+  <!-- For security proxied views -->
+  <class class=".form.Widgets">
+    <allow interface=".interfaces.IWidgets" />
+  </class>
+
+  <class class=".form.Actions">
+    <allow interface=".interfaces.IActions" />
+  </class>
+
+  <class class=".form.Action">
+    <allow interface=".interfaces.IAction" />
+  </class>
+
 </configure>
