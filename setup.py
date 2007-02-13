@@ -18,13 +18,10 @@ $Id$
 
 import os
 
-try:
-    from setuptools import setup, Extension
-except ImportError, e:
-    from distutils.core import setup, Extension
+from setuptools import setup, find_packages
 
 setup(name='zope.formlib',
-      version='3.4-dev',
+      version='3.4dev',
       url='http://svn.zope.org/zope.formlib',
       license='ZPL 2.1',
       description='Zope formlib',
@@ -35,7 +32,7 @@ setup(name='zope.formlib',
                        "displays the widgets by accessing an attribute or"
                        "method on an underlying class.",
 
-      packages=['zope', 'zope.formlib'],
+      packages=find_packages('src'),
       package_dir = {'': 'src'},
 
       namespace_packages=['zope',],
