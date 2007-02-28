@@ -47,6 +47,7 @@ setup(name='zope.formlib',
                         'zope.app',
                         'zope.i18nmessageid',],
       include_package_data = True,
-
       zip_safe = False,
+      extras_require = dict(
+        )
       )
