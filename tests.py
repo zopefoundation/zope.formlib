@@ -15,6 +15,7 @@
 $Id$
 """
 import unittest
+import os
 import pytz
 
 from zope import component, interface
@@ -31,7 +32,16 @@ import zope.app.form.browser.exception
 import zope.app.form.browser.interfaces
 import zope.app.form.interfaces
 
+from zope.app.testing import functional
+
+
 from zope.formlib import interfaces, namedtemplate, form
+
+FormlibLayer = functional.ZCMLLayer(
+    os.path.join(os.path.split(__file__)[0], 'ftesting.zcml'),
+    __name__, 'FormlibLayer', allow_teardown=True)
+
+
 
 @interface.implementer(zope.interface.common.idatetime.ITZInfo)
 @component.adapter(zope.publisher.interfaces.IRequest)
@@ -470,6 +480,8 @@ def test_setUpWidgets_prefix():
 
 def test_suite():
     from zope.testing import doctest
+    errors = functional.FunctionalDocFileSuite("errors.txt")
+    errors.layer = FormlibLayer
     return unittest.TestSuite((
         doctest.DocFileSuite(
             'form.txt',
@@ -484,7 +496,8 @@ def test_suite():
             setUp=pageSetUp, tearDown=zope.component.testing.tearDown,
             ),
         doctest.DocTestSuite(
-            'zope.formlib.errors')
+            'zope.formlib.errors'),
+        errors,
         ))
 
 if __name__ == '__main__':
