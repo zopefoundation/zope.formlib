@@ -16,9 +16,11 @@ $Id$
 """
 import unittest
 import os
+import re
 import pytz
 
 from zope import component, interface
+from zope.testing import renormalizing
 import zope.interface.common.idatetime
 import zope.i18n.testing
 import zope.publisher.interfaces
@@ -480,6 +482,14 @@ def test_setUpWidgets_prefix():
 
 def test_suite():
     from zope.testing import doctest
+    checker = renormalizing.RENormalizing([
+      (re.compile(r"\[WidgetInputError\('form.summary', 'summary', A error message\)\]"),
+                  r"[<zope.app.form.interfaces.WidgetInputError instance at ...>]"),
+      (re.compile(r"\[WidgetInputError\('summary', u'Summary', None\)\]"),
+                  r"[<zope.app.form.interfaces.WidgetInputError instance at ...>]"),
+      (re.compile(r" ValueError\('invalid literal for float\(\): (bob'|10,0'),\)"),
+                  r"\n <exceptions.ValueError instance at ...>"),
+    ])
     errors = functional.FunctionalDocFileSuite("errors.txt")
     errors.layer = FormlibLayer
     return unittest.TestSuite((
@@ -487,9 +497,11 @@ def test_suite():
             'form.txt',
             setUp=formSetUp, tearDown=zope.component.testing.tearDown,
             optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
+            checker=checker
             ),
         doctest.DocTestSuite(
             setUp=formSetUp, tearDown=zope.component.testing.tearDown,
+            checker=checker
             ),
         doctest.DocFileSuite(
             'namedtemplate.txt',
