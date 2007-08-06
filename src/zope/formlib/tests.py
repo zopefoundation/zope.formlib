@@ -484,7 +484,7 @@ def test_suite():
     from zope.testing import doctest
     checker = renormalizing.RENormalizing([
       (re.compile(r"\[WidgetInputError\('form.summary', 'summary', A error message\)\]"),
-		  r"[<zope.app.form.interfaces.WidgetInputError instance at ...>]"),
+                  r"[<zope.app.form.interfaces.WidgetInputError instance at ...>]"),
       (re.compile(r"\[WidgetInputError\('summary', u'Summary', None\)\]"),
                   r"[<zope.app.form.interfaces.WidgetInputError instance at ...>]"),
       (re.compile(r" ValueError\('invalid literal for float\(\): (bob'|10,0'),\)"),
@@ -497,11 +497,11 @@ def test_suite():
             'form.txt',
             setUp=formSetUp, tearDown=zope.component.testing.tearDown,
             optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
-	    checker=checker
+            checker=checker
             ),
         doctest.DocTestSuite(
             setUp=formSetUp, tearDown=zope.component.testing.tearDown,
-	    checker=checker
+            checker=checker
             ),
         doctest.DocFileSuite(
             'namedtemplate.txt',
