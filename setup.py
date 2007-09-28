@@ -15,27 +15,32 @@
 
 $Id$
 """
-
 import os
-
 from setuptools import setup, find_packages
 
+def read(*rnames):
+    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+
 setup(name='zope.formlib',
-      version = '3.4.0b1',
-      url='http://svn.zope.org/zope.formlib',
+      version = '3.4.0',
+      url='http://pypi.python.org/pypi/zope.formlib',
       license='ZPL 2.1',
-      description='Zope formlib',
+      description='Form generation and validation library for Zope',
       author='Zope Corporation and Contributors',
       author_email='zope3-dev@zope.org',
-      long_description="Forms are web components that use widgets"
-                       "to display and input data.  Typically a template"
-                       "displays the widgets by accessing an attribute or"
-                       "method on an underlying class.",
+      long_description=(read('README.txt')
+                        + '\n\n' +
+                        read('CHANGES.txt')
+                        + '\n\n' +
+                        read('src', 'zope', 'formlib', 'form.txt')
+                        + '\n\n' +
+                        read('src', 'zope', 'formlib', 'errors.txt')
+                        + '\n\n' +
+                        read('src', 'zope', 'formlib', 'namedtemplate.txt')
+                        ),
 
       packages=find_packages('src'),
       package_dir = {'': 'src'},
-      extras_require=dict(test=['zope.app.testing',
-                                'zope.app.zcmlfiles']),
       namespace_packages=['zope',],
       install_requires=['setuptools',
                         'pytz',
@@ -52,7 +57,10 @@ setup(name='zope.formlib',
                         'zope.publisher',
                         'zope.schema',
                         'zope.security',
-                        'zope.traversing'
+                        'zope.traversing',
+                        # testing requirements:
+                        'zope.app.testing',
+                        'zope.app.zcmlfiles',
                         ],
       include_package_data = True,
       zip_safe = False,
