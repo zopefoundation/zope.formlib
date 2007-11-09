@@ -1802,3 +1802,38 @@ Here are some more places where the behavior was incorrect:
 
   >>> form.applyChanges(blah, form_fields, {'title': 'new'})
   True
+
+
+Event descriptions
+------------------
+
+The ObjectModifiedEvent can be annotated with descriptions about the involved
+schemas and fields. The formlib provides these annotations with the help of the
+applyData function, which returns a list of modification descriptions:
+
+    >>> form.applyData(blah, form_fields, {'title': 'modified'})
+    {<InterfaceClass __builtin__.IFooBar>: ['title']}
+
+The events are annotated with these descriptions. We need a subscriber to log these
+infos:
+
+    >>> def eventLog(event):
+    ...     desc = event.descriptions[0]
+    ...     print 'Modified:', desc.interface.__identifier__, desc.attributes
+    >>> zope.event.subscribers.append(eventLog)
+
+
+    >>> class MyForm(form.EditForm):
+    ...     form_fields = form.FormFields(IFooBar)
+
+    >>> request = TestRequest()
+    >>> request.form['form.title'] = u'again modified'
+    >>> request.form['form.actions.apply'] = u''
+    >>> MyForm(FooBar(), request)()
+    Modified: __builtin__.IFooBar ('title',)
+    ...
+
+Cleanup:
+
+    >>> zope.event.subscribers.remove(eventLog)
+    

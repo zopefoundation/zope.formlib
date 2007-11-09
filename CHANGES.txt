@@ -2,10 +2,17 @@
 Changes
 =======
 
-3.4.1 (unreleased)
+3.5.0 (unreleased)
 ==================
 
-...
+* Introduced ``zope.formlib.form.applyData`` which works like
+  ``applyChanges`` but returns a dictionary with information about
+  which attribute of which schema changed.  This information is then
+  sent along with the ``IObjectModifiedEvent``.
+
+  This fixes https://bugs.launchpad.net/zope3/+bug/98483.
+
+* ...
 
 3.4.0 (2007-09-28)
 ==================

@@ -31,8 +31,8 @@ from zope.interface.common import idatetime
 from zope.interface.interface import InterfaceClass
 from zope.schema.interfaces import IField
 from zope.schema.interfaces import ValidationError
-import zope.security
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
+from zope.lifecycleevent import Attributes
 
 import zope.app.container.interfaces
 import zope.app.form.browser.interfaces
@@ -507,11 +507,11 @@ def checkInvariants(form_fields, form_data):
 
     return [error for error in errors if not isinstance(error, NoInputData)]
 
-def applyChanges(context, form_fields, data, adapters=None):
+def applyData(context, form_fields, data, adapters=None):
     if adapters is None:
         adapters = {}
 
-    changed = False
+    descriptions = {}
 
     for form_field in form_fields:
         field = form_field.field
@@ -528,10 +528,13 @@ def applyChanges(context, form_fields, data, adapters=None):
         name = form_field.__name__
         newvalue = data.get(name, form_field) # using form_field as marker
         if (newvalue is not form_field) and (field.get(adapter) != newvalue):
-            changed = True
+            descriptions.setdefault(interface, []).append(field.__name__)
             field.set(adapter, newvalue)
 
-    return changed
+    return descriptions
+    
+def applyChanges(context, form_fields, data, adapters=None):
+    return bool(applyData(context, form_fields, data, adapters))
 
 _identifier = re.compile('[A-Za-z][a-zA-Z0-9_]*$')
 
@@ -808,8 +811,12 @@ class EditFormBase(FormBase):
 
     @action(_("Apply"), condition=haveInputWidgets)
     def handle_edit_action(self, action, data):
-        if applyChanges(self.context, self.form_fields, data, self.adapters):
-            zope.event.notify(ObjectModifiedEvent(self.context))
+        descriptions = applyData(self.context, self.form_fields, data,
+                                self.adapters)
+        if descriptions:
+            descriptions = [Attributes(interface, *tuple(keys))
+                           for interface, keys in descriptions.items()]
+            zope.event.notify(ObjectModifiedEvent(self.context, *descriptions))
             formatter = self.request.locale.dates.getFormatter(
                 'dateTime', 'medium')
 
