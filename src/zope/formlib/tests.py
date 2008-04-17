@@ -480,6 +480,16 @@ def test_setUpWidgets_prefix():
 
     """
 
+def test_Action_interface():
+    """
+    >>> action = form.Action('foo')
+    >>> import zope.interface.verify
+    >>> import zope.formlib.interfaces
+    >>> zope.interface.verify.verifyObject(zope.formlib.interfaces.IAction,
+    ...                                    action)
+    True
+    """
+
 def test_suite():
     from zope.testing import doctest
     checker = renormalizing.RENormalizing([

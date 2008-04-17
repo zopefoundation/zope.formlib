@@ -704,6 +704,7 @@ class IAction(ISubPage):
     label = schema.TextLine(title=u"Action label")
 
     name = schema.TextLine(title=u"Action name")
+    __name__ = schema.TextLine(title=u"Action name with its prefix")
 
     data = schema.Dict(title=u"Application data")
 

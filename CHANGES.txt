@@ -5,6 +5,9 @@ Changes
 3.5.0 (unreleased)
 ==================
 
+New Features
+------------
+
 * Introduced ``zope.formlib.form.applyData`` which works like
   ``applyChanges`` but returns a dictionary with information about
   which attribute of which schema changed.  This information is then
@@ -12,7 +15,12 @@ Changes
 
   This fixes https://bugs.launchpad.net/zope3/+bug/98483.
 
-* ...
+Bugs Fixed
+----------
+
+- The zope.formlib.form.Action class didn't fully implement
+  zope.formlib.interfaces.IAction.
+
 
 3.4.0 (2007-09-28)
 ==================

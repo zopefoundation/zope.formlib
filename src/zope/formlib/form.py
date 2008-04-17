@@ -572,11 +572,16 @@ class Action(object):
             else:
                 name = label.encode('hex')
 
-        self.__name__ = expandPrefix(prefix) + name
+        self.name = name
+        self.setPrefix(prefix)
 
         if data is None:
             data = {}
         self.data = data
+
+    def setPrefix(self, prefix):
+        self.prefix = prefix
+        self.__name__ = expandPrefix(prefix) + self.name
 
     def __get__(self, form, class_=None):
         if form is None:
