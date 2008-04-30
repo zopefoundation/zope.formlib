@@ -19,15 +19,14 @@ import os
 import re
 import pytz
 
-from zope import component, interface
-from zope.testing import renormalizing
-import zope.interface.common.idatetime
+import zope.component.testing
 import zope.i18n.testing
+import zope.interface.common.idatetime
 import zope.publisher.interfaces
 import zope.publisher.interfaces.browser
 import zope.schema.interfaces
+import zope.testing.renormalizing
 import zope.traversing.adapters
-import zope.component.testing
 
 import zope.app.form.browser
 import zope.app.form.browser.exception
@@ -36,8 +35,9 @@ import zope.app.form.interfaces
 
 from zope.app.testing import functional
 
-
-from zope.formlib import interfaces, namedtemplate, form
+import zope.formlib.form
+import zope.formlib.interfaces
+import zope.formlib.namedtemplate
 
 FormlibLayer = functional.ZCMLLayer(
     os.path.join(os.path.split(__file__)[0], 'ftesting.zcml'),
@@ -45,20 +45,20 @@ FormlibLayer = functional.ZCMLLayer(
 
 
 
-@interface.implementer(zope.interface.common.idatetime.ITZInfo)
-@component.adapter(zope.publisher.interfaces.IRequest)
+@zope.interface.implementer(zope.interface.common.idatetime.ITZInfo)
+@zope.component.adapter(zope.publisher.interfaces.IRequest)
 def requestToTZInfo(request):
     return pytz.timezone('US/Hawaii')
 
 def pageSetUp(test):
     zope.component.testing.setUp(test)
-    component.provideAdapter(
+    zope.component.provideAdapter(
         zope.traversing.adapters.DefaultTraversable,
         [None],
         )
 
-@component.adapter(interfaces.IForm)
-@namedtemplate.NamedTemplateImplementation
+@zope.component.adapter(zope.formlib.interfaces.IForm)
+@zope.formlib.namedtemplate.NamedTemplateImplementation
 def TestTemplate(self):
     status = self.status
     if status:
@@ -89,90 +89,90 @@ def TestTemplate(self):
 def formSetUp(test):
     zope.component.testing.setUp(test)
     zope.i18n.testing.setUp(test)
-    component.provideAdapter(
+    zope.component.provideAdapter(
         zope.app.form.browser.TextWidget,
         [zope.schema.interfaces.ITextLine,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IInputWidget,
         )
-    component.provideAdapter(
+    zope.component.provideAdapter(
         zope.app.form.browser.FloatWidget,
         [zope.schema.interfaces.IFloat,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IInputWidget,
         )
-    component.provideAdapter(
+    zope.component.provideAdapter(
         zope.app.form.browser.UnicodeDisplayWidget,
         [zope.schema.interfaces.IInt,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IDisplayWidget,
         )
-    component.provideAdapter(
+    zope.component.provideAdapter(
         zope.app.form.browser.IntWidget,
         [zope.schema.interfaces.IInt,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IInputWidget,
         )
-    component.provideAdapter(
+    zope.component.provideAdapter(
         zope.app.form.browser.UnicodeDisplayWidget,
         [zope.schema.interfaces.IFloat,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IDisplayWidget,
         )
-    component.provideAdapter(
+    zope.component.provideAdapter(
         zope.app.form.browser.UnicodeDisplayWidget,
         [zope.schema.interfaces.ITextLine,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IDisplayWidget,
         )
-    component.provideAdapter(
+    zope.component.provideAdapter(
         zope.app.form.browser.DatetimeDisplayWidget,
         [zope.schema.interfaces.IDatetime,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IDisplayWidget,
         )
-    component.provideAdapter(
+    zope.component.provideAdapter(
         zope.app.form.browser.DatetimeWidget,
         [zope.schema.interfaces.IDatetime,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IInputWidget,
         )
-    component.provideAdapter(
+    zope.component.provideAdapter(
         zope.app.form.browser.exception.WidgetInputErrorView,
         [zope.app.form.interfaces.IWidgetInputError,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.browser.interfaces.IWidgetInputErrorView,
         )
-    component.provideAdapter(TestTemplate, name='default')
-    component.provideAdapter(requestToTZInfo)
-    component.provideAdapter(form.render_submit_button, name='render')
+    zope.component.provideAdapter(TestTemplate, name='default')
+    zope.component.provideAdapter(requestToTZInfo)
+    zope.component.provideAdapter(
+        zope.formlib.form.render_submit_button, name='render')
 
 def makeSureRenderCanBeCalledWithoutCallingUpdate():
     """\
 
-    >>> from zope.formlib import form
-    >>> from zope import interface, schema
-    >>> class IOrder(interface.Interface):
-    ...     identifier = schema.Int(title=u"Identifier", readonly=True)
-    ...     name = schema.TextLine(title=u"Name")
-    ...     min_size = schema.Float(title=u"Minimum size")
-    ...     max_size = schema.Float(title=u"Maximum size")
-    ...     now = schema.Datetime(title=u"Now", readonly=True)
+    >>> class IOrder(zope.interface.Interface):
+    ...     identifier = zope.schema.Int(title=u"Identifier", readonly=True)
+    ...     name = zope.schema.TextLine(title=u"Name")
+    ...     min_size = zope.schema.Float(title=u"Minimum size")
+    ...     max_size = zope.schema.Float(title=u"Maximum size")
+    ...     now = zope.schema.Datetime(title=u"Now", readonly=True)
 
-    >>> class MyForm(form.EditForm):
-    ...     form_fields = form.fields(IOrder, keep_readonly=['identifier'])
+    >>> class MyForm(zope.formlib.form.EditForm):
+    ...     form_fields = zope.formlib.form.fields(
+    ...         IOrder, keep_readonly=['identifier'])
 
     >>> class Order:
-    ...     interface.implements(IOrder)
+    ...     zope.interface.implements(IOrder)
     ...     identifier = 1
     ...     name = 'unknown'
     ...     min_size = 1.0
@@ -205,12 +205,12 @@ We'll start by setting up an action:
 
     >>> import zope.i18nmessageid
     >>> _ = zope.i18nmessageid.MessageFactory('my.domain')
-    >>> action = form.Action(_("MyAction"))
+    >>> action = zope.formlib.form.Action(_("MyAction"))
 
 Actions get bound to forms.  We'll set up a test request, create a
 form for it and bind the action to the form:
 
-    >>> myform = form.FormBase(None, 42)
+    >>> myform = zope.formlib.form.FormBase(None, 42)
     >>> action = action.__get__(myform)
 
 Button labels are rendered by form.render_submit_button, passing the
@@ -219,7 +219,7 @@ translation domain.  We'll create one for our needs:
 
     >>> import zope.i18n.interfaces
     >>> class MyDomain:
-    ...     interface.implements(zope.i18n.interfaces.ITranslationDomain)
+    ...     zope.interface.implements(zope.i18n.interfaces.ITranslationDomain)
     ...
     ...     def translate(self, msgid, mapping=None, context=None,
     ...                   target_language=None, default=None):
@@ -230,12 +230,12 @@ translation domain.  We'll create one for our needs:
     ...         print default
     ...         return msgid
 
-    >>> component.provideUtility(MyDomain(), name='my.domain')
+    >>> zope.component.provideUtility(MyDomain(), name='my.domain')
 
 Now, if we call render_submit_button, we should be able to verify the
 data passed to translate:
 
-    >>> form.render_submit_button(action)() # doctest: +NORMALIZE_WHITESPACE
+    >>> zope.formlib.form.render_submit_button(action)() # doctest: +NORMALIZE_WHITESPACE
     MyAction
     None
     42
@@ -253,10 +253,9 @@ def test_error_handling():
 Let's test the getWidgetsData method which is responsible for handling widget
 erros raised by the widgets getInputValue method.
 
-    >>> from zope.interface import implements
-    >>> from zope.app.form.interfaces import IInputWidget
+    >>> import zope.app.form.interfaces
     >>> class Widget(object):
-    ...     implements(IInputWidget)
+    ...     zope.interface.implements(zope.app.form.interfaces.IInputWidget)
     ...     def __init__(self):
     ...         self.name = 'form.summary'
     ...         self.label = 'Summary'
@@ -268,31 +267,30 @@ erros raised by the widgets getInputValue method.
     ...         widget_title=u'Summary')
     >>> widget = Widget()
     >>> inputs = [(True, widget)]
-    >>> widgets = form.Widgets(inputs, 5)
-    >>> errors = form.getWidgetsData(widgets, 'form', {'summary':'value'})
+    >>> widgets = zope.formlib.form.Widgets(inputs, 5)
+    >>> errors = zope.formlib.form.getWidgetsData(widgets, 'form', {'summary':'value'})
     >>> errors #doctest: +ELLIPSIS
     [<zope.app.form.interfaces.WidgetInputError instance at ...>]
 
-Let's see what happens if a widget doesn't convert a ValidationError 
-raised by a field to a WidgetInputError. This should not happen if a widget 
-converts ValidationErrors to WidgetInputErrors. But since I just fixed 
+Let's see what happens if a widget doesn't convert a ValidationError
+raised by a field to a WidgetInputError. This should not happen if a widget
+converts ValidationErrors to WidgetInputErrors. But since I just fixed
 yesterday the sequence input widget, I decided to catch ValidationError also
 in the formlib as a fallback if some widget doen't handle errors correct. (ri)
 
-    >>> from zope.schema.interfaces import ValidationError
     >>> class Widget(object):
-    ...     implements(IInputWidget)
+    ...     zope.interface.implements(zope.app.form.interfaces.IInputWidget)
     ...     def __init__(self):
     ...         self.name = 'form.summary'
     ...         self.label = 'summary'
     ...     def hasInput(self):
     ...         return True
     ...     def getInputValue(self):
-    ...         raise ValidationError('A error message')
+    ...         raise zope.schema.interfaces.ValidationError('A error message')
     >>> widget = Widget()
     >>> inputs = [(True, widget)]
-    >>> widgets = form.Widgets(inputs, 5)
-    >>> errors = form.getWidgetsData(widgets, 'form', {'summary':'value'})
+    >>> widgets = zope.formlib.form.Widgets(inputs, 5)
+    >>> errors = zope.formlib.form.getWidgetsData(widgets, 'form', {'summary':'value'})
     >>> errors #doctest: +ELLIPSIS
     [<zope.app.form.interfaces.WidgetInputError instance at ...>]
     
@@ -307,17 +305,16 @@ We'll define a simple form:
     >>> import zope.i18nmessageid
     >>> _ = zope.i18nmessageid.MessageFactory('my.domain')
 
-    >>> from zope import schema
-    >>> class MyForm(form.Form):
+    >>> class MyForm(zope.formlib.form.Form):
     ...     label = _('The label')
     ...     status = _('Success!')
-    ...     form_fields = form.Fields(
-    ...         schema.TextLine(__name__='name',
-    ...                         title=_("Name"),
-    ...                         description=_("Enter your name"),
-    ...                         ),
+    ...     form_fields = zope.formlib.form.Fields(
+    ...         zope.schema.TextLine(__name__='name',
+    ...                              title=_("Name"),
+    ...                              description=_("Enter your name"),
+    ...                             ),
     ...         )
-    ...     @form.action(_('Ok'))
+    ...     @zope.formlib.form.action(_('Ok'))
     ...     def ok(self, action, data):
     ...         pass
     ...     page = ViewPageTemplateFile("pageform.pt")
@@ -346,37 +343,37 @@ that lets us look up the macros.
 
     >>> import zope.traversing.interfaces
     >>> class view:
-    ...     component.adapts(None, None)
-    ...     interface.implements(zope.traversing.interfaces.ITraversable)
+    ...     zope.component.adapts(None, None)
+    ...     zope.interface.implements(zope.traversing.interfaces.ITraversable)
     ...     def __init__(self, ob, r=None):
     ...         pass
     ...     def traverse(*args):
     ...         return macro_template.macros
 
-    >>> component.provideAdapter(view, name='view')
+    >>> zope.component.provideAdapter(view, name='view')
 
 And we have to register the default traversable adapter (I wish we had
 push templates):
 
     >>> from zope.traversing.adapters import DefaultTraversable
-    >>> component.provideAdapter(DefaultTraversable, [None])
+    >>> zope.component.provideAdapter(DefaultTraversable, [None])
 
 We need to set up the translation framework. We'll just provide a
 negotiator that always decides to use the test language:
 
     >>> import zope.i18n.interfaces
     >>> class Negotiator:
-    ...     interface.implements(zope.i18n.interfaces.INegotiator)
+    ...     zope.interface.implements(zope.i18n.interfaces.INegotiator)
     ...     def getLanguage(*ignored):
     ...         return 'test'
 
-    >>> component.provideUtility(Negotiator())
+    >>> zope.component.provideUtility(Negotiator())
 
 And we'll set up the fallback-domain factory, which provides the test
 language for all domains:
 
     >>> from zope.i18n.testmessagecatalog import TestMessageFallbackDomain
-    >>> component.provideUtility(TestMessageFallbackDomain)
+    >>> zope.component.provideUtility(TestMessageFallbackDomain)
     
 OK, so let's see what the page form looks like. First, we'll compute
 the page:
@@ -482,9 +479,8 @@ def test_setUpWidgets_prefix():
 
 def test_Action_interface():
     """
-    >>> action = form.Action('foo')
+    >>> action = zope.formlib.form.Action('foo')
     >>> import zope.interface.verify
-    >>> import zope.formlib.interfaces
     >>> zope.interface.verify.verifyObject(zope.formlib.interfaces.IAction,
     ...                                    action)
     True
@@ -492,7 +488,7 @@ def test_Action_interface():
 
 def test_suite():
     from zope.testing import doctest
-    checker = renormalizing.RENormalizing([
+    checker = zope.testing.renormalizing.RENormalizing([
       (re.compile(r"\[WidgetInputError\('form.summary', 'summary', A error message\)\]"),
                   r"[<zope.app.form.interfaces.WidgetInputError instance at ...>]"),
       (re.compile(r"\[WidgetInputError\('summary', u'Summary', None\)\]"),
