@@ -264,7 +264,7 @@ def setUpWidgets(form_fields,
         readonly = readonly or (field.readonly and not form_field.for_input)
         readonly = readonly or (
             (form_field.render_context & interfaces.DISPLAY_UNWRITEABLE)
-            and not canWrite(context, field)
+            and not canWrite(adapter, field)
             )
 
         if form_field.custom_widget is not None:
@@ -386,7 +386,7 @@ def setUpEditWidgets(form_fields, form_prefix, context, request,
         readonly = readonly or (field.readonly and not form_field.for_input)
         readonly = readonly or (
             (form_field.render_context & interfaces.DISPLAY_UNWRITEABLE)
-            and not canWrite(context, field)
+            and not canWrite(adapter, field)
             )
         readonly = readonly or for_display
 

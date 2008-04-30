@@ -10,4 +10,19 @@
   <include package="zope.app.zcmlfiles" />
   <include package="zope.formlib" />
 
+  <class class=".tests.Order">
+    <allow interface=".tests.IOrder" />
+    <require
+      set_schema=".tests.IOrder"
+      permission="zope.ManageContent"
+      />
+  </class>
+  <adapter factory=".tests.Descriptive" />
+  <class class=".tests.Descriptive">
+    <require
+      interface=".tests.IDescriptive" 
+      permission="zope.View"
+      />
+  </class>
+
 </configure>

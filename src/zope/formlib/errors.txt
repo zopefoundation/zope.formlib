@@ -25,8 +25,8 @@ Interface invariant methods raise zope.interface.Invalid exception. Test if
 this exception gets handled by the error_views.
 
     >>> myError = Invalid('My error message')
-    >>> from zope.formlib import form
-    >>> mybase = form.FormBase(None, TestRequest())
+    >>> import zope.formlib.form
+    >>> mybase = zope.formlib.form.FormBase(None, TestRequest())
     >>> mybase.errors = (myError,)
     >>> save = mybase.error_views()
     >>> save.next()
@@ -48,7 +48,7 @@ And yes, we can even handle an i18n message in an Invalid exception:
     >>> from zope.i18nmessageid import MessageFactory
     >>> _ = MessageFactory('my.domain')
     >>> myError = Invalid(_('My i18n error message'))
-    >>> mybase = form.FormBase(None, TestRequest())
+    >>> mybase = zope.formlib.form.FormBase(None, TestRequest())
     >>> mybase.errors = (myError,)
     >>> save = mybase.error_views()
     >>> save.next()
@@ -64,7 +64,7 @@ WidgetInputError exceptions also work with i18n messages:
     ...     field_name='summary',
     ...     widget_title=_(u'Summary'),
     ...     errors=_(u'Foo'))
-    >>> mybase = form.FormBase(None, TestRequest())
+    >>> mybase = zope.formlib.form.FormBase(None, TestRequest())
     >>> mybase.errors = (myError,)
     >>> save = mybase.error_views()
     >>> save.next()

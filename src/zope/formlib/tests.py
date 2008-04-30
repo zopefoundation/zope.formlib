@@ -157,29 +157,65 @@ def formSetUp(test):
     zope.component.provideAdapter(
         zope.formlib.form.render_submit_button, name='render')
 
+# Classes used in tests
+
+class IOrder(zope.interface.Interface):
+    identifier = zope.schema.Int(title=u"Identifier", readonly=True)
+    name = zope.schema.TextLine(title=u"Name")
+    min_size = zope.schema.Float(title=u"Minimum size")
+    max_size = zope.schema.Float(title=u"Maximum size")
+    now = zope.schema.Datetime(title=u"Now", readonly=True)
+
+class IDescriptive(zope.interface.Interface):
+    title = zope.schema.TextLine(title=u"Title")
+    description = zope.schema.TextLine(title=u"Description")
+
+
+class Order:
+    zope.interface.implements(IOrder)
+    identifier = 1
+    name = 'unknown'
+    min_size = 1.0
+    max_size = 10.0
+
+
+class Descriptive(object):
+    zope.component.adapts(IOrder)
+    zope.interface.implements(IDescriptive)
+    def __init__(self, context):
+        self.context = context
+
+    def title():
+        def get(self):
+            try:
+                return self.context.__title
+            except AttributeError:
+                return ''
+        def set(self, v):
+            self.context.__title = v
+        return property(get, set)
+    title = title()
+
+    def description():
+        def get(self):
+            try:
+                return self.context.__description
+            except AttributeError:
+                return ''
+        def set(self, v):
+            self.context.__description = v
+        return property(get, set)
+    description = description()
+
+
 def makeSureRenderCanBeCalledWithoutCallingUpdate():
     """\
-
-    >>> class IOrder(zope.interface.Interface):
-    ...     identifier = zope.schema.Int(title=u"Identifier", readonly=True)
-    ...     name = zope.schema.TextLine(title=u"Name")
-    ...     min_size = zope.schema.Float(title=u"Minimum size")
-    ...     max_size = zope.schema.Float(title=u"Maximum size")
-    ...     now = zope.schema.Datetime(title=u"Now", readonly=True)
 
     >>> class MyForm(zope.formlib.form.EditForm):
     ...     form_fields = zope.formlib.form.fields(
     ...         IOrder, keep_readonly=['identifier'])
 
-    >>> class Order:
-    ...     zope.interface.implements(IOrder)
-    ...     identifier = 1
-    ...     name = 'unknown'
-    ...     min_size = 1.0
-    ...     max_size = 10.0
-
     >>> from zope.publisher.browser import TestRequest
-
     >>> myform = MyForm(Order(), TestRequest())
     >>> print myform.render() # doctest: +NORMALIZE_WHITESPACE
     1
@@ -374,7 +410,7 @@ language for all domains:
 
     >>> from zope.i18n.testmessagecatalog import TestMessageFallbackDomain
     >>> zope.component.provideUtility(TestMessageFallbackDomain)
-    
+
 OK, so let's see what the page form looks like. First, we'll compute
 the page:
 
@@ -486,6 +522,7 @@ def test_Action_interface():
     True
     """
 
+
 def test_suite():
     from zope.testing import doctest
     checker = zope.testing.renormalizing.RENormalizing([
@@ -498,6 +535,10 @@ def test_suite():
     ])
     errors = functional.FunctionalDocFileSuite("errors.txt")
     errors.layer = FormlibLayer
+    bugs = functional.FunctionalDocFileSuite(
+        "bugs.txt",
+        optionflags=doctest.INTERPRET_FOOTNOTES | doctest.ELLIPSIS)
+    bugs.layer = FormlibLayer
     return unittest.TestSuite((
         doctest.DocFileSuite(
             'form.txt',
@@ -516,6 +557,7 @@ def test_suite():
         doctest.DocTestSuite(
             'zope.formlib.errors'),
         errors,
+        bugs,
         ))
 
 if __name__ == '__main__':

@@ -20,6 +20,9 @@ Bugs Fixed
 
 - The zope.formlib.form.Action class didn't fully implement
   zope.formlib.interfaces.IAction.
+- zope.formlib.form.setupWidgets and zope.formlib.form.setupEditWidgets did
+  not check for write access on the adapter but on context. This fixes
+  https://bugs.launchpad.net/zope3/+bug/219948
 
 
 3.4.0 (2007-09-28)
