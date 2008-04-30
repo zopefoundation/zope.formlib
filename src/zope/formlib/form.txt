@@ -1097,7 +1097,6 @@ on objects:
     ...     interface.implements(IDescriptive)
     ...     def __init__(self, context):
     ...         self.context = context
-    ...         self.request = request
     ...
     ...     def title():
     ...         def get(self):
