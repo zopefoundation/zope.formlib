@@ -601,7 +601,7 @@ class IFormField(interface.Interface):
 
 
         SKIP_UNAUTHORIZED
-            If the user is not priviledges to perfoem the requested
+            If the user is not priviledges to perform the requested
             operation, then omit a widget.
 
             TODO unimplemented
