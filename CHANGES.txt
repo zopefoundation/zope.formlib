@@ -8,7 +8,7 @@ Changes
 New Features
 ------------
 
-* Introduced ``zope.formlib.form.applyData`` which works like
+- Introduced ``zope.formlib.form.applyData`` which works like
   ``applyChanges`` but returns a dictionary with information about
   which attribute of which schema changed.  This information is then
   sent along with the ``IObjectModifiedEvent``.
@@ -20,6 +20,7 @@ Bugs Fixed
 
 - The zope.formlib.form.Action class didn't fully implement
   zope.formlib.interfaces.IAction.
+
 - zope.formlib.form.setupWidgets and zope.formlib.form.setupEditWidgets did
   not check for write access on the adapter but on context. This fixes
   https://bugs.launchpad.net/zope3/+bug/219948
