@@ -18,6 +18,9 @@ New Features
 Bugs Fixed
 ----------
 
+- Actions that cause a redirect (301, 302) do not cause the `render` method to
+  be called anymore.
+
 - The zope.formlib.form.Action class didn't fully implement
   zope.formlib.interfaces.IAction.
 

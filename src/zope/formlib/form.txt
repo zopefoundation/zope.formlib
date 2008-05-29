@@ -1835,4 +1835,38 @@ infos:
 Cleanup:
 
     >>> zope.event.subscribers.remove(eventLog)
-    
+
+Actions that cause a redirect
+-----------------------------
+
+When an action causes a redirect, the following `render` phase is omitted as
+the result will not be displayed anyway. This is both a performance
+improvement and for avoiding application bugs with one-time session
+information.
+
+    >>> class MyForm(form.Form):
+    ...     form_fields = form.FormFields(IFooBar)
+    ...     @form.action("Redirect")
+    ...     def redirect(self, action, data):
+    ...         print 'Action: redirect'
+    ...         self.request.response.redirect('foo')
+    ...     @form.action("Stay")
+    ...     def redirect(self, action, data):
+    ...         print 'Action: stay'
+    ...         pass
+    ...     def render(self):
+    ...         print 'render was called'
+    ...         return ''
+
+    >>> request = TestRequest()
+    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    render was called
+    >>> request.form['form.actions.redirect'] = u''
+    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    Action: redirect
+
+    >>> request = TestRequest()
+    >>> request.form['form.actions.stay'] = u''
+    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    Action: stay
+    render was called

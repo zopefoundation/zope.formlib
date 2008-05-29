@@ -779,7 +779,12 @@ class FormBase(zope.publisher.browser.BrowserPage):
 
     def __call__(self):
         self.update()
-        return self.render()
+        if self.request.response.getStatus() in [301, 302]:
+            # Avoid rendering if the action caused a redirect.
+            result = self.form_result or ''
+        else:
+            result = self.render()
+        return result
 
     def error_views(self):
         for error in self.errors:
