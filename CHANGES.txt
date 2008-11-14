@@ -8,6 +8,8 @@ Changes
 New Features
 ------------
 
+- Test dependencies are declared in a `test` extra now.
+
 - Introduced ``zope.formlib.form.applyData`` which works like
   ``applyChanges`` but returns a dictionary with information about
   which attribute of which schema changed.  This information is then
