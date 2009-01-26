@@ -22,7 +22,7 @@ def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
 setup(name='zope.formlib',
-      version = '3.5.0',
+      version = '3.5.1dev',
       url='http://pypi.python.org/pypi/zope.formlib',
       license='ZPL 2.1',
       description='Form generation and validation library for Zope',
