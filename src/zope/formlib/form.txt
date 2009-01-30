@@ -195,8 +195,8 @@ variable:
     >>> request.form['submit'] = u'Submit'
     >>> MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
     There were errors:
-    ('min_size', u'Minimum size', )
-    ('max_size', u'Maximum size', )
+    ('min_size', u'Minimum size', RequiredMissing())
+    ('max_size', u'Maximum size', RequiredMissing())
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
@@ -218,7 +218,7 @@ and max size.  If we provide an invalid value, we'll get an error too:
     There were errors:
     (u'Invalid floating point data',
      <exceptions.ValueError instance at ...>)
-    ('max_size', u'Maximum size', )
+    ('max_size', u'Maximum size', RequiredMissing())
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
@@ -347,7 +347,7 @@ We can have field errors and invariant errors:
 
     >>> pprint(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     There were field errors:
-    ('name', u'Name', )
+    ('name', u'Name', RequiredMissing())
     There were invariant errors:
     Maximum is less than Minimum
     <input class="textType" id="form.name" name="form.name" size="20"
@@ -367,8 +367,8 @@ invariants are ignored:
 
     >>> pprint(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     There were field errors:
-    ('name', u'Name', )
-    ('max_size', u'Maximum size', )
+    ('name', u'Name', RequiredMissing())
+    ('max_size', u'Maximum size', RequiredMissing())
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value=""  />
     <span class="error">Required input is missing.</span>
