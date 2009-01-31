@@ -2,7 +2,7 @@
 Changes
 =======
 
-3.5.1 (unreleased)
+3.5.1 (2009-01-31)
 ==================
 
 - Adapt tests to upcoming zope.schema release 3.5.1.
