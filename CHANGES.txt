@@ -5,6 +5,7 @@ Changes
 3.5.3 (unreleased)
 ==================
 
+- Remove deprecated imports.
 
 3.5.2 (2009-02-21)
 ==================

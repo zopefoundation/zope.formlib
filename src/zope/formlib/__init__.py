@@ -13,11 +13,3 @@
 """
 $Id$
 """
-
-# BBB 2006/04/19 -- to be removed after 12 months
-import zope.deferredimport
-zope.deferredimport.deprecated(
-    "It has moved to zope.publisher.browser.BrowserPage.  This reference "
-    "will be gone in Zope 3.5.",
-    Page = 'zope.publisher.browser:BrowserPage',
-    )

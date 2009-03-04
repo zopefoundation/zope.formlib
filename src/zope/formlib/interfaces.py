@@ -18,17 +18,6 @@ import re
 from zope import interface, schema
 from zope.publisher.interfaces.browser import IBrowserPage
 
-##############################################################################
-# BBB 2006/04/19 -- to be removed after 12 months
-
-import zope.deferredimport
-zope.deferredimport.deprecated(
-    "It has moved to zope.publisher.interfaces.browser.IBrowserPage.  "
-    "This reference will be gone in Zope 3.5.",
-    IPage = 'zope.publisher.interfaces.browser:IBrowserPage',
-    )
-
-##############################################################################
 
 class FormError(Exception):
     """There was an error in managing the form
