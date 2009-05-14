@@ -34,7 +34,7 @@ from zope.schema.interfaces import ValidationError
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 from zope.lifecycleevent import Attributes
 
-import zope.app.container.interfaces
+import zope.browser.interfaces
 import zope.app.form.browser.interfaces
 from zope.app.form.interfaces import IInputWidget, IDisplayWidget
 from zope.app.form.interfaces import WidgetsError, MissingInputError
@@ -864,7 +864,7 @@ class AddFormBase(FormBase):
     interface.implements(interfaces.IAddFormCustomization,
                          zope.component.interfaces.IFactory)
 
-    component.adapts(zope.app.container.interfaces.IAdding,
+    component.adapts(zope.browser.interfaces.IAdding,
                      zope.publisher.interfaces.browser.IBrowserRequest)
 
     def __init__(self, context, request):

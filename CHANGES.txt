@@ -7,6 +7,10 @@ Changes
 
 - Remove deprecated imports.
 
+- Remove dependency on zope.app.container (use ``IAdding`` from
+  ``zope.browser.interfaces``) instead.  Depend on
+  ``zope.browser>=1.1`` (the version with ``IAdding``).
+
 3.5.2 (2009-02-21)
 ==================
 
