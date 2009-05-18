@@ -37,7 +37,7 @@ from zope.app.testing import functional
 
 import zope.formlib.form
 import zope.formlib.interfaces
-import zope.formlib.namedtemplate
+import zope.app.pagetemplate.namedtemplate
 
 FormlibLayer = functional.ZCMLLayer(
     os.path.join(os.path.split(__file__)[0], 'ftesting.zcml'),
@@ -58,7 +58,7 @@ def pageSetUp(test):
         )
 
 @zope.component.adapter(zope.formlib.interfaces.IForm)
-@zope.formlib.namedtemplate.NamedTemplateImplementation
+@zope.app.pagetemplate.namedtemplate.NamedTemplateImplementation
 def TestTemplate(self):
     status = self.status
     if status:
@@ -329,7 +329,7 @@ in the formlib as a fallback if some widget doen't handle errors correct. (ri)
     >>> errors = zope.formlib.form.getWidgetsData(widgets, 'form', {'summary':'value'})
     >>> errors #doctest: +ELLIPSIS
     [<zope.app.form.interfaces.WidgetInputError instance at ...>]
-    
+
 """
 
 def test_form_template_i18n():
@@ -373,7 +373,7 @@ view that provides the necessary macros:
     ... <body metal:define-slot="body" />
     ... </html>
     ... ''')
-    
+
 We also need to provide a traversal adapter for the view namespace
 that lets us look up the macros.
 
@@ -549,10 +549,6 @@ def test_suite():
         doctest.DocTestSuite(
             setUp=formSetUp, tearDown=zope.component.testing.tearDown,
             checker=checker
-            ),
-        doctest.DocFileSuite(
-            'namedtemplate.txt',
-            setUp=pageSetUp, tearDown=zope.component.testing.tearDown,
             ),
         doctest.DocTestSuite(
             'zope.formlib.errors'),

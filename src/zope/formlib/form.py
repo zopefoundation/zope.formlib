@@ -39,9 +39,9 @@ import zope.app.form.browser.interfaces
 from zope.app.form.interfaces import IInputWidget, IDisplayWidget
 from zope.app.form.interfaces import WidgetsError, MissingInputError
 from zope.app.form.interfaces import InputErrors, WidgetInputError
-from zope.app.pagetemplate import ViewPageTemplateFile
+from zope.app.pagetemplate import ViewPageTemplateFile, namedtemplate
 
-from zope.formlib import interfaces, namedtemplate
+from zope.formlib import interfaces
 from zope.i18nmessageid import MessageFactory
 _ = MessageFactory("zope")
 
@@ -532,7 +532,7 @@ def applyData(context, form_fields, data, adapters=None):
             field.set(adapter, newvalue)
 
     return descriptions
-    
+
 def applyChanges(context, form_fields, data, adapters=None):
     return bool(applyData(context, form_fields, data, adapters))
 

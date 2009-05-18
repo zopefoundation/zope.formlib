@@ -11,6 +11,11 @@ Changes
   ``zope.browser.interfaces``) instead.  Depend on
   ``zope.browser>=1.1`` (the version with ``IAdding``).
 
+- Moved ``namedtemplate`` to ``zope.app.pagetemplate``, to cut some
+  dependencies on ``zope.formlib`` when using this feature. Left BBB
+  imports here.
+
+
 3.5.2 (2009-02-21)
 ==================
 
