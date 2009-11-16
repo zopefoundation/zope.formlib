@@ -619,7 +619,7 @@ def render_submit_button(self):
         label = zope.i18n.translate(self.label, context=self.form.request)
     return ('<input type="submit" id="%s" name="%s" value="%s"'
             ' class="button" />' %
-            (self.__name__, self.__name__, escape(label))
+            (self.__name__, self.__name__, escape(label, quote=True))
             )
 
 class action:
