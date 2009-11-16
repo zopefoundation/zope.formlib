@@ -5,7 +5,7 @@ Changes
 3.6.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Fix: Button label needs escaping
 
 
 3.6.0 (2009-05-18)
