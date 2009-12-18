@@ -2,7 +2,7 @@
 Changes
 =======
 
-3.7.0 (unreleased)
+3.7.0 (2009-12-18)
 ==================
 
 - Rid ourselves from zope.app test dependencies.
