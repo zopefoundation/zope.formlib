@@ -2,11 +2,12 @@
 Changes
 =======
 
-3.6.1 (unreleased)
+3.7.0 (unreleased)
 ==================
 
-- Fix: Button label needs escaping
+- Rid ourselves from zope.app test dependencies.
 
+- Fix: Button label needs escaping
 
 3.6.0 (2009-05-18)
 ==================
@@ -20,7 +21,6 @@ Changes
 - Moved ``namedtemplate`` to ``zope.app.pagetemplate``, to cut some
   dependencies on ``zope.formlib`` when using this feature. Left BBB
   imports here.
-
 
 3.5.2 (2009-02-21)
 ==================

@@ -26,7 +26,7 @@ from setuptools import setup, find_packages
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-version = '3.6.1dev'
+version = '3.7.0dev'
 
 setup(name='zope.formlib',
       version=version,
@@ -47,12 +47,16 @@ setup(name='zope.formlib',
       package_dir = {'': 'src'},
       namespace_packages=['zope',],
       extras_require=dict(
-          test=['zope.app.testing', 'zope.app.zcmlfiles']
+          test=['zope.cachedescriptors',
+                'zope.configuration',
+                'zope.testing',
+               ]
           ),
       install_requires=['setuptools',
                         'pytz',
                         'zope.app.form',
                         'zope.app.pagetemplate>=3.6.0',
+                        'zope.browser>=1.1',
                         'zope.component',
                         'zope.event',
                         'zope.i18n',
@@ -63,7 +67,6 @@ setup(name='zope.formlib',
                         'zope.schema>=3.5.1',
                         'zope.security',
                         'zope.traversing',
-                        'zope.browser>=1.1',
                         ],
       include_package_data = True,
       zip_safe = False,

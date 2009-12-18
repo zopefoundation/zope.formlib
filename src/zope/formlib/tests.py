@@ -15,12 +15,16 @@
 $Id$
 """
 import unittest
-import os
 import re
 import pytz
 
-import zope.component.testing
-import zope.i18n.testing
+from zope.component.testing import setUp, tearDown
+from zope.component import adapter
+from zope.component import adapts
+from zope.component import provideAdapter
+from zope.component import provideUtility
+
+from zope.i18n.testing import setUp as i18nSetUp
 import zope.interface.common.idatetime
 import zope.publisher.interfaces
 import zope.publisher.interfaces.browser
@@ -33,31 +37,26 @@ import zope.app.form.browser.exception
 import zope.app.form.browser.interfaces
 import zope.app.form.interfaces
 
-from zope.app.testing import functional
-
+import zope.formlib
 import zope.formlib.form
 import zope.formlib.interfaces
 import zope.app.pagetemplate.namedtemplate
 
-FormlibLayer = functional.ZCMLLayer(
-    os.path.join(os.path.split(__file__)[0], 'ftesting.zcml'),
-    __name__, 'FormlibLayer', allow_teardown=True)
-
-
+from zope.configuration.xmlconfig import XMLConfig
 
 @zope.interface.implementer(zope.interface.common.idatetime.ITZInfo)
-@zope.component.adapter(zope.publisher.interfaces.IRequest)
+@adapter(zope.publisher.interfaces.IRequest)
 def requestToTZInfo(request):
     return pytz.timezone('US/Hawaii')
 
 def pageSetUp(test):
-    zope.component.testing.setUp(test)
-    zope.component.provideAdapter(
+    setUp(test)
+    provideAdapter(
         zope.traversing.adapters.DefaultTraversable,
         [None],
         )
 
-@zope.component.adapter(zope.formlib.interfaces.IForm)
+@adapter(zope.formlib.interfaces.IForm)
 @zope.app.pagetemplate.namedtemplate.NamedTemplateImplementation
 def TestTemplate(self):
     status = self.status
@@ -87,75 +86,84 @@ def TestTemplate(self):
     return '\n'.join(result)
 
 def formSetUp(test):
-    zope.component.testing.setUp(test)
-    zope.i18n.testing.setUp(test)
-    zope.component.provideAdapter(
+    setUp(test)
+    i18nSetUp(test)
+    provideAdapter(
         zope.app.form.browser.TextWidget,
         [zope.schema.interfaces.ITextLine,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IInputWidget,
         )
-    zope.component.provideAdapter(
+    provideAdapter(
         zope.app.form.browser.FloatWidget,
         [zope.schema.interfaces.IFloat,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IInputWidget,
         )
-    zope.component.provideAdapter(
+    provideAdapter(
         zope.app.form.browser.UnicodeDisplayWidget,
         [zope.schema.interfaces.IInt,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IDisplayWidget,
         )
-    zope.component.provideAdapter(
+    provideAdapter(
         zope.app.form.browser.IntWidget,
         [zope.schema.interfaces.IInt,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IInputWidget,
         )
-    zope.component.provideAdapter(
+    provideAdapter(
         zope.app.form.browser.UnicodeDisplayWidget,
         [zope.schema.interfaces.IFloat,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IDisplayWidget,
         )
-    zope.component.provideAdapter(
+    provideAdapter(
         zope.app.form.browser.UnicodeDisplayWidget,
         [zope.schema.interfaces.ITextLine,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IDisplayWidget,
         )
-    zope.component.provideAdapter(
+    provideAdapter(
         zope.app.form.browser.DatetimeDisplayWidget,
         [zope.schema.interfaces.IDatetime,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IDisplayWidget,
         )
-    zope.component.provideAdapter(
+    provideAdapter(
         zope.app.form.browser.DatetimeWidget,
         [zope.schema.interfaces.IDatetime,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.interfaces.IInputWidget,
         )
-    zope.component.provideAdapter(
+    provideAdapter(
         zope.app.form.browser.exception.WidgetInputErrorView,
         [zope.app.form.interfaces.IWidgetInputError,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.browser.interfaces.IWidgetInputErrorView,
         )
-    zope.component.provideAdapter(TestTemplate, name='default')
-    zope.component.provideAdapter(requestToTZInfo)
-    zope.component.provideAdapter(
+    provideAdapter(
+        zope.formlib.errors.InvalidErrorView,
+        [zope.interface.Invalid,
+         zope.publisher.interfaces.browser.IBrowserRequest,
+         ],
+        zope.app.form.browser.interfaces.IWidgetInputErrorView,
+        )
+    provideAdapter(TestTemplate, name='default')
+    provideAdapter(requestToTZInfo)
+    provideAdapter(
         zope.formlib.form.render_submit_button, name='render')
+
+    XMLConfig('ftesting.zcml', zope.formlib)
 
 # Classes used in tests
 
@@ -180,7 +188,7 @@ class Order:
 
 
 class Descriptive(object):
-    zope.component.adapts(IOrder)
+    adapts(IOrder)
     zope.interface.implements(IDescriptive)
     def __init__(self, context):
         self.context = context
@@ -266,7 +274,7 @@ translation domain.  We'll create one for our needs:
     ...         print default
     ...         return msgid
 
-    >>> zope.component.provideUtility(MyDomain(), name='my.domain')
+    >>> provideUtility(MyDomain(), name='my.domain')
 
 Now, if we call render_submit_button, we should be able to verify the
 data passed to translate:
@@ -379,20 +387,20 @@ that lets us look up the macros.
 
     >>> import zope.traversing.interfaces
     >>> class view:
-    ...     zope.component.adapts(None, None)
+    ...     adapts(None, None)
     ...     zope.interface.implements(zope.traversing.interfaces.ITraversable)
     ...     def __init__(self, ob, r=None):
     ...         pass
     ...     def traverse(*args):
     ...         return macro_template.macros
 
-    >>> zope.component.provideAdapter(view, name='view')
+    >>> provideAdapter(view, name='view')
 
 And we have to register the default traversable adapter (I wish we had
 push templates):
 
     >>> from zope.traversing.adapters import DefaultTraversable
-    >>> zope.component.provideAdapter(DefaultTraversable, [None])
+    >>> provideAdapter(DefaultTraversable, [None])
 
 We need to set up the translation framework. We'll just provide a
 negotiator that always decides to use the test language:
@@ -403,13 +411,13 @@ negotiator that always decides to use the test language:
     ...     def getLanguage(*ignored):
     ...         return 'test'
 
-    >>> zope.component.provideUtility(Negotiator())
+    >>> provideUtility(Negotiator())
 
 And we'll set up the fallback-domain factory, which provides the test
 language for all domains:
 
     >>> from zope.i18n.testmessagecatalog import TestMessageFallbackDomain
-    >>> zope.component.provideUtility(TestMessageFallbackDomain)
+    >>> provideUtility(TestMessageFallbackDomain)
 
 OK, so let's see what the page form looks like. First, we'll compute
 the page:
@@ -533,27 +541,30 @@ def test_suite():
       (re.compile(r" ValueError\('invalid literal for float\(\): (bob'|10,0'),\)"),
                   r"\n <exceptions.ValueError instance at ...>"),
     ])
-    errors = functional.FunctionalDocFileSuite("errors.txt")
-    errors.layer = FormlibLayer
-    bugs = functional.FunctionalDocFileSuite(
-        "bugs.txt",
-        optionflags=doctest.INTERPRET_FOOTNOTES | doctest.ELLIPSIS)
-    bugs.layer = FormlibLayer
     return unittest.TestSuite((
         doctest.DocFileSuite(
+            'errors.txt',
+            setUp=formSetUp, tearDown=tearDown,
+            optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
+            ),
+        # The following test needs some zope.security test setup
+        # doctest.DocFileSuite(
+        #     'bugs.txt',
+        #     setUp=formSetUp, tearDown=tearDown,
+        #     optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
+        #     ),
+        doctest.DocFileSuite(
             'form.txt',
-            setUp=formSetUp, tearDown=zope.component.testing.tearDown,
+            setUp=formSetUp, tearDown=tearDown,
             optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
             checker=checker
             ),
         doctest.DocTestSuite(
-            setUp=formSetUp, tearDown=zope.component.testing.tearDown,
+            setUp=formSetUp, tearDown=tearDown,
             checker=checker
             ),
         doctest.DocTestSuite(
             'zope.formlib.errors'),
-        errors,
-        bugs,
         ))
 
 if __name__ == '__main__':

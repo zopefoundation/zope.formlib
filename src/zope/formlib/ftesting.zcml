@@ -1,14 +1,11 @@
 <configure
-   xmlns="http://namespaces.zope.org/zope"
-   i18n_domain="zope"
-   package="zope.formlib"
-   >
+  xmlns="http://namespaces.zope.org/zope"
+  i18n_domain="zope"
+  package="zope.formlib"
+  >
 
-  <!-- This file is the equivalent of site.zcml and it is -->
-  <!-- used for functional testing setup -->
-
-  <include package="zope.app.zcmlfiles" />
-  <include package="zope.formlib" />
+  <include package="zope.component" file="meta.zcml" />
+  <include package="zope.security" file="meta.zcml" />
 
   <class class=".tests.Order">
     <allow interface=".tests.IOrder" />
