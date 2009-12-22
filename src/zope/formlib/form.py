@@ -36,7 +36,7 @@ from zope.schema.interfaces import IField
 from zope.schema.interfaces import ValidationError
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 from zope.lifecycleevent import Attributes
-from zope.app.pagetemplate import namedtemplate
+from zope.browserpage import namedtemplate
 
 import zope.app.form.browser.interfaces
 from zope.app.form.interfaces import IInputWidget, IDisplayWidget

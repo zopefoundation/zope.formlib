@@ -17,6 +17,6 @@ $Id$
 """
 
 # BBB
-from zope.app.pagetemplate.namedtemplate import (
+from zope.browserpage.namedtemplate import (
     INamedTemplate, NamedTemplateImplementation, implementation,
     NamedTemplate, NamedTemplatePathAdapter)

@@ -40,7 +40,7 @@ import zope.app.form.interfaces
 import zope.formlib
 import zope.formlib.form
 import zope.formlib.interfaces
-import zope.app.pagetemplate.namedtemplate
+from zope.browserpage.namedtemplate import NamedTemplateImplementation
 
 from zope.configuration.xmlconfig import XMLConfig
 
@@ -57,7 +57,7 @@ def pageSetUp(test):
         )
 
 @adapter(zope.formlib.interfaces.IForm)
-@zope.app.pagetemplate.namedtemplate.NamedTemplateImplementation
+@NamedTemplateImplementation
 def TestTemplate(self):
     status = self.status
     if status:
