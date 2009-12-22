@@ -20,6 +20,7 @@ import sys
 import pytz
 from cgi import escape
 
+import zope.browser.interfaces
 import zope.event
 import zope.i18n
 import zope.i18nmessageid
@@ -28,19 +29,19 @@ import zope.interface.interfaces
 import zope.publisher.browser
 import zope.publisher.interfaces.browser
 from zope import component, interface, schema
+from zope.browserpage import ViewPageTemplateFile
 from zope.interface.common import idatetime
 from zope.interface.interface import InterfaceClass
 from zope.schema.interfaces import IField
 from zope.schema.interfaces import ValidationError
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 from zope.lifecycleevent import Attributes
+from zope.app.pagetemplate import namedtemplate
 
-import zope.browser.interfaces
 import zope.app.form.browser.interfaces
 from zope.app.form.interfaces import IInputWidget, IDisplayWidget
 from zope.app.form.interfaces import WidgetsError, MissingInputError
 from zope.app.form.interfaces import InputErrors, WidgetInputError
-from zope.app.pagetemplate import ViewPageTemplateFile, namedtemplate
 
 from zope.formlib import interfaces
 from zope.i18nmessageid import MessageFactory

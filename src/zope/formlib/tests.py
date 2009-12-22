@@ -345,7 +345,7 @@ def test_form_template_i18n():
 Let's try to check that the formlib templates handle i18n correctly.
 We'll define a simple form:
 
-    >>> from zope.app.pagetemplate import ViewPageTemplateFile
+    >>> from zope.browserpage import ViewPageTemplateFile
     >>> import zope.i18nmessageid
     >>> _ = zope.i18nmessageid.MessageFactory('my.domain')
 
