@@ -2,7 +2,7 @@
 Changes
 =======
 
-3.9.0 (unreleased)
+3.9.0 (2009-12-22)
 ==================
 
 - Use ViewPageTemplateFile from zope.browserpage.
