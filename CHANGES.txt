@@ -2,7 +2,7 @@
 Changes
 =======
 
-3.8.0 (unreleased)
+3.8.0 (2009-12-22)
 ==================
 
 - Adjusted test output to new zope.schema release.
