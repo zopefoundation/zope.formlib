@@ -26,7 +26,7 @@ from setuptools import setup, find_packages
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-version = '3.7.1dev'
+version = '3.8.0dev'
 
 setup(name='zope.formlib',
       version=version,
