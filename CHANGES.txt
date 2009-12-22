@@ -2,7 +2,7 @@
 Changes
 =======
 
-3.10.0 (unreleased)
+3.10.0 (2009-12-22)
 ===================
 
 - Use named template from zope.browserpage in favor of zope.app.pagetemplate.
