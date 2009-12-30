@@ -17,7 +17,7 @@ $Id$
 """
 import datetime
 import unittest
-from zope.testing import doctest
+import doctest
 from zope.datetime import parseDatetimetz
 from zope.schema import Date
 from zope.interface.verify import verifyClass
@@ -33,7 +33,7 @@ class DateWidgetTest(SimpleInputWidgetTest):
     """Documents and tests the date widget.
 
         >>> verifyClass(IInputWidget, DateWidget)
-        True
+        True        
     """
 
     _FieldFactory = Date

@@ -21,7 +21,7 @@ from zope.component import getMultiAdapter
 from zope.configuration import xmlconfig
 from zope.interface import implements
 from zope.publisher.browser import TestRequest
-from zope.testing.doctest import DocTestSuite
+from doctest import DocTestSuite
 
 from zope.component import testing
 # import all widgets (in this case, importing * is ok, since we

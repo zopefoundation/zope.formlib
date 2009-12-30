@@ -22,7 +22,7 @@ from zope.schema.interfaces import ITextLine
 from zope.component import provideAdapter
 from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-from zope.testing import doctest
+import doctest
 
 from zope.formlib.widgets import TextWidget, ObjectWidget, DisplayWidget
 from zope.formlib.widgets import TupleSequenceWidget, ListSequenceWidget

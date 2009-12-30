@@ -16,7 +16,7 @@
 $Id$
 """
 import unittest
-from zope.testing import doctest
+import doctest
 from zope.interface import Interface, implements
 from zope.publisher.browser import TestRequest
 from zope.schema import Choice, List

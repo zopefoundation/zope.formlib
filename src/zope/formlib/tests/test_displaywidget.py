@@ -20,7 +20,7 @@ from zope.interface.verify import verifyClass
 from zope.interface.exceptions import DoesNotImplement
 from zope.publisher.browser import TestRequest
 from zope.schema import TextLine
-from zope.testing.doctest import DocTestSuite
+from doctest import DocTestSuite
 
 from zope.formlib.widget import DisplayWidget, UnicodeDisplayWidget
 

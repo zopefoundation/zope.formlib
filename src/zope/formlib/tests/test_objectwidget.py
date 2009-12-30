@@ -22,7 +22,7 @@ from zope.interface import Interface, implements
 from zope.publisher.browser import TestRequest
 from zope.schema import Object, TextLine
 from zope.schema.interfaces import ITextLine
-from zope.testing import doctest
+import doctest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.component import provideAdapter
 

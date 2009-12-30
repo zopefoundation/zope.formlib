@@ -19,7 +19,7 @@ from unittest import TestSuite, main
 
 from zope.component.testing import setUp, tearDown
 from zope.publisher.browser import TestRequest
-from zope.testing.doctest import DocTestSuite
+from doctest import DocTestSuite
 
 from zope.formlib.widget import Widget
 

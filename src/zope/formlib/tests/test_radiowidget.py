@@ -16,7 +16,7 @@
 $Id$
 """
 import unittest
-from zope.testing import doctest
+import doctest
 from zope.interface import Interface, implements
 from zope.interface.verify import verifyClass
 from zope.publisher.browser import TestRequest

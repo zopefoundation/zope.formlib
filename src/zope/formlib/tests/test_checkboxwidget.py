@@ -16,7 +16,7 @@
 $Id$
 """
 import unittest
-from zope.testing import doctest
+import doctest
 from zope.formlib.interfaces import IInputWidget
 from zope.formlib.widgets import CheckBoxWidget
 from zope.publisher.browser import TestRequest

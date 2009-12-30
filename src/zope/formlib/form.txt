@@ -146,7 +146,7 @@ Reading data
 Of course, we don't just want to display inputs.  We want to get the
 input data.  We can use getWidgetsData for that:
 
-    >>> from zope.testing.doctestunit import pprint
+    >>> from pprint import pprint
     >>> class MyForm:
     ...     form_fields = form.Fields(IOrder, omit_readonly=True)
     ...

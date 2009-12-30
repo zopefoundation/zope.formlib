@@ -17,7 +17,7 @@ $Id$
 """
 import unittest
 import decimal
-from zope.testing import doctest
+import doctest
 from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
 from zope.formlib.interfaces import IInputWidget
 from zope.formlib.widgets import DecimalWidget

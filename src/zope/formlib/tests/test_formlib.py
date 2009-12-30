@@ -533,7 +533,7 @@ def test_Action_interface():
 
 
 def test_suite():
-    from zope.testing import doctest
+    import doctest
     checker = zope.testing.renormalizing.RENormalizing([
       (re.compile(r"\[WidgetInputError\('form.summary', 'summary', ValidationError\('A error message'\)\)\]"),
                   r"[<zope.formlib.interfaces.WidgetInputError instance at ...>]"),

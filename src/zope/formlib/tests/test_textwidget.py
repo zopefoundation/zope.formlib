@@ -17,7 +17,7 @@ $Id$
 """
 import datetime
 import unittest
-from zope.testing import doctest
+import doctest
 from zope.component.testing import setUp, tearDown
 from zope.interface.verify import verifyClass
 from zope.schema import TextLine
