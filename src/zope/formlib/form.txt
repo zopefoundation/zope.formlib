@@ -1469,9 +1469,9 @@ field and the request as arguments.
 
 Let's create a simple custom widget to use in our demonstration::
 
-    >>> import zope.app.form.browser.widget
+    >>> import zope.formlib.widget
 
-    >>> class ISODisplayWidget(zope.app.form.browser.widget.DisplayWidget):
+    >>> class ISODisplayWidget(zope.formlib.widget.DisplayWidget):
     ...
     ...     def __call__(self):
     ...         return '<span class="iso-datetime">2005-05-04</span>'

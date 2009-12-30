@@ -548,7 +548,7 @@ def test_suite():
             optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
             ),
         # The following test needs some zope.security test setup
-        # doctest.DocFileSuite(
+        #doctest.DocFileSuite(
         #     'bugs.txt',
         #     setUp=formSetUp, tearDown=tearDown,
         #     optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,

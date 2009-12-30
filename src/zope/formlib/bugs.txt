@@ -32,7 +32,7 @@ writable[#needsinteraction]_:
 
 >>> form.setUpWidgets()
 >>> form.widgets['title']
-<zope.app.form.browser.widget.DisplayWidget object at 0x...>
+<zope.formlib.widget.DisplayWidget object at 0x...>
 >>> form.widgets['name']
 <zope.app.form.browser.textwidgets.TextWidget object at 0x...>
 
@@ -47,7 +47,7 @@ Make sure we have the same behaviour for non-edit forms:
 >>> form = MyForm(order, request)
 >>> form.setUpWidgets()
 >>> form.widgets['title']
-<zope.app.form.browser.widget.DisplayWidget object at 0x...>
+<zope.formlib.widget.DisplayWidget object at 0x...>
 >>> form.widgets['name']
 <zope.app.form.browser.textwidgets.TextWidget object at 0x...>
 
