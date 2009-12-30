@@ -24,7 +24,7 @@ from zope.interface import Invalid
 from zope.i18n import Message
 from zope.i18n import translate
 
-from zope.app.form.browser.interfaces import IWidgetInputErrorView
+from zope.formlib.interfaces import IWidgetInputErrorView
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 

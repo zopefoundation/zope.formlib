@@ -32,10 +32,12 @@ import zope.schema.interfaces
 import zope.testing.renormalizing
 import zope.traversing.adapters
 
-import zope.app.form.browser
-import zope.app.form.browser.exception
-import zope.app.form.browser.interfaces
-import zope.formlib.interfaces
+from zope.app.form.browser import (
+    TextWidget, FloatWidget, UnicodeDisplayWidget, IntWidget,
+    DatetimeDisplayWidget, DatetimeWidget)
+
+from zope.app.form.browser import exception
+from zope.formlib.interfaces import IWidgetInputErrorView
 
 import zope.formlib
 import zope.formlib.form
@@ -89,74 +91,74 @@ def formSetUp(test):
     setUp(test)
     i18nSetUp(test)
     provideAdapter(
-        zope.app.form.browser.TextWidget,
+        TextWidget,
         [zope.schema.interfaces.ITextLine,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IInputWidget,
         )
     provideAdapter(
-        zope.app.form.browser.FloatWidget,
+        FloatWidget,
         [zope.schema.interfaces.IFloat,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IInputWidget,
         )
     provideAdapter(
-        zope.app.form.browser.UnicodeDisplayWidget,
+        UnicodeDisplayWidget,
         [zope.schema.interfaces.IInt,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IDisplayWidget,
         )
     provideAdapter(
-        zope.app.form.browser.IntWidget,
+        IntWidget,
         [zope.schema.interfaces.IInt,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IInputWidget,
         )
     provideAdapter(
-        zope.app.form.browser.UnicodeDisplayWidget,
+        UnicodeDisplayWidget,
         [zope.schema.interfaces.IFloat,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IDisplayWidget,
         )
     provideAdapter(
-        zope.app.form.browser.UnicodeDisplayWidget,
+        UnicodeDisplayWidget,
         [zope.schema.interfaces.ITextLine,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IDisplayWidget,
         )
     provideAdapter(
-        zope.app.form.browser.DatetimeDisplayWidget,
+        DatetimeDisplayWidget,
         [zope.schema.interfaces.IDatetime,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IDisplayWidget,
         )
     provideAdapter(
-        zope.app.form.browser.DatetimeWidget,
+        DatetimeWidget,
         [zope.schema.interfaces.IDatetime,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IInputWidget,
         )
     provideAdapter(
-        zope.app.form.browser.exception.WidgetInputErrorView,
+        exception.WidgetInputErrorView,
         [zope.formlib.interfaces.IWidgetInputError,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
-        zope.app.form.browser.interfaces.IWidgetInputErrorView,
+        IWidgetInputErrorView,
         )
     provideAdapter(
         zope.formlib.errors.InvalidErrorView,
         [zope.interface.Invalid,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
-        zope.app.form.browser.interfaces.IWidgetInputErrorView,
+        IWidgetInputErrorView,
         )
     provideAdapter(TestTemplate, name='default')
     provideAdapter(requestToTZInfo)

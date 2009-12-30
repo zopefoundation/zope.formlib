@@ -248,6 +248,52 @@ class FormError(Exception):
     """There was an error in managing the form
     """
 
+class IBrowserWidget(IWidget):
+    """A widget for use in a web browser UI."""
+
+    def __call__():
+        """Render the widget."""
+
+    def hidden():
+        """Render the widget as a hidden field."""
+
+    def error():
+        """Render the validation error for the widget, or return
+        an empty string if no error"""
+
+
+class ISimpleInputWidget(IBrowserWidget, IInputWidget):
+    """A widget that uses a single HTML element to collect user input."""
+
+    tag = schema.TextLine(
+        title=u'Tag',
+        description=u'The widget HTML element.')
+
+    type = schema.TextLine(
+        title=u'Type',
+        description=u'The element type attribute',
+        required=False)
+
+    cssClass = schema.TextLine(
+        title=u'CSS Class',
+        description=u'The element class attribute.',
+        required=False)
+
+    extra = schema.TextLine(
+        title=u'Extra',
+        description=u'The element extra attribute.',
+        required=False)
+
+
+class ITextBrowserWidget(ISimpleInputWidget):
+
+    convert_missing_value = schema.Bool(
+        title=u'Translate Input Value',
+        description=
+            u'If True, an empty string is converted to field.missing_value.',
+        default=True)
+
+
 def reConstraint(pat, explanation):
     pat = re.compile(pat)
 
@@ -255,6 +301,13 @@ def reConstraint(pat, explanation):
         if prefix_re.match(value):
             return True
         raise interface.Invalid(value, explanation)
+
+class IWidgetInputErrorView(Interface):
+    """Display an input error as a snippet of text."""
+
+    def snippet():
+        """Convert a widget input error to an html snippet."""
+
 
 class ISubPage(Interface):
     """A component that computes part of a page

@@ -14,7 +14,7 @@ by adapting them to IWidgetInputErrorView:
     >>> from zope.publisher.browser import TestRequest
     >>> from zope.interface.exceptions import Invalid
     >>> from zope.component import getMultiAdapter
-    >>> from zope.app.form.browser.interfaces import IWidgetInputErrorView
+    >>> from zope.formlib.interfaces import IWidgetInputErrorView
     >>> error = Invalid("You are wrong!")
     >>> message = getMultiAdapter((error, TestRequest()),
     ...         IWidgetInputErrorView).snippet()

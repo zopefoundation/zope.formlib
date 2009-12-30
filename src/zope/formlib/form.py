@@ -38,7 +38,7 @@ from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 from zope.lifecycleevent import Attributes
 from zope.browserpage import namedtemplate
 
-import zope.app.form.browser.interfaces
+from zope.formlib.interfaces import IWidgetInputErrorView
 from zope.formlib.interfaces import IInputWidget, IDisplayWidget
 from zope.formlib.interfaces import WidgetsError, MissingInputError
 from zope.formlib.interfaces import InputErrors, WidgetInputError
@@ -795,7 +795,7 @@ class FormBase(zope.publisher.browser.BrowserPage):
             else:
                 view = component.getMultiAdapter(
                     (error, self.request),
-                    zope.app.form.browser.interfaces.IWidgetInputErrorView)
+                    IWidgetInputErrorView)
                 title = getattr(error, 'widget_title', None) # duck typing
                 if title:
                     if isinstance(title, zope.i18n.Message):
