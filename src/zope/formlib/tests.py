@@ -32,11 +32,11 @@ import zope.schema.interfaces
 import zope.testing.renormalizing
 import zope.traversing.adapters
 
-from zope.app.form.browser import (
+from zope.formlib.widgets import (
     TextWidget, FloatWidget, UnicodeDisplayWidget, IntWidget,
     DatetimeDisplayWidget, DatetimeWidget)
 
-from zope.app.form.browser import exception
+from zope.formlib import exception
 from zope.formlib.interfaces import IWidgetInputErrorView
 
 import zope.formlib

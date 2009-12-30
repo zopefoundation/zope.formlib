@@ -24,9 +24,9 @@ from zope.schema import getFieldNamesInOrder
 from zope.formlib.interfaces import IInputWidget
 from zope.formlib.widget import InputWidget
 from zope.formlib.widget import BrowserWidget
-from zope.app.form.utility import setUpWidgets, applyWidgetsChanges
+from zope.formlib.utility import setUpWidgets, applyWidgetsChanges
 from zope.browserpage import ViewPageTemplateFile
-from zope.app.form.browser.interfaces import IWidgetInputErrorView
+from zope.formlib.interfaces import IWidgetInputErrorView
 
 
 class ObjectWidgetView:

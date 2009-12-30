@@ -1,5 +1,5 @@
 """\
-I18N support for zope.app.form.browser.
+I18N support for zope.formlib
 
 """
 __docformat__ = "reStructuredText"
