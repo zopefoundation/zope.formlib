@@ -35,7 +35,7 @@ import zope.traversing.adapters
 import zope.app.form.browser
 import zope.app.form.browser.exception
 import zope.app.form.browser.interfaces
-import zope.app.form.interfaces
+import zope.formlib.interfaces
 
 import zope.formlib
 import zope.formlib.form
@@ -93,60 +93,60 @@ def formSetUp(test):
         [zope.schema.interfaces.ITextLine,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
-        zope.app.form.interfaces.IInputWidget,
+        zope.formlib.interfaces.IInputWidget,
         )
     provideAdapter(
         zope.app.form.browser.FloatWidget,
         [zope.schema.interfaces.IFloat,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
-        zope.app.form.interfaces.IInputWidget,
+        zope.formlib.interfaces.IInputWidget,
         )
     provideAdapter(
         zope.app.form.browser.UnicodeDisplayWidget,
         [zope.schema.interfaces.IInt,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
-        zope.app.form.interfaces.IDisplayWidget,
+        zope.formlib.interfaces.IDisplayWidget,
         )
     provideAdapter(
         zope.app.form.browser.IntWidget,
         [zope.schema.interfaces.IInt,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
-        zope.app.form.interfaces.IInputWidget,
+        zope.formlib.interfaces.IInputWidget,
         )
     provideAdapter(
         zope.app.form.browser.UnicodeDisplayWidget,
         [zope.schema.interfaces.IFloat,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
-        zope.app.form.interfaces.IDisplayWidget,
+        zope.formlib.interfaces.IDisplayWidget,
         )
     provideAdapter(
         zope.app.form.browser.UnicodeDisplayWidget,
         [zope.schema.interfaces.ITextLine,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
-        zope.app.form.interfaces.IDisplayWidget,
+        zope.formlib.interfaces.IDisplayWidget,
         )
     provideAdapter(
         zope.app.form.browser.DatetimeDisplayWidget,
         [zope.schema.interfaces.IDatetime,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
-        zope.app.form.interfaces.IDisplayWidget,
+        zope.formlib.interfaces.IDisplayWidget,
         )
     provideAdapter(
         zope.app.form.browser.DatetimeWidget,
         [zope.schema.interfaces.IDatetime,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
-        zope.app.form.interfaces.IInputWidget,
+        zope.formlib.interfaces.IInputWidget,
         )
     provideAdapter(
         zope.app.form.browser.exception.WidgetInputErrorView,
-        [zope.app.form.interfaces.IWidgetInputError,
+        [zope.formlib.interfaces.IWidgetInputError,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.app.form.browser.interfaces.IWidgetInputErrorView,
@@ -297,16 +297,16 @@ def test_error_handling():
 Let's test the getWidgetsData method which is responsible for handling widget
 erros raised by the widgets getInputValue method.
 
-    >>> import zope.app.form.interfaces
+    >>> import zope.formlib.interfaces
     >>> class Widget(object):
-    ...     zope.interface.implements(zope.app.form.interfaces.IInputWidget)
+    ...     zope.interface.implements(zope.formlib.interfaces.IInputWidget)
     ...     def __init__(self):
     ...         self.name = 'form.summary'
     ...         self.label = 'Summary'
     ...     def hasInput(self):
     ...         return True
     ...     def getInputValue(self):
-    ...         raise zope.app.form.interfaces.WidgetInputError(
+    ...         raise zope.formlib.interfaces.WidgetInputError(
     ...         field_name='summary',
     ...         widget_title=u'Summary')
     >>> widget = Widget()
@@ -314,7 +314,7 @@ erros raised by the widgets getInputValue method.
     >>> widgets = zope.formlib.form.Widgets(inputs, 5)
     >>> errors = zope.formlib.form.getWidgetsData(widgets, 'form', {'summary':'value'})
     >>> errors #doctest: +ELLIPSIS
-    [<zope.app.form.interfaces.WidgetInputError instance at ...>]
+    [<zope.formlib.interfaces.WidgetInputError instance at ...>]
 
 Let's see what happens if a widget doesn't convert a ValidationError
 raised by a field to a WidgetInputError. This should not happen if a widget
@@ -323,7 +323,7 @@ yesterday the sequence input widget, I decided to catch ValidationError also
 in the formlib as a fallback if some widget doen't handle errors correct. (ri)
 
     >>> class Widget(object):
-    ...     zope.interface.implements(zope.app.form.interfaces.IInputWidget)
+    ...     zope.interface.implements(zope.formlib.interfaces.IInputWidget)
     ...     def __init__(self):
     ...         self.name = 'form.summary'
     ...         self.label = 'summary'
@@ -336,7 +336,7 @@ in the formlib as a fallback if some widget doen't handle errors correct. (ri)
     >>> widgets = zope.formlib.form.Widgets(inputs, 5)
     >>> errors = zope.formlib.form.getWidgetsData(widgets, 'form', {'summary':'value'})
     >>> errors #doctest: +ELLIPSIS
-    [<zope.app.form.interfaces.WidgetInputError instance at ...>]
+    [<zope.formlib.interfaces.WidgetInputError instance at ...>]
 
 """
 
@@ -535,9 +535,9 @@ def test_suite():
     from zope.testing import doctest
     checker = zope.testing.renormalizing.RENormalizing([
       (re.compile(r"\[WidgetInputError\('form.summary', 'summary', ValidationError\('A error message'\)\)\]"),
-                  r"[<zope.app.form.interfaces.WidgetInputError instance at ...>]"),
+                  r"[<zope.formlib.interfaces.WidgetInputError instance at ...>]"),
       (re.compile(r"\[WidgetInputError\('summary', u'Summary', None\)\]"),
-                  r"[<zope.app.form.interfaces.WidgetInputError instance at ...>]"),
+                  r"[<zope.formlib.interfaces.WidgetInputError instance at ...>]"),
       (re.compile(r" ValueError\('invalid literal for float\(\): (bob'|10,0'),\)"),
                   r"\n <exceptions.ValueError instance at ...>"),
     ])

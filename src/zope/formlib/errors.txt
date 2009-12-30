@@ -59,7 +59,7 @@ Displaying widget input errors
 
 WidgetInputError exceptions also work with i18n messages:
 
-    >>> from zope.app.form.interfaces import WidgetInputError
+    >>> from zope.formlib.interfaces import WidgetInputError
     >>> myError = WidgetInputError(
     ...     field_name='summary',
     ...     widget_title=_(u'Summary'),

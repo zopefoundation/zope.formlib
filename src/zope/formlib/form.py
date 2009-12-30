@@ -39,9 +39,9 @@ from zope.lifecycleevent import Attributes
 from zope.browserpage import namedtemplate
 
 import zope.app.form.browser.interfaces
-from zope.app.form.interfaces import IInputWidget, IDisplayWidget
-from zope.app.form.interfaces import WidgetsError, MissingInputError
-from zope.app.form.interfaces import InputErrors, WidgetInputError
+from zope.formlib.interfaces import IInputWidget, IDisplayWidget
+from zope.formlib.interfaces import WidgetsError, MissingInputError
+from zope.formlib.interfaces import InputErrors, WidgetInputError
 
 from zope.formlib import interfaces
 from zope.i18nmessageid import MessageFactory
