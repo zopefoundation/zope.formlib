@@ -14,7 +14,7 @@ by adapting them to IWidgetInputErrorView:
     >>> from zope.publisher.browser import TestRequest
     >>> from zope.interface.exceptions import Invalid
     >>> from zope.component import getMultiAdapter
-    >>> from zope.app.form.browser.interfaces import IWidgetInputErrorView
+    >>> from zope.formlibwidget.browser.interfaces import IWidgetInputErrorView
     >>> error = Invalid("You are wrong!")
     >>> message = getMultiAdapter((error, TestRequest()),
     ...         IWidgetInputErrorView).snippet()
@@ -59,7 +59,7 @@ Displaying widget input errors
 
 WidgetInputError exceptions also work with i18n messages:
 
-    >>> from zope.app.form.interfaces import WidgetInputError
+    >>> from zope.formlibwidget.interfaces import WidgetInputError
     >>> myError = WidgetInputError(
     ...     field_name='summary',
     ...     widget_title=_(u'Summary'),

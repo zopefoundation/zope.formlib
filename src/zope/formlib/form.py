@@ -38,10 +38,10 @@ from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 from zope.lifecycleevent import Attributes
 from zope.browserpage import namedtemplate
 
-import zope.app.form.browser.interfaces
-from zope.app.form.interfaces import IInputWidget, IDisplayWidget
-from zope.app.form.interfaces import WidgetsError, MissingInputError
-from zope.app.form.interfaces import InputErrors, WidgetInputError
+import zope.formlibwidget.browser.interfaces
+from zope.formlibwidget.interfaces import IInputWidget, IDisplayWidget
+from zope.formlibwidget.interfaces import WidgetsError, MissingInputError
+from zope.formlibwidget.interfaces import InputErrors, WidgetInputError
 
 from zope.formlib import interfaces
 from zope.i18nmessageid import MessageFactory
@@ -795,7 +795,7 @@ class FormBase(zope.publisher.browser.BrowserPage):
             else:
                 view = component.getMultiAdapter(
                     (error, self.request),
-                    zope.app.form.browser.interfaces.IWidgetInputErrorView)
+                    zope.formlibwidget.browser.interfaces.IWidgetInputErrorView)
                 title = getattr(error, 'widget_title', None) # duck typing
                 if title:
                     if isinstance(title, zope.i18n.Message):

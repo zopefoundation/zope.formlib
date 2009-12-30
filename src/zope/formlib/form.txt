@@ -1469,9 +1469,9 @@ field and the request as arguments.
 
 Let's create a simple custom widget to use in our demonstration::
 
-    >>> import zope.app.form.browser.widget
+    >>> import zope.formlibwidget.browser.widget
 
-    >>> class ISODisplayWidget(zope.app.form.browser.widget.DisplayWidget):
+    >>> class ISODisplayWidget(zope.formlibwidget.browser.widget.DisplayWidget):
     ...
     ...     def __call__(self):
     ...         return '<span class="iso-datetime">2005-05-04</span>'
@@ -1630,7 +1630,7 @@ Dividing display of widget errors and invariant errors
 Even though the form machinery only has a single errors attribute, if designers
 wish to render widget errors differently than invariant errors, they can be
 separated reasonably easily.  The separation takes advantage of the fact that
-all widget errors should implement zope.app.form.interfaces.IWidgetInputError,
+all widget errors should implement zope.formlibwidget.interfaces.IWidgetInputError,
 and invariant errors shouldn't, because they don't come from a widget.
 Therefore, a simple division such as the following should suffice.
 
