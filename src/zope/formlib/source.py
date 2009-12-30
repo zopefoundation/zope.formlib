@@ -416,7 +416,6 @@ class SourceListInputWidget(SourceInputWidget):
     def __call__(self):
         result = ['<div class="value">']
         value = self._value()
-        field = self.context
 
         if value:
             for v in value:
