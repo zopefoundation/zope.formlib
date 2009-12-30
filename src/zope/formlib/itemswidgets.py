@@ -21,8 +21,8 @@ from xml.sax.saxutils import escape
 from zope import component
 from zope.interface import implements
 from zope.i18n import translate
-from zope.schema.interfaces import ValidationError, InvalidValue
-from zope.schema.interfaces import ConstraintNotSatisfied, ITitledTokenizedTerm
+from zope.schema.interfaces import InvalidValue
+from zope.schema.interfaces import ITitledTokenizedTerm
 
 from zope.formlib.widget import SimpleInputWidget, renderElement
 from zope.formlib.interfaces import IInputWidget, IDisplayWidget
@@ -120,7 +120,7 @@ class ItemsWidgetBase(TranslationHook, SimpleInputWidget):
         for token in tokens:
             try:
                 term = self.vocabulary.getTermByToken(token)
-            except LookupError, error:
+            except LookupError:
                 raise InvalidValue("token %r not found in vocabulary" % token)
             else:
                 values.append(term.value)
@@ -335,7 +335,6 @@ class ItemsEditWidgetBase(SingleDataHelper, ItemsWidgetBase):
         """See IBrowserWidget."""
         value = self._getFormValue()
         contents = []
-        have_results = False
 
         contents.append(self._div('value', self.renderValue(value)))
         contents.append(self._emptyMarker())

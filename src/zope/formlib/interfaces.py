@@ -19,7 +19,7 @@ from zope import schema
 from zope.publisher.interfaces.browser import IBrowserPage
 from zope.schema.interfaces import ValidationError
 from zope.publisher.interfaces import IView
-from zope.interface import Attribute, Interface, implements
+from zope.interface import Attribute, Interface, implements, Invalid
 from zope.schema import Bool
 from zope.exceptions.interfaces import UserError
 
@@ -293,14 +293,15 @@ class ITextBrowserWidget(ISimpleInputWidget):
             u'If True, an empty string is converted to field.missing_value.',
         default=True)
 
-
+# XXX this seems to be buggy (since at least 2005)
+# it returns None, and prefix_re is never defined.
 def reConstraint(pat, explanation):
     pat = re.compile(pat)
 
     def constraint(value):
         if prefix_re.match(value):
             return True
-        raise interface.Invalid(value, explanation)
+        raise Invalid(value, explanation)
 
 class IWidgetInputErrorView(Interface):
     """Display an input error as a snippet of text."""

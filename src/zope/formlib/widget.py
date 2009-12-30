@@ -25,13 +25,12 @@ from zope.schema.interfaces import ValidationError
 from zope.publisher.browser import BrowserView
 
 from zope.formlib.interfaces import ConversionError
-from zope.formlib.interfaces import InputErrors
 from zope.formlib.interfaces import WidgetInputError, MissingInputError
 from zope.formlib.interfaces import IBrowserWidget
 from zope.formlib.interfaces import ISimpleInputWidget
 from zope.formlib.interfaces import IWidgetInputErrorView
 from zope.formlib.interfaces import IWidget, InputErrors, IWidgetFactory
-from zope.interface import implements
+
 from zope.i18n import translate
 from zope.schema.interfaces import IChoice, ICollection
 

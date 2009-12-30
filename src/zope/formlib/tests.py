@@ -21,8 +21,7 @@ import pytz
 from zope.component.testing import setUp, tearDown
 from zope.component import adapter
 from zope.component import adapts
-from zope.component import provideAdapter
-from zope.component import provideUtility
+from zope.component import provideAdapter, provideUtility
 
 from zope.i18n.testing import setUp as i18nSetUp
 import zope.interface.common.idatetime

@@ -23,16 +23,11 @@ uses the infrastructure provided by zope.formlib itself.
 __docformat__ = 'restructuredtext'
 
 from zope import component
-from zope import security
-from zope.security.proxy import Proxy
-from zope.proxy import isProxy
-from zope.interface.interfaces import IMethod
-from zope.security.interfaces import ForbiddenAttribute, Unauthorized
 from zope.schema import getFieldsInOrder
 from zope.formlib.interfaces import IWidget
-from zope.formlib.interfaces import WidgetsError, MissingInputError
+from zope.formlib.interfaces import WidgetsError
 from zope.formlib.interfaces import InputErrors
-from zope.formlib.interfaces import IInputWidget, IDisplayWidget
+from zope.formlib.interfaces import IInputWidget
 from zope.formlib.interfaces import IWidgetFactory
 
 # A marker that indicates 'no value' for any of the utility functions that
