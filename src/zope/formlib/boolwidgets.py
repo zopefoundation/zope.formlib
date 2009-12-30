@@ -22,7 +22,7 @@ from zope.schema.vocabulary import SimpleVocabulary
 
 from zope.formlib.widget import SimpleInputWidget, renderElement
 from zope.formlib.widget import DisplayWidget
-from zope.app.form.browser.i18n import _
+from zope.formlib.i18n import _
 from zope.app.form.browser.itemswidgets import RadioWidget
 from zope.app.form.browser.itemswidgets import SelectWidget, DropdownWidget
 from zope.formlib.interfaces import IInputWidget

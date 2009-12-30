@@ -25,7 +25,7 @@ from zope.schema.interfaces import ValidationError
 from zope.formlib.interfaces import IDisplayWidget, IInputWidget
 from zope.formlib.interfaces import WidgetInputError, MissingInputError
 from zope.formlib.widget import InputWidget
-from zope.app.form.browser.i18n import _
+from zope.formlib.i18n import _
 from zope.formlib.widget import BrowserWidget
 from zope.formlib.widget import DisplayWidget, renderElement
 from zope.browserpage import ViewPageTemplateFile

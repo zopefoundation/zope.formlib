@@ -27,7 +27,7 @@ from zope.schema.interfaces import ConstraintNotSatisfied, ITitledTokenizedTerm
 from zope.formlib.widget import SimpleInputWidget, renderElement
 from zope.formlib.interfaces import IInputWidget, IDisplayWidget
 from zope.formlib.interfaces import ConversionError
-from zope.app.form.browser.i18n import _
+from zope.formlib.i18n import _
 from zope.browserpage import ViewPageTemplateFile
 
 

@@ -25,7 +25,7 @@ from zope.datetime import DateTimeError
 from zope.i18n.format import DateTimeParseError
 
 from zope.formlib.interfaces import IInputWidget, ConversionError
-from zope.app.form.browser.i18n import _
+from zope.formlib.i18n import _
 from zope.app.form.browser.interfaces import ITextBrowserWidget
 from zope.formlib.widget import SimpleInputWidget, renderElement
 from zope.formlib.widget import DisplayWidget
