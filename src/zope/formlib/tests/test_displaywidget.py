@@ -31,7 +31,7 @@ def test_implemented_interfaces():
     Like all browser-used widgets, DisplayWidget must implement
     `IBrowserWidget`.
 
-    >>> from zope.app.form.browser.interfaces import IBrowserWidget
+    >>> from zope.formlib.interfaces import IBrowserWidget
     >>> verifyClass(IBrowserWidget, DisplayWidget)
     True
 

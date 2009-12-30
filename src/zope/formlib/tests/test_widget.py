@@ -173,7 +173,7 @@ class TestCustomWidgetFactory(object):
     Test sequence widget:
 
         >>> from zope.schema import TextLine, List
-        >>> from zope.app.form.browser import ListSequenceWidget
+        >>> from zope.formlib.widgets import ListSequenceWidget
         >>> value_type = TextLine(__name__=u'bar')
         >>> field = List( __name__=u'foo', value_type=value_type )
 
@@ -197,7 +197,7 @@ class TestCustomWidgetFactory(object):
     Test vocabulary widget:
 
         >>> from zope.schema import Choice
-        >>> from zope.app.form.browser import RadioWidget
+        >>> from zope.formlib.widgets import RadioWidget
         >>> field = Choice( __name__=u'foo', values=['1', '2', '3'] )
         >>> bound = field.bind(context)
 

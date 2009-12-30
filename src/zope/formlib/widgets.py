@@ -40,6 +40,7 @@ from zope.formlib.boolwidgets import CheckBoxWidget
 from zope.formlib.boolwidgets import BooleanRadioWidget
 from zope.formlib.boolwidgets import BooleanSelectWidget
 from zope.formlib.boolwidgets import BooleanDropdownWidget
+from zope.formlib.boolwidgets import BooleanDisplayWidget
 
 # Choice and Sequence Display Widgets
 from zope.formlib.itemswidgets import ItemDisplayWidget

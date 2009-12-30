@@ -97,8 +97,8 @@ Now let's setup a enviroment for use the widget like in a real application:
   >>> from zope.publisher.browser import TestRequest
   >>> from zope.schema.interfaces import ITextLine
   >>> from zope.schema import TextLine
-  >>> from zope.app.form.browser import TextWidget
-  >>> from zope.app.form.browser import ObjectWidget
+  >>> from zope.formlib.widgets import TextWidget
+  >>> from zope.formlib.widgets import ObjectWidget
   >>> from zope.formlib.interfaces import IInputWidget
 
 Register the TextLine widget used in the IPerson interface for the field 'name'.
@@ -135,7 +135,7 @@ this factory and set it to the attribute 'name' of the instance mother
 allready store in the family object, the factory instance will be stored 
 directly to the family attribute mother. For more information see the method 
 'applyChanges()' in the interface 
-zope.app.form.browser.objectwidget.ObjectWidget.
+zope.formlib.objectwidget.ObjectWidget.
 
   >>> widget.applyChanges(family)
   True
