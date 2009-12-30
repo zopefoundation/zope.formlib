@@ -17,6 +17,9 @@ This is an implementation only used by zope.formlib.objectwidget, not
 by the rest of the widgets in zope.formlib. We would like to keep it
 this way.
 
+This module is not directly tested: zope.app.form does have tests to
+test this, and the objectwidget implementation tests this indirectly.
+
 At some point we would like to rewrite zope.formlib.objectwidget so it
 uses the infrastructure provided by zope.formlib itself.
 """
