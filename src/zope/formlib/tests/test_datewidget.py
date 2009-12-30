@@ -33,7 +33,7 @@ class DateWidgetTest(SimpleInputWidgetTest):
     """Documents and tests the date widget.
 
         >>> verifyClass(IInputWidget, DateWidget)
-        True        
+        True
     """
 
     _FieldFactory = Date
