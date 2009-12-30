@@ -19,10 +19,11 @@ __docformat__ = 'restructuredtext'
 
 from xml.sax.saxutils import quoteattr, escape
 
-from zope.component import getMultiAdapter
+from zope.component import getMultiAdapter, provideAdapter
 from zope.interface import implements
 from zope.schema.interfaces import ValidationError
 from zope.publisher.browser import BrowserView
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 from zope.formlib.interfaces import ConversionError
 from zope.formlib.interfaces import WidgetInputError, MissingInputError
@@ -174,10 +175,10 @@ class BrowserWidget(Widget, BrowserView):
         ...         self.context = context
         ...     def snippet(self):
         ...         return "The error: " + str(self.context.errors)
-        >>> from zope.app.testing import ztapi
-        >>> ztapi.browserViewProviding(IWidgetInputError, SnippetErrorView,
-        ...                            IWidgetInputErrorView)
-
+        >>> provideAdapter(SnippetErrorView,
+        ...                (IWidgetInputError, IDefaultBrowserLayer),
+        ...                IWidgetInputErrorView, '')
+        
     Whever an error occurs, widgets should set _error:
 
         >>> widget._error = WidgetInputError('foo', 'Foo', ('Err1', 'Err2'))
