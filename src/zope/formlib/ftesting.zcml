@@ -7,17 +7,17 @@
   <include package="zope.component" file="meta.zcml" />
   <include package="zope.security" file="meta.zcml" />
 
-  <class class=".tests.Order">
-    <allow interface=".tests.IOrder" />
+  <class class=".tests.test_formlib.Order">
+    <allow interface=".tests.test_formlib.IOrder" />
     <require
-      set_schema=".tests.IOrder"
+      set_schema=".tests.test_formlib.IOrder"
       permission="zope.ManageContent"
       />
   </class>
-  <adapter factory=".tests.Descriptive" />
-  <class class=".tests.Descriptive">
+  <adapter factory=".tests.test_formlib.Descriptive" />
+  <class class=".tests.test_formlib.Descriptive">
     <require
-      interface=".tests.IDescriptive" 
+      interface=".tests.test_formlib.IDescriptive" 
       permission="zope.View"
       />
   </class>

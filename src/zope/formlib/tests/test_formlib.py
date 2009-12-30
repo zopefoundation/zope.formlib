@@ -362,8 +362,8 @@ We'll define a simple form:
     ...     @zope.formlib.form.action(_('Ok'))
     ...     def ok(self, action, data):
     ...         pass
-    ...     page = ViewPageTemplateFile("pageform.pt")
-    ...     subpage = ViewPageTemplateFile("subpageform.pt")
+    ...     page = ViewPageTemplateFile("../pageform.pt")
+    ...     subpage = ViewPageTemplateFile("../subpageform.pt")
 
 Now, we should be able to create a form instance:
 
@@ -544,7 +544,7 @@ def test_suite():
     ])
     return unittest.TestSuite((
         doctest.DocFileSuite(
-            'errors.txt',
+            '../errors.txt',
             setUp=formSetUp, tearDown=tearDown,
             optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
             ),
@@ -555,7 +555,7 @@ def test_suite():
         #     optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
         #     ),
         doctest.DocFileSuite(
-            'form.txt',
+            '../form.txt',
             setUp=formSetUp, tearDown=tearDown,
             optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
             checker=checker
