@@ -15,6 +15,7 @@
 
 $Id$
 """
+import re
 
 class VerifyResults(object):
     """Mix-in for test classes with helpers for checking string data."""
@@ -32,3 +33,15 @@ class VerifyResults(object):
         for check in check_list:
             self.assert_(result.find(check) < 0,
                          "%r unexpectedly found in %r" % (check, result))
+
+def patternExists(pattern, source, flags=0):
+    return re.search(pattern, source, flags) is not None
+
+def validationErrorExists(field, error_msg, source):
+    regex = re.compile(r'%s.*?name="form.(\w+)(?:\.[\w\.]+)?"' % (error_msg,),
+                       re.DOTALL)
+    # compile it first because Python 2.3 doesn't allow flags in findall
+    return field in regex.findall(source)
+
+def missingInputErrorExists(field, source):
+    return validationErrorExists(field, 'Required input is missing.', source)
