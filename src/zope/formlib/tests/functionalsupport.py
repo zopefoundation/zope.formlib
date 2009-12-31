@@ -36,9 +36,9 @@ def TestTemplate(self):
 
     result = []
 
-    if self.errors:
-        for error in self.errors:
-            result.append("%s: %s" % (error.__class__.__name__, error))
+    #if self.errors:
+    #    for error in self.errors:
+    #        result.append("%s: %s" % (error.__class__.__name__, error))
 
     for w in self.widgets:
         result.append(w())
