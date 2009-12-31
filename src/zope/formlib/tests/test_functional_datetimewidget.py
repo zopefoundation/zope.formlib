@@ -108,8 +108,6 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = u''
 
         Form(foo, request)()
-        
-        #    env={"HTTP_ACCEPT_LANGUAGE": "en"})
 
         self.assertEqual(foo.d1, datetime(2003, 2, 1, tzinfo=tzinfo(0)))
         self.assertEqual(foo.d2, datetime(2003, 2, 2, tzinfo=tzinfo(0)))
