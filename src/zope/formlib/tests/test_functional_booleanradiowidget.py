@@ -40,9 +40,8 @@ class Form(form.EditForm):
 
     
 class Test(FunctionalWidgetTestCase):
-    widget = BooleanRadioWidget
-    field = zope.schema.interfaces.IBool
-        
+    widgets = [(zope.schema.interfaces.IBool, BooleanRadioWidget)]
+
     def test_display_editform(self):
         foo = Foo()
         request = TestRequest()

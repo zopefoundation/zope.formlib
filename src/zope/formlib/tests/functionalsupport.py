@@ -54,12 +54,17 @@ def TestTemplate(self):
 def formSetUp(test):
     setUp(test)
     i18nSetUp(test)
-    provideAdapter(
-        test.widget,
-        (test.field,
-         IBrowserRequest),
-        IInputWidget)
-    
+
+    for field, widget in test.widgets:
+        if isinstance(field, tuple):
+            field = field + (IBrowserRequest,)
+        else:
+            field = (field, IBrowserRequest)
+        provideAdapter(
+            widget,
+            field,
+            IInputWidget)
+        
     provideAdapter(
        WidgetInputErrorView,
         (IWidgetInputError,
@@ -79,8 +84,7 @@ def formSetUp(test):
         form.render_submit_button, name='render')
 
 class FunctionalWidgetTestCase(unittest.TestCase):
-    widget = None
-    field = None
+    widgets = []
     
     def setUp(self):
         formSetUp(self)

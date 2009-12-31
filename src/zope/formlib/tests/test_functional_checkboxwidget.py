@@ -46,9 +46,8 @@ class Form(form.EditForm):
     form_fields = form.fields(IBoolTest)
            
 class Test(FunctionalWidgetTestCase):
-    widget = CheckBoxWidget
-    field = zope.schema.interfaces.IBool
-
+    widgets = [(zope.schema.interfaces.IBool, CheckBoxWidget)]
+    
     def test_display_editform(self):
         foo = BoolTest()
         request = TestRequest()
