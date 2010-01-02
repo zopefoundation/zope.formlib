@@ -17,20 +17,15 @@ $Id$
 """
 import unittest
 
-import re
-from datetime import datetime
-
 from StringIO import StringIO
 from zope.interface import Interface, implements
-from zope.schema import Datetime, Choice, Field
+from zope.schema import Field
 from zope.schema.interfaces import IField
 from zope.formlib import form
 from zope.publisher.browser import TestRequest
 from zope.formlib.tests.support import patternExists
 from zope.formlib.widgets import FileWidget
 from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
-import zope.schema.interfaces
-from zope.datetime import parseDatetimetz, tzinfo
 
 class IFileField(IField):
     """Field for representing a file that can be edited by FileWidget."""
@@ -144,7 +139,7 @@ class Test(FunctionalWidgetTestCase):
         # or else it will complain (see test_required_validation) and the
         # change will not succeed.
         
-        html = Form(foo, request)()
+        Form(foo, request)()
 
         # new value for f1 should be field.missing_value (i.e, None)
         self.assert_(foo.f1 is None)

@@ -17,7 +17,6 @@ $Id$
 """
 import unittest
 
-import decimal
 from zope.interface import Interface, implements
 from zope.schema import Text
 from zope.formlib import form
@@ -83,7 +82,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.s3'] = u'baz'
         request.form['form.actions.apply'] = u''
 
-        html = Form(foo, request)()
+        Form(foo, request)()
         
         # check new values in object
         self.assertEqual(foo.s1, u'foo')
@@ -119,7 +118,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.s3'] = ''
         request.form['form.actions.apply'] = u''
 
-        html = Form(foo, request)()
+        Form(foo, request)()
 
         # check new value in object
         self.assertEqual(foo.s1, u'foo')
@@ -177,7 +176,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.s2'] = u'bar'
         request.form['form.actions.apply'] = u''
 
-        html = Form(foo, request)()
+        Form(foo, request)()
         
         # check new values in object
         self.assertEqual(foo.s1, '')

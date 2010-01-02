@@ -95,7 +95,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.f2'] = '2.23456789012345'
         request.form['form.f3'] = '11.1'
         request.form['form.actions.apply'] = u''
-        html = Form(foo, request)()
+        Form(foo, request)()
 
         # check new values in object
         self.assertEqual(foo.f1, decimal.Decimal("1.123"))
@@ -110,7 +110,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.f2'] = ''
         request.form['form.f3'] = '1.1'
         request.form['form.actions.apply'] = u''
-        html = Form(foo, request)()
+        Form(foo, request)()
 
         # check new values in object
         self.assertEqual(foo.f1, None)
@@ -184,7 +184,7 @@ class Test(FunctionalWidgetTestCase):
         # field f1 is omitted, which should not cause a validation error
         request.form['form.f2'] = ''
         request.form['form.actions.apply'] = u''
-        html = Form(foo, request)()
+        Form(foo, request)()
 
         # check new value in object
         self.assert_(foo.f1 is None)

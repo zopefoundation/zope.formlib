@@ -91,7 +91,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.f2'] = '2.23456789012345'
         request.form['form.f3'] = '11.1'
         request.form['form.actions.apply'] = u''
-        html = Form(foo, request)()
+        Form(foo, request)()
         
         # check new values in object
         self.assertEqual(foo.f1, 1.123)
@@ -107,7 +107,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.f2'] = ''
         request.form['form.f3'] = '1.1'
         request.form['form.actions.apply'] = u''
-        html = Form(foo, request)()
+        Form(foo, request)()
  
         # check new values in object
         self.assertEqual(foo.f1, None)
@@ -126,8 +126,6 @@ class Test(FunctionalWidgetTestCase):
         html = Form(foo, request)()
 
         # confirm error msgs
-        f1_index = html.find('form.f1')
-        f2_index =  html.find('form.f2')
         f3_index = html.find('form.f3')
         missing_index = html.find('missing')
         self.assert_(missing_index > f3_index)
@@ -176,7 +174,7 @@ class Test(FunctionalWidgetTestCase):
         # field f1 is omitted, which should not cause a validation error
         request.form['form.f2'] = ''
         request.form['form.actions.apply'] = u''
-        html = Form(foo, request)()
+        Form(foo, request)()
 
         # check new value in object
         self.assert_(foo.f1 is None)

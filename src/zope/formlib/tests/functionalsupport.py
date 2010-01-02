@@ -11,14 +11,10 @@ from zope.formlib.exception import WidgetInputErrorView
 from zope.formlib.interfaces import (
     IInputWidget, IForm,
     IWidgetInputError, IWidgetInputErrorView)
-from zope.formlib.tests.support import patternExists
 from zope.formlib.tests.test_formlib import requestToTZInfo
-from zope.formlib.widgets import BooleanRadioWidget
 from zope.i18n.testing import setUp as i18nSetUp
-from zope.interface import Interface, implements, Invalid
-from zope.publisher.browser import TestRequest
+from zope.interface import Invalid
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.schema import Bool
 import unittest
 import zope.i18n
 import zope.schema.interfaces

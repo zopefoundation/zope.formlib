@@ -54,8 +54,8 @@ vocab = SampleVocabulary([])
 
 def setUp(test):
     testing.setUp()
-    context = xmlconfig.file("tests/registerWidgets.zcml",
-                             zope.formlib)
+    xmlconfig.file("tests/registerWidgets.zcml",
+                   zope.formlib)
 
 class Tests(object):
     """Documents and tests widgets registration for specific field types.

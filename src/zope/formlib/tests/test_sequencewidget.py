@@ -290,9 +290,8 @@ class SequenceWidgetTest(SequenceWidgetTestHelper, BrowserWidgetTest):
             'field.foo.count': u'2'})
         widget = TupleSequenceWidget(
             self.field, self.field.value_type, request)
-        s = widget()
         # Rendering a widget should not raise errors!
-        result = widget()
+        widget()
 
         data = widget._generateSequence()
         self.assertEquals(data, [None, u'nonempty'])

@@ -18,7 +18,6 @@ $Id$
 import datetime
 import unittest
 import doctest
-from zope.datetime import parseDatetimetz
 from zope.schema import Date
 from zope.interface.verify import verifyClass
 

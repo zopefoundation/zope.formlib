@@ -24,7 +24,6 @@ from zope.interface import Interface, implements
 from zope.schema import Datetime, Choice
 from zope.formlib import form
 from zope.publisher.browser import TestRequest
-from zope.formlib.tests.support import patternExists
 from zope.formlib.widgets import DatetimeWidget, DropdownWidget, ChoiceInputWidget
 from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 import zope.schema.interfaces
@@ -182,7 +181,6 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = u''
         html = Form(foo, request)()
 
-        d1_index = html.find('form.d1')
         self.assert_(html.find('Value is too big') != -1)
         d2_index = html.find('form.d2')
         self.assert_(html.find('Value is too big', d2_index) == -1)

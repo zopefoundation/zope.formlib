@@ -91,7 +91,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.s2'] = u'bar'
         request.form['form.s3'] = u'Uncle'
         request.form['form.actions.apply'] = u''
-        html = Form(foo, request)()
+        Form(foo, request)()
 
         # check new values in object
         self.assertEqual(foo.s1, u'foo')
@@ -124,7 +124,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.s2'] = u''
         request.form['form.s3'] = u''
         request.form['form.actions.apply'] = u''
-        html = Form(foo, request)()
+        Form(foo, request)()
         
         # check new values in object
         self.assertEqual(foo.s1, u'foo')
@@ -194,7 +194,7 @@ class Test(FunctionalWidgetTestCase):
         # field s1 is omitted, which should not cause a validation error
         request.form['form.s2'] = u'bar'
         request.form['form.actions.apply'] = u''
-        html = Form(foo, request)()
+        Form(foo, request)()
 
         # check new value in object
         self.assertEqual(foo.s1, '')

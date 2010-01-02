@@ -23,12 +23,10 @@ from zope.component import provideAdapter
 from zope.traversing.adapters import DefaultTraversable
 from zope.component.testing import PlacelessSetup
 from zope.interface import Interface, implements
-from zope.schema import TextLine, Object, Choice
+from zope.schema import TextLine, Object
 from zope.formlib import form
 from zope.publisher.browser import TestRequest
-from zope.formlib.tests.support import patternExists
-from zope.formlib.widgets import TextWidget, ObjectWidget
-from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
+from zope.formlib.widgets import ObjectWidget
 from zope.formlib.tests.support import VerifyResults
 import zope.schema.interfaces
 from zope.traversing.testing import setUp as traversingSetUp
@@ -55,8 +53,8 @@ class Test(PlacelessSetup, unittest.TestCase, VerifyResults):
         # simpler way to publish widget_macros.pt? Probably.
         
         # load the registrations for formlib
-        context = xmlconfig.file("configure.zcml",
-                                 zope.formlib)
+        xmlconfig.file("configure.zcml",
+                       zope.formlib)
 
         # set up the widget_macros macro
         macro_template = PageTemplate()

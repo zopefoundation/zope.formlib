@@ -17,13 +17,8 @@ $Id$
 """
 import unittest
 
-import re
-from datetime import datetime
-
-from StringIO import StringIO
 from zope.interface import Interface, implements
 from zope.schema import Int, Choice
-from zope.schema.interfaces import IField
 from zope.formlib import form
 from zope.publisher.browser import TestRequest
 from zope.formlib.tests.support import patternExists
@@ -32,7 +27,6 @@ from zope.formlib.widgets import (
     DropdownWidget, ChoiceInputWidget)
 from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 import zope.schema.interfaces
-from zope.datetime import parseDatetimetz, tzinfo
 
 class IIntTest(Interface):
     i1 = Int(
@@ -117,7 +111,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.i3'] = '3'
         request.form['form.actions.apply'] = u''
         
-        html = Form(foo, request)()
+        Form(foo, request)()
 
         # check new values in object
         self.assertEqual(foo.i1, 1)
@@ -134,7 +128,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.i3-empty-marker'] = ''
         request.form['form.actions.apply'] = u''
         
-        html = Form(foo, request)()
+        Form(foo, request)()
 
         # check new values in object
         self.assertEqual(foo.i1, 1)
@@ -235,7 +229,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.i2'] = ''
         request.form['form.actions.apply'] = u''
         
-        html = Form(foo, request)()
+        Form(foo, request)()
 
         # check new value in object
         self.assert_(foo.i1 is None)

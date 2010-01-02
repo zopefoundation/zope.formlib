@@ -17,7 +17,6 @@ $Id$
 """
 import unittest
 import doctest
-from unittest import main, makeSuite
 from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
 from zope.formlib.interfaces import IInputWidget
 from zope.formlib.widgets import IntWidget
