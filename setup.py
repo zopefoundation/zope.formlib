@@ -47,8 +47,7 @@ setup(name='zope.formlib',
       package_dir = {'': 'src'},
       namespace_packages=['zope',],
       extras_require=dict(
-          test=['zope.cachedescriptors',
-                'zope.configuration',
+          test=['zope.configuration',
                 'zope.testing',
                ]
           ),

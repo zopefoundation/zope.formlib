@@ -1590,12 +1590,11 @@ Multiple button groups
 Multiple button groups can be accomplished many ways, but the way we've found
 that reuses the most code is the following:
 
-    >>> import zope.cachedescriptors.property
     >>> class MyForm(form.Form):
     ...     form_fields = form.Fields(IOrder)
     ...     primary_actions = form.Actions()
     ...     secondary_actions = form.Actions()
-    ...     @zope.cachedescriptors.property.Lazy
+    ...     # can use @zope.cachedescriptors.property.Lazy for performance
     ...     def actions(self):
     ...         return list(self.primary_actions) + list(self.secondary_actions)
     ...     @form.action(u'Edit', primary_actions)
