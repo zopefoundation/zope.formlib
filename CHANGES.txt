@@ -5,7 +5,16 @@ Changes
 4.0 (unreleased)
 ===================
 
-- ...
+- Widget implementation and all widgets from zope.app.form have been
+  moved into zope.formlib, breaking zope.formlib's dependency on
+  zope.app.form.
+
+  Widgets can all be imported from ``zope.formlib.widgets``.
+
+  Widget base classes and render functionality is in
+  ``zope.formlib.widget``.
+
+  All relevant widget interfaces are now in ``zope.formlib.interfaces``.
 
 3.10.0 (2009-12-22)
 ===================
