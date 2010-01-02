@@ -1,8 +1,19 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
     i18n_domain="zope">
 
+  <include package="zope.component" file="meta.zcml" />
+  <include package="zope.security" file="meta.zcml" />
+  <include package="zope.browserpage" file="meta.zcml" />
 
+  <browser:page
+      for="*"
+      name="widget_macros"
+      permission="zope.Public"
+      template="widget_macros.pt"
+      />
+  
   <adapter factory=".form.default_page_template" name="default" />
   <adapter factory=".form.default_subpage_template" name="default" />
   <adapter factory=".form.render_submit_button" name="render" />
