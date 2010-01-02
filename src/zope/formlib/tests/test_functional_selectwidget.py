@@ -1,0 +1,151 @@
+##############################################################################
+#
+# Copyright (c) 2001, 2002 Zope Corporation and Contributors.
+# All Rights Reserved.
+#
+# This software is subject to the provisions of the Zope Public License,
+# Version 2.1 (ZPL).  A copy of the ZPL should accompany this distribution.
+# THIS SOFTWARE IS PROVIDED "AS IS" AND ANY AND ALL EXPRESS OR IMPLIED
+# WARRANTIES ARE DISCLAIMED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+# WARRANTIES OF TITLE, MERCHANTABILITY, AGAINST INFRINGEMENT, AND FITNESS
+# FOR A PARTICULAR PURPOSE.
+#
+##############################################################################
+"""RadioWidget Tests
+
+$Id$
+"""
+import unittest
+
+from zope.interface import Interface, implements
+from zope.schema import Choice
+from zope.formlib import form
+from zope.publisher.browser import TestRequest
+from zope.formlib.tests.support import patternExists
+from zope.formlib.widgets import (
+    TextWidget,
+    DropdownWidget, ChoiceInputWidget)
+from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
+import zope.schema.interfaces
+
+class IRadioTest(Interface):
+
+    s3 = Choice(
+        required=False,
+        values=(u'Bob', u'is', u'Your', u'Uncle'))
+
+    s4 = Choice(
+        required=True,
+        values=(u'1', u'2', u'3'))
+
+class RadioTest(object):
+
+    implements(IRadioTest)
+
+    def __init__(self):
+        self.s3 = None
+        self.s4 = u'1'
+
+class Form(form.EditForm):
+    form_fields = form.fields(IRadioTest)
+    
+class Test(FunctionalWidgetTestCase):
+    widgets = [
+        (zope.schema.interfaces.ITextLine, TextWidget),
+        (zope.schema.interfaces.IChoice, ChoiceInputWidget),
+        ((zope.schema.interfaces.IChoice, zope.schema.interfaces.IVocabularyTokenized),
+         DropdownWidget)]
+
+    def test_display_editform(self):
+        foo = RadioTest()
+        request = TestRequest()
+
+        # display edit view
+        html = Form(foo, request)()
+        
+        # S3
+        self.assert_(patternExists(
+            '<select .* name="form.s3".*>',
+            html))
+        self.assert_(patternExists(
+            '<option selected="selected" value="">',
+            html))
+        self.assert_(patternExists(
+            '<option value="Bob">',
+            html))
+        self.assert_(patternExists(
+            '<option value="is">',
+            html))
+        self.assert_(patternExists(
+            '<option value="Your">',
+            html))
+        self.assert_(patternExists(
+            '<option value="Uncle">',
+            html))
+
+        # S4
+        joined_body = "".join(html.split("\n"))
+        self.failIf(patternExists(
+            '<select.*name="form.s4".*>.*<option.*value="".*>',
+            joined_body))
+        self.assert_(patternExists(
+            '<select .* name="form.s4".*>',
+            html))
+        self.assert_(patternExists(
+            '<option selected="selected" value="1">',
+            html))
+        self.assert_(patternExists(
+            '<option value="2">',
+            html))
+        self.assert_(patternExists(
+            '<option value="3">',
+            html))
+
+        request = TestRequest()
+        request.form['form.s3'] = u'Bob'
+        request.form['form.s4'] = u'2'
+        request.form['form.actions.apply'] = u''
+        
+        # display edit view
+        html = Form(foo, request)()
+
+        self.assert_(patternExists(
+            '<option selected="selected" value="Bob">',
+            html))
+        self.assert_(patternExists(
+            '<option selected="selected" value="2">',
+            html))
+
+        
+        html = Form(foo, request)()
+        self.assert_(patternExists(
+            '<option selected="selected" value="Bob">',
+            html))
+        self.assert_(patternExists(
+            '<option selected="selected" value="2">',
+            html))
+
+        request = TestRequest()
+        request.form['form.s3'] = u''
+        request.form['form.actions.apply'] = u''
+        
+        html = Form(foo, request)()
+        self.assert_(patternExists(
+            '<option selected="selected" value="">',
+            html))
+        self.assert_(patternExists(
+            '<option selected="selected" value="2">',
+            html))
+
+        request = TestRequest()
+        html = Form(foo, request)()
+
+        self.assert_(patternExists(
+            '<option selected="selected" value="">',
+            html))
+
+def test_suite():
+    suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(Test))
+    return suite
+
