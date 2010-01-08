@@ -5,8 +5,7 @@ Changes
 4.1 (unreleased)
 ================
 
-- Nothing changed yet.
-
+- Documentation uploaded to PyPI now contains widget documentation.
 
 4.0 (2010-01-08)
 ================
