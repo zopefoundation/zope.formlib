@@ -2,8 +2,6 @@
 Browser Widgets
 ===============
 
-.. contents::
-
 Formlib defines widgets: views on bound schema fields. Many of these
 are straightforward.  For instance, see the `TextWidget` in
 textwidgets.py, which is a subclass of BrowserWidget in widget.py.  It

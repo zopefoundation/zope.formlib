@@ -37,11 +37,13 @@ setup(name='zope.formlib',
       author_email='zope-dev@zope.org',
       long_description=(read('README.txt')
                         + '\n\n' +
-                        read('CHANGES.txt')
-                        + '\n\n' +
                         read('src', 'zope', 'formlib', 'form.txt')
                         + '\n\n' +
+                        read('src', 'zope', 'formlib', 'widgets.txt')
+                        + '\n\n' +
                         read('src', 'zope', 'formlib', 'errors.txt')
+                        + '\n\n' +
+                        read('CHANGES.txt')
                         ),
       packages=find_packages('src'),
       package_dir = {'': 'src'},
