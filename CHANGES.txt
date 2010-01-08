@@ -2,12 +2,12 @@
 Changes
 =======
 
-4.0 (unreleased)
-===================
+4.0 (2010-01-08)
+================
 
 - Widget implementation and all widgets from zope.app.form have been
   moved into zope.formlib, breaking zope.formlib's dependency on
-  zope.app.form.
+  zope.app.form (instead zope.app.form now depends on zope.formlib).
 
   Widgets can all be imported from ``zope.formlib.widgets``.
 
