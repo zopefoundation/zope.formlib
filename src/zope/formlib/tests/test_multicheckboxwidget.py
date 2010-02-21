@@ -72,6 +72,19 @@ class MultiCheckBoxWidgetTest(SimpleInputWidgetTest):
                 0, 'Foo', 'foo', 'field.bar', None),
             check_list)
 
+    def testRenderItemEscaped(self):
+        check_list = ('type="checkbox"', 'id="field.bar.',
+                      'name="field.bar"', 'value="foo"',
+                      '&lt;h1&gt;Foo&lt;/h1&gt;')
+        self.verifyResult(
+            self._widget.renderItem(0, '<h1>Foo</h1>', 'foo', 'field.bar',
+                                    None),
+            check_list)
+        check_list += ('checked="checked"',)
+        self.verifyResult(
+            self._widget.renderSelectedItem(
+                0, '<h1>Foo</h1>', 'foo', 'field.bar', None),
+            check_list)
 
     def testRenderItems(self):
         check_list = ('type="checkbox"', 'id="field.foo.',

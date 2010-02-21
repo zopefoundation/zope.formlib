@@ -2,10 +2,11 @@
 Changes
 =======
 
-4.1 (unreleased)
+4.0.1 (unreleased)
 ================
 
 - Documentation uploaded to PyPI now contains widget documentation.
+- Escape MultiCheckBoxWidget content [LP:302427].
 
 4.0 (2010-01-08)
 ================

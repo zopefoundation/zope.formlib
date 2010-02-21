@@ -626,7 +626,7 @@ class MultiCheckBoxWidget(ItemsMultiEditWidgetBase):
                              id=id,
                              value=value,
                              **kw)
-        contents = self._joinButtonToMessageTemplate % (elem, text)
+        contents = self._joinButtonToMessageTemplate % (elem, escape(text))
         return renderElement(u'label',
                              contents=contents,
                              **{'for': id})
