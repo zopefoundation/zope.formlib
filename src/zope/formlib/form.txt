@@ -235,7 +235,7 @@ If we provide valid data, we'll get the data back:
 
     >>> request.form['form.min_size'] = u'42'
     >>> request.form['form.max_size'] = u'142'
-    >>> values = MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> pprint(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
@@ -244,8 +244,9 @@ If we provide valid data, we'll get the data back:
            type="text" value="142.0"  />
     <input class="textType" id="form.color" name="form.color" size="20"
            type="text" value=""  />
-    >>> sorted(values.items())
-    [('max_size', 142.0), ('min_size', 42.0), ('name', u'bob')]
+    {'max_size': 142.0,
+     'min_size': 42.0,
+     'name': u'bob'}
 
 It's up to the form to decide what to do with the information.
 
@@ -310,15 +311,16 @@ We can update our form to check the invariant using 'checkInvariants':
 
 If we display the form again, we'll get the same result:
 
-    >>> values = MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> pprint(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="42.0"  />
     <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="142.0"  />
-    >>> sorted(values.items())
-    [('max_size', 142.0), ('min_size', 42.0), ('name', u'bob')]
+    {'max_size': 142.0,
+     'min_size': 42.0,
+     'name': u'bob'}
 
 But if we reduce the maximum below the minimum, we'll get an invariant
 error:
@@ -326,7 +328,7 @@ error:
     >>> request.form['form.min_size'] = u'42'
     >>> request.form['form.max_size'] = u'14'
 
-    >>> values = MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> pprint(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     There were invariant errors:
     Maximum is less than Minimum
     <input class="textType" id="form.name" name="form.name" size="20"
@@ -335,14 +337,15 @@ error:
            type="text" value="42.0"  />
     <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="14.0"  />
-    >>> sorted(values.items())
-    [('max_size', 14.0), ('min_size', 42.0), ('name', u'bob')]
+    {'max_size': 14.0,
+     'min_size': 42.0,
+     'name': u'bob'}
 
 We can have field errors and invariant errors:
 
     >>> request.form['form.name'] = u''
 
-    >>> values = MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> pprint(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     There were field errors:
     ('name', u'Name', RequiredMissing('name'))
     There were invariant errors:
@@ -354,8 +357,8 @@ We can have field errors and invariant errors:
            type="text" value="42.0"  />
     <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="14.0"  />
-    >>> sorted(values.items())
-    [('max_size', 14.0), ('min_size', 42.0)]
+    {'max_size': 14.0,
+     'min_size': 42.0}
 
 If the inputs for some fields tested by invariants are missing, the
 invariants are ignored:
@@ -535,7 +538,7 @@ Now, if we submit the form with some data:
     >>> request.form['form.min_size'] = u'42'
     >>> request.form['form.max_size'] = u'142'
     >>> request.form['submit'] = u''
-    >>> values = MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> pprint(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     1
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
@@ -544,8 +547,9 @@ Now, if we submit the form with some data:
     <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="142.0"  />
     Object updated
-    >>> sorted(values.items())
-    [('max_size', 142.0), ('min_size', 42.0), ('name', u'bob')]
+    {'max_size': 142.0,
+     'min_size': 42.0,
+     'name': u'bob'}
 
     >>> order.name
     u'bob'
@@ -559,7 +563,7 @@ Now, if we submit the form with some data:
 Note, however, that if we submit the same request, we'll see that no
 changes were applied:
 
-    >>> values = MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> pprint(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     1
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
@@ -568,8 +572,9 @@ changes were applied:
     <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value="142.0"  />
     No changes
-    >>> sorted(values.items())
-    [('max_size', 142.0), ('min_size', 42.0), ('name', u'bob')]
+    {'max_size': 142.0,
+     'min_size': 42.0,
+     'name': u'bob'}
 
 because the new and old values are the same.
 
