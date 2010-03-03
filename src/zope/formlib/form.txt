@@ -235,7 +235,8 @@ If we provide valid data, we'll get the data back:
 
     >>> request.form['form.min_size'] = u'42'
     >>> request.form['form.max_size'] = u'142'
-    >>> pprint(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
+    >>> pprint(MyForm(None, request)(), width=1)
+    ... # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
@@ -311,7 +312,8 @@ We can update our form to check the invariant using 'checkInvariants':
 
 If we display the form again, we'll get the same result:
 
-    >>> pprint(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
+    >>> pprint(MyForm(None, request)(), width=1)
+    ... # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
@@ -328,7 +330,8 @@ error:
     >>> request.form['form.min_size'] = u'42'
     >>> request.form['form.max_size'] = u'14'
 
-    >>> pprint(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
+    >>> pprint(MyForm(None, request)(), width=1)
+    ... # doctest: +NORMALIZE_WHITESPACE
     There were invariant errors:
     Maximum is less than Minimum
     <input class="textType" id="form.name" name="form.name" size="20"
@@ -345,7 +348,8 @@ We can have field errors and invariant errors:
 
     >>> request.form['form.name'] = u''
 
-    >>> pprint(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
+    >>> pprint(MyForm(None, request)(), width=1)
+    ... # doctest: +NORMALIZE_WHITESPACE
     There were field errors:
     ('name', u'Name', RequiredMissing('name'))
     There were invariant errors:
@@ -538,7 +542,8 @@ Now, if we submit the form with some data:
     >>> request.form['form.min_size'] = u'42'
     >>> request.form['form.max_size'] = u'142'
     >>> request.form['submit'] = u''
-    >>> pprint(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
+    >>> pprint(MyForm(order, request)(), width=1)
+    ... # doctest: +NORMALIZE_WHITESPACE
     1
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
@@ -563,7 +568,8 @@ Now, if we submit the form with some data:
 Note, however, that if we submit the same request, we'll see that no
 changes were applied:
 
-    >>> pprint(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
+    >>> pprint(MyForm(order, request)(), width=1)
+    ... # doctest: +NORMALIZE_WHITESPACE
     1
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />

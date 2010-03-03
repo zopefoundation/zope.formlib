@@ -2,11 +2,10 @@
 Changes
 =======
 
-4.X.X (unreleased)
+4.0.2 (unreleased)
 ==================
 
-- Adapted tests for Python 2.4 to 2.6
-- ...
+- Adapted tests for Python 2.4 (enforce sorting for short pprint output)
 
 4.0.1 (2010-02-21)
 ==================
