@@ -2,9 +2,10 @@
 Changes
 =======
 
-4.1 (unreleased)
-================
+4.X.X (unreleased)
+==================
 
+- Adapted tests for Python 2.4 to 2.6
 - ...
 
 4.0.1 (2010-02-21)
