@@ -136,6 +136,18 @@ class ItemDisplayWidgetTest(ItemsWidgetBaseTest):
         self.failIf(self._makeWidget().required)
 
 
+    def test_toFieldValue(self):
+        from zope.formlib.interfaces import ConversionError
+        widget = self._makeWidget()
+        self.assertEquals(
+            widget._toFieldValue(None), self._field.missing_value)
+        self.assertEquals(widget._toFieldValue('token1'), 'one')
+        self.assertRaises(
+            ConversionError, widget._toFieldValue, 'no_such_token')
+        self.assertRaises(
+            ConversionError, widget._toFieldValue, ['token1', 'token2'])
+
+
 class ItemsMultiDisplayWidgetTest(ItemsWidgetBaseTest):
 
     _widget = ItemsMultiDisplayWidget

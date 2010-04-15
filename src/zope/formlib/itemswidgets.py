@@ -154,7 +154,7 @@ class SingleDataHelper(object):
         if input:
             try:
                 return self.convertTokensToValues([input])[0]
-            except InvalidValue, e:
+            except (InvalidValue, TypeError), e:
                 raise ConversionError(_("Invalid value"), e)
         else:
             return self.context.missing_value

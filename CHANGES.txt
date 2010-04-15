@@ -5,6 +5,7 @@ Changes
 4.0.3 (unreleased)
 ==================
 
+- LP #98491:  don't blow up if TypeError raised during token conversion.
 
 4.0.2 (2010-03-07)
 ==================
