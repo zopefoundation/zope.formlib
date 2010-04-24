@@ -426,7 +426,7 @@ class SelectWidget(ItemsEditWidgetBase):
     """Provide a selection list for the item."""
 
     _messageNoValue = _("vocabulary-missing-single-value-for-edit",
-                        "(no value)")
+                        "(nothing selected)")
 
     def renderValue(self, value):
         rendered_items = self.renderItems(value)
@@ -457,7 +457,7 @@ class RadioWidget(SelectWidget):
     orientation = "vertical"
 
     _messageNoValue = _("vocabulary-missing-single-value-for-edit",
-                        "(no value)")
+                        "(nothing selected)")
 
     def renderItem(self, index, text, value, name, cssClass):
         """Render an item of the list."""
@@ -496,7 +496,7 @@ class ItemsMultiEditWidgetBase(MultiDataHelper, ItemsEditWidgetBase):
     """Items widget supporting multiple selections."""
 
     _messageNoValue = _("vocabulary-missing-multiple-value-for-edit",
-                        "(no values)")
+                        "(nothing selected)")
     _displayItemForMissingValue = False
 
     def renderItems(self, value):
