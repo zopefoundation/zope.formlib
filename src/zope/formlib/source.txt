@@ -171,7 +171,7 @@ generates a selection list of size 1::
   <div>
   <div class="value">
   <select id="field.dog" name="field.dog" size="1" >
-  <option selected="selected" value="">(no value)</option>...
+  <option selected="selected" value="">(nothing selected)</option>...
 
 An alternative to SourceSelectWidget for small numbers of items is
 SourceRadioWidget that provides a radio button group for the items::

@@ -299,7 +299,7 @@ class SelectWidgetTest(ItemsEditWidgetBaseTest):
             '<div>\n'
             '<div class="value">\n'
             '<select id="field.choice" name="field.choice" size="%i" >\n'
-            '<option value="">(no value)</option>\n'
+            '<option value="">(nothing selected)</option>\n'
             '<option selected="selected" value="token1">One</option>\n'
             '<option value="token2">Two</option>\n'
             '<option value="token3">Three</option>\n'
@@ -343,7 +343,7 @@ class SelectWidgetTest(ItemsEditWidgetBaseTest):
         widget.context.required = False
         self.assertEqual(
             widget.renderItems([]),
-            [u'<option value="">(no value)</option>',
+            [u'<option value="">(nothing selected)</option>',
              u'<option value="token1">One</option>',
              u'<option value="token2">Two</option>',
              u'<option value="token3">Three</option>'])
@@ -370,7 +370,7 @@ class DropdownWidgetTest(SelectWidgetTest):
         widget.firstItem = True
         self.assertEqual(
             widget.renderItems(widget._toFormValue(widget.context.missing_value)),
-            [u'<option selected="selected" value="">(no value)</option>',
+            [u'<option selected="selected" value="">(nothing selected)</option>',
              u'<option value="token1">One</option>',
              u'<option value="token2">Two</option>',
              u'<option value="token3">Three</option>'])
@@ -441,7 +441,7 @@ class RadioWidgetTest(ItemsEditWidgetBaseTest):
         widget = self._makeWidget()
         widget.context.required = False
         items = widget.renderItems([])
-        values = [('', '(no value)'),
+        values = [('', '(nothing selected)'),
                   ('token1','One'),
                   ('token2','Two'),
                   ('token3','Three')]
