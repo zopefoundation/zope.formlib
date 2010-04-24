@@ -6,7 +6,7 @@ Changes
 ==================
 
 - Improve display of the "nothing selected" case for optional Choice fields
-  [LP:111361].
+  [LP:269782].
 
 - Improve truth testing for ItemDisplayWidget [LP:159232].
 
