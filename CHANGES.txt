@@ -7,7 +7,7 @@ Changes
 
 - Improve truth testing for ItemDisplayWidget [LP:159232]
 
-- LP #98491:  don't blow up if TypeError raised during token conversion.
+- Don't blow up if TypeError raised during token conversion [LP:98491]
 
 4.0.2 (2010-03-07)
 ==================
