@@ -148,6 +148,39 @@ class ItemDisplayWidgetTest(ItemsWidgetBaseTest):
             ConversionError, widget._toFieldValue, ['token1', 'token2'])
 
 
+containerVocab = SimpleVocabulary(
+    [SimpleTerm(value, token, title) for value, token, title in (
+        ((), 'container1', 'Container One'),
+        ((1,), 'container2', 'Container Two'),
+        ((2,), 'container3', 'Container Three'))])
+
+class ITestContainer(Interface):
+    container = Choice(
+        title=u"Container",
+        description=u"The container",
+        vocabulary=containerVocab,
+        required=True)
+
+class TestContainer(object):
+    implements(ITestContainer)
+
+    def __init__(self, container=None):
+        self.container = container
+
+class ContainerItemDisplayWidgetTest(VerifyResults,
+                                     PlacelessSetup,
+                                     unittest.TestCase):
+    def test_handle_empty_containers(self):
+        # Regression test for bug 159232"""
+        field = ITestContainer.get('container')
+
+        request = TestRequest(form={'field.container': 'container1'})
+        container = TestContainer()
+        bound = field.bind(container)
+        widget = ItemDisplayWidget(bound, field.vocabulary, request)
+
+        self.assertEqual(widget(), 'Container One')
+
 class ItemsMultiDisplayWidgetTest(ItemsWidgetBaseTest):
 
     _widget = ItemsMultiDisplayWidget
@@ -590,6 +623,7 @@ class MultiCheckBoxWidgetTest(ItemsMultiEditWidgetBaseTest):
 
 def test_suite():
     suite = unittest.makeSuite(ItemDisplayWidgetTest)
+    suite.addTest(unittest.makeSuite(ContainerItemDisplayWidgetTest))
     suite.addTest(unittest.makeSuite(ItemsMultiDisplayWidgetTest))
     suite.addTest(unittest.makeSuite(ListDisplayWidgetTest))
     suite.addTest(unittest.makeSuite(SetDisplayWidgetTest))

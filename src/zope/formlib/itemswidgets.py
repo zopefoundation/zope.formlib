@@ -232,7 +232,7 @@ class ItemDisplayWidget(SingleDataHelper, ItemsWidgetBase):
     def __call__(self):
         """See IBrowserWidget."""
         value = self._getFormValue()
-        if not value:
+        if value is None or value == u'':
             return self.translate(self._messageNoValue)
         else:
             term = self.vocabulary.getTerm(value)
