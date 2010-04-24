@@ -538,8 +538,6 @@ def applyData(context, form_fields, data, adapters=None):
 def applyChanges(context, form_fields, data, adapters=None):
     return bool(applyData(context, form_fields, data, adapters))
 
-_identifier = re.compile('[A-Za-z][a-zA-Z0-9_]*$')
-
 def _action_options(success=None, failure=None, condition=None, validator=None,
                     prefix='actions', name=None, data=None,
                     ):
