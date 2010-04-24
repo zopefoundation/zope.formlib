@@ -5,9 +5,12 @@ Changes
 4.0.3 (unreleased)
 ==================
 
-- Improve truth testing for ItemDisplayWidget [LP:159232]
+- Improve display of the "nothing selected" case for optional Choice fields
+  [LP:111361].
 
-- Don't blow up if TypeError raised during token conversion [LP:98491]
+- Improve truth testing for ItemDisplayWidget [LP:159232].
+
+- Don't blow up if TypeError raised during token conversion [LP:98491].
 
 4.0.2 (2010-03-07)
 ==================
