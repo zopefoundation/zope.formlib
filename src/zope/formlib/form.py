@@ -50,7 +50,6 @@ _ = MessageFactory("zope")
 
 interface.moduleProvides(interfaces.IFormAPI)
 
-_identifier = re.compile('[A-Za-z][a-zA-Z0-9_]*$')
 
 def expandPrefix(prefix):
     """Expand prefix string by adding a trailing period if needed.
@@ -86,8 +85,10 @@ class FormField:
 
 Field = FormField
 
+
 def _initkw(keep_readonly=(), omit_readonly=False, **defaults):
     return keep_readonly, omit_readonly, defaults
+
 
 class FormFields(object):
 
@@ -104,14 +105,17 @@ class FormFields(object):
             elif IField.providedBy(arg):
                 name = arg.__name__
                 if not name:
-                        raise ValueError(
+                    raise ValueError(
                             "Field has no name")
 
                 fields.append((name, arg, arg.interface))
             elif isinstance(arg, FormFields):
                 for form_field in arg:
                     fields.append(
-                        (form_field.__name__, form_field, form_field.interface))
+                        (form_field.__name__,
+                         form_field,
+                         form_field.interface)
+                        )
             elif isinstance(arg, FormField):
                 fields.append((arg.__name__, arg, arg.interface))
             else:
@@ -155,7 +159,6 @@ class FormFields(object):
             return NotImplemented
         return self.__class__(self, other)
 
-
     def select(self, *names):
         """Return a modified instance with an ordered subset of fields."""
         return self.__class__(*[self[name] for name in names])
@@ -166,6 +169,7 @@ class FormFields(object):
 
 Fields = FormFields
 
+
 def fields_initkw(keep_all_readonly=False, **other):
     return keep_all_readonly, other
 
@@ -174,6 +178,7 @@ def fields(*args, **kw):
     keep_all_readonly, other = fields_initkw(**kw)
     other['omit_readonly'] = not keep_all_readonly
     return FormFields(*args, **other)
+
 
 class Widgets(object):
 
@@ -529,7 +534,8 @@ def applyData(context, form_fields, data, adapters=None):
 
         name = form_field.__name__
         newvalue = data.get(name, form_field) # using form_field as marker
-        if (newvalue is not form_field) and (field.get(adapter) != newvalue):
+        if (newvalue is not form_field) \
+        and (field.get(adapter) != newvalue):
             descriptions.setdefault(interface, []).append(field.__name__)
             field.set(adapter, newvalue)
 
@@ -538,50 +544,60 @@ def applyData(context, form_fields, data, adapters=None):
 def applyChanges(context, form_fields, data, adapters=None):
     return bool(applyData(context, form_fields, data, adapters))
 
-def _action_options(success=None, failure=None, condition=None, validator=None,
-                    prefix='actions', name=None, data=None,
-                    ):
-    return (success, failure, condition, validator, prefix, name, data)
 
-def _callify(f):
-    if isinstance(f, str):
-        callable = lambda form, *args: getattr(form, f)(*args)
-    else:
-        callable = f
+def _callify(meth):
+    """Return method if it is callable,
+       otherwise return the form's method of the name"""
+    if callable(meth):
+        return meth
+    elif isinstance(meth, str):
+        return lambda form, *args: getattr(form, meth)(*args)
 
-    return callable
 
 class Action(object):
 
     interface.implements(interfaces.IAction)
+    _identifier = re.compile('[A-Za-z][a-zA-Z0-9_]*$')
 
-    def __init__(self, label, **options):
-        (success, failure, condition, validator,
-         prefix, name, data
-         ) = _action_options(**options)
+    def __init__(self, label, success=None, failure=None,
+                condition=None, validator=None, prefix='actions',
+                name=None, data=None):
 
         self.label = label
-
-        [self.success_handler, self.failure_handler,
-         self.condition, self.validator] = [
-            _callify(f) for f in (success, failure, condition, validator)]
-
-        if name is None:
-            if _identifier.match(label):
-                name = unicode(label).lower()
-            else:
-                name = label.encode('hex')
-
-        self.name = name
         self.setPrefix(prefix)
+        self.setName(name)
+        self.bindMethods(success_handler=success,
+                        failure_handler=failure,
+                        condition=condition, 
+                        validator=validator)
 
         if data is None:
             data = {}
         self.data = data
+        
+    def bindMethods(self, **methods):
+        """Bind methods to the action"""
+        for k, v in methods.items():
+            setattr(self, k, _callify(v))
 
+    def setName(self, name):
+        """Make sure name is ASCIIfiable.
+           Use action label if name is None
+        """
+        if name is None:
+            name = self.label
+        if self._identifier.match(name):
+            name = name.lower()
+        else:
+            if isinstance(name, unicode):
+                name = name.encode("utf-8")
+            name = name.encode('hex')
+        self.name = name
+        self.__name__ = self.prefix + name
+ 
     def setPrefix(self, prefix):
-        self.prefix = prefix
-        self.__name__ = expandPrefix(prefix) + self.name
+        """Set prefix"""
+        self.prefix = expandPrefix(prefix)
 
     def __get__(self, form, class_=None):
         if form is None:

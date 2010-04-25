@@ -522,15 +522,6 @@ def test_setUpWidgets_prefix():
 
     """
 
-def test_Action_interface():
-    """
-    >>> action = zope.formlib.form.Action('foo')
-    >>> import zope.interface.verify
-    >>> zope.interface.verify.verifyObject(zope.formlib.interfaces.IAction,
-    ...                                    action)
-    True
-    """
-
 
 def test_suite():
     import doctest
