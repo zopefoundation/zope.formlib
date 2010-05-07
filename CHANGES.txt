@@ -2,7 +2,7 @@
 Changes
 =======
 
-4.0.3 (unreleased)
+4.0.3 (2010-05-06)
 ==================
 
 - Keep Actions from raising exceptions when passed Unicode lables [LP:528468].
