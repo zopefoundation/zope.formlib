@@ -5,7 +5,7 @@ Changes
 4.0.3 (unreleased)
 ==================
 
-- Make Actions work when passed Unicode lables [LP:528468].
+- Keep Actions from raising exceptions when passed Unicode lables [LP:528468].
 
 - Improve display of the "nothing selected" case for optional Choice fields
   [LP:269782].
