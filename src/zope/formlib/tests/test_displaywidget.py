@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Generic Text Widgets tests
-
-$Id$
 """
 import unittest
 from zope.interface.verify import verifyClass

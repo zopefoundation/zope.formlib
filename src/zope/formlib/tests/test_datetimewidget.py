@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Datetime Widget Tests
-
-$Id$
 """
 import datetime
 import unittest

@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Browser widgets for sequences
-
-$Id$
 """
 __docformat__ = 'restructuredtext'
 

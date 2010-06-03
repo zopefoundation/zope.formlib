@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Source Widget Tests
-
-$Id$
 """
 from zope.component import testing
 

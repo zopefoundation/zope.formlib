@@ -10,10 +10,6 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""
-
-$Id$
-"""
 import unittest
 import re
 import pytz

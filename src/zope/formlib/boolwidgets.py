@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Browser widgets for items
-
-$Id$
 """
 __docformat__ = 'restructuredtext'
 

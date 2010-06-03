@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Test Browser Widget
-
-$Id$
 """
 import unittest
 from zope.component.testing import PlacelessSetup

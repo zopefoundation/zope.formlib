@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Browser widgets for text-like data
-
-$Id$
 """
 __docformat__ = 'restructuredtext'
 

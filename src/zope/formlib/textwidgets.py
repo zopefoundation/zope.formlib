@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Browser widgets with text-based input
-
-$Id$
 """
 __docformat__ = 'restructuredtext'
 

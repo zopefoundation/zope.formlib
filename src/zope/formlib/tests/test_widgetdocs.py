@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Generic Text Widgets tests
-
-$Id$
 """
 import unittest
 from doctest import DocTestSuite

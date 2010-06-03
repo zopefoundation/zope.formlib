@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Decimal Widget tests
-
-$Id$
 """
 import unittest
 import decimal

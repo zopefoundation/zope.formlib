@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Checkbox Widget tests
-
-$Id$
 """
 import unittest
 import doctest

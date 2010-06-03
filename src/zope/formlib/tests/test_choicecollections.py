@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Test the choice collections widgets (function).
-
-$Id$
 """
 import unittest
 from zope.component.testing import PlacelessSetup

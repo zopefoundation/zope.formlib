@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Integer Widget Tests
-
-$Id$
 """
 import unittest
 import doctest

@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Test the Choice display and edit widget (function).
-
-$Id$
 """
 import unittest
 from zope.component.testing import PlacelessSetup

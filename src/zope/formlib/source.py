@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Source widgets support
-
-$Id$
 """
 
 from itertools import imap

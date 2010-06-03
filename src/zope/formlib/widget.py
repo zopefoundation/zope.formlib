@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Browser Widget Definitions
-
-$Id$
 """
 __docformat__ = 'restructuredtext'
 

@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Sequence Field Widget tests.
-
-$Id$
 """
 import unittest
 from zope.interface import Interface, implements

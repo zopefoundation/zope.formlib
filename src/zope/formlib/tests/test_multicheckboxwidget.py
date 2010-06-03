@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Multi-Checkbox Widget Tests 
-
-$Id$
 """
 import unittest
 import doctest

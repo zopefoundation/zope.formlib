@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Generic Widget Tests
-
-$Id$
 """
 from unittest import TestSuite, main
 

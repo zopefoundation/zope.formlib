@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Form-related exception views
-
-$Id$
 """
 __docformat__ = 'restructuredtext'
 

@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Password Widget Tests
-
-$Id$
 """
 import unittest
 import doctest

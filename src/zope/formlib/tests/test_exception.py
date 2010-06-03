@@ -12,8 +12,6 @@
 #
 ##############################################################################
 """Exception Views tests
-
-$Id$
 """
 import unittest
 from doctest import DocTestSuite
