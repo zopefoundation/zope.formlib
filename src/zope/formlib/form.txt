@@ -814,9 +814,9 @@ changes.
 
 Let's try changing some data:
 
-    >>> request.form['form.max_size'] = u'10,0'
+    >>> request.form['form.max_size'] = u'10/0'
     >>> print MyForm(order, request)()
-    ... # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
+    ... # doctest: +NORMALIZE_WHITESPACE
     There were errors:
     (u'Invalid floating point data', <exceptions.ValueError instance at ...>)
     1
@@ -825,7 +825,7 @@ Let's try changing some data:
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
            type="text" value="42.0"  />
     <input class="textType" id="form.max_size" name="form.max_size" size="10"
-           type="text" value="10,0"  />
+           type="text" value="10/0"  />
     <span class="error">Invalid floating point data</span>
     <input type="submit" id="form.actions.edit" name="form.actions.edit"
            value="Edit" class="button" />
