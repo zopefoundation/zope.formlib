@@ -140,7 +140,7 @@ function selectionError()
 <table border="0" class="ordered-selection-field">
   <tr>
     <td>
-      <select id="from" name="from" size="5" multiple=""
+      <select id="from" name="from" size="5" multiple="multiple"
           tal:attributes="name string:${view/name}.from;
                           id string:${view/name}.from;
                           size view/size"
@@ -162,7 +162,7 @@ function selectionError()
           >&lt;-&nbsp;</button>
     </td>
     <td>
-      <select id="to" name="to" size="5" multiple=""
+      <select id="to" name="to" size="5" multiple="multiple"
           tal:attributes="name string:${view/name}.to;
                           id string:${view/name}.to;
                           size view/size">

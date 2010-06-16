@@ -5,6 +5,8 @@ Changes
 4.0.4 (unreleased)
 ==================
 
+- Fix validation of "multiple" attributes in orderedSelectionList.pt.
+
 4.0.3 (2010-05-06)
 ==================
 
