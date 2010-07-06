@@ -24,7 +24,7 @@ from setuptools import setup, find_packages
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-version = '4.0.4dev'
+version = '4.0.4'
 
 setup(name='zope.formlib',
       version=version,
@@ -53,7 +53,6 @@ setup(name='zope.formlib',
           ),
       install_requires=['setuptools',
                         'pytz',
-#                        'zope.app.form',
                         'zope.browser>=1.1',
                         'zope.browserpage>=3.11.0',
                         'zope.component',
