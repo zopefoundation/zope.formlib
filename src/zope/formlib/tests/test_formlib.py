@@ -528,6 +528,8 @@ def test_suite():
                   r"[<zope.formlib.interfaces.WidgetInputError instance at ...>]"),
       (re.compile(r" ValueError\('invalid literal for float\(\): (bob'|10/0'),\)"),
                   r"\n <exceptions.ValueError instance at ...>"),
+      (re.compile(r" ValueError\('could not convert string to float: bob',\)"),
+                  r"\n <exceptions.ValueError instance at ...>"),
     ])
     return unittest.TestSuite((
         doctest.DocFileSuite(
