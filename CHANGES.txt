@@ -2,7 +2,7 @@
 Changes
 =======
 
-4.0.5 (unreleased)
+4.0.5 (2010-09-16)
 ==================
 
 - Fixed Action name parameter handling, since 4.0.3 all passed names were
