@@ -518,6 +518,117 @@ def test_setUpWidgets_prefix():
 
     """
 
+def check_action_name():
+    """
+We want to make sure that Action name setting adheres to the specification.
+
+With just label, with increasing complexity:
+
+    >>> action = zope.formlib.form.Action("MyAction")
+    >>> action.name
+    'myaction'
+
+    >>> action = zope.formlib.form.Action("8 Balls")
+    >>> action.name
+    '382042616c6c73'
+
+    >>> action = zope.formlib.form.Action(u"MyAction")
+    >>> action.name
+    u'myaction'
+
+    >>> action = zope.formlib.form.Action(u"8 Balls")
+    >>> action.name
+    '382042616c6c73'
+
+    >>> action = zope.formlib.form.Action(u'\u9001\u4fe1')
+    >>> action.name
+    'e98081e4bfa1'
+
+    >>> import zope.i18nmessageid
+    >>> _ = zope.i18nmessageid.MessageFactory('my.domain')
+
+    >>> action = zope.formlib.form.Action(_(u"MyAction"))
+    >>> action.name
+    u'myaction'
+
+    >>> action = zope.formlib.form.Action(_(u"8 Balls"))
+    >>> action.name
+    '382042616c6c73'
+
+    >>> action = zope.formlib.form.Action(_(u'\u9001\u4fe1'))
+    >>> action.name
+    'e98081e4bfa1'
+
+With all lowercase name:
+
+    >>> action = zope.formlib.form.Action("MyAction", name='foobar')
+    >>> action.name
+    'foobar'
+
+    >>> action = zope.formlib.form.Action("8 Balls", name='foobar')
+    >>> action.name
+    'foobar'
+
+    >>> action = zope.formlib.form.Action(u"MyAction", name='foobar')
+    >>> action.name
+    'foobar'
+
+    >>> action = zope.formlib.form.Action(u"8 Balls", name='foobar')
+    >>> action.name
+    'foobar'
+
+    >>> action = zope.formlib.form.Action(u'\u9001\u4fe1', name='foobar')
+    >>> action.name
+    'foobar'
+
+    >>> action = zope.formlib.form.Action(_(u"MyAction"), name='foobar')
+    >>> action.name
+    'foobar'
+
+    >>> action = zope.formlib.form.Action(_(u"8 Balls"), name='foobar')
+    >>> action.name
+    'foobar'
+
+    >>> action = zope.formlib.form.Action(_(u'\u9001\u4fe1'), name='foobar')
+    >>> action.name
+    'foobar'
+
+With some uppercase name:
+
+    >>> action = zope.formlib.form.Action("MyAction", name='FooBar')
+    >>> action.name
+    'FooBar'
+
+    >>> action = zope.formlib.form.Action("8 Balls", name='FooBar')
+    >>> action.name
+    'FooBar'
+
+    >>> action = zope.formlib.form.Action(u"MyAction", name='FooBar')
+    >>> action.name
+    'FooBar'
+
+    >>> action = zope.formlib.form.Action(u"8 Balls", name='FooBar')
+    >>> action.name
+    'FooBar'
+
+    >>> action = zope.formlib.form.Action(u'\u9001\u4fe1', name='FooBar')
+    >>> action.name
+    'FooBar'
+
+    >>> action = zope.formlib.form.Action(_(u"MyAction"), name='FooBar')
+    >>> action.name
+    'FooBar'
+
+    >>> action = zope.formlib.form.Action(_(u"8 Balls"), name='FooBar')
+    >>> action.name
+    'FooBar'
+
+    >>> action = zope.formlib.form.Action(_(u'\u9001\u4fe1'), name='FooBar')
+    >>> action.name
+    'FooBar'
+
+"""
+
 
 def test_suite():
     import doctest
@@ -559,4 +670,3 @@ def test_suite():
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')
-

@@ -566,13 +566,13 @@ class Action(object):
         self.setName(name)
         self.bindMethods(success_handler=success,
                         failure_handler=failure,
-                        condition=condition, 
+                        condition=condition,
                         validator=validator)
 
         if data is None:
             data = {}
         self.data = data
-        
+
     def bindMethods(self, **methods):
         """Bind methods to the action"""
         for k, v in methods.items():
@@ -584,15 +584,15 @@ class Action(object):
         """
         if name is None:
             name = self.label
-        if self._identifier.match(name):
-            name = name.lower()
-        else:
-            if isinstance(name, unicode):
-                name = name.encode("utf-8")
-            name = name.encode('hex')
+            if self._identifier.match(name):
+                name = name.lower()
+            else:
+                if isinstance(name, unicode):
+                    name = name.encode("utf-8")
+                name = name.encode('hex')
         self.name = name
         self.__name__ = self.prefix + name
- 
+
     def setPrefix(self, prefix):
         """Set prefix"""
         self.prefix = expandPrefix(prefix)
