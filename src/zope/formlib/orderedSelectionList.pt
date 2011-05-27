@@ -177,7 +177,7 @@ function selectionError()
         <script type="text/javascript" tal:content="string:
           copyDataForSubmit('${view/name}');">
           // initial copying of field "field.to" --> "field"
-          copyDataForSubmit("<i tal:replace="${view/name}"/>");
+          copyDataForSubmit("<i tal:replace="view/name"/>");
         </script>
       </span>
     </td>
