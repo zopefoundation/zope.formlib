@@ -2,11 +2,10 @@
 Changes
 =======
 
-4.0.6 (unreleased)
+4.0.6 (2011-08-20)
 ==================
 
 - Fixed bug in ``orderedSelectionList.pt`` template.
-
 
 4.0.5 (2010-09-16)
 ==================
