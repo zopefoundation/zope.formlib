@@ -5,7 +5,13 @@ Changes
 4.1.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Added `ignoreContext` attribute to form classes to control whether
+  `checkInvariants` takes the context of the form into account when
+  checking interface invariants.
+
+  By default `ignoreContext` is set to ``False``.  On the `AddForm` it is
+  ``True`` by default because the context of this form is naturally not
+  suitable as context for the interface invariant.
 
 
 4.1.0 (2012-03-15)

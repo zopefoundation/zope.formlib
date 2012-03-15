@@ -479,7 +479,7 @@ class FormData:
                     raise NoInputData(name)
                 # The value is not in the form look it up on the context:
                 field = schema[name]
-                adapted_context = schema(context)
+                adapted_context = schema(context, None)
                 if IField.providedBy(field):
                     value = field.get(adapted_context)
                 elif (zope.interface.interfaces.IAttribute.providedBy(field)
@@ -743,6 +743,8 @@ class FormBase(zope.publisher.browser.BrowserPage):
 
     errors = ()
 
+    ignoreContext = False
+
     interface.implements(interfaces.IForm)
 
     def setPrefix(self, prefix):
@@ -755,8 +757,12 @@ class FormBase(zope.publisher.browser.BrowserPage):
             form=self, adapters=self.adapters, ignore_request=ignore_request)
 
     def validate(self, action, data):
+        if self.ignoreContext:
+            context = None
+        else:
+            context = self.context
         return (getWidgetsData(self.widgets, self.prefix, data)
-                + checkInvariants(self.form_fields, data, self.context))
+                + checkInvariants(self.form_fields, data, context))
 
     template = namedtemplate.NamedTemplate('default')
 
@@ -890,6 +896,8 @@ class DisplayFormBase(FormBase):
 
 
 class AddFormBase(FormBase):
+
+    ignoreContext = True
 
     interface.implements(interfaces.IAddFormCustomization,
                          zope.component.interfaces.IFactory)

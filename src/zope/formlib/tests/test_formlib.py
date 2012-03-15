@@ -630,9 +630,11 @@ With some uppercase name:
 """
 
 
-def checkInvariants_falls_back_to_context_if_value_not_in_form():
+def validate_respects_ignoreContext_setting_on_form_when_checking_invariants():
     """
-`checkInvariants` is able to access the values from the form and the context to
+The `validate` method of the form respects the value of
+``self.ignoreContext`` when calling `checkInvariants`. `checkInvariants` is
+able to access the values from the form and the context (if not ignored) to
 make sure invariants are not violated:
 
     >>> class IFlexMaximum(zope.interface.Interface):
@@ -649,30 +651,49 @@ make sure invariants are not violated:
     ...     max = 10
     ...     value = 7
 
-    >>> class ValueEditForm(zope.formlib.form.EditForm):
+    >>> class ValueForm(zope.formlib.form.FormBase):
+    ...     ignoreContext = False
     ...     form_fields = zope.formlib.form.FormFields(
     ...         IFlexMaximum).omit('max')
+    ...
+    ...     @zope.formlib.form.action("Apply")
+    ...     def handle_apply(self, action, data):
+    ...         pass
 
-If the value entered in the example form is bigger than the maximum the
-interface invariant triggers an error:
+`checkInvariants` is able to access the value on the context, so the
+interface invariant triggers an error message:
 
     >>> from zope.publisher.browser import TestRequest
     >>> request = TestRequest(
     ...     form={'form.value': 42, 'form.actions.apply': '1'})
-    >>> form = ValueEditForm(Content(), request)
+    >>> form = ValueForm(Content(), request)
     >>> form.update()
     >>> form.errors
     (Invalid('value bigger than max',),)
 
-If the value is below the maximum no error occures:
+`checkInvariants` if the entered value is small enough, the error message is
+not triggered:
 
+    >>> from zope.publisher.browser import TestRequest
     >>> request = TestRequest(
     ...     form={'form.value': 8, 'form.actions.apply': '1'})
-    >>> form = ValueEditForm(Content(), request)
+    >>> form = ValueForm(Content(), request)
+    >>> form.update()
+    >>> form.errors
+    ()
+
+The error is not triggered, too,  if ``ignoreContext`` is set to ``True`` as
+`checkInvariants` does not access the context then:
+
+    >>> request = TestRequest(
+    ...     form={'form.value': 42, 'form.actions.apply': '1'})
+    >>> form = ValueForm(Content(), request)
+    >>> form.ignoreContext = True
     >>> form.update()
     >>> form.errors
     ()
 """
+
 
 
 def FormData___getattr___handles_zope_interrface_attributes_correctly():
@@ -693,7 +714,7 @@ interface correctly from context:
 """
 
 
-def FormData___getattr___raises_exception_if_unknown_how_to_access_value():
+def FormData___getattr___raises_NoInputData_if_unknown_how_to_access_value():
     """
 `FormData.__getattr__` raises an exception if it cannot determine how to
 read the object from context:
