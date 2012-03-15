@@ -748,6 +748,3 @@ def test_suite():
         doctest.DocTestSuite(
             'zope.formlib.errors'),
         ))
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
