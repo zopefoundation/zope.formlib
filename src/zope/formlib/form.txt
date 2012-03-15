@@ -227,7 +227,7 @@ and max size.  If we provide an invalid value, we'll get an error too:
     <input class="textType" id="form.max_size" name="form.max_size" size="10"
            type="text" value=""  />
     <span class="error">Required input is missing.</span>
-    <input class="textType" id="form.color" name="form.color" size="20" 
+    <input class="textType" id="form.color" name="form.color" size="20"
            type="text" value=""  />
     {'name': u'bob'}
 
@@ -288,8 +288,8 @@ We can update our form to check the invariant using 'checkInvariants':
     ...         if 'submit' in self.request:
     ...             data = {}
     ...             errors = form.getWidgetsData(widgets, 'form', data)
-    ...             invariant_errors = form.checkInvariants(self.form_fields,
-    ...                                                     data)
+    ...             invariant_errors = form.checkInvariants(
+    ...                 self.form_fields, data, self.context)
     ...             if errors:
     ...                 print 'There were field errors:'
     ...                 for error in errors:
@@ -504,8 +504,8 @@ object. We can use the `applyChanges` function for that:
     ...         if 'submit' in self.request:
     ...             data = {}
     ...             errors = form.getWidgetsData(widgets, 'form', data)
-    ...             invariant_errors = form.checkInvariants(self.form_fields,
-    ...                                                     data)
+    ...             invariant_errors = form.checkInvariants(
+    ...                 self.form_fields, data, self.context)
     ...             if errors:
     ...                 print 'There were field errors:'
     ...                 for error in errors:
@@ -698,7 +698,8 @@ Here's the new version:
     ...
     ...     def validate(self, action, data):
     ...         return (form.getWidgetsData(self.widgets, self.prefix, data) +
-    ...                 form.checkInvariants(self.form_fields, data))
+    ...                 form.checkInvariants(
+    ...                     self.form_fields, data, self.context))
     ...
     ...     def handle_edit_action(self, action, data):
     ...         if form.applyChanges(self.context, self.form_fields, data):
@@ -1566,15 +1567,15 @@ Now try the same with the AddFormBase which uses a setUpInputWidget:
     ...         super(MyAddForm, self).setUpWidgets(ignore_request)
 
     >>> print MyAddForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
-    <input class="textType" id="form.identifier" name="form.identifier" 
+    <input class="textType" id="form.identifier" name="form.identifier"
            size="10" type="text" value=""  />
-    <input class="textType" id="form.name" name="form.name" size="20" 
+    <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value=""  />
-    <input class="textType" id="form.min_size" name="form.min_size" 
+    <input class="textType" id="form.min_size" name="form.min_size"
            size="10" type="text" value=""  />
-    <input class="textType" id="form.max_size" name="form.max_size" 
+    <input class="textType" id="form.max_size" name="form.max_size"
            size="10" type="text" value=""  />
-    <input class="textType" id="form.now" name="form.now" size="20" 
+    <input class="textType" id="form.now" name="form.now" size="20"
            type="text" value="2002-12-02 12:30:00"  />
 
 Note that a EditForm can't make use of a get_rendered method. The get_rendered
@@ -1801,7 +1802,7 @@ Here are some more places where the behavior was incorrect:
   <input class="textType" id="form.title" name="form.title"
          size="20" type="text" value="" />
 
-  >>> form.checkInvariants(form_fields, {'title': 'new'})
+  >>> form.checkInvariants(form_fields, {'title': 'new'}, blah)
   []
 
   >>> form.applyChanges(blah, form_fields, {'title': 'new'})

@@ -459,13 +459,15 @@ class NoInputData(interface.Invalid):
 
 class FormData:
 
-    def __init__(self, schema, data):
+    def __init__(self, schema, data, context):
         self._FormData_data___ = data
         self._FormData_schema___ = schema
+        self._FormData_context___ = context
 
     def __getattr__(self, name):
         schema = self._FormData_schema___
         data = self._FormData_data___
+        context = self._FormData_context___
         try:
             field = schema[name]
         except KeyError:
@@ -473,7 +475,21 @@ class FormData:
         else:
             value = data.get(name, data)
             if value is data:
-                raise NoInputData(name)
+                if context is None:
+                    raise NoInputData(name)
+                # The value is not in the form look it up on the context:
+                field = schema[name]
+                adapted_context = schema(context)
+                if IField.providedBy(field):
+                    value = field.get(adapted_context)
+                elif (zope.interface.interfaces.IAttribute.providedBy(field)
+                      and
+                      not zope.interface.interfaces.IMethod.providedBy(field)):
+                    # Fallback for non-field schema contents:
+                    value = getattr(adapted_context, name)
+                else:
+                    # Don't know how to extract value
+                    raise NoInputData(name)
             if zope.interface.interfaces.IMethod.providedBy(field):
                 if not IField.providedBy(field):
                     raise RuntimeError(
@@ -486,7 +502,7 @@ class FormData:
         raise AttributeError(name)
 
 
-def checkInvariants(form_fields, form_data):
+def checkInvariants(form_fields, form_data, context):
 
     # First, collect the data for the various schemas
     schema_data = {}
@@ -506,7 +522,7 @@ def checkInvariants(form_fields, form_data):
     errors = []
     for schema, data in schema_data.items():
         try:
-            schema.validateInvariants(FormData(schema, data), errors)
+            schema.validateInvariants(FormData(schema, data, context), errors)
         except interface.Invalid:
             pass # Just collect the errors
 
@@ -740,7 +756,7 @@ class FormBase(zope.publisher.browser.BrowserPage):
 
     def validate(self, action, data):
         return (getWidgetsData(self.widgets, self.prefix, data)
-                + checkInvariants(self.form_fields, data))
+                + checkInvariants(self.form_fields, data, self.context))
 
     template = namedtemplate.NamedTemplate('default')
 

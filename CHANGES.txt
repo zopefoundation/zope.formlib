@@ -2,8 +2,11 @@
 Changes
 =======
 
-4.0.7 (unreleased)
+4.1.0 (unreleased)
 ==================
+
+- `checkInvariants` now takes the context of the form into account when
+  checking interface invariants.
 
 
 4.0.6 (2011-08-20)

@@ -630,6 +630,87 @@ With some uppercase name:
 """
 
 
+def checkInvariants_falls_back_to_context_if_value_not_in_form():
+    """
+`checkInvariants` is able to access the values from the form and the context to
+make sure invariants are not violated:
+
+    >>> class IFlexMaximum(zope.interface.Interface):
+    ...     max = zope.schema.Int(title=u"Maximum")
+    ...     value = zope.schema.Int(title=u"Value")
+    ...
+    ...     @zope.interface.invariant
+    ...     def value_not_bigger_than_max(data):
+    ...         if data.value > data.max:
+    ...             raise zope.interface.Invalid('value bigger than max')
+
+    >>> class Content(object):
+    ...     zope.interface.implements(IFlexMaximum)
+    ...     max = 10
+    ...     value = 7
+
+    >>> class ValueEditForm(zope.formlib.form.EditForm):
+    ...     form_fields = zope.formlib.form.FormFields(
+    ...         IFlexMaximum).omit('max')
+
+If the value entered in the example form is bigger than the maximum the
+interface invariant triggers an error:
+
+    >>> from zope.publisher.browser import TestRequest
+    >>> request = TestRequest(
+    ...     form={'form.value': 42, 'form.actions.apply': '1'})
+    >>> form = ValueEditForm(Content(), request)
+    >>> form.update()
+    >>> form.errors
+    (Invalid('value bigger than max',),)
+
+If the value is below the maximum no error occures:
+
+    >>> request = TestRequest(
+    ...     form={'form.value': 8, 'form.actions.apply': '1'})
+    >>> form = ValueEditForm(Content(), request)
+    >>> form.update()
+    >>> form.errors
+    ()
+"""
+
+
+def FormData___getattr___handles_zope_interrface_attributes_correctly():
+    """
+`FormData.__getattr__` reads objects defined as zope.interface.Attribute in
+interface correctly from context:
+
+    >>> class IStaticMaximum(zope.interface.Interface):
+    ...     max = zope.interface.Attribute("Predefined maximum")
+
+    >>> class Content(object):
+    ...     zope.interface.implements(IStaticMaximum)
+    ...     max = 10
+
+    >>> formdata = zope.formlib.form.FormData(IStaticMaximum, {}, Content())
+    >>> formdata.max
+    10
+"""
+
+
+def FormData___getattr___raises_exception_if_unknown_how_to_access_value():
+    """
+`FormData.__getattr__` raises an exception if it cannot determine how to
+read the object from context:
+
+    >>> class IStaticMaximum(zope.interface.Interface):
+    ...     def max(): pass
+
+    >>> class Content(object):
+    ...     zope.interface.implements(IStaticMaximum)
+
+    >>> formdata = zope.formlib.form.FormData(IStaticMaximum, {}, Content())
+    >>> formdata.max
+    Traceback (most recent call last):
+    NoInputData: max
+"""
+
+
 def test_suite():
     import doctest
     checker = zope.testing.renormalizing.RENormalizing([
