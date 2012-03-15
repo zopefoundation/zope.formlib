@@ -479,7 +479,7 @@ class FormData:
                     raise NoInputData(name)
                 # The value is not in the form look it up on the context:
                 field = schema[name]
-                adapted_context = schema(context, None)
+                adapted_context = schema(context)
                 if IField.providedBy(field):
                     value = field.get(adapted_context)
                 elif (zope.interface.interfaces.IAttribute.providedBy(field)
