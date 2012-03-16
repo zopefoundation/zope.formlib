@@ -2,7 +2,7 @@
 Changes
 =======
 
-4.1.1 (unreleased)
+4.1.1 (2012-03-16)
 ==================
 
 - Added `ignoreContext` attribute to form classes to control whether
