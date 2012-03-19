@@ -33,6 +33,23 @@ setup(name='zope.formlib',
       description='Form generation and validation library for Zope',
       author='Zope Foundation and Contributors',
       author_email='zope-dev@zope.org',
+      classifiers=[
+        'Development Status :: 5 - Production/Stable',
+        'Environment :: Web Environment',
+        'Framework :: Zope3',
+        'Intended Audience :: Developers',
+        'License :: OSI Approved :: Zope Public License',
+        'License :: OSI Approved',
+        'Natural Language :: English',
+        'Operating System :: OS Independent',
+        'Programming Language :: Python :: 2 :: Only',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.5',
+        'Programming Language :: Python :: 2.6',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python',
+        'Topic :: Internet :: WWW/HTTP',
+        ],
       long_description=(read('README.txt')
                         + '\n\n' +
                         read('src', 'zope', 'formlib', 'form.txt')

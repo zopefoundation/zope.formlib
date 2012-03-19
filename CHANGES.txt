@@ -26,6 +26,8 @@ Changes
 - `checkInvariants` now takes the context of the form into account when
   checking interface invariants.
 
+- Tests are no longer compatible with Python 2.4.
+
 
 4.0.6 (2011-08-20)
 ==================
