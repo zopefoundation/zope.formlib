@@ -176,7 +176,7 @@ class BrowserWidget(Widget, BrowserView):
         >>> provideAdapter(SnippetErrorView,
         ...                (IWidgetInputError, IDefaultBrowserLayer),
         ...                IWidgetInputErrorView, '')
-        
+
     Whever an error occurs, widgets should set _error:
 
         >>> widget._error = WidgetInputError('foo', 'Foo', ('Err1', 'Err2'))
@@ -357,7 +357,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
         >>> widget.getInputValue()
         32.0
         >>> widget()
-        u'<input class="textType" id="field.price" name="field.price" type="text" value="32.00"  />'
+        u'<input class="textType" id="field.price" name="field.price" required="True" type="text" value="32.00"  />'
 
         >>> request = TestRequest(form={'field.price': u'<p>foo</p>'})
         >>> widget = FloatWidget(field, request)
@@ -367,7 +367,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
         ...     print error.doc()
         Invalid floating point data
         >>> widget()
-        u'<input class="textType" id="field.price" name="field.price" type="text" value="&lt;p&gt;foo&lt;/p&gt;"  />'
+        u'<input class="textType" id="field.price" name="field.price" required="True" type="text" value="&lt;p&gt;foo&lt;/p&gt;"  />'
 
 
     >>> tearDown()
@@ -524,6 +524,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
                              id=self.name,
                              value=self._getFormValue(),
                              cssClass=self.cssClass,
+                             required=self.required,
                              extra=self.extra)
 
     def hidden(self):
