@@ -24,7 +24,7 @@ from setuptools import setup, find_packages
 def read(*rnames):
     return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
 
-version = '4.1.2dev'
+version = '4.2.0dev'
 
 setup(name='zope.formlib',
       version=version,
@@ -42,9 +42,7 @@ setup(name='zope.formlib',
         'License :: OSI Approved',
         'Natural Language :: English',
         'Operating System :: OS Independent',
-        'Programming Language :: Python :: 2 :: Only',
         'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.5',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python',

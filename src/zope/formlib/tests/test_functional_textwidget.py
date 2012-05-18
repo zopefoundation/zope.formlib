@@ -15,7 +15,7 @@
 """
 import unittest
 
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.schema import TextLine, Choice
 from zope.formlib import form
 from zope.publisher.browser import TestRequest
@@ -40,9 +40,8 @@ class ITextLineTest(Interface):
         required=False,
         values=(u'Bob', u'is', u'Your', u'Uncle'))
 
+@implementer(ITextLineTest)
 class TextLineTest(object):
-
-    implements(ITextLineTest)
 
     def __init__(self):
         self.s1 = ''

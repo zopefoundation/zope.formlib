@@ -58,9 +58,8 @@ def expandPrefix(prefix):
         return prefix + '.'
     return prefix
 
+@interface.implementer(interfaces.IFormField)
 class FormField:
-
-    interface.implements(interfaces.IFormField)
 
     def __init__(self, field, name=None, prefix='',
                  for_display=None, for_input=None, custom_widget=None,
@@ -88,9 +87,8 @@ def _initkw(keep_readonly=(), omit_readonly=False, **defaults):
     return keep_readonly, omit_readonly, defaults
 
 
+@interface.implementer(interfaces.IFormFields)
 class FormFields(object):
-
-    interface.implements(interfaces.IFormFields)
 
     def __init__(self, *args, **kw):
         keep_readonly, omit_readonly, defaults = _initkw(**kw)
@@ -178,9 +176,8 @@ def fields(*args, **kw):
     return FormFields(*args, **other)
 
 
+@interface.implementer(interfaces.IWidgets)
 class Widgets(object):
-
-    interface.implements(interfaces.IWidgets)
 
     def __init__(self, widgets, prefix_length=None, prefix=None):
         self.__Widgets_widgets_items__ = widgets
@@ -568,9 +565,8 @@ def _callify(meth):
         return lambda form, *args: getattr(form, meth)(*args)
 
 
+@interface.implementer(interfaces.IAction)
 class Action(object):
-
-    interface.implements(interfaces.IAction)
     _identifier = re.compile('[A-Za-z][a-zA-Z0-9_]*$')
 
     def __init__(self, label, success=None, failure=None,
@@ -676,9 +672,8 @@ class action:
         return action
 
 
+@interface.implementer(interfaces.IActions)
 class Actions(object):
-
-    interface.implements(interfaces.IActions)
 
     def __init__(self, *actions):
         self.actions = actions
@@ -733,6 +728,7 @@ def availableActions(form, actions):
     return result
 
 
+@interface.implementer(interfaces.IForm)
 class FormBase(zope.publisher.browser.BrowserPage):
 
     label = u''
@@ -745,7 +741,6 @@ class FormBase(zope.publisher.browser.BrowserPage):
 
     ignoreContext = False
 
-    interface.implements(interfaces.IForm)
 
     def setPrefix(self, prefix):
         self.prefix = prefix
@@ -895,15 +890,14 @@ class DisplayFormBase(FormBase):
     actions = ()
 
 
+@interface.implementer(interfaces.IAddFormCustomization,
+                       zope.component.interfaces.IFactory)
+@component.adapter(zope.browser.interfaces.IAdding,
+                   zope.publisher.interfaces.browser.IBrowserRequest)
 class AddFormBase(FormBase):
 
     ignoreContext = True
 
-    interface.implements(interfaces.IAddFormCustomization,
-                         zope.component.interfaces.IFactory)
-
-    component.adapts(zope.browser.interfaces.IAdding,
-                     zope.publisher.interfaces.browser.IBrowserRequest)
 
     def __init__(self, context, request):
         self.__parent__ = context
@@ -953,38 +947,38 @@ default_page_template = namedtemplate.NamedTemplateImplementation(
 default_subpage_template = namedtemplate.NamedTemplateImplementation(
     ViewPageTemplateFile('subpageform.pt'), interfaces.ISubPageForm)
 
+@interface.implementer(interfaces.IPageForm)
 class PageForm(FormBase):
-
-    interface.implements(interfaces.IPageForm)
+    pass
 
 Form = PageForm
 
+@interface.implementer(interfaces.IPageForm)
 class PageEditForm(EditFormBase):
-
-    interface.implements(interfaces.IPageForm)
+    pass
 
 EditForm = PageEditForm
 
+@interface.implementer(interfaces.IPageForm)
 class PageDisplayForm(DisplayFormBase):
-
-    interface.implements(interfaces.IPageForm)
+    pass
 
 DisplayForm = PageDisplayForm
 
+@interface.implementer(interfaces.IPageForm)
 class PageAddForm(AddFormBase):
-
-    interface.implements(interfaces.IPageForm)
+    pass
 
 AddForm = PageAddForm
 
+@interface.implementer(interfaces.ISubPageForm)
 class SubPageForm(FormBase):
+    pass
 
-    interface.implements(interfaces.ISubPageForm)
-
+@interface.implementer(interfaces.ISubPageForm)
 class SubPageEditForm(EditFormBase):
+    pass
 
-    interface.implements(interfaces.ISubPageForm)
-
+@interface.implementer(interfaces.ISubPageForm)
 class SubPageDisplayForm(DisplayFormBase):
-
-    interface.implements(interfaces.ISubPageForm)
+    pass

@@ -15,7 +15,7 @@
 """
 import unittest
 
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.schema import Float, Choice
 from zope.formlib import form
 from zope.publisher.browser import TestRequest
@@ -41,9 +41,8 @@ class IFloatTest(Interface):
         values=(0.0, 1.1, 2.1, 3.1, 5.1, 7.1, 11.1),
         missing_value=0)
 
+@implementer(IFloatTest)
 class FloatTest(object):
-
-    implements(IFloatTest)
 
     def __init__(self):
         self.f1 = None

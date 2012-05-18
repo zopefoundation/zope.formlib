@@ -15,7 +15,7 @@
 """
 import unittest
 
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.schema import Choice
 from zope.formlib import form
 from zope.publisher.browser import TestRequest
@@ -36,9 +36,8 @@ class IRadioTest(Interface):
         required=True,
         values=(u'1', u'2', u'3'))
 
+@implementer(IRadioTest)
 class RadioTest(object):
-
-    implements(IRadioTest)
 
     def __init__(self):
         self.s3 = None

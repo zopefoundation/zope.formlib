@@ -16,8 +16,8 @@ __docformat__ = 'restructuredtext'
 
 from cgi import escape
 
-from zope.component import adapts
-from zope.interface import implements
+from zope.component import adapter
+from zope.interface import implementer
 from zope.interface import Invalid
 from zope.i18n import Message
 from zope.i18n import translate
@@ -26,12 +26,10 @@ from zope.formlib.interfaces import IWidgetInputErrorView
 from zope.publisher.interfaces.browser import IBrowserRequest
 
 
+@implementer(IWidgetInputErrorView)
+@adapter(Invalid, IBrowserRequest)
 class InvalidErrorView(object):
-
     """Display a validation error as a snippet of text."""
-
-    implements(IWidgetInputErrorView)
-    adapts(Invalid, IBrowserRequest)
 
     def __init__(self, context, request):
         self.context = context

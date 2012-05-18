@@ -16,7 +16,7 @@
 import unittest
 import sys
 from zope.component import testing
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.publisher.browser import TestRequest
 from zope.schema import Object, TextLine
 from zope.schema.interfaces import ITextLine
@@ -33,11 +33,12 @@ class ITestContact(Interface):
     name = TextLine()
     email = TextLine()
     
+@implementer(ITestContact)
 class TestContact(object):
-    implements(ITestContact)
+    pass
 
+@implementer(IWidgetInputErrorView)
 class ObjectWidgetInputErrorView(object):
-    implements(IWidgetInputErrorView)
 
     def __init__(self, error, request):
         self.error = error
@@ -69,8 +70,9 @@ class ObjectWidgetTest(BrowserWidgetTest):
                     title=title,
                     description=desc
                     )
+        @implementer(ITestContent)
         class TestObject(object):
-            implements(ITestContent)
+            pass
 
         self.content = TestObject()
         self.field = ITestContent['foo']

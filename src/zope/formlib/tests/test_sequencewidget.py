@@ -14,7 +14,7 @@
 """Sequence Field Widget tests.
 """
 import unittest
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.schema import Tuple, List, TextLine
 from zope.schema.interfaces import ITextLine
 from zope.component import provideAdapter
@@ -47,8 +47,9 @@ class SequenceWidgetTestHelper(object):
                     title=title,
                     description=desc,
                     )
+        @implementer(ITestContent)
         class TestObject(object):
-            implements(ITestContent)
+            pass
 
         self.content = TestObject()
         self.field = ITestContent['foo'].bind(self.content)

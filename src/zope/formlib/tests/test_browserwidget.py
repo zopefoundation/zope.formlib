@@ -15,7 +15,7 @@
 """
 import unittest
 from zope.component.testing import PlacelessSetup
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.publisher.browser import TestRequest
 from zope.schema import Text, Int
 from doctest import DocTestSuite
@@ -38,8 +38,9 @@ class BrowserWidgetTest(PlacelessSetup,
             __name__='foo', title=title, description=desc)
         class ITestContent(Interface):
             foo = field
+        @implementer(ITestContent)
         class TestObject:
-            implements(ITestContent)
+            pass
         self.content = TestObject()
         field = ITestContent['foo']
         field = field.bind(self.content)

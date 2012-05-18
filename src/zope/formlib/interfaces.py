@@ -17,7 +17,7 @@ from zope import schema
 from zope.publisher.interfaces.browser import IBrowserPage
 from zope.schema.interfaces import ValidationError
 from zope.publisher.interfaces import IView
-from zope.interface import Attribute, Interface, implements, Invalid
+from zope.interface import Attribute, Interface, implementer, Invalid
 from zope.schema import Bool
 from zope.exceptions.interfaces import UserError
 
@@ -27,10 +27,9 @@ class IWidgetInputError(Interface):
     def doc():
         """Returns a string that represents the error message."""
 
+@implementer(IWidgetInputError)
 class WidgetInputError(UserError):
     """One or more user input errors occurred."""
-
-    implements(IWidgetInputError)
 
     def __init__(self, field_name, widget_title, errors=None):
         """Initialize Error
@@ -56,10 +55,9 @@ class MissingInputError(WidgetInputError):
     """Required data was not supplied."""
 
 
+@implementer(IWidgetInputError)
 class ConversionError(Exception):
     """A conversion error occurred."""
-
-    implements(IWidgetInputError)
 
     def __init__(self, error_name, original_exception=None):
         Exception.__init__(self, error_name, original_exception)

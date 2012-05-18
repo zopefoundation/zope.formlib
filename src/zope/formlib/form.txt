@@ -403,8 +403,8 @@ Let's create a content class that provides `IOrder` and a simple form
 that uses it:
 
     >>> import datetime
-    >>> class Order:
-    ...     interface.implements(IOrder)
+    >>> @interface.implementer(IOrder)
+    ... class Order:
     ...
     ...     def __init__(self, identifier):
     ...         self.identifier = identifier
@@ -1099,9 +1099,9 @@ Suppose we have a generic adapter for storing descriptive information
 on objects:
 
     >>> from zope import component
-    >>> class Descriptive(object):
-    ...     component.adapts(interface.Interface)
-    ...     interface.implements(IDescriptive)
+    >>> @component.adapter(interface.Interface)
+    ... @interface.implementer(IDescriptive)
+    ... class Descriptive(object):
     ...     def __init__(self, context):
     ...         self.context = context
     ...
@@ -1772,8 +1772,8 @@ Here is the unexpected behavior that caused formlib to do the wrong thing:
 
 Note: If this behavior ever changes, the formlib can be simplified again.
 
-  >>> class FooBar(object):
-  ...     zope.interface.implements(IFooBar)
+  >>> @zope.interface.implementer(IFooBar)
+  ... class FooBar(object):
   ...     title = u'initial'
   >>> foobar = FooBar()
 

@@ -18,7 +18,7 @@ __docformat__ = 'restructuredtext'
 from xml.sax.saxutils import quoteattr, escape
 
 from zope.component import getMultiAdapter, provideAdapter
-from zope.interface import implements
+from zope.interface import implementer
 from zope.schema.interfaces import ValidationError
 from zope.publisher.browser import BrowserView
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
@@ -44,10 +44,9 @@ if quoteattr("\r") != '"&13;"':
             data, {'\n': '&#10;', '\r': '&#13;', '\t':'&#9;'})
 
 
+@implementer(IWidget)
 class Widget(object):
     """Mixin class providing functionality common across widget types."""
-
-    implements(IWidget)
 
     _prefix = 'field.'
     _data_marker = object()
@@ -103,9 +102,9 @@ class InputWidget(Widget):
             return False
 
 
+@implementer(IWidgetFactory)
 class CustomWidgetFactory(object):
     """Custom Widget Factory."""
-    implements(IWidgetFactory)
 
     def __init__(self, widget_factory, *args, **kw):
         self._widget_factory = widget_factory
@@ -133,6 +132,7 @@ class CustomWidgetFactory(object):
 
         return self._create(args)
 
+@implementer(IBrowserWidget)
 class BrowserWidget(Widget, BrowserView):
     """Base class for browser widgets.
 
@@ -167,8 +167,8 @@ class BrowserWidget(Widget, BrowserView):
     illustrate, we can create and register a simple error display view:
 
         >>> from zope.formlib.interfaces import IWidgetInputError
-        >>> class SnippetErrorView:
-        ...     implements(IWidgetInputErrorView)
+        >>> @implementer(IWidgetInputErrorView)
+        ... class SnippetErrorView:
         ...     def __init__(self, context, request):
         ...         self.context = context
         ...     def snippet(self):
@@ -190,8 +190,6 @@ class BrowserWidget(Widget, BrowserView):
 
     """
 
-    implements(IBrowserWidget)
-
     _error = None
 
     def __init__(self, context, request):
@@ -208,6 +206,7 @@ class BrowserWidget(Widget, BrowserView):
         return ""
 
 
+@implementer(ISimpleInputWidget)
 class SimpleInputWidget(BrowserWidget, InputWidget):
     """A baseclass for simple HTML form widgets.
 
@@ -372,8 +371,6 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
 
     >>> tearDown()
     """
-
-    implements(ISimpleInputWidget)
 
     tag = u'input'
     type = u'text'

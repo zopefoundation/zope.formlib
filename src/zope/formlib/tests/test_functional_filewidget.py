@@ -16,7 +16,7 @@
 import unittest
 
 from StringIO import StringIO
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.schema import Field
 from zope.schema.interfaces import IField
 from zope.formlib import form
@@ -28,15 +28,16 @@ from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 class IFileField(IField):
     """Field for representing a file that can be edited by FileWidget."""
 
+@implementer(IFileField)
 class FileField(Field):
-    implements(IFileField)
+    pass
 
 class IFileTest(Interface):
     f1 = FileField(required=True)
     f2 = FileField(required=False)
 
+@implementer(IFileTest)
 class FileTest(object):
-    implements(IFileTest)
 
     def __init__(self):
         self.f1 = None

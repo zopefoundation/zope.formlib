@@ -16,7 +16,6 @@ import pytz
 
 from zope.component.testing import setUp, tearDown
 from zope.component import adapter
-from zope.component import adapts
 from zope.component import provideAdapter, provideUtility
 
 from zope.i18n.testing import setUp as i18nSetUp
@@ -176,17 +175,17 @@ class IDescriptive(zope.interface.Interface):
     description = zope.schema.TextLine(title=u"Description")
 
 
+@zope.interface.implementer(IOrder)
 class Order:
-    zope.interface.implements(IOrder)
     identifier = 1
     name = 'unknown'
     min_size = 1.0
     max_size = 10.0
 
 
+@adapter(IOrder)
+@zope.interface.implementer(IDescriptive)
 class Descriptive(object):
-    adapts(IOrder)
-    zope.interface.implements(IDescriptive)
     def __init__(self, context):
         self.context = context
 
@@ -259,8 +258,8 @@ bound action.  Before we call this however, we need to set up a dummy
 translation domain.  We'll create one for our needs:
 
     >>> import zope.i18n.interfaces
-    >>> class MyDomain:
-    ...     zope.interface.implements(zope.i18n.interfaces.ITranslationDomain)
+    >>> @zope.interface.implementer(zope.i18n.interfaces.ITranslationDomain)
+    ... class MyDomain:
     ...
     ...     def translate(self, msgid, mapping=None, context=None,
     ...                   target_language=None, default=None):
@@ -295,8 +294,8 @@ Let's test the getWidgetsData method which is responsible for handling widget
 erros raised by the widgets getInputValue method.
 
     >>> import zope.formlib.interfaces
-    >>> class Widget(object):
-    ...     zope.interface.implements(zope.formlib.interfaces.IInputWidget)
+    >>> @zope.interface.implementer(zope.formlib.interfaces.IInputWidget)
+    ... class Widget(object):
     ...     def __init__(self):
     ...         self.name = 'form.summary'
     ...         self.label = 'Summary'
@@ -319,8 +318,8 @@ converts ValidationErrors to WidgetInputErrors. But since I just fixed
 yesterday the sequence input widget, I decided to catch ValidationError also
 in the formlib as a fallback if some widget doen't handle errors correct. (ri)
 
-    >>> class Widget(object):
-    ...     zope.interface.implements(zope.formlib.interfaces.IInputWidget)
+    >>> @zope.interface.implementer(zope.formlib.interfaces.IInputWidget)
+    ... class Widget(object):
     ...     def __init__(self):
     ...         self.name = 'form.summary'
     ...         self.label = 'summary'
@@ -383,9 +382,9 @@ We also need to provide a traversal adapter for the view namespace
 that lets us look up the macros.
 
     >>> import zope.traversing.interfaces
-    >>> class view:
-    ...     adapts(None, None)
-    ...     zope.interface.implements(zope.traversing.interfaces.ITraversable)
+    >>> @adapter(None, None)
+    ... @zope.interface.implementer(zope.traversing.interfaces.ITraversable)
+    ... class view:
     ...     def __init__(self, ob, r=None):
     ...         pass
     ...     def traverse(*args):
@@ -403,8 +402,8 @@ We need to set up the translation framework. We'll just provide a
 negotiator that always decides to use the test language:
 
     >>> import zope.i18n.interfaces
-    >>> class Negotiator:
-    ...     zope.interface.implements(zope.i18n.interfaces.INegotiator)
+    >>> @zope.interface.implementer(zope.i18n.interfaces.INegotiator)
+    ... class Negotiator:
     ...     def getLanguage(*ignored):
     ...         return 'test'
 
@@ -483,8 +482,8 @@ def test_setUpWidgets_prefix():
 
     Let's call setUpDataWidgets and see their names:
 
-        >>> class Trivial(object):
-        ...     interface.implements(ITrivial)
+        >>> @interface.implementer(ITrivial)
+        ... class Trivial(object):
         ...     name = 'foo'
         >>> context = Trivial()
 
@@ -646,8 +645,8 @@ make sure invariants are not violated:
     ...         if data.value > data.max:
     ...             raise zope.interface.Invalid('value bigger than max')
 
-    >>> class Content(object):
-    ...     zope.interface.implements(IFlexMaximum)
+    >>> @zope.interface.implementer(IFlexMaximum)
+    ... class Content(object):
     ...     max = 10
     ...     value = 7
 
@@ -704,8 +703,8 @@ interface correctly from context:
     >>> class IStaticMaximum(zope.interface.Interface):
     ...     max = zope.interface.Attribute("Predefined maximum")
 
-    >>> class Content(object):
-    ...     zope.interface.implements(IStaticMaximum)
+    >>> @zope.interface.implementer(IStaticMaximum)
+    ... class Content(object):
     ...     max = 10
 
     >>> formdata = zope.formlib.form.FormData(IStaticMaximum, {}, Content())
@@ -722,8 +721,9 @@ read the object from context:
     >>> class IStaticMaximum(zope.interface.Interface):
     ...     def max(): pass
 
-    >>> class Content(object):
-    ...     zope.interface.implements(IStaticMaximum)
+    >>> @zope.interface.implementer(IStaticMaximum)
+    ... class Content(object):
+    ...     pass
 
     >>> formdata = zope.formlib.form.FormData(IStaticMaximum, {}, Content())
     >>> formdata.max

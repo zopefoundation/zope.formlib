@@ -20,7 +20,7 @@ import zope.traversing.interfaces
 from zope.component import provideAdapter
 from zope.traversing.adapters import DefaultTraversable
 from zope.component.testing import PlacelessSetup
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.schema import TextLine, Object
 from zope.formlib import form
 from zope.publisher.browser import TestRequest
@@ -36,8 +36,9 @@ class ITestContact(Interface):
     name = TextLine()
     email = TextLine()
 
+@implementer(ITestContact)
 class TestContact(object):
-    implements(ITestContact)
+    pass
 
 class Form(form.EditForm):
     form_fields = form.fields(ITestContact)
@@ -63,9 +64,9 @@ class Test(PlacelessSetup, unittest.TestCase, VerifyResults):
         data = f.read()
         f.close()
         macro_template.write(data)
+        @zope.component.adapter(None, None)
+        @implementer(zope.traversing.interfaces.ITraversable)
         class view:
-            zope.component.adapts(None, None)
-            zope.interface.implements(zope.traversing.interfaces.ITraversable)
             def __init__(self, ob, r=None):
                 pass
             def traverse(*args):

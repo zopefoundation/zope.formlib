@@ -15,7 +15,7 @@
 """
 import unittest
 import doctest
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.publisher.browser import TestRequest
 from zope.schema import Choice, List
 
@@ -41,8 +41,9 @@ class MultiCheckBoxWidgetTest(SimpleInputWidgetTest):
                     description=desc,
                     value_type=Choice(values=[u'foo', u'bar'])
                     )
+        @implementer(ITestContent)
         class TestObject(object):
-            implements(ITestContent)
+            pass
 
         self.content = TestObject()
         field = ITestContent['foo']

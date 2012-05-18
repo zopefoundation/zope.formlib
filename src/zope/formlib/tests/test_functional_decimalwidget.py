@@ -16,7 +16,7 @@
 import unittest
 
 import decimal
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.schema import Decimal, Choice
 from zope.formlib import form
 from zope.publisher.browser import TestRequest
@@ -46,9 +46,8 @@ class IDecimalTest(Interface):
         missing_value=0)
 
 
+@implementer(IDecimalTest)
 class DecimalTest(object):
-
-    implements(IDecimalTest)
 
     def __init__(self):
         self.f1 = None

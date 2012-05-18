@@ -18,8 +18,8 @@ from itertools import imap
 
 import xml.sax.saxutils
 
-from zope.component import adapts, getMultiAdapter
-from zope.interface import implements
+from zope.component import adapter, getMultiAdapter
+from zope.interface import implementer
 import zope.browser.interfaces
 import zope.schema.interfaces
 from zope.schema.interfaces import \
@@ -43,9 +43,8 @@ from zope.formlib.widget import InputWidget
 import zope.formlib.itemswidgets
 from zope.formlib.widget import DisplayWidget
 
+@implementer(IDisplayWidget)
 class SourceDisplayWidget(DisplayWidget):
-
-    implements(IDisplayWidget)
 
     def __init__(self, field, source, request):
         super(SourceDisplayWidget, self).__init__(field, request)
@@ -117,11 +116,11 @@ class SourceSequenceDisplayWidget(SourceDisplayWidget):
         return '<br />\n'.join(result)
 
 
+@implementer(IInputWidget)
 class SourceInputWidget(InputWidget):
 
     _error = None
 
-    implements(IInputWidget)
 
     def __init__(self, field, source, request):
         super(SourceInputWidget, self).__init__(field, request)
@@ -511,6 +510,8 @@ class SourceListInputWidget(SourceInputWidget):
 # should be updated into full implementations.
 
 
+@implementer(IVocabularyTokenized)
+@adapter(IIterableSource)
 class IterableSourceVocabulary(object):
 
     """Adapts an iterable source into a legacy vocabulary.
@@ -519,9 +520,6 @@ class IterableSourceVocabulary(object):
     expect vocabularies. Note that there must be an ITerms implementation
     registered to obtain the terms.
     """
-
-    implements(IVocabularyTokenized)
-    adapts(IIterableSource);
 
     def __init__(self, source, request):
         self.source = source

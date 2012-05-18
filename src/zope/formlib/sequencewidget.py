@@ -16,7 +16,7 @@
 __docformat__ = 'restructuredtext'
 
 from zope import component
-from zope.interface import implements
+from zope.interface import implementer
 from zope.i18n import translate
 from zope.schema.interfaces import ValidationError
 
@@ -29,14 +29,13 @@ from zope.formlib.widget import DisplayWidget, renderElement
 from zope.browserpage import ViewPageTemplateFile
 
 
+@implementer(IInputWidget)
 class SequenceWidget(BrowserWidget, InputWidget):
     """A widget baseclass for a sequence of fields.
 
     subwidget  - Optional CustomWidget used to generate widgets for the
                  items in the sequence
     """
-
-    implements(IInputWidget)
 
     template = ViewPageTemplateFile('sequencewidget.pt')
 

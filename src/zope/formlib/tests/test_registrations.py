@@ -17,7 +17,7 @@ import unittest
 
 from zope.component import getMultiAdapter
 from zope.configuration import xmlconfig
-from zope.interface import implements
+from zope.interface import implementer
 from zope.publisher.browser import TestRequest
 from doctest import DocTestSuite
 
@@ -36,15 +36,17 @@ from zope.schema import vocabulary
 class ISampleObject(interfaces.IField):
     pass
 
+@implementer(ISampleObject)
 class SampleObject(object):
-    implements(ISampleObject)
+    pass
 
 class ISampleVocabulary(interfaces.IVocabularyTokenized,
                         interfaces.IVocabulary):
     pass
 
+@implementer(ISampleVocabulary)
 class SampleVocabulary(vocabulary.SimpleVocabulary):
-    implements(ISampleVocabulary)
+    pass
 
 request = TestRequest()
 sample = SampleObject()

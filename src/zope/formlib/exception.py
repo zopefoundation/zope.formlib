@@ -17,14 +17,14 @@ __docformat__ = 'restructuredtext'
 
 from cgi import escape
 
-from zope.interface import implements
+from zope.interface import implementer
 from zope.i18n import translate
 
 from zope.formlib.interfaces import IWidgetInputError, IWidgetInputErrorView
 
+@implementer(IWidgetInputErrorView)
 class WidgetInputErrorView(object):
     """Display an input error as a snippet of text."""
-    implements(IWidgetInputErrorView)
 
     __used_for__ = IWidgetInputError
 

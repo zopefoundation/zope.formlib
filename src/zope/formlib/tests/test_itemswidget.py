@@ -16,7 +16,7 @@
 import unittest
 
 from zope.component.testing import PlacelessSetup
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.publisher.browser import TestRequest
 from zope.schema import Choice, List, Set, FrozenSet
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
@@ -69,8 +69,8 @@ class ICollector(Interface):
         required=False)
 
 
+@implementer(ICollector)
 class Collector(object):
-    implements(ICollector)
 
     def __init__(self, numbers=None):
         self.numbers = numbers or []
@@ -159,8 +159,8 @@ class ITestContainer(Interface):
         vocabulary=containerVocab,
         required=True)
 
+@implementer(ITestContainer)
 class TestContainer(object):
-    implements(ITestContainer)
 
     def __init__(self, container=None):
         self.container = container

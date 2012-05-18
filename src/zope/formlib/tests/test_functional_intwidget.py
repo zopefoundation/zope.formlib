@@ -15,7 +15,7 @@
 """
 import unittest
 
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.schema import Int, Choice
 from zope.formlib import form
 from zope.publisher.browser import TestRequest
@@ -51,9 +51,8 @@ class IIntTest2(Interface):
         values=(10, 20, 30))
 
 
+@implementer(IIntTest)
 class IntTest(object):
-
-    implements(IIntTest)
 
     def __init__(self):
         self.i1 = None
@@ -61,9 +60,8 @@ class IntTest(object):
         self.i3 = 2
 
 
+@implementer(IIntTest2)
 class IntTest2(object):
-
-    implements(IIntTest2)
 
     def __init__(self):
         self.i1 = 10

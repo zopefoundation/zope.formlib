@@ -29,9 +29,8 @@ our tests::
   >>> from zope.browser.interfaces import ITerms
   >>> import zope.publisher.interfaces.browser
   >>> from zope.schema.vocabulary import SimpleTerm
-  >>> class ListTerms:
-  ...
-  ...     zope.interface.implements(ITerms)
+  >>> @zope.interface.implementer(ITerms)
+  ... class ListTerms:
   ...
   ...     def __init__(self, source, request):
   ...         pass # We don't actually need the source or the request :)
@@ -72,8 +71,9 @@ source.  This allows each possible value to be listed in a  <select> form field.
 Let's start with a simple example.  We have a very trivial source,
 which is basically a list::
 
-  >>> class SourceList(list):
-  ...     zope.interface.implements(zope.schema.interfaces.IIterableSource)
+  >>> @zope.interface.implementer(zope.schema.interfaces.IIterableSource)
+  ... class SourceList(list):
+  ...     pass
 
 We need to register our `ITerms` view::
 
@@ -514,8 +514,9 @@ following approach:
 Let's start with a simple example.  We have a very trivial source,
 which is basically a list:
 
-  >>> class SourceList(list):
-  ...     zope.interface.implements(zope.schema.interfaces.ISource)
+  >>> @zope.interface.implementer(zope.schema.interfaces.ISource)
+  ... class SourceList(list):
+  ...     pass
 
 We need to register our `ITerms` view::
 
@@ -527,14 +528,13 @@ We aren't going to provide an adapter to `ISourceQueriables`, so the source
 itself will be used as it's own queriable.  We need to provide a query view
 for the source::
 
-  >>> class ListQueryView:
-  ...
-  ...     zope.interface.implements(
+  >>> @zope.interface.implementer(
   ...         zope.formlib.interfaces.ISourceQueryView)
-  ...     zope.component.adapts(
+  ... @zope.component.adapter(
   ...         SourceList,
   ...         zope.publisher.interfaces.browser.IBrowserRequest,
   ...         )
+  ... class ListQueryView:
   ...
   ...     def __init__(self, source, request):
   ...         self.source = source
@@ -703,12 +703,11 @@ We should also be able to get the input value::
 Now, let's look at a more complicated example. We'll define a source that
 combines multiple sources::
 
-  >>> class MultiSource:
-  ...
-  ...     zope.interface.implements(
+  >>> @zope.interface.implementer(
   ...        zope.schema.interfaces.ISource,
   ...        zope.schema.interfaces.ISourceQueriables,
   ...        )
+  ... class MultiSource:
   ...
   ...     def __init__(self, *sources):
   ...         self.sources = [(unicode(i), s) for (i, s) in enumerate(sources)]
@@ -1069,12 +1068,13 @@ Usage::
   >>> terms = [SimpleTerm(values[i], token=tokens[i], title=titles[i]) \
   ...     for i in range(0,len(values))]
 
-  >>> class TestSource(list):
-  ...     zope.interface.implements(zope.schema.interfaces.IIterableSource)
+  >>> @zope.interface.implementer(zope.schema.interfaces.IIterableSource)
+  ... class TestSource(list):
+  ...     pass
   >>> source = TestSource(values)
 
-  >>> class TestTerms(object):
-  ...     zope.interface.implements(ITerms)
+  >>> @zope.interface.implementer(ITerms)
+  ... class TestTerms(object):
   ...     def __init__(self, source, request):
   ...         pass
   ...     def getTerm(self, value):

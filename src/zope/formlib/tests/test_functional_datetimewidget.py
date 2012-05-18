@@ -18,7 +18,7 @@ import unittest
 import re
 from datetime import datetime
 
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.schema import Datetime, Choice
 from zope.formlib import form
 from zope.publisher.browser import TestRequest
@@ -43,9 +43,8 @@ class IDatetimeTest(Interface):
             datetime(2003, 10, 15, tzinfo=tzinfo(0))),
         missing_value=datetime(2000, 1, 1, tzinfo=tzinfo(0)))
 
+@implementer(IDatetimeTest)
 class DatetimeTest(object):
-
-    implements(IDatetimeTest)
 
     def __init__(self):
         self.d1 = datetime(2003, 4, 6, tzinfo=tzinfo(0))

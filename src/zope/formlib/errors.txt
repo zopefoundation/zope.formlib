@@ -36,8 +36,8 @@ Now we need to set up the translation framework:
 
     >>> from zope import component, interface
     >>> from zope.i18n.interfaces import INegotiator
-    >>> class Negotiator:
-    ...     interface.implements(INegotiator)
+    >>> @interface.implementer(INegotiator)
+    ... class Negotiator:
     ...     def getLanguage(*ignored): return 'test'
     >>> component.provideUtility(Negotiator())
     >>> from zope.i18n.testmessagecatalog import TestMessageFallbackDomain

@@ -15,7 +15,7 @@
 """
 import unittest
 
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.schema import Text
 from zope.formlib import form
 from zope.publisher.browser import TestRequest
@@ -37,9 +37,8 @@ class ITextTest(Interface):
     s3 = Text(
         required=False)
 
+@implementer(ITextTest)
 class TextTest(object):
-
-    implements(ITextTest)
 
     def __init__(self):
         self.s1 = ''

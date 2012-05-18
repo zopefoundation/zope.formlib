@@ -5,7 +5,7 @@ Object Widget
 The following example shows a Family with Mother and Father.
 First define the interface for a person:
 
-  >>> from zope.interface import Interface, implements
+  >>> from zope.interface import Interface, implementer
   >>> from zope.schema import TextLine
 
   >>> class IPerson(Interface):
@@ -15,10 +15,8 @@ First define the interface for a person:
 
 Let's define the class:
 
-  >>> class Person(object):
-  ...
-  ...     implements(IPerson)
-  ...
+  >>> @implementer(IPerson)
+  ... class Person(object):
   ...     def __init__(self, name=''):
   ...         self.name = name
 
@@ -42,11 +40,9 @@ FieldProperty validate the values if they get added:
 
   >>> from zope.schema.fieldproperty import FieldProperty
 
-  >>> class Family(object):
+  >>> @implementer(IFamily)
+  ... class Family(object):
   ...     """The familiy interface."""
-  ...
-  ...     implements(IFamily)
-  ...
   ...     mother = FieldProperty(IFamily['mother'])
   ...     father = FieldProperty(IFamily['father'])
   ...

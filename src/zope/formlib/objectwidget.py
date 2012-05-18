@@ -16,7 +16,7 @@
 __docformat__ = 'restructuredtext'
 
 from zope import component
-from zope.interface import implements
+from zope.interface import implementer
 from zope.schema import getFieldNamesInOrder
 
 from zope.formlib.interfaces import IInputWidget
@@ -39,6 +39,7 @@ class ObjectWidgetView:
         return self.template()
 
 
+@implementer(IInputWidget)
 class ObjectWidget(BrowserWidget, InputWidget):
     """A widget over an Interface that contains Fields.
 
@@ -51,8 +52,6 @@ class ObjectWidget(BrowserWidget, InputWidget):
       Optional CustomWidgets used to generate widgets for the fields in this
       widget
     """
-
-    implements(IInputWidget)
 
     _object = None      # the object value (from setRenderedValue & request)
     _request_parsed = False

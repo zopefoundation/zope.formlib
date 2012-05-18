@@ -15,7 +15,7 @@
 """
 import unittest
 
-from zope.interface import Interface, implements
+from zope.interface import Interface, implementer
 from zope.schema import Bool
 from zope.formlib import form
 from zope.publisher.browser import TestRequest
@@ -27,8 +27,8 @@ import zope.schema.interfaces
 class IFoo(Interface):
     bar = Bool(title=u'Bar')
 
+@implementer(IFoo)
 class Foo(object):
-    implements(IFoo)
     def __init__(self):
         self.bar = True
 

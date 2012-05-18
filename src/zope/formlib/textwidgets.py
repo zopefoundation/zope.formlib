@@ -17,7 +17,7 @@ __docformat__ = 'restructuredtext'
 
 import decimal
 from xml.sax import saxutils
-from zope.interface import implements
+from zope.interface import implementer
 from zope.datetime import parseDatetimetz
 from zope.datetime import DateTimeError
 from zope.i18n.format import DateTimeParseError
@@ -34,6 +34,7 @@ def escape(str):
         str = saxutils.escape(str)
     return str
 
+@implementer(ITextBrowserWidget)
 class TextWidget(SimpleInputWidget):
     """Text widget.
 
@@ -102,8 +103,6 @@ class TextWidget(SimpleInputWidget):
       value="&lt;h1&gt;&amp;copy;&lt;/h1&gt;"
       />
     """
-
-    implements(ITextBrowserWidget)
 
     default = ''
     displayWidth = 20
@@ -523,8 +522,8 @@ class IntWidget(TextWidget):
                 raise ConversionError(_("Invalid integer data"), v)
 
 
+@implementer(IInputWidget)
 class FloatWidget(TextWidget):
-    implements(IInputWidget)
     displayWidth = 10
 
     def _toFieldValue(self, input):
@@ -536,8 +535,8 @@ class FloatWidget(TextWidget):
             except ValueError, v:
                 raise ConversionError(_("Invalid floating point data"), v)
 
+@implementer(IInputWidget)
 class DecimalWidget(TextWidget):
-    implements(IInputWidget)
     displayWidth = 10
 
     def _toFieldValue(self, input):
