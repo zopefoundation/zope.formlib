@@ -42,10 +42,10 @@ class FormBaseTests(unittest.TestCase):
         return self._getTargetClass()(context, request)
 
     def test___call___does_not_render_on_redirects(self):
-        for status in (301, 302):
+        for status in (301, 302, 303, 307):
             request = self._makeRequest()
             request.response.setStatus(status)
-            def _raise(self, *args, **kw):
+            def _raise(*args, **kw):
                 self.fail("DON'T GO HERE")
             form = self._makeOne(request=request)
             form.form_fields = form.actions = ()

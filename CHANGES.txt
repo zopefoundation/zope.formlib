@@ -5,6 +5,9 @@ Changes
 4.2.0 (unreleased)
 ==================
 
+- LP #1017884:  Add redirect status codes (303, 307) to the set which prevent
+  form rendering.
+
 - Replaced deprecated ``zope.component.adapts`` usage with equivalent
   ``zope.component.adapter`` decorator.
 
