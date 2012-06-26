@@ -2,6 +2,12 @@
 Changes
 =======
 
+4.0.7 (unreleased)
+==================
+
+- LP #1017884:  Add redirect status codes (303, 307) to the set which prevent
+  form rendering.
+
 4.0.6 (2011-08-20)
 ==================
 
