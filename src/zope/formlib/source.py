@@ -92,6 +92,8 @@ class SourceDisplayWidget(DisplayWidget):
 
 class SourceSequenceDisplayWidget(SourceDisplayWidget):
 
+    separator = '<br />\n'
+
     def __call__(self):
 
         if self._renderedValueSet():
@@ -113,7 +115,7 @@ class SourceSequenceDisplayWidget(SourceDisplayWidget):
 
             result.append(value)
 
-        return '<br />\n'.join(result)
+        return self.separator.join(result)
 
 
 @implementer(IInputWidget)

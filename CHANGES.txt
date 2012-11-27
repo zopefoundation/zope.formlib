@@ -16,6 +16,8 @@ Changes
 
 - Dropped support for Python 2.5.
 
+- Make separator of ``SourceSequenceDisplayWidget`` configurable.
+
 
 4.1.1 (2012-03-16)
 ==================
