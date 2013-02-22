@@ -5,7 +5,8 @@ Changes
 4.2.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Moved default values for the `BooleanDisplayWidget` from module to class
+  definition to make them changeable in instance.
 
 
 4.2.0 (2012-11-27)

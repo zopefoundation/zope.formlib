@@ -115,10 +115,10 @@ def BooleanDropdownWidget(field, request, true=_('on'), false=_('off')):
     return widget
 
 
-_msg_true = _("True")
-_msg_false = _("False")
-
 class BooleanDisplayWidget(DisplayWidget):
+
+    _msg_true = _("True")
+    _msg_false = _("False")
 
     def __call__(self):
         if self._renderedValueSet():
@@ -126,6 +126,6 @@ class BooleanDisplayWidget(DisplayWidget):
         else:
             value = self.context.default
         if value:
-            return _msg_true
+            return self._msg_true
         else:
-            return _msg_false
+            return self._msg_false
