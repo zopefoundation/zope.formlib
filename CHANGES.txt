@@ -2,7 +2,7 @@
 Changes
 =======
 
-4.2.1 (unreleased)
+4.2.1 (2013-02-22)
 ==================
 
 - Moved default values for the `BooleanDisplayWidget` from module to class
