@@ -41,6 +41,7 @@ from zope.formlib.widgets import URIDisplayWidget
 
 from zope.formlib.tests.test_browserwidget import BrowserWidgetTest
 from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
+from zope.formlib.tests.support import checker
 
 class TextWidgetTest(SimpleInputWidgetTest):
     """Documents and tests the text widget.
@@ -162,7 +163,7 @@ class DateDisplayWidgetTest(BrowserWidgetTest):
 
     def setUp(self):
         super(DateDisplayWidgetTest, self).setUp()
-        self._value = datetime.date(2004, 12, 01)
+        self._value = datetime.date(2004, 12, 0o1)
 
     def testDefaultDisplayStyle(self):
         self.failIf(self._widget.displayStyle)
@@ -222,7 +223,7 @@ class DatetimeDisplayWidgetTest(DateDisplayWidgetTest):
 
     def setUp(self):
         super(DatetimeDisplayWidgetTest, self).setUp()
-        self._value = datetime.datetime(2004, 12, 01, 14, 39, 01)
+        self._value = datetime.datetime(2004, 12, 0o1, 14, 39, 0o1)
 
     def testRenderDefault(self):
         super(DatetimeDisplayWidgetTest, self).testRenderDefault()
@@ -396,7 +397,7 @@ def test_w_nonrequired_and_missing_value_and_no_inout():
     >>> def normalize(s):
     ...   return '\\n  '.join(filter(None, s.split(' ')))
 
-    >>> print normalize( widget() )
+    >>> print(normalize( widget() ))
     <input
       class="textType"
       id="field.foo"
@@ -419,7 +420,7 @@ def test_no_error_on_render_only():
     >>> request = TestRequest(form={'field.foo': ''})
     >>> widget = TextWidget(field, request)
     >>> ignored = widget()
-    >>> unicode(widget.error())
+    >>> str(widget.error())
     u''
 
 
@@ -435,7 +436,7 @@ def test_text_area_works_with_missing_value():
     >>> def normalize(s):
     ...   return '\\n  '.join(filter(None, s.split(' ')))
 
-    >>> print normalize( widget() )
+    >>> print(normalize( widget() ))
     <textarea
       cols="60"
       id="field.foo"
@@ -443,7 +444,7 @@ def test_text_area_works_with_missing_value():
       rows="15"
       ></textarea>
 
-    >>> print normalize( widget.hidden() )
+    >>> print(normalize( widget.hidden() ))
     <input
       class="hiddenType"
       id="field.foo"
@@ -467,7 +468,7 @@ def test_suite():
         unittest.makeSuite(FloatDisplayWidgetTest),
         unittest.makeSuite(BytesDisplayWidgetTest),
         unittest.makeSuite(ASCIIDisplayWidgetTest),
-        doctest.DocTestSuite(),
+        doctest.DocTestSuite(checker=checker),
         ))
 
 if __name__=='__main__':

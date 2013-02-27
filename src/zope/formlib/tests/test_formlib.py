@@ -10,6 +10,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
+from __future__ import print_function
 import unittest
 import re
 import pytz
@@ -36,6 +37,7 @@ from zope.formlib.interfaces import IWidgetInputErrorView
 import zope.formlib
 import zope.formlib.form
 import zope.formlib.interfaces
+from zope.formlib.tests import support
 from zope.browserpage.namedtemplate import NamedTemplateImplementation
 
 from zope.configuration.xmlconfig import XMLConfig
@@ -62,7 +64,7 @@ def TestTemplate(self):
                                      default=self.status)
         if getattr(status, 'mapping', 0):
             status = zope.i18n.interpolate(status, status.mapping)
-        print status
+        print(status)
 
     result = []
 
@@ -160,6 +162,7 @@ def formSetUp(test):
         zope.formlib.form.render_submit_button, name='render')
 
     XMLConfig('ftesting.zcml', zope.formlib)
+    test.globs['print_function'] = print_function
 
 # Classes used in tests
 
@@ -221,7 +224,7 @@ def makeSureRenderCanBeCalledWithoutCallingUpdate():
 
     >>> from zope.publisher.browser import TestRequest
     >>> myform = MyForm(Order(), TestRequest())
-    >>> print myform.render() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(myform.render()) # doctest: +NORMALIZE_WHITESPACE
     1
     <input class="textType" id="form.name" name="form.name"
            size="20" type="text" value="unknown"  />
@@ -263,11 +266,11 @@ translation domain.  We'll create one for our needs:
     ...
     ...     def translate(self, msgid, mapping=None, context=None,
     ...                   target_language=None, default=None):
-    ...         print msgid
-    ...         print mapping
-    ...         print context
-    ...         print target_language
-    ...         print default
+    ...         print(msgid)
+    ...         print(mapping)
+    ...         print(context)
+    ...         print(target_language)
+    ...         print(default)
     ...         return msgid
 
     >>> provideUtility(MyDomain(), name='my.domain')
@@ -275,14 +278,15 @@ translation domain.  We'll create one for our needs:
 Now, if we call render_submit_button, we should be able to verify the
 data passed to translate:
 
-    >>> zope.formlib.form.render_submit_button(action)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(zope.formlib.form.render_submit_button(action)())
+    ...     # doctest: +NORMALIZE_WHITESPACE
     MyAction
     None
     42
     None
     MyAction
-    u'<input type="submit" id="form.actions.myaction"
-       name="form.actions.myaction" value="MyAction" class="button" />'
+    <input type="submit" id="form.actions.myaction"
+       name="form.actions.myaction" value="MyAction" class="button" />
 
 
 """
@@ -308,9 +312,10 @@ erros raised by the widgets getInputValue method.
     >>> widget = Widget()
     >>> inputs = [(True, widget)]
     >>> widgets = zope.formlib.form.Widgets(inputs, 5)
-    >>> errors = zope.formlib.form.getWidgetsData(widgets, 'form', {'summary':'value'})
-    >>> errors #doctest: +ELLIPSIS
-    [<zope.formlib.interfaces.WidgetInputError instance at ...>]
+    >>> errors = zope.formlib.form.getWidgetsData(
+    ...     widgets, 'form', {'summary':'value'})
+    >>> print(errors[0].__class__.__name__, errors[0])
+    WidgetInputError ('summary', 'Summary', None)
 
 Let's see what happens if a widget doesn't convert a ValidationError
 raised by a field to a WidgetInputError. This should not happen if a widget
@@ -445,7 +450,7 @@ that extracts the translations, complaining if any are nested:
     ...         l = lclose + 2
 
     >>> for t in find_translations(page):
-    ...     print t
+    ...     print(t)
     [[my.domain][The label]]
     [[my.domain][Success!]]
     [[my.domain][Name]]
@@ -455,7 +460,7 @@ that extracts the translations, complaining if any are nested:
 Now, let's try the same thing with the sub-page form:
 
     >>> for t in find_translations(form.subpage()):
-    ...     print t
+    ...     print(t)
     [[my.domain][The label]]
     [[my.domain][Success!]]
     [[my.domain][Name]]
@@ -726,7 +731,7 @@ read the object from context:
     ...     pass
 
     >>> formdata = zope.formlib.form.FormData(IStaticMaximum, {}, Content())
-    >>> formdata.max
+    >>> formdata.max #doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     NoInputData: max
 """
@@ -734,7 +739,7 @@ read the object from context:
 
 def test_suite():
     import doctest
-    checker = zope.testing.renormalizing.RENormalizing([
+    checker = support.checker + zope.testing.renormalizing.RENormalizing([
       (re.compile(r"\[WidgetInputError\('form.summary', 'summary', ValidationError\('A error message'\)\)\]"),
                   r"[<zope.formlib.interfaces.WidgetInputError instance at ...>]"),
       (re.compile(r"\[WidgetInputError\('summary', u'Summary', None\)\]"),
@@ -747,7 +752,7 @@ def test_suite():
     return unittest.TestSuite((
         doctest.DocFileSuite(
             '../errors.txt',
-            setUp=formSetUp, tearDown=tearDown,
+            setUp=formSetUp, tearDown=tearDown, checker=checker,
             optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
             ),
         # The following test needs some zope.security test setup
@@ -767,5 +772,5 @@ def test_suite():
             checker=checker
             ),
         doctest.DocTestSuite(
-            'zope.formlib.errors'),
+            'zope.formlib.errors', checker=checker),
         ))

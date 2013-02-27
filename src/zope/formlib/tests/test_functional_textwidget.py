@@ -57,15 +57,15 @@ class Test(FunctionalWidgetTestCase):
         (zope.schema.interfaces.IChoice, ChoiceInputWidget),
         ((zope.schema.interfaces.IChoice, zope.schema.interfaces.IVocabularyTokenized),
          DropdownWidget)]
-        
+
     def test_display_editform(self):
         foo = TextLineTest()
         request = TestRequest()
 
         # display edit view
-        
+
         html = Form(foo, request)()
-        
+
         # s1 and s2 should be displayed in text fields
         self.assert_(patternExists(
             '<input .* name="form.s1".* value="".*>', html))
@@ -108,7 +108,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.s1'] = ''
         request.form['form.actions.apply'] = u''
         html = Form(foo, request)()
-        
+
         # We don't have a invalid field value
         # since we convert the value to unicode
         self.assert_('Object is of wrong type.' not in html)
@@ -122,7 +122,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.s3'] = u''
         request.form['form.actions.apply'] = u''
         Form(foo, request)()
-        
+
         # check new values in object
         self.assertEqual(foo.s1, u'foo')
         self.assertEqual(foo.s2, u'')   # default missing_value
@@ -137,7 +137,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.s3'] = u''
         request.form['form.actions.apply'] = u''
         html = Form(foo, request)()
-        
+
         # confirm error msgs
         s1_index = html.find('form.s1')
         s2_index = html.find('form.s2')
@@ -163,7 +163,7 @@ class Test(FunctionalWidgetTestCase):
     def test_length_validation(self):
         foo = TextLineTest()
         request = TestRequest()
-        
+
         # submit value for s1 that is too short
         request.form['form.s1'] = u'a'
         request.form['form.actions.apply'] = u''
@@ -181,7 +181,7 @@ class Test(FunctionalWidgetTestCase):
     def test_omitted_value(self):
         foo = TextLineTest()
         request = TestRequest()
-        
+
         # confirm default values
         self.assertEqual(foo.s1, '')
         self.assertEqual(foo.s2, u'foo')

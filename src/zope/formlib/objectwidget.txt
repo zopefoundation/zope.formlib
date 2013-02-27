@@ -25,14 +25,14 @@ Let's define the interface family:
   >>> from zope.schema import Object
 
   >>> class IFamily(Interface):
-  ...     """The familiy interface.""" 
-  ...  
+  ...     """The familiy interface."""
+  ...
   ...     mother = Object(title=u'Mother',
-  ...                     required=False, 
+  ...                     required=False,
   ...                     schema=IPerson)
   ...
   ...     father = Object(title=u'Father',
-  ...                     required=False, 
+  ...                     required=False,
   ...                     schema=IPerson)
 
 Let's define the class family with FieldProperty's mother and father
@@ -77,7 +77,7 @@ Let's define a dummy class which doesn't implements IPerson:
   ...     def __init__(self, name=''):
   ...         self.name = name
 
-Raise a SchemaNotProvided exception if we add a Dummy instance to a Family 
+Raise a SchemaNotProvided exception if we add a Dummy instance to a Family
 object:
 
   >>> foo = Dummy('foo')
@@ -122,15 +122,15 @@ Now let's initialize a ObjectWidget with the right attributes:
   >>> factory = Person
   >>> widget = ObjectWidget(mother_field, request, factory)
 
-Now comes the magic. Apply changes means we force the ObjectWidget to read 
-the request, extract the value and save it on the content. The ObjectWidget 
-instance uses a real Person class (factory) for add the value. The value is 
-temporary stored in this factory class. The ObjectWidget reads the value from 
-this factory and set it to the attribute 'name' of the instance mother 
-(The object mother is allready there). If we don't have a instance mother 
-allready store in the family object, the factory instance will be stored 
-directly to the family attribute mother. For more information see the method 
-'applyChanges()' in the interface 
+Now comes the magic. Apply changes means we force the ObjectWidget to read
+the request, extract the value and save it on the content. The ObjectWidget
+instance uses a real Person class (factory) for add the value. The value is
+temporary stored in this factory class. The ObjectWidget reads the value from
+this factory and set it to the attribute 'name' of the instance mother
+(The object mother is allready there). If we don't have a instance mother
+allready store in the family object, the factory instance will be stored
+directly to the family attribute mother. For more information see the method
+'applyChanges()' in the interface
 zope.formlib.objectwidget.ObjectWidget.
 
   >>> widget.applyChanges(family)
@@ -140,9 +140,9 @@ Test the updated mother's name value on the object family:
 
   >>> family.mother.name
   u'Margrith Ineichen'
-  
+
   >>> IPerson.providedBy(family.mother)
   True
 
-So, now you know my mothers and fathers name. I hope it's also clear how to 
+So, now you know my mothers and fathers name. I hope it's also clear how to
 use the Object field and the ObjectWidget.

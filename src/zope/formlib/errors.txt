@@ -29,7 +29,7 @@ this exception gets handled by the error_views.
     >>> mybase = zope.formlib.form.FormBase(None, TestRequest())
     >>> mybase.errors = (myError,)
     >>> save = mybase.error_views()
-    >>> save.next()
+    >>> next(save)
     u'<span class="error">My error message</span>'
 
 Now we need to set up the translation framework:
@@ -51,7 +51,7 @@ And yes, we can even handle an i18n message in an Invalid exception:
     >>> mybase = zope.formlib.form.FormBase(None, TestRequest())
     >>> mybase.errors = (myError,)
     >>> save = mybase.error_views()
-    >>> save.next()
+    >>> next(save)
     u'<span class="error">[[my.domain][My i18n error message]]</span>'
 
 Displaying widget input errors
@@ -67,5 +67,5 @@ WidgetInputError exceptions also work with i18n messages:
     >>> mybase = zope.formlib.form.FormBase(None, TestRequest())
     >>> mybase.errors = (myError,)
     >>> save = mybase.error_views()
-    >>> save.next()
+    >>> next(save)
     u'[[my.domain][Summary]]: <span class="error">[[my.domain][Foo]]</span>'

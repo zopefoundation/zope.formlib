@@ -29,6 +29,7 @@ from zope.formlib.interfaces import IBrowserWidget
 from zope.formlib.interfaces import ISimpleInputWidget
 from zope.formlib.interfaces import IWidgetInputErrorView
 from zope.formlib.interfaces import IWidget, InputErrors, IWidgetFactory
+from zope.formlib._compat import toUnicode
 
 from zope.i18n import translate
 from zope.schema.interfaces import IChoice, ICollection
@@ -290,7 +291,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
     This input violates the new field constraint and therefore causes an
     error when `getInputValue` is called:
 
-        >>> widget.getInputValue()
+        >>> widget.getInputValue() #doctest: +IGNORE_EXCEPTION_DETAIL
         Traceback (most recent call last):
         WidgetInputError: ('foo', u'Foo', ConstraintNotSatisfied(u'bye world'))
 
@@ -298,7 +299,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
     If input is not present, a ``MissingInputError`` is raised:
 
         >>> del request.form[widget.name]
-        >>> widget.getInputValue()
+        >>> widget.getInputValue() #doctest: +IGNORE_EXCEPTION_DETAIL
         Traceback (most recent call last):
         MissingInputError: ('baz.foo', u'Foo', None)
 
@@ -307,7 +308,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
     for a required field. The ``MissingInputError`` above was caused by the
     fact that the form does have any input for the widget:
 
-        >>> request.form[widget.name]
+        >>> request.form[widget.name] #doctest: +IGNORE_EXCEPTION_DETAIL
         Traceback (most recent call last):
         KeyError: 'baz.foo'
 
@@ -320,7 +321,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
     raised on a call to `getInputValue`:
 
         >>> field.required = True
-        >>> widget.getInputValue()
+        >>> widget.getInputValue() #doctest: +IGNORE_EXCEPTION_DETAIL
         Traceback (most recent call last):
         WidgetInputError: ('foo', u'Foo', RequiredMissing('foo'))
 
@@ -344,7 +345,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
         ...     def _toFieldValue(self, input):
         ...         try:
         ...             return float(input)
-        ...         except ValueError, v:
+        ...         except ValueError as v:
         ...             raise ConversionError('Invalid floating point data', v)
         ...
         ...     def _toFormValue(self, value):
@@ -362,8 +363,8 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
         >>> widget = FloatWidget(field, request)
         >>> try:
         ...     widget.getInputValue()
-        ... except ConversionError, error:
-        ...     print error.doc()
+        ... except ConversionError as error:
+        ...     print(error.doc())
         Invalid floating point data
         >>> widget()
         u'<input class="textType" id="field.price" name="field.price" required="True" type="text" value="&lt;p&gt;foo&lt;/p&gt;"  />'
@@ -402,7 +403,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
         # convert input to suitable value - may raise conversion error
         try:
             value = self._toFieldValue(self._getFormInput())
-        except ConversionError, error:
+        except ConversionError as error:
             # ConversionError is already a WidgetInputError
             self._error = error
             raise self._error
@@ -414,7 +415,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
         # value must be valid per the field constraints
         try:
             field.validate(value)
-        except ValidationError, v:
+        except ValidationError as v:
             self._error = WidgetInputError(
                 self.context.__name__, self.label, v)
             raise self._error
@@ -560,7 +561,7 @@ class UnicodeDisplayWidget(DisplayWidget):
             value = self.context.default
         if value == self.context.missing_value:
             return ""
-        return escape(unicode(value))
+        return escape(toUnicode(value))
 
 
 def renderTag(tag, **kw):
@@ -595,8 +596,7 @@ def renderTag(tag, **kw):
 
     # handle other attributes
     if kw:
-        items = kw.items()
-        items.sort()
+        items = sorted(kw.items())
         for key, value in items:
             if value is None:
                 warnings.warn(
@@ -607,7 +607,7 @@ def renderTag(tag, **kw):
                     % key,
                     DeprecationWarning, stacklevel=2)
                 value = key
-            attr_list.append(u'%s=%s' % (key, quoteattr(unicode(value))))
+            attr_list.append(u'%s=%s' % (key, quoteattr(toUnicode(value))))
 
     if attr_list:
         attr_str = u" ".join(attr_list)

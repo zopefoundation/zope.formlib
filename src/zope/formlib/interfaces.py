@@ -20,6 +20,7 @@ from zope.publisher.interfaces import IView
 from zope.interface import Attribute, Interface, implementer, Invalid
 from zope.schema import Bool
 from zope.exceptions.interfaces import UserError
+from zope.formlib._compat import basestring
 
 class IWidgetInputError(Interface):
     """Placeholder for a snippet View"""

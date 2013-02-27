@@ -13,18 +13,15 @@
 ##############################################################################
 """File Widget tests
 """
-import unittest
-
 import doctest
-from StringIO import StringIO
-from zope.formlib.interfaces import IInputWidget
-from zope.formlib.widgets import FileWidget
-
-from zope.formlib.tests.test_browserwidget import (
-    SimpleInputWidgetTest)
-
+import unittest
 from zope.interface.verify import verifyClass
 
+from zope.formlib._compat import StringIO
+from zope.formlib.interfaces import IInputWidget
+from zope.formlib.widgets import FileWidget
+from zope.formlib.tests.test_browserwidget import (
+    SimpleInputWidgetTest)
 
 class FileWidgetTest(SimpleInputWidgetTest):
     """Documents and tests the file widget.

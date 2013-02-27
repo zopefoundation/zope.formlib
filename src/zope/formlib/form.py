@@ -12,6 +12,7 @@
 ##############################################################################
 """Forms
 """
+import binascii
 import datetime
 import re
 import sys
@@ -36,6 +37,7 @@ from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
 from zope.lifecycleevent import Attributes
 from zope.browserpage import namedtemplate
 
+from zope.formlib._compat import basestring, unicode
 from zope.formlib.interfaces import IWidgetInputErrorView
 from zope.formlib.interfaces import IInputWidget, IDisplayWidget
 from zope.formlib.interfaces import WidgetsError, MissingInputError
@@ -344,11 +346,11 @@ def getWidgetsData(widgets, form_prefix, data):
 
             try:
                 data[name] = widget.getInputValue()
-            except ValidationError, error:
+            except ValidationError as error:
                 # convert field ValidationError to WidgetInputError
                 error = WidgetInputError(widget.name, widget.label, error)
                 errors.append(error)
-            except InputErrors, error:
+            except InputErrors as error:
                 errors.append(error)
 
     return errors
@@ -601,7 +603,7 @@ class Action(object):
             else:
                 if isinstance(name, unicode):
                     name = name.encode("utf-8")
-                name = name.encode('hex')
+                name = binascii.hexlify(name).decode()
         self.name = name
         self.__name__ = self.prefix + name
 

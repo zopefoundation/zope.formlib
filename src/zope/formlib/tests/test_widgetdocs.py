@@ -15,8 +15,10 @@
 """
 import unittest
 from doctest import DocTestSuite
+from .support import checker
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(DocTestSuite("zope.formlib.textwidgets"))
+    suite.addTest(
+        DocTestSuite("zope.formlib.textwidgets", checker=checker))
     return suite

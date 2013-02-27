@@ -164,10 +164,10 @@ class SequenceWidget(BrowserWidget, InputWidget):
                 # catch and set field errors to ``_error`` attribute
                 try:
                     self.context.validate(sequence)
-                except WidgetInputError, error:
+                except WidgetInputError as error:
                     self._error = error
                     raise self._error
-                except ValidationError, error:
+                except ValidationError as error:
                     self._error = WidgetInputError(
                         self.context.__name__, self.label, error)
                     raise self._error
@@ -220,13 +220,13 @@ class SequenceWidget(BrowserWidget, InputWidget):
         # now look through the request for interesting values
         # in reverse so that we can remove items as we go
         removing = self.name + ".remove" in self.request.form
-        for i in reversed(range(count)):
+        for i in reversed(list(range(count))):
             widget = self._getWidget(i)
             if widget.hasValidInput():
                 # catch and set sequence widget errors to ``_error`` attribute
                 try:
                     sequence[i] = widget.getInputValue()
-                except WidgetInputError, error:
+                except WidgetInputError as error:
                     self._error = error
                     raise self._error
 

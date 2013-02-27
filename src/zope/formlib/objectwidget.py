@@ -107,7 +107,7 @@ class ObjectWidget(BrowserWidget, InputWidget):
     def error(self):
         if self._error:
             errormessages = []
-            keys = self._error.keys(); keys.sort()
+            keys = sorted(self._error.keys())
             for key in keys:
                 errormessages.append(str(key) + ': ')
                 errormessages.append(component.getMultiAdapter(
@@ -132,11 +132,11 @@ class ObjectWidget(BrowserWidget, InputWidget):
         for name in self.names:
             try:
                 setattr(content, name, self.getSubWidget(name).getInputValue())
-            except Exception, e:
+            except Exception as e:
                 errors.append(e)
                 if self._error is None:
                     self._error = {}
-                
+
                 if name not in self._error:
                     self._error[name] = e
 

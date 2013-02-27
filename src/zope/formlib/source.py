@@ -13,9 +13,6 @@
 ##############################################################################
 """Source widgets support
 """
-
-from itertools import imap
-
 import xml.sax.saxutils
 
 from zope.component import adapter, getMultiAdapter
@@ -27,6 +24,8 @@ from zope.schema.interfaces import \
 
 import zope.formlib.interfaces
 import zope.formlib.widget
+import zope.formlib.itemswidgets
+from zope.formlib._compat import imap
 from zope.formlib.interfaces import (
     WidgetInputError,
     MissingInputError,
@@ -34,14 +33,12 @@ from zope.formlib.interfaces import (
     IWidgetInputErrorView,
     IDisplayWidget,
     IInputWidget)
-
 from zope.formlib.i18n import _
 from zope.formlib.widgets import (
     SelectWidget, RadioWidget, MultiSelectWidget, OrderedMultiSelectWidget,
     MultiCheckBoxWidget, MultiSelectSetWidget, MultiSelectFrozenSetWidget)
-from zope.formlib.widget import InputWidget
-import zope.formlib.itemswidgets
-from zope.formlib.widget import DisplayWidget
+from zope.formlib.widget import DisplayWidget, InputWidget
+from zope.formlib._compat import safeBase64Encode
 
 @implementer(IDisplayWidget)
 class SourceDisplayWidget(DisplayWidget):
@@ -137,8 +134,7 @@ class SourceInputWidget(InputWidget):
             queriables = ((self.name + '.query', self.source), )
         else:
             queriables = [
-                (self.name + '.' +
-                 unicode(i).encode('base64').strip().replace('=', '_'), s)
+                (self.name + '.' + safeBase64Encode(i), s)
                           for (i, s) in queriables.getQueriables()]
 
         return [
@@ -321,7 +317,7 @@ class SourceInputWidget(InputWidget):
         # value must be valid per the field constraints
         try:
             field.validate(value)
-        except ValidationError, err:
+        except ValidationError as err:
             # TODO This code path is untested.
             self._error = WidgetInputError(field.__name__, self.label, err)
             raise self._error
@@ -493,7 +489,7 @@ class SourceListInputWidget(SourceInputWidget):
         field = self.context
         try:
             field.validate(value)
-        except ValidationError, err:
+        except ValidationError as err:
             # TODO This code path is untested.
             self._error = WidgetInputError(field.__name__, self.label, err)
             raise self._error

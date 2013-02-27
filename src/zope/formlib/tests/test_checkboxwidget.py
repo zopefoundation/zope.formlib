@@ -69,7 +69,7 @@ class CheckBoxWidgetTest(SimpleInputWidgetTest):
 
     Default widget rendering:
 
-        >>> print normalize( widget() )
+        >>> print(normalize( widget() ))
         <input
           class="hiddenType"
           id="field.foo.used"
@@ -88,7 +88,7 @@ class CheckBoxWidgetTest(SimpleInputWidgetTest):
 
     Hidden rendering:
 
-        >>> print normalize( widget.hidden() )
+        >>> print(normalize( widget.hidden() ))
         <input
           class="hiddenType"
           id="field.foo"
@@ -100,7 +100,7 @@ class CheckBoxWidgetTest(SimpleInputWidgetTest):
     Calling setRenderedValue will change what gets output:
 
         >>> widget.setRenderedValue(False)
-        >>> print normalize( widget() )
+        >>> print(normalize( widget() ))
         <input
           class="hiddenType"
           id="field.foo.used"

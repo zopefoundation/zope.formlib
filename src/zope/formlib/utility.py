@@ -162,7 +162,7 @@ def applyWidgetsChanges(view, schema, target=None, names=None):
         if IInputWidget.providedBy(widget) and widget.hasInput():
             try:
                 changed = widget.applyChanges(target) or changed
-            except InputErrors, v:
+            except InputErrors as v:
                 errors.append(v)
     if errors:
         raise WidgetsError(errors)

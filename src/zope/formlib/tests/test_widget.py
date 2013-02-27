@@ -20,7 +20,7 @@ from zope.publisher.browser import TestRequest
 from doctest import DocTestSuite
 
 from zope.formlib.widget import Widget
-
+from .support import checker
 
 class TestContext(object):
     __name__ = 'Test'
@@ -124,8 +124,9 @@ class TestInputWidget(object):
     field is read only:
 
         >>> field.readonly = True
-        >>> widget.getInputValue()
+        >>> widget.getInputValue() # doctest: +IGNORE_EXCEPTION_DETAIL
         Traceback (most recent call last):
+        ...
         WidgetInputError: ('', '', None)
 
     A call to hasValidInput returns False instead of raising an error:
@@ -175,7 +176,7 @@ class TestCustomWidgetFactory(object):
         >>> value_type = TextLine(__name__=u'bar')
         >>> field = List( __name__=u'foo', value_type=value_type )
 
-        >>> factory = CustomWidgetFactory(ListSequenceWidget, 
+        >>> factory = CustomWidgetFactory(ListSequenceWidget,
         ...     subwidget=CustomWidgetFactory(FooWidget, bar='baz'))
 
         >>> widget = factory(field, request)
@@ -199,7 +200,7 @@ class TestCustomWidgetFactory(object):
         >>> field = Choice( __name__=u'foo', values=['1', '2', '3'] )
         >>> bound = field.bind(context)
 
-        >>> factory = CustomWidgetFactory(RadioWidget, 
+        >>> factory = CustomWidgetFactory(RadioWidget,
         ...      orientation = 'vertical')
 
         >>> widget = factory(bound, request)
@@ -216,7 +217,7 @@ class TestCustomWidgetFactory(object):
 
 def test_suite():
     return TestSuite((
-        DocTestSuite(setUp=setUp, tearDown=tearDown),
+        DocTestSuite(setUp=setUp, tearDown=tearDown, checker=checker),
         ))
 
 if __name__=='__main__':

@@ -64,10 +64,10 @@ class SequenceWidgetTestHelper(object):
 
     def tearDown(self):
         traversingTearDown()
-        
+
     def _FieldFactory(self, **kw):
         kw.update({
-            '__name__': u'foo', 
+            '__name__': u'foo',
             'value_type': TextLine(__name__=u'bar')})
         return Tuple(**kw)
 
@@ -308,7 +308,7 @@ class SequenceWidgetTest(SequenceWidgetTestHelper, BrowserWidgetTest):
 
          If we render the widget, we see no errors:
 
-            >>> print widget()
+            >>> print(widget())
             <BLANKLINE>
             ...
             <tr>
@@ -330,7 +330,7 @@ class SequenceWidgetTest(SequenceWidgetTestHelper, BrowserWidgetTest):
             >>> widget.hasValidInput()
             False
 
-            >>> print widget()
+            >>> print(widget())
             <BLANKLINE>
             ...
             <tr>
@@ -364,7 +364,7 @@ class SequenceDisplayWidgetTest(
             self.field, self.field.value_type, self.request)
         provideAdapter(DisplayWidget, (ITextLine, IDefaultBrowserLayer),
                        IDisplayWidget)
-        
+
     def test_render_empty(self):
         self.content.foo = ()
         self.assertEquals(self.widget(), '(no values)')

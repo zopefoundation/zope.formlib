@@ -21,7 +21,7 @@ from zope.schema import TextLine
 from doctest import DocTestSuite
 
 from zope.formlib.widget import DisplayWidget, UnicodeDisplayWidget
-
+from .support import checker
 
 def test_implemented_interfaces():
     """Make sure that the display widget implements the correct interfaces.
@@ -38,7 +38,7 @@ def test_implemented_interfaces():
 
     >>> from zope.formlib.interfaces import IInputWidget
     >>> try:
-    ...     verifyClass(IInputWidget, DisplayWidget)    
+    ...     verifyClass(IInputWidget, DisplayWidget)
     ... except DoesNotImplement:
     ...     'not implemented'
     'not implemented'
@@ -53,7 +53,7 @@ def test_not_required():
     >>> widget = DisplayWidget(field, TestRequest())
     >>> widget.required
     False
-    
+
     """
 
 def test_value_escaping():
@@ -118,9 +118,10 @@ def test_value_escaping():
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(DocTestSuite())
+    suite.addTest(DocTestSuite(checker=checker))
     suite.addTest(DocTestSuite(
-        extraglobs={"DisplayWidget": UnicodeDisplayWidget}))
+            checker=checker,
+            extraglobs={"DisplayWidget": UnicodeDisplayWidget}))
     return suite
 
 if __name__ == '__main__':

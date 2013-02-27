@@ -13,8 +13,6 @@
 ##############################################################################
 """Browser widgets with text-based input
 """
-__docformat__ = 'restructuredtext'
-
 import decimal
 from xml.sax import saxutils
 from zope.interface import implementer
@@ -22,6 +20,7 @@ from zope.datetime import parseDatetimetz
 from zope.datetime import DateTimeError
 from zope.i18n.format import DateTimeParseError
 
+from zope.formlib._compat import toUnicode, unicode, PY3
 from zope.formlib.interfaces import IInputWidget, ConversionError
 from zope.formlib.i18n import _
 from zope.formlib.interfaces import ITextBrowserWidget
@@ -53,7 +52,7 @@ class TextWidget(SimpleInputWidget):
     >>> def normalize(s):
     ...   return '\\n  '.join(filter(None, s.split(' ')))
 
-    >>> print normalize( widget() )
+    >>> print(normalize( widget() ))
     <input
       class="textType"
       id="field.foo"
@@ -63,7 +62,7 @@ class TextWidget(SimpleInputWidget):
       value="Bob"
       />
 
-    >>> print normalize( widget.hidden() )
+    >>> print(normalize( widget.hidden() ))
     <input
       class="hiddenType"
       id="field.foo"
@@ -75,7 +74,7 @@ class TextWidget(SimpleInputWidget):
     Calling `setRenderedValue` will change what gets output:
 
     >>> widget.setRenderedValue("Barry")
-    >>> print normalize( widget() )
+    >>> print(normalize( widget() ))
     <input
       class="textType"
       id="field.foo"
@@ -93,7 +92,7 @@ class TextWidget(SimpleInputWidget):
     >>> widget.getInputValue()
     u'<h1>&copy;</h1>'
 
-    >>> print normalize( widget() )
+    >>> print(normalize( widget() ))
     <input
       class="textType"
       id="field.foo"
@@ -141,20 +140,25 @@ class TextWidget(SimpleInputWidget):
             # as a string. Note that you always have the choice of overriding
             # the method.
             try:
-                value = unicode(input)
-            except ValueError, v:
+                value = toUnicode(input)
+            except ValueError as v:
                 raise ConversionError(_("Invalid text data"), v)
         return value
 
+
+class Text(SimpleInputWidget):
+
+    def _toFieldValue(self, input):
+        return super(Text, self)._toFieldValue(input)
 
 class Bytes(SimpleInputWidget):
 
     def _toFieldValue(self, input):
         value = super(Bytes, self)._toFieldValue(input)
-        if type(value) is unicode:
+        if isinstance(value, unicode):
             try:
                 value = value.encode('ascii')
-            except UnicodeError, v:
+            except UnicodeError as v:
                 raise ConversionError(_("Invalid textual data"), v)
         return value
 
@@ -184,17 +188,27 @@ class BytesDisplayWidget(DisplayWidget):
             content = self.context.default
         return renderElement("pre", contents=escape(content))
 
-class ASCII(Bytes):
+# for things which are of the str type on both Python 2 and 3
+if PY3: #pragma NO COVER
+    NativeString = Text
+    NativeStringWidget = TextWidget
+    NativeStringDisplayWidget = DisplayWidget
+else: #pragma NO COVER
+    NativeString = Bytes
+    NativeStringWidget = BytesWidget
+    NativeStringDisplayWidget = BytesDisplayWidget
+
+class ASCII(NativeString):
     """ASCII"""
 
 
-class ASCIIWidget(BytesWidget):
+class ASCIIWidget(NativeStringWidget):
     """ASCII widget.
 
     Single-line data (string) input
     """
 
-class ASCIIDisplayWidget(BytesDisplayWidget):
+class ASCIIDisplayWidget(NativeStringDisplayWidget):
     """ASCII display widget"""
 
 class URIDisplayWidget(DisplayWidget):
@@ -241,7 +255,7 @@ class TextAreaWidget(SimpleInputWidget):
     >>> def normalize(s):
     ...   return '\\n  '.join(filter(None, s.split(' ')))
 
-    >>> print normalize( widget() )
+    >>> print(normalize( widget() ))
     <textarea
       cols="60"
       id="field.foo"
@@ -250,7 +264,7 @@ class TextAreaWidget(SimpleInputWidget):
       >Hello\r
     world!</textarea>
 
-    >>> print normalize( widget.hidden() )
+    >>> print(normalize( widget.hidden() ))
     <input
       class="hiddenType"
       id="field.foo"
@@ -262,7 +276,7 @@ class TextAreaWidget(SimpleInputWidget):
     Calling `setRenderedValue` will change what gets output:
 
     >>> widget.setRenderedValue("Hey\\ndude!")
-    >>> print normalize( widget() )
+    >>> print(normalize( widget() ))
     <textarea
       cols="60"
       id="field.foo"
@@ -279,7 +293,7 @@ class TextAreaWidget(SimpleInputWidget):
     >>> widget.getInputValue()
     u'<h1>&copy;</h1>'
 
-    >>> print normalize( widget() )
+    >>> print(normalize( widget() ))
     <textarea
       cols="60"
       id="field.foo"
@@ -306,7 +320,7 @@ class TextAreaWidget(SimpleInputWidget):
     >>> widget = TestTextAreaWidget(field, request)
     >>> widget.getInputValue()
     u'<p>bar</p>'
-    >>> print normalize( widget() )
+    >>> print(normalize( widget() ))
     <textarea
       cols="60"
       id="field.description"
@@ -318,10 +332,10 @@ class TextAreaWidget(SimpleInputWidget):
     >>> widget = TestTextAreaWidget(field, request)
     >>> try:
     ...     widget.getInputValue()
-    ... except ConversionError, error:
-    ...     print error.doc()
+    ... except ConversionError as error:
+    ...     print(error.doc())
     I don't like foo.
-    >>> print normalize( widget() )
+    >>> print(normalize( widget() ))
     <textarea
       cols="60"
       id="field.description"
@@ -340,8 +354,8 @@ class TextAreaWidget(SimpleInputWidget):
         value = super(TextAreaWidget, self)._toFieldValue(value)
         if value:
             try:
-                value = unicode(value)
-            except ValueError, v:
+                value = toUnicode(value)
+            except ValueError as v:
                 raise ConversionError(_("Invalid unicode data"), v)
             else:
                 value = value.replace("\r\n", "\n")
@@ -383,7 +397,7 @@ class BytesAreaWidget(Bytes, TextAreaWidget):
     'Hello\\nworld!'
     """
 
-class ASCIIAreaWidget(ASCII, TextAreaWidget):
+class ASCIIAreaWidget(NativeString, TextAreaWidget):
     """ASCIIArea widget.
 
     Multi-line string input.
@@ -479,7 +493,7 @@ class FileWidget(TextWidget):
         try:
             seek = input.seek
             read = input.read
-        except AttributeError, e:
+        except AttributeError as e:
             raise ConversionError(_('Form input is not a file object'), e)
         else:
             seek(0)
@@ -518,7 +532,7 @@ class IntWidget(TextWidget):
         else:
             try:
                 return int(input)
-            except ValueError, v:
+            except ValueError as v:
                 raise ConversionError(_("Invalid integer data"), v)
 
 
@@ -532,7 +546,7 @@ class FloatWidget(TextWidget):
         else:
             try:
                 return float(input)
-            except ValueError, v:
+            except ValueError as v:
                 raise ConversionError(_("Invalid floating point data"), v)
 
 @implementer(IInputWidget)
@@ -545,14 +559,14 @@ class DecimalWidget(TextWidget):
         else:
             try:
                 return decimal.Decimal(input)
-            except decimal.InvalidOperation, v:
+            except decimal.InvalidOperation as v:
                 raise ConversionError(_("Invalid decimal data"), v)
 
     def _toFormValue(self, value):
         if value == self.context.missing_value:
             value = self._missing
         else:
-            return unicode(value)
+            return toUnicode(value)
 
 
 class DatetimeWidget(TextWidget):
@@ -570,7 +584,7 @@ class DatetimeWidget(TextWidget):
                 # Maybe offset-naive datetimes should be returned in
                 # this case? (DV)
                 return parseDatetimetz(input)
-            except (DateTimeError, ValueError, IndexError), v:
+            except (DateTimeError, ValueError, IndexError) as v:
                 raise ConversionError(_("Invalid datetime data"), v)
 
 class DateWidget(DatetimeWidget):
@@ -608,7 +622,7 @@ class DateI18nWidget(TextWidget):
                 formatter = self.request.locale.dates.getFormatter(
                     self._category, (self.displayStyle or None))
                 return formatter.parse(input)
-            except (DateTimeParseError, ValueError), v:
+            except (DateTimeParseError, ValueError) as v:
                 raise ConversionError(_("Invalid datetime data"),
                     "%s (%r)" % (v, input))
 

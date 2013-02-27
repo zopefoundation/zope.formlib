@@ -97,7 +97,7 @@ Now, we can display the form:
 
     >>> from zope.publisher.browser import TestRequest
     >>> request = TestRequest()
-    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value=""  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
@@ -112,7 +112,7 @@ If the request contains any form data, that will be reflected in the
 output:
 
     >>> request.form['form.name'] = u'bob'
-    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
@@ -128,7 +128,7 @@ particularly after a form has been processed and before it is drawn again.
 This can be accomplished with the 'ignore_request' argument in
 setUpWidgets.
 
-    >>> print MyForm(None, request)(ignore_request=True)
+    >>> print(MyForm(None, request)(ignore_request=True))
     ... # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value=""  />
@@ -161,17 +161,17 @@ input data.  We can use getWidgetsData for that:
     ...             data = {}
     ...             errors = form.getWidgetsData(widgets, 'form', data)
     ...             if errors:
-    ...                 print 'There were errors:'
+    ...                 print('There were errors:')
     ...                 for error in errors:
-    ...                     print error
+    ...                     print(error)
     ...         else:
     ...             data = None
     ...
     ...         for w in widgets:
-    ...             print w()
+    ...             print(w())
     ...             error = w.error()
     ...             if error:
-    ...                 print error
+    ...                 print(error)
     ...
     ...         return data
 
@@ -216,8 +216,7 @@ and max size.  If we provide an invalid value, we'll get an error too:
     >>> request.form['form.min_size'] = u'bob'
     >>> MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
     There were errors:
-    (u'Invalid floating point data',
-     <exceptions.ValueError instance at ...>)
+    (u'Invalid floating point data', ...ValueError...)
     ('max_size', u'Maximum size', RequiredMissing('max_size'))
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
@@ -291,22 +290,22 @@ We can update our form to check the invariant using 'checkInvariants':
     ...             invariant_errors = form.checkInvariants(
     ...                 self.form_fields, data, self.context)
     ...             if errors:
-    ...                 print 'There were field errors:'
+    ...                 print('There were field errors:')
     ...                 for error in errors:
-    ...                     print error
+    ...                     print(error)
     ...
     ...             if invariant_errors:
-    ...                 print 'There were invariant errors:'
+    ...                 print('There were invariant errors:')
     ...                 for error in invariant_errors:
-    ...                     print error
+    ...                     print(error)
     ...         else:
     ...             data = None
     ...
     ...         for w in widgets:
-    ...             print w()
+    ...             print(w())
     ...             error = w.error()
     ...             if error:
-    ...                 print error
+    ...                 print(error)
     ...
     ...         return data
 
@@ -430,7 +429,7 @@ that uses it:
     ...
     ...         return '\n'.join([w() for w in widgets])
 
-    >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="" />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
@@ -443,7 +442,7 @@ we used an old request.  If we want to redraw the form after processing a
 request, it is safest to pass ignore_request = True to setUpWidgets so that
 the form is redrawn with the values as found in the object, not on the request.
 
-    >>> print MyForm(order, request)(ignore_request=True)
+    >>> print(MyForm(order, request)(ignore_request=True))
     ... # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="unknown"  />
@@ -455,7 +454,7 @@ the form is redrawn with the values as found in the object, not on the request.
 If we use a new request, we will of course get the same result:
 
     >>> request = TestRequest()
-    >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="unknown"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
@@ -478,7 +477,7 @@ If we include read-only fields in an edit form, they will get display widgets:
     ...
     ...         return '\n'.join([w() for w in widgets])
 
-    >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     1
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="unknown"  />
@@ -507,14 +506,14 @@ object. We can use the `applyChanges` function for that:
     ...             invariant_errors = form.checkInvariants(
     ...                 self.form_fields, data, self.context)
     ...             if errors:
-    ...                 print 'There were field errors:'
+    ...                 print('There were field errors:')
     ...                 for error in errors:
-    ...                     print error
+    ...                     print(error)
     ...
     ...             if invariant_errors:
-    ...                 print 'There were invariant errors:'
+    ...                 print('There were invariant errors:')
     ...                 for error in invariant_errors:
-    ...                     print error
+    ...                     print(error)
     ...
     ...             if not errors and not invariant_errors:
     ...                 changed = form.applyChanges(
@@ -524,15 +523,15 @@ object. We can use the `applyChanges` function for that:
     ...             data = changed = None
     ...
     ...         for w in widgets:
-    ...             print w()
+    ...             print(w())
     ...             error = w.error()
     ...             if error:
-    ...                 print error
+    ...                 print(error)
     ...
     ...         if changed:
-    ...             print 'Object updated'
+    ...             print('Object updated')
     ...         else:
-    ...             print 'No changes'
+    ...             print('No changes')
     ...
     ...         return data
 
@@ -709,7 +708,7 @@ Here's the new version:
     ...
     ...     def template(self):
     ...         if self.status:
-    ...             print self.status
+    ...             print(self.status)
     ...
     ...         result = []
     ...
@@ -782,7 +781,7 @@ Lets walk through the `__call__` method.
 
 Let's try the new version of our form:
 
-    >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     1
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
@@ -798,7 +797,7 @@ request form data didn't include a submit action that matched our
 action definition. Let's add one and try again:
 
     >>> request.form['form.actions.edit'] = u''
-    >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     No changes
     1
     <input class="textType" id="form.name" name="form.name" size="20"
@@ -816,10 +815,10 @@ changes.
 Let's try changing some data:
 
     >>> request.form['form.max_size'] = u'10/0'
-    >>> print MyForm(order, request)()
+    >>> print(MyForm(order, request)())
     ... # doctest: +NORMALIZE_WHITESPACE
     There were errors:
-    (u'Invalid floating point data', <exceptions.ValueError instance at ...>)
+    (u'Invalid floating point data',...ValueError...)
     1
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
@@ -834,7 +833,7 @@ Let's try changing some data:
 Oops, we had a typo, let's fix it:
 
     >>> request.form['form.max_size'] = u'10.0'
-    >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     There were errors:
     Maximum is less than Minimum
     1
@@ -850,7 +849,7 @@ Oops, we had a typo, let's fix it:
 Oh yeah, we need to reduce the minimum too: :)
 
     >>> request.form['form.min_size'] = u'1.0'
-    >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     Object updated
     1
     <input class="textType" id="form.name" name="form.name" size="20"
@@ -969,7 +968,7 @@ simplification in common cases.
 
 Now we can try out our form:
 
-    >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     No changes
     1
     <input class="textType" id="form.name" name="form.name" size="20"
@@ -982,7 +981,7 @@ Now we can try out our form:
            value="Edit" class="button" />
 
     >>> request.form['form.min_size'] = u'20.0'
-    >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     There were 1 errors.
     Invalid: Maximum is less than Minimum
     1
@@ -996,7 +995,7 @@ Now we can try out our form:
            value="Edit" class="button" />
 
     >>> request.form['form.max_size'] = u'30.0'
-    >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     Object updated
     1
     <input class="textType" id="form.name" name="form.name" size="20"
@@ -1028,7 +1027,7 @@ option.
     ...     form_fields = form_fields.omit('now')
 
     >>> request.form['form.actions.apply'] = u''
-    >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     No changes
     1
     <input class="textType" id="form.name" name="form.name" size="20"
@@ -1041,7 +1040,7 @@ option.
            value="Apply" class="button" />
 
     >>> request.form['form.min_size'] = u'40.0'
-    >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     There were errors
     Invalid: Maximum is less than Minimum
     1
@@ -1055,7 +1054,7 @@ option.
            value="Apply" class="button" />
 
     >>> request.form['form.max_size'] = u'50.0'
-    >>> print MyForm(order, request)()
+    >>> print(MyForm(order, request)())
     ... # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
     Updated on ... ... ...  ...:...:...
     1
@@ -1133,7 +1132,7 @@ Now, we can use a single form to edit both the regular order data and
 the descriptive data:
 
     >>> request = TestRequest()
-    >>> print MyForm(order, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     1
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
@@ -1156,7 +1155,7 @@ the descriptive data:
     >>> request.form['form.description'] = u'Need more widgets'
     >>> request.form['form.actions.apply'] = u''
     >>> myform = MyForm(order, request)
-    >>> print myform()
+    >>> print(myform())
     ... # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
     Updated on ... ... ...  ...:...:...
     1
@@ -1177,7 +1176,7 @@ the descriptive data:
     >>> order.min_size
     10.0
 
-    >>> order.title
+    >>> order.title #doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
     AttributeError: Order instance has no attribute 'title'
@@ -1244,7 +1243,7 @@ form that collects just the name from `IOrder` and the title from
     ...                               IDescriptive['title'])
     ...     actions = ()
 
-    >>> print MyForm(order, TestRequest())() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, TestRequest())()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
     <input class="textType" id="form.title" name="form.title" size="20"
@@ -1259,7 +1258,7 @@ You can also use stand-alone fields:
     ...         )
     ...     actions = ()
 
-    >>> print MyForm(order, TestRequest())() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, TestRequest())()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
     <input class="textType" id="form.title" name="form.title" size="20"
@@ -1282,7 +1281,7 @@ combine field definitions:
     ...         )
     ...     actions = ()
 
-    >>> print MyExpandedForm(order, TestRequest())()
+    >>> print(MyExpandedForm(order, TestRequest())())
     ... # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name"
            size="20" type="text" value=""  />
@@ -1306,7 +1305,7 @@ this using the `for_display` option when setting up form_fields:
     ...         )
 
 
-    >>> print MyForm(order, TestRequest())() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, TestRequest())()) # doctest: +NORMALIZE_WHITESPACE
     bob
     <input class="textType" id="form.min_size" name="form.min_size"
            size="10" type="text" value="10.0"  />
@@ -1321,7 +1320,7 @@ Note that if all of the fields in an edit form are for display:
     ...     form_fields = form.Fields(IOrder, for_display=True
     ...                               ).select('name', 'min_size', 'max_size')
 
-    >>> print MyForm(order, TestRequest())() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, TestRequest())()) # doctest: +NORMALIZE_WHITESPACE
     bob
     10.0
     20.0
@@ -1345,7 +1344,7 @@ if the underlying schema field is read-only. We can do this using the
     ...     actions = ()
 
 
-    >>> print MyForm(order, TestRequest())() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(order, TestRequest())()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.identifier" name="form.identifier"
            size="10" type="text" value="1"  />
     <input class="textType" id="form.name" name="form.name"
@@ -1381,7 +1380,7 @@ In this case, we supplied initial data for the identifier and the
 name.  Now if we display the form, we'll see our data and defaults for
 the fields we didn't supply data for:
 
-    >>> print MyForm(None, TestRequest())() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(None, TestRequest())()) # doctest: +NORMALIZE_WHITESPACE
     42
     <input class="textType" id="form.name" name="form.name"
            size="20" type="text" value="sally"  />
@@ -1397,7 +1396,7 @@ input fields:
     >>> request.form['form.name'] = u'fred'
     >>> request.form['form.identifier'] = u'0'
     >>> request.form['form.max_size'] = u'100'
-    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     42
     <input class="textType" id="form.name" name="form.name"
            size="20" type="text" value="fred"  />
@@ -1423,7 +1422,7 @@ our form fields:
     ...             ignore_request=ignore_request
     ...             )
 
-    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     42
     sally
     <BLANKLINE>
@@ -1452,7 +1451,7 @@ fake that quickly by forcing ignore_request to be `True`.
     ...             ignore_request=True # =ignore_request
     ...             )
 
-    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     42
     <input class="textType" id="form.name" name="form.name"
            size="20" type="text" value="sally"  />
@@ -1495,7 +1494,7 @@ To set the custom widget factory for a field, assign to the
     ...
     ...     form_fields["now"].custom_widget = ISODisplayWidget
 
-    >>> print MyForm(None, request)()
+    >>> print(MyForm(None, request)())
     <span class="iso-datetime">2005-05-04</span>
 
 Specifying Fields individually
@@ -1514,7 +1513,7 @@ written more simply as:
     ...         form.Field(IOrder['now'], custom_widget=ISODisplayWidget),
     ...         )
 
-    >>> print MyForm(None, request)()
+    >>> print(MyForm(None, request)())
     <span class="iso-datetime">2005-05-04</span>
 
 Computing default values
@@ -1540,7 +1539,7 @@ a function for getting the needed initial value:
     ...         form.Field(IOrder['now'], get_rendered=now),
     ...         )
 
-    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     <BLANKLINE>
     <input class="textType" id="form.name" name="form.name"
            size="20" type="text" value="fred"  />
@@ -1566,7 +1565,7 @@ Now try the same with the AddFormBase which uses a setUpInputWidget:
     ...     def setUpWidgets(self, ignore_request=True):
     ...         super(MyAddForm, self).setUpWidgets(ignore_request)
 
-    >>> print MyAddForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyAddForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.identifier" name="form.identifier"
            size="10" type="text" value=""  />
     <input class="textType" id="form.name" name="form.name" size="20"
@@ -1612,7 +1611,7 @@ that reuses the most code is the following:
     ...             self.status = 'No changes'
     ...     @form.action(u'Submit for review...', secondary_actions)
     ...     def handle_review_action(self, action, data):
-    ...         print "do something here"
+    ...         print("do something here")
     ...
 
 The template then can render the button groups separately--something like the
@@ -1653,7 +1652,7 @@ software you do not control) it is important to be able to generate forms
     >>> form_fields = form.Fields(IOrder).select('name')
     >>> request = TestRequest()
     >>> widgets = form.setUpWidgets(form_fields, '', None, request)
-    >>> print widgets['name']() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(widgets['name']()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="name" name="name" size="20"
            type="text" value=""  />
 
@@ -1669,25 +1668,25 @@ Of course, getting the widget data still works.
 
 And the value from the request is also visible in the rendered form.
 
-    >>> print widgets['name']() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(widgets['name']()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="name" name="name" size="20"
            type="text" value="foo"  />
 
 The same is true when using the other setup*Widgets helpers.
 
     >>> widgets = form.setUpInputWidgets(form_fields, '', None, request)
-    >>> print widgets['name']() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(widgets['name']()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="name" name="name" size="20"
            type="text" value="foo"  />
 
     >>> order = Order(42)
     >>> widgets = form.setUpEditWidgets(form_fields, '', order, request)
-    >>> print widgets['name']() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(widgets['name']()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="name" name="name" size="20"
            type="text" value="foo"  />
 
     >>> widgets = form.setUpDataWidgets(form_fields, '', None, request)
-    >>> print widgets['name']() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(widgets['name']()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="name" name="name" size="20"
            type="text" value="foo"  />
 
@@ -1710,7 +1709,7 @@ argument.
     ...
     >>> request = TestRequest()
     >>> request.form['actions.button1'] = ''
-    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     Button 1 detected
     <input type="submit" id="actions.button1" name="actions.button1"
            value="Button 1" class="button" />
@@ -1718,7 +1717,7 @@ argument.
            value="Button 2" class="button" />
     >>> request = TestRequest()
     >>> request.form['button2'] = ''
-    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     Button 2 detected
     <input type="submit" id="actions.button1" name="actions.button1"
            value="Button 1" class="button" />
@@ -1737,7 +1736,7 @@ It is also possible to keep the form prefix and just suppress the 'actions' pref
     ...
     >>> request = TestRequest()
     >>> request.form['form.button'] = ''
-    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     Button detected
     <input type="submit" id="form.button" name="form.button"
            value="Button" class="button" />
@@ -1791,14 +1790,14 @@ Let's now generate the form fields and instantiate the widgets:
 
   >>> request = TestRequest()
   >>> widgets = form.setUpEditWidgets(form_fields, 'form', blah, request)
-  >>> print widgets.get('title')()
+  >>> print(widgets.get('title')())
   <input class="textType" id="form.title" name="form.title"
          size="20" type="text" value="initial" />
 
 Here are some more places where the behavior was incorrect:
 
   >>> widgets = form.setUpWidgets(form_fields, 'form', blah, request)
-  >>> print widgets.get('title')()
+  >>> print(widgets.get('title')())
   <input class="textType" id="form.title" name="form.title"
          size="20" type="text" value="" />
 
@@ -1824,7 +1823,7 @@ infos:
 
     >>> def eventLog(event):
     ...     desc = event.descriptions[0]
-    ...     print 'Modified:', desc.interface.__identifier__, desc.attributes
+    ...     print('Modified:', desc.interface.__identifier__, desc.attributes)
     >>> zope.event.subscribers.append(eventLog)
 
 
@@ -1854,25 +1853,25 @@ information.
     ...     form_fields = form.FormFields(IFooBar)
     ...     @form.action("Redirect")
     ...     def redirect(self, action, data):
-    ...         print 'Action: redirect'
+    ...         print('Action: redirect')
     ...         self.request.response.redirect('foo')
     ...     @form.action("Stay")
     ...     def redirect(self, action, data):
-    ...         print 'Action: stay'
+    ...         print('Action: stay')
     ...         pass
     ...     def render(self):
-    ...         print 'render was called'
+    ...         print('render was called')
     ...         return ''
 
     >>> request = TestRequest()
-    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     render was called
     >>> request.form['form.actions.redirect'] = u''
-    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     Action: redirect
 
     >>> request = TestRequest()
     >>> request.form['form.actions.stay'] = u''
-    >>> print MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     Action: stay
     render was called

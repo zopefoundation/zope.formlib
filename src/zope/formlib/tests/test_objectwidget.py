@@ -24,15 +24,17 @@ import doctest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 from zope.component import provideAdapter
 
+from zope.formlib._compat import PY3
 from zope.formlib.interfaces import IInputWidget, MissingInputError
 from zope.formlib.widgets import TextWidget, ObjectWidget
 from zope.formlib.tests.test_browserwidget import BrowserWidgetTest
 from zope.formlib.interfaces import IWidgetInputErrorView
+from .support import checker
 
 class ITestContact(Interface):
     name = TextLine()
     email = TextLine()
-    
+
 @implementer(ITestContact)
 class TestContact(object):
     pass
@@ -63,10 +65,10 @@ class ObjectWidgetTest(BrowserWidgetTest):
     def setUpContent(self, desc=u'', title=u'Foo Title'):
         provideAdapter(TextWidget, (ITextLine, IDefaultBrowserLayer),
                        IInputWidget)
-        
+
         class ITestContent(Interface):
             foo = self._FieldFactory(
-                    ITestContact, 
+                    ITestContact,
                     title=title,
                     description=desc
                     )
@@ -107,16 +109,20 @@ class ObjectWidgetTest(BrowserWidgetTest):
         widget = self._WidgetFactory(self.field, self.request)
         self.assertRaises(MissingInputError, widget.getInputValue)
         error_html = widget.error()
-        if sys.version_info < (2, 5):
-            self.failUnless("email: <zope.formlib.interfaces.Mis" 
-                             in error_html)
-            self.failUnless("name: <zope.formlib.interfaces.Miss"
-                             in error_html)
+        if PY3:
+            self.failUnless(
+                "email: MissingInputError('field.foo.email', '', None)"
+                in error_html)
+            self.failUnless(
+                "name: MissingInputError('field.foo.name', '', None)"
+                in error_html)
         else:
-            self.failUnless("email: MissingInputError(u'field.foo.email', u'', None)"
-                             in error_html)
-            self.failUnless("name: MissingInputError(u'field.foo.name', u'', None)"
-                             in error_html)
+            self.failUnless(
+                "email: MissingInputError(u'field.foo.email', u'', None)"
+                in error_html)
+            self.failUnless(
+                "name: MissingInputError(u'field.foo.name', u'', None)"
+                in error_html)
 
     def test_applyChangesNoChange(self):
         self.content.foo = TestContact()
@@ -138,9 +144,10 @@ class ObjectWidgetTest(BrowserWidgetTest):
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(ObjectWidgetTest),
-        doctest.DocFileSuite('../objectwidget.txt',
-                             setUp=testing.setUp,
-                             tearDown=testing.tearDown),
+        doctest.DocFileSuite(
+                '../objectwidget.txt',
+                setUp=testing.setUp, tearDown=testing.tearDown,
+                checker=checker),
         doctest.DocTestSuite(),
         ))
 

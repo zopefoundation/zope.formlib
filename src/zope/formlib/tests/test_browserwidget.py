@@ -206,7 +206,7 @@ class Test(BrowserWidgetTest):
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(Test))
-    suite.addTest(DocTestSuite("zope.formlib.widget"))
+    suite.addTest(DocTestSuite("zope.formlib.widget", checker=support.checker))
     return suite
 
 if __name__ == '__main__':

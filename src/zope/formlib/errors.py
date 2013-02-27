@@ -12,8 +12,6 @@
 ##############################################################################
 """Error related things.
 """
-__docformat__ = 'restructuredtext'
-
 from cgi import escape
 
 from zope.component import adapter

@@ -14,6 +14,29 @@
 """General test support.
 """
 import re
+from zope.testing import renormalizing
+
+checker = renormalizing.RENormalizing([
+    # Python 3 unicode removed the "u".
+    (re.compile("u('.*?')"),
+     r"\1"),
+    (re.compile('u(".*?")'),
+     r"\1"),
+    # Python 3 bytes adds the "b".
+    (re.compile("b('.*?')"),
+     r"\1"),
+    (re.compile('b(".*?")'),
+     r"\1"),
+    # Python 3 changed the set representation.
+    (re.compile("set\(\[(.*)\]\)"),
+     r"{\1}"),
+    # Python 3 renames builtins.
+    (re.compile("__builtin__"),
+     r"builtins"),
+    # Python 3 adds module name to exceptions.
+    (re.compile("zope.schema.interfaces.SchemaNotProvided"),
+     r"SchemaNotProvided"),
+    ])
 
 class VerifyResults(object):
     """Mix-in for test classes with helpers for checking string data."""

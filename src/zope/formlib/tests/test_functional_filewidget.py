@@ -15,12 +15,12 @@
 """
 import unittest
 
-from StringIO import StringIO
+from zope.publisher.browser import TestRequest
 from zope.interface import Interface, implementer
 from zope.schema import Field
 from zope.schema.interfaces import IField
-from zope.formlib import form
-from zope.publisher.browser import TestRequest
+from zope.formlib import form, _compat
+from zope.formlib._compat import StringIO
 from zope.formlib.tests.support import patternExists
 from zope.formlib.widgets import FileWidget
 from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
@@ -47,14 +47,14 @@ class Form(form.EditForm):
     form_fields = form.fields(IFileTest)
     form_fields['f1'].custom_widget = FileWidget
     form_fields['f2'].custom_widget = FileWidget
-    
+
 class SampleTextFile(StringIO):
     def __init__(self, buf, filename=''):
         StringIO.__init__(self, buf)
         self.filename = filename
 
 class Test(FunctionalWidgetTestCase):
-    
+
     sampleText = "The quick brown fox\njumped over the lazy dog."
     sampleTextFile = SampleTextFile(sampleText)
 
@@ -89,7 +89,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = u''
 
         Form(foo, request)()
-                
+
         # check new values in object
         self.assertEqual(foo.f1, self.sampleText)
         self.assertEqual(foo.f2, self.sampleText)
@@ -137,7 +137,7 @@ class Test(FunctionalWidgetTestCase):
         # we don't let f1 know that it was rendered
         # or else it will complain (see test_required_validation) and the
         # change will not succeed.
-        
+
         Form(foo, request)()
 
         # new value for f1 should be field.missing_value (i.e, None)

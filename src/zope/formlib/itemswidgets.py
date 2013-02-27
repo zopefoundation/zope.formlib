@@ -152,7 +152,7 @@ class SingleDataHelper(object):
         if input:
             try:
                 return self.convertTokensToValues([input])[0]
-            except (InvalidValue, TypeError), e:
+            except (InvalidValue, TypeError) as e:
                 raise ConversionError(_("Invalid value"), e)
         else:
             return self.context.missing_value
@@ -192,7 +192,7 @@ class MultiDataHelper(object):
             input = [input]
         try:
             values = self.convertTokensToValues(input)
-        except InvalidValue, e:
+        except InvalidValue as e:
             raise ConversionError(_("Invalid value"), e)
 
         # All AbstractCollection fields have a `_type` attribute specifying
