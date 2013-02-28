@@ -40,7 +40,7 @@ def alltests():
     return unittest.TestSuite(suites)
 
 setup(name='zope.formlib',
-      version='4.3.0a1',
+      version='4.3.0a2.dev0',
       author='Zope Foundation and Contributors',
       author_email='zope-dev@zope.org',
       description='Form generation and validation library for Zope',
