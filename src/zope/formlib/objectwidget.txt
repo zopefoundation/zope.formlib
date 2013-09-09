@@ -127,8 +127,8 @@ the request, extract the value and save it on the content. The ObjectWidget
 instance uses a real Person class (factory) for add the value. The value is
 temporary stored in this factory class. The ObjectWidget reads the value from
 this factory and set it to the attribute 'name' of the instance mother
-(The object mother is allready there). If we don't have a instance mother
-allready store in the family object, the factory instance will be stored
+(The object mother is already there). If we don't have a instance mother
+already store in the family object, the factory instance will be stored
 directly to the family attribute mother. For more information see the method
 'applyChanges()' in the interface
 zope.formlib.objectwidget.ObjectWidget.
