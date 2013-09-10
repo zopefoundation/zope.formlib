@@ -50,7 +50,7 @@ FieldProperty validate the values if they get added:
   ...         self.mother = mother
   ...         self.father = father
 
-Let's make a instance of Family with None attributes:
+Let's make an instance of Family with None attributes:
 
   >>> family = Family()
   >>> bool(family.mother == None)
@@ -59,7 +59,7 @@ Let's make a instance of Family with None attributes:
   >>> bool(family.father == None)
   True
 
-Let's make a instance of Family with None attributes:
+Let's make an instance of Family with None attributes:
 
   >>> mother = Person(u'Margrith')
   >>> father = Person(u'Joe')
@@ -127,8 +127,8 @@ the request, extract the value and save it on the content. The ObjectWidget
 instance uses a real Person class (factory) for add the value. The value is
 temporary stored in this factory class. The ObjectWidget reads the value from
 this factory and set it to the attribute 'name' of the instance mother
-(The object mother is allready there). If we don't have a instance mother
-allready store in the family object, the factory instance will be stored
+(The object mother is already there). If we don't have an instance mother
+already stored in the family object, the factory instance will be stored
 directly to the family attribute mother. For more information see the method
 'applyChanges()' in the interface
 zope.formlib.objectwidget.ObjectWidget.
