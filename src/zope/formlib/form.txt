@@ -1875,3 +1875,104 @@ information.
     >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     Action: stay
     render was called
+
+Prevent form submit for GET requests
+------------------------------------
+
+It can be useful to only accept form submit over POST requests. This, for
+example, prevents replaying data-modifying actions when reloading a page in a
+web browser (most web browsers warn users for re-submitting the form when
+reloading a page that was the result of a POST request). This also helps (but
+is not enough by itself!) in preventing CSRF attacks.
+
+Whenever a form component has set the ``method`` attributes on the class, it
+is is used when validating the form data.
+
+    >>> class MyPOSTForm(form.Form):
+    ...     method = 'POST'
+    ...
+    ...     form_fields = form.FormFields(IFooBar)
+    ...
+    ...     @form.action("Handle")
+    ...     def handle(self, action, data):
+    ...         print('Action: handle %s' % data)
+    ...
+    ...     def render(self):
+    ...         return ''
+
+This is a GET request for a form that specifies it can only validate POST
+requests::
+
+    >>> request = TestRequest()
+    >>> request.form['form.title'] = u'Submitted Title'
+    >>> request.form['form.actions.handle'] = u''
+    >>> MyPOSTForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    Traceback (most recent call last):
+    ...
+    MethodNotAllowed: None, <zope.publisher.browser.TestRequest
+    instance URL=http://127.0.0.1>
+
+By setting the correct request method we validate input::
+
+    >>> request = TestRequest()
+    >>> request.method = 'POST'
+    >>> request.form['form.title'] = u'Submitted Title'
+    >>> request.form['form.actions.handle'] = u''
+    >>> print(MyPOSTForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
+    Action: handle {'title': 'Submitted Title'}
+
+Although slightly convoluted, we could require the submit to go over a
+GET request::
+
+    >>> class MyGETForm(form.Form):
+    ...     method = 'GET'
+    ...
+    ...     form_fields = form.FormFields(IFooBar)
+    ...
+    ...     @form.action("Handle")
+    ...     def handle(self, action, data):
+    ...         print('Action: handle %s' % data)
+    ...
+    ...     def render(self):
+    ...         return ''
+
+    >>> request = TestRequest()
+    >>> request.method = 'POST'
+    >>> request.form['form.actions.handle'] = u''
+    >>> MyGETForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    Traceback (most recent call last):
+    ...
+    MethodNotAllowed: None, <zope.publisher.browser.TestRequest
+    instance URL=http://127.0.0.1>
+
+    >>> request = TestRequest()
+    >>> request.form['form.title'] = u'Submitted Title'
+    >>> request.form['form.actions.handle'] = u''
+    >>> print(MyGETForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
+    Action: handle {'title': 'Submitted Title'}
+
+Note how the default value for ``method`` is None, meaning all request
+methods are accepted::
+
+    >>> class MyForm(form.Form):
+    ...     form_fields = form.FormFields(IFooBar)
+    ...
+    ...     @form.action("Handle")
+    ...     def handle(self, action, data):
+    ...         print('Action: handle %s' % data)
+    ...
+    ...     def render(self):
+    ...         return ''
+
+    >>> request = TestRequest()
+    >>> request.method = 'POST'
+    >>> request.form['form.title'] = u'Submitted Title'
+    >>> request.form['form.actions.handle'] = u''
+    >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
+    Action: handle {'title': 'Submitted Title'}
+
+    >>> request = TestRequest()
+    >>> request.form['form.title'] = u'Submitted Title'
+    >>> request.form['form.actions.handle'] = u''
+    >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
+    Action: handle {'title': 'Submitted Title'}
