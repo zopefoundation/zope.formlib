@@ -31,6 +31,7 @@ from zope import component, interface, schema
 from zope.browserpage import ViewPageTemplateFile
 from zope.interface.common import idatetime
 from zope.interface.interface import InterfaceClass
+from zope.publisher.interfaces.http import MethodNotAllowed
 from zope.schema.interfaces import IField
 from zope.schema.interfaces import ValidationError
 from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
@@ -743,6 +744,7 @@ class FormBase(zope.publisher.browser.BrowserPage):
 
     ignoreContext = False
 
+    method = None
 
     def setPrefix(self, prefix):
         self.prefix = prefix
@@ -754,6 +756,10 @@ class FormBase(zope.publisher.browser.BrowserPage):
             form=self, adapters=self.adapters, ignore_request=ignore_request)
 
     def validate(self, action, data):
+        if self.method is not None:
+            # Verify the correct request method was used.
+            if self.method.upper() != self.request.method.upper():
+                raise MethodNotAllowed(self.context, self.request)
         if self.ignoreContext:
             context = None
         else:
