@@ -5,7 +5,8 @@ Changes
 4.3.0a2 (unreleased)
 ====================
 
-- Nothing changed yet.
+- Added support for restricting the acceptable request method for the
+  form submit.
 
 
 4.3.0a1 (2013-02-27)
