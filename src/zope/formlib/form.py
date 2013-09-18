@@ -771,6 +771,7 @@ class FormBase(zope.publisher.browser.BrowserPage):
                 self.request.response.setCookie(
                     '__csrftoken__',
                     self.csrftoken,
+                    path='/',
                     expires=None,  # equivalent to "remove on browser quit"
                     httpOnly=True,  # no javascript access please.
                     )
