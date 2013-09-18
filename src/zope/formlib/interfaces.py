@@ -22,6 +22,20 @@ from zope.schema import Bool
 from zope.exceptions.interfaces import UserError
 from zope.formlib._compat import basestring
 
+class IInvalidFormError(Interface):
+
+    def doc():
+        """The form submit could not be validated.
+        """
+
+@implementer(IInvalidFormError)
+class InvalidFormError(Exception):
+    """The form submit could not be validated.
+
+    For example when the CSRF token is incorrect or does not existed
+    for "protected" form components.
+    """
+
 class IWidgetInputError(Interface):
     """Placeholder for a snippet View"""
 
@@ -237,7 +251,7 @@ class IDisplayWidget(IWidget):
 
 class IWidgetFactory(Interface):
     """A factory that creates the widget"""
-    
+
     def __call__(context, request):
         """Return a widget"""
 
