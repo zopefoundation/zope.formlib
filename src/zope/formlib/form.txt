@@ -1906,11 +1906,10 @@ requests::
     >>> request = TestRequest()
     >>> request.form['form.title'] = u'Submitted Title'
     >>> request.form['form.actions.handle'] = u''
-    >>> MyPOSTForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> MyPOSTForm(None, request)() # doctest: +NORMALIZE_WHITESPACE +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
-    MethodNotAllowed: None, <zope.publisher.browser.TestRequest
-    instance URL=http://127.0.0.1>
+    MethodNotAllowed: None, <zope.publisher.browser.TestRequest instance URL=http://127.0.0.1>
 
 By setting the correct request method we validate input::
 
@@ -1939,11 +1938,10 @@ GET request::
     >>> request = TestRequest()
     >>> request.method = 'POST'
     >>> request.form['form.actions.handle'] = u''
-    >>> MyGETForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> MyGETForm(None, request)() # doctest: +NORMALIZE_WHITESPACE +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
-    MethodNotAllowed: None, <zope.publisher.browser.TestRequest
-    instance URL=http://127.0.0.1>
+    MethodNotAllowed: None, <zope.publisher.browser.TestRequest instance URL=http://127.0.0.1>
 
     >>> request = TestRequest()
     >>> request.form['form.title'] = u'Submitted Title'
