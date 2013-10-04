@@ -1906,7 +1906,7 @@ requests::
     >>> request = TestRequest()
     >>> request.form['form.title'] = u'Submitted Title'
     >>> request.form['form.actions.handle'] = u''
-    >>> MyPOSTForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> MyPOSTForm(None, request)() # doctest: +NORMALIZE_WHITESPACE +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
     MethodNotAllowed: None, <zope.publisher.browser.TestRequest
@@ -1939,7 +1939,7 @@ GET request::
     >>> request = TestRequest()
     >>> request.method = 'POST'
     >>> request.form['form.actions.handle'] = u''
-    >>> MyGETForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
+    >>> MyGETForm(None, request)() # doctest: +NORMALIZE_WHITESPACE +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
     MethodNotAllowed: None, <zope.publisher.browser.TestRequest
@@ -2055,7 +2055,7 @@ If for some reason the cookie is not set, the form will raise an error::
     >>> request.form['form.actions.handle'] = 'true'
     >>> request.form['__csrftoken__'] = csrftoken
     >>> myform = MyForm(None, request)
-    >>> _ = myform()
+    >>> _ = myform()   #doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
     InvalidFormError: CSRF token incorrect
@@ -2069,7 +2069,7 @@ corresponding form value, that is hard get right, so most proably wrong::
     >>> request.form['form.actions.handle'] = 'true'
     >>> request.form['__csrftoken__'] = 'a guessed value'
     >>> myform = MyForm(None, request)
-    >>> _ = myform()
+    >>> _ = myform()  #doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
     InvalidFormError: CSRF token incorrect
@@ -2082,7 +2082,7 @@ too::
     >>> request.form['form.title'] = 'Submitted title'
     >>> request.form['form.actions.handle'] = 'true'
     >>> myform = MyForm(None, request)
-    >>> _ = myform()
+    >>> _ = myform()   #doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
     InvalidFormError: CSRF token incorrect
@@ -2158,7 +2158,7 @@ The CSRF tokens in both the hidden form fields should be identical to the one
 set in the cookie::
 
     >>> csrftoken = request.response.getCookie('__csrftoken__')['value']
-    >>> len(result.split(csrftoken))
+    >>> len(result.split(str(csrftoken)))
     3
     >>> multi.formone.csrftoken == multi.formtwo.csrftoken == csrftoken
     True

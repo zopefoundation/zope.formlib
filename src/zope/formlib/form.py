@@ -765,9 +765,12 @@ class FormBase(zope.publisher.browser.BrowserPage):
             if setcookie is not None:
                 self.csrftoken = setcookie['value']
             else:
-                # Ok, nothing found, we should generate one and set it
-                # in the cookie ourselves.
-                self.csrftoken = binascii.hexlify(os.urandom(32))
+                # Ok, nothing found, we should generate one and set it in
+                # the cookie ourselves. Note how "str()" the hex value
+                # of the os.urandom call as Python-3 will return bytes
+                # here and the cookie roundtrip of a bytes values gets
+                # messed up.
+                self.csrftoken = str(binascii.hexlify(os.urandom(32)))
                 self.request.response.setCookie(
                     '__csrftoken__',
                     self.csrftoken,
