@@ -31,9 +31,19 @@ class IInvalidFormError(Interface):
 @implementer(IInvalidFormError)
 class InvalidFormError(Exception):
     """The form submit could not be validated.
+    """
 
-    For example when the CSRF token is incorrect or does not existed
-    for "protected" form components.
+class IInvalidCSRFTokenError(Interface):
+
+    def doc():
+        """The form submit could not be handled as the CSRF token is missing
+        or incorrect.
+        """
+
+@implementer(IInvalidCSRFTokenError)
+class InvalidCSRFTokenError(InvalidFormError):
+    """The form submit could not be handled as the CSRF token is missing
+    or incorrect.
     """
 
 class IWidgetInputError(Interface):

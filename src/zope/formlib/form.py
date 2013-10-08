@@ -44,7 +44,7 @@ from zope.formlib.interfaces import IWidgetInputErrorView
 from zope.formlib.interfaces import IInputWidget, IDisplayWidget
 from zope.formlib.interfaces import WidgetsError, MissingInputError
 from zope.formlib.interfaces import InputErrors, WidgetInputError
-from zope.formlib.interfaces import InvalidFormError
+from zope.formlib.interfaces import InvalidFormError, InvalidCSRFTokenError
 
 from zope.formlib import interfaces
 from zope.i18nmessageid import MessageFactory
@@ -784,11 +784,11 @@ class FormBase(zope.publisher.browser.BrowserPage):
         if cookietoken is None:
             # CSRF is enabled, so we really should get a token from the
             # cookie. We didn't get it, so this submit is invalid!
-            raise InvalidFormError('CSRF token incorrect')
+            raise InvalidCSRFTokenError(_('Invalid CSRF token'))
         if cookietoken != self.request.form.get('__csrftoken__', None):
             # The token in the cookie is different from the one in the
             # form data. This submit is invalid!
-            raise InvalidFormError('CSRF token incorrect')
+            raise InvalidCSRFTokenError(_('Invalid CSRF token'))
 
     def setUpWidgets(self, ignore_request=False):
         self.adapters = {}

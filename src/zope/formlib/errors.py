@@ -20,8 +20,11 @@ from zope.interface import Invalid
 from zope.i18n import Message
 from zope.i18n import translate
 
-from zope.formlib.interfaces import IWidgetInputErrorView
 from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.publisher.interfaces.browser import IBrowserPage
+from zope.publisher.browser import BrowserPage
+from zope.formlib.interfaces import IWidgetInputErrorView
+from zope.formlib.interfaces import IInvalidCSRFTokenError
 
 
 @implementer(IWidgetInputErrorView)
@@ -45,3 +48,23 @@ class InvalidErrorView(object):
         if isinstance(msg, Message):
             msg = translate(msg, context=self.request)
         return u'<span class="error">%s</span>' % escape(msg)
+
+
+@implementer(IBrowserPage)
+@adapter(IInvalidCSRFTokenError, IBrowserRequest)
+class InvalidCSRFTokenErrorView(BrowserPage):
+
+    def update(self):
+        self.request.response.setStatus(403)
+        self.request.response.setHeader(
+            'Expires', 'Jan, 1 Jan 1970 00:00:00 GMT')
+        self.request.response.setHeader(
+            'Cache-Control', 'no-store, no-cache, must-revalidate')
+        self.request.response.setHeader(
+            'Pragma', 'no-cache')
+
+    def render(self):
+        msg = self.context.doc
+        if isinstance(msg, Message):
+            msg = translate(msg, context=self.request)
+        return escape(msg)

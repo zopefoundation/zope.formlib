@@ -2058,7 +2058,7 @@ If for some reason the cookie is not set, the form will raise an error::
     >>> _ = myform()   #doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
-    InvalidFormError: CSRF token incorrect
+    InvalidCSRFTokenError: Invalid CSRF token
 
 As an attacker cannot read the cookie value, he can only guess the
 corresponding form value, that is hard get right, so most proably wrong::
@@ -2072,7 +2072,7 @@ corresponding form value, that is hard get right, so most proably wrong::
     >>> _ = myform()  #doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
-    InvalidFormError: CSRF token incorrect
+    InvalidCSRFTokenError: Invalid CSRF token
 
 When the form value is missing altogether, the form obviously raises an error
 too::
@@ -2085,7 +2085,7 @@ too::
     >>> _ = myform()   #doctest: +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
-    InvalidFormError: CSRF token incorrect
+    InvalidCSRFTokenError: Invalid CSRF token
 
 To repeat: this protection works as long as the cookie value is identical to
 the submitted form value. No state is kept on the server. We can demonstrate
