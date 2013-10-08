@@ -758,18 +758,18 @@ class FormBase(zope.publisher.browser.BrowserPage):
     def setUpToken(self):
         self.csrftoken = self.request.getCookies().get('__csrftoken__')
         if self.csrftoken is None:
-            # It is possible another form that is rendered as part of
-            # this request already set a csrftoken. In that case we
+            # It is possible another form, that is rendered as part of
+            # this request, already set a csrftoken. In that case we
             # should find it in the response cookie and use that.
             setcookie = self.request.response.getCookie('__csrftoken__')
             if setcookie is not None:
                 self.csrftoken = setcookie['value']
             else:
-                # Ok, nothing found, we should generate one and set it in
-                # the cookie ourselves. Note how "str()" the hex value
-                # of the os.urandom call as Python-3 will return bytes
-                # here and the cookie roundtrip of a bytes values gets
-                # messed up.
+                # Ok, nothing found, we should generate one and set
+                # it in the cookie ourselves. Note how we ``str()``
+                # the hex value of the ``os.urandom`` call here, as
+                # Python-3 will return bytes and the cookie roundtrip
+                # of a bytes values gets messed up.
                 self.csrftoken = str(binascii.hexlify(os.urandom(32)))
                 self.request.response.setCookie(
                     '__csrftoken__',
