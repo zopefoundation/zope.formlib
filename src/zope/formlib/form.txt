@@ -1974,3 +1974,219 @@ methods are accepted::
     >>> request.form['form.actions.handle'] = u''
     >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     Action: handle {'title': 'Submitted Title'}
+
+Prevent Cross-site Request Forgery (CSRF) attacks
+-------------------------------------------------
+
+See also: http://en.wikipedia.org/wiki/Cross-site_request_forgery.
+
+The CSRF protection in zope.formlib assumes the attacker cannot get hold of
+information stored in a cookie that is send to the domain handling the form
+submit. zope.formlib verifies that the token as sent with the cookie is
+identical to the value as sent with the form (as a hidden input field).
+
+zope.formlib will set a random token in the cookie when first accessing the
+form. Any subsequent form rendering and submit handling will use the token
+stored in this cookie.
+
+Thus this token is reused for all forms for as long the cookie is available.
+
+The cookie is set to expiry when the web browser quits.
+
+This protection works best when used in combination with the afformentioned
+acceptable request method restriction.
+
+Issues to research:
+
+* Is the name "__csrftoken__ acceptable?
+
+* I do not see a scheme for having a token per form without keep server-
+  side, which I try to avoid.
+
+* One cannot *submit* a form as the very first request to that form, as the
+  token will not have been set just yet. I think this acceptable.
+
+* Tests for applications that use form components with CSRF protection
+  enabled, is cumbersome. Can we help that somehow?
+
+* Is using os.urandom() for generating a token sufficient *and*
+  available cross-platform? Could uuid.uuid4() be an alternative?
+
+When first visting a form, a CSRF token will be set in the cookie::
+
+    >>> class MyForm(form.Form):
+    ...     protected = True
+    ...
+    ...     form_fields = form.FormFields(IFooBar)
+    ...
+    ...     @form.action("Handle")
+    ...     def handle(self, action, data):
+    ...         print('Action: handle %s' % data)
+
+    >>> request = TestRequest()
+    >>> myform = MyForm(None, request)
+    >>> _ = myform()  # "render" the form.
+    >>> csrfcookie = request.response.getCookie('__csrftoken__')
+    >>> csrfcookie['httponly']
+    True
+    >>> csrftoken = csrfcookie['value']
+    >>> csrftoken == myform.csrftoken
+    True
+
+When submitting the form, the token in the cookie (that will be sent
+as part of the request) needs to be identical to the value of the
+hidden form field "__csrftoken__"::
+
+    >>> request = TestRequest(
+    ...     **{'HTTP_COOKIE': '__csrftoken__=%s;' % csrftoken})
+    >>> request.form['form.title'] = 'Submitted title'
+    >>> request.form['form.actions.handle'] = 'true'
+    >>> request.form['__csrftoken__'] = csrftoken
+    >>> myform = MyForm(None, request)
+    >>> _ = myform()
+    Action: handle {'title': u'Submitted title'}
+
+If for some reason the cookie is not set, the form will raise an error::
+
+    >>> request = TestRequest(**{'HTTP_COOKIE': ''})
+    >>> request.form['form.title'] = 'Submitted title'
+    >>> request.form['form.actions.handle'] = 'true'
+    >>> request.form['__csrftoken__'] = csrftoken
+    >>> myform = MyForm(None, request)
+    >>> _ = myform()   #doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+    ...
+    InvalidCSRFTokenError: Invalid CSRF token
+
+As an attacker cannot read the cookie value, he can only guess the
+corresponding form value, that is hard get right, so most proably wrong::
+
+    >>> request = TestRequest(
+    ...     **{'HTTP_COOKIE': '__csrftoken__=%s;' % csrftoken})
+    >>> request.form['form.title'] = 'Submitted title'
+    >>> request.form['form.actions.handle'] = 'true'
+    >>> request.form['__csrftoken__'] = 'a guessed value'
+    >>> myform = MyForm(None, request)
+    >>> _ = myform()  #doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+    ...
+    InvalidCSRFTokenError: Invalid CSRF token
+
+When the form value is missing altogether, the form obviously raises an error
+too::
+
+    >>> request = TestRequest(
+    ...     **{'HTTP_COOKIE': '__csrftoken__=%s;' % csrftoken})
+    >>> request.form['form.title'] = 'Submitted title'
+    >>> request.form['form.actions.handle'] = 'true'
+    >>> myform = MyForm(None, request)
+    >>> _ = myform()   #doctest: +IGNORE_EXCEPTION_DETAIL
+    Traceback (most recent call last):
+    ...
+    InvalidCSRFTokenError: Invalid CSRF token
+
+To repeat: this protection works as long as the cookie value is identical to
+the submitted form value. No state is kept on the server. We can demonstrate
+this by inventing a token value here in the test ourselves::
+
+    >>> csrftoken = 'MYNICETOKENVALUE'
+    >>> request = TestRequest(
+    ...     **{'HTTP_COOKIE': '__csrftoken__=%s;' % csrftoken})
+    >>> request.form['form.title'] = 'Submitted title'
+    >>> request.form['form.actions.handle'] = 'true'
+    >>> request.form['__csrftoken__'] = csrftoken
+    >>> myform = MyForm(None, request)
+    >>> _ = myform()
+    Action: handle {'title': u'Submitted title'}
+
+It is possible to have multiple forms in one page. Of course only one of
+these forms can be submitted at one point in time, but the CSRF token should
+not confuse things::
+
+    >>> class FormOne(form.Form):
+    ...     prefix = 'form_one'
+    ...
+    ...     protected = True
+    ...
+    ...     form_fields = form.FormFields(IFooBar)
+    ...
+    ...     @form.action("Handle")
+    ...     def handle(self, action, data):
+    ...         print('Action: handle in Form One')
+
+    >>> class FormTwo(form.Form):
+    ...     prefix = 'form_two'
+    ...
+    ...     protected = True
+    ...
+    ...     form_fields = form.FormFields(IFooBar)
+    ...
+    ...     @form.action("Handle")
+    ...     def handle(self, action, data):
+    ...         print('Action: handle in Form Two')
+
+    >>> from zope.publisher.browser import BrowserPage
+    >>> class MultiForm(BrowserPage):
+    ...     def __init__(self, context, request):
+    ...         self.formone = FormOne(context, request)
+    ...         self.formtwo = FormTwo(context, request)
+    ...
+    ...     def __call__(self):
+    ...         return '\n'.join((self.formone(), self.formtwo()))
+    ...
+
+Render the initial multi form view::
+
+    >>> request = TestRequest()
+    >>> multi = MultiForm(None, request)
+    >>> result = multi()
+    >>> print(result)
+    <input class="textType" id="form_one.title"
+      name="form_one.title" size="20" type="text" value=""  />
+    <inut type="hidden" name="__csrftoken__" value="..."
+    <input type="submit" id="form_one.actions.handle"
+      name="form_one.actions.handle" value="Handle" class="button" />
+    <input class="textType" id="form_two.title"
+      name="form_two.title" size="20" type="text" value=""  />
+    <inut type="hidden" name="__csrftoken__" value="..."
+    <input type="submit" id="form_two.actions.handle"
+      name="form_two.actions.handle" value="Handle" class="button" />
+
+The CSRF tokens in both the hidden form fields should be identical to the one
+set in the cookie::
+
+    >>> csrftoken = request.response.getCookie('__csrftoken__')['value']
+    >>> len(result.split(str(csrftoken)))
+    3
+    >>> multi.formone.csrftoken == multi.formtwo.csrftoken == csrftoken
+    True
+
+We can indeed submit data to the forms::
+
+    >>> request = TestRequest(
+    ...     **{'HTTP_COOKIE': '__csrftoken__=%s;' % csrftoken})
+    >>> request.form['form_one.title'] = 'Submitted title'
+    >>> request.form['form_one.actions.handle'] = 'true'
+    >>> request.form['__csrftoken__'] = csrftoken
+    >>> multi = MultiForm(None, request)
+    >>> _ = multi()
+    Action: handle in Form One
+
+    >>> request = TestRequest(
+    ...     **{'HTTP_COOKIE': '__csrftoken__=%s;' % csrftoken})
+    >>> request.form['form_two.title'] = 'Submitted title'
+    >>> request.form['form_two.actions.handle'] = 'true'
+    >>> request.form['__csrftoken__'] = csrftoken
+    >>> multi = MultiForm(None, request)
+    >>> _ = multi()
+    Action: handle in Form Two
+
+There is a view for the InvalidCSRFTokenError::
+
+    >>> from zope.component import getMultiAdapter
+    >>> from zope.formlib.interfaces import InvalidCSRFTokenError
+    >>> from zope.formlib.errors import InvalidCSRFTokenErrorView
+    >>> error = InvalidCSRFTokenError('Invalid CSRF token')
+    >>> request = TestRequest()
+    >>> print(InvalidCSRFTokenErrorView(error, request)())
+    Invalid CSRF token

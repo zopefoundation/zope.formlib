@@ -57,6 +57,8 @@ def pageSetUp(test):
 @adapter(zope.formlib.interfaces.IForm)
 @NamedTemplateImplementation
 def TestTemplate(self):
+    # This "template" overrides the default page templates that is
+    # registered for forms.
     status = self.status
     if status:
         status = zope.i18n.translate(status,
@@ -77,6 +79,12 @@ def TestTemplate(self):
         error = w.error()
         if error:
             result.append(str(error))
+
+    if self.protected:
+        result.append(
+            '<inut type="hidden" '
+            'name="__csrftoken__" '
+            'value="%s"' % self.csrftoken)
 
     for action in self.availableActions():
         result.append(action.render())

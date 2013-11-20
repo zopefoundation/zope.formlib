@@ -14,6 +14,7 @@
 """
 import binascii
 import datetime
+import os
 import re
 import sys
 import pytz
@@ -43,6 +44,7 @@ from zope.formlib.interfaces import IWidgetInputErrorView
 from zope.formlib.interfaces import IInputWidget, IDisplayWidget
 from zope.formlib.interfaces import WidgetsError, MissingInputError
 from zope.formlib.interfaces import InputErrors, WidgetInputError
+from zope.formlib.interfaces import InvalidFormError, InvalidCSRFTokenError
 
 from zope.formlib import interfaces
 from zope.i18nmessageid import MessageFactory
@@ -746,8 +748,47 @@ class FormBase(zope.publisher.browser.BrowserPage):
 
     method = None
 
+    protected = False
+
+    csrftoken = None
+
     def setPrefix(self, prefix):
         self.prefix = prefix
+
+    def setUpToken(self):
+        self.csrftoken = self.request.getCookies().get('__csrftoken__')
+        if self.csrftoken is None:
+            # It is possible another form, that is rendered as part of
+            # this request, already set a csrftoken. In that case we
+            # should find it in the response cookie and use that.
+            setcookie = self.request.response.getCookie('__csrftoken__')
+            if setcookie is not None:
+                self.csrftoken = setcookie['value']
+            else:
+                # Ok, nothing found, we should generate one and set
+                # it in the cookie ourselves. Note how we ``str()``
+                # the hex value of the ``os.urandom`` call here, as
+                # Python-3 will return bytes and the cookie roundtrip
+                # of a bytes values gets messed up.
+                self.csrftoken = str(binascii.hexlify(os.urandom(32)))
+                self.request.response.setCookie(
+                    '__csrftoken__',
+                    self.csrftoken,
+                    path='/',
+                    expires=None,  # equivalent to "remove on browser quit"
+                    httpOnly=True,  # no javascript access please.
+                    )
+
+    def checkToken(self):
+        cookietoken = self.request.getCookies().get('__csrftoken__')
+        if cookietoken is None:
+            # CSRF is enabled, so we really should get a token from the
+            # cookie. We didn't get it, so this submit is invalid!
+            raise InvalidCSRFTokenError(_('Invalid CSRF token'))
+        if cookietoken != self.request.form.get('__csrftoken__', None):
+            # The token in the cookie is different from the one in the
+            # form data. This submit is invalid!
+            raise InvalidCSRFTokenError(_('Invalid CSRF token'))
 
     def setUpWidgets(self, ignore_request=False):
         self.adapters = {}
@@ -760,6 +801,8 @@ class FormBase(zope.publisher.browser.BrowserPage):
             # Verify the correct request method was used.
             if self.method.upper() != self.request.method.upper():
                 raise MethodNotAllowed(self.context, self.request)
+        if self.protected:
+            self.checkToken()  # This form has CSRF protection enabled.
         if self.ignoreContext:
             context = None
         else:
@@ -780,6 +823,8 @@ class FormBase(zope.publisher.browser.BrowserPage):
     form_reset = True
 
     def update(self):
+        if self.protected:
+            self.setUpToken()  # This form has CSRF protection enabled.
         self.setUpWidgets()
         self.form_reset = False
 

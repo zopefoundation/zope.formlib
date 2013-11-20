@@ -5,6 +5,8 @@ Changes
 4.3.0a2 (unreleased)
 ====================
 
+- Support for CSRF protection.
+
 - Added support for restricting the acceptable request method for the
   form submit.
 
