@@ -2182,3 +2182,13 @@ We can indeed submit data to the forms::
     >>> multi = MultiForm(None, request)
     >>> _ = multi()
     Action: handle in Form Two
+
+There is a view for the InvalidCSRFTokenError::
+
+    >>> from zope.component import getMultiAdapter
+    >>> from zope.formlib.interfaces import InvalidCSRFTokenError
+    >>> from zope.formlib.errors import InvalidCSRFTokenErrorView
+    >>> error = InvalidCSRFTokenError('Invalid CSRF token')
+    >>> request = TestRequest()
+    >>> print(InvalidCSRFTokenErrorView(error, request)())
+    Invalid CSRF token

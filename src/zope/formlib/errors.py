@@ -64,7 +64,11 @@ class InvalidCSRFTokenErrorView(BrowserPage):
             'Pragma', 'no-cache')
 
     def render(self):
-        msg = self.context.doc
+        msg = self.context.args[0]
         if isinstance(msg, Message):
             msg = translate(msg, context=self.request)
         return escape(msg)
+
+    def __call__(self):
+        self.update()
+        return self.render()
