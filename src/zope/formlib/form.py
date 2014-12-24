@@ -18,7 +18,10 @@ import os
 import re
 import sys
 import pytz
-from cgi import escape
+try:
+    from html import escape
+except ImportError:     # pragma: NO COVER
+    from cgi import escape
 
 import zope.browser.interfaces
 import zope.event

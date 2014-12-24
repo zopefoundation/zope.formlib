@@ -12,7 +12,10 @@
 ##############################################################################
 """Error related things.
 """
-from cgi import escape
+try:
+    from html import escape
+except ImportError:     # pragma: NO COVER
+    from cgi import escape
 
 from zope.component import adapter
 from zope.interface import implementer

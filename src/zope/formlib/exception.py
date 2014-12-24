@@ -15,7 +15,10 @@
 """
 __docformat__ = 'restructuredtext'
 
-from cgi import escape
+try:
+    from html import escape
+except ImportError:     # pragma: NO COVER
+    from cgi import escape
 
 from zope.interface import implementer
 from zope.i18n import translate
