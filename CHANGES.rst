@@ -5,6 +5,8 @@ Changes
 4.3.0 (unreleased)
 ==================
 
+- Add support for testing on Travis.
+
 - Explicitly hide span in ``orderedSelectionList.pt``.  This only
   contains hidden inputs, but Internet Explorer 10 was showing them
   anyway.
