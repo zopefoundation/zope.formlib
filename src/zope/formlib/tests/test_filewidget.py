@@ -50,9 +50,9 @@ class FileWidgetTest(SimpleInputWidgetTest):
     def test_hasInput(self): # override the usual one
         del self._widget.request.form['field.foo']
         self._widget.request.form['field.foo.used'] = ''
-        self.failUnless(self._widget.hasInput())
+        self.assertTrue(self._widget.hasInput())
         del self._widget.request.form['field.foo.used']
-        self.failIf(self._widget.hasInput())
+        self.assertFalse(self._widget.hasInput())
 
     def testRender(self):
         value = 'Foo Value'

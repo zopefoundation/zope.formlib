@@ -61,40 +61,40 @@ class Test(FunctionalWidgetTestCase):
         html = Form(foo, request)()
         
         # S3
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<select .* name="form.s3".*>',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option selected="selected" value="">',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option value="Bob">',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option value="is">',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option value="Your">',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option value="Uncle">',
             html))
 
         # S4
         joined_body = "".join(html.split("\n"))
-        self.failIf(patternExists(
+        self.assertFalse(patternExists(
             '<select.*name="form.s4".*>.*<option.*value="".*>',
             joined_body))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<select .* name="form.s4".*>',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option selected="selected" value="1">',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option value="2">',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option value="3">',
             html))
 
@@ -106,19 +106,19 @@ class Test(FunctionalWidgetTestCase):
         # display edit view
         html = Form(foo, request)()
 
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option selected="selected" value="Bob">',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option selected="selected" value="2">',
             html))
 
         
         html = Form(foo, request)()
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option selected="selected" value="Bob">',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option selected="selected" value="2">',
             html))
 
@@ -127,17 +127,17 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = u''
         
         html = Form(foo, request)()
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option selected="selected" value="">',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option selected="selected" value="2">',
             html))
 
         request = TestRequest()
         html = Form(foo, request)()
 
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option selected="selected" value="">',
             html))
 

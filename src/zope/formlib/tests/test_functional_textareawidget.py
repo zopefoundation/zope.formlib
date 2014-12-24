@@ -60,13 +60,13 @@ class Test(FunctionalWidgetTestCase):
         html = Form(foo, request)()
     
         # all fields should be displayed in text fields
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<textarea .* name="form.s1".*></textarea>',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<textarea .* name="form.s2".*>foo</textarea>',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<textarea .* name="form.s3".*></textarea>',
             html))
 
@@ -103,7 +103,7 @@ class Test(FunctionalWidgetTestCase):
 
         # Note: We don't have a invalid field value
         # since we convert the value to unicode
-        self.assert_(not 'Object is of wrong type' in html)
+        self.assertTrue(not 'Object is of wrong type' in html)
 
     def test_missing_value(self):
         foo = TextTest()
@@ -138,7 +138,7 @@ class Test(FunctionalWidgetTestCase):
         s1_index = html.find('form.s1')
         s2_index = html.find('form.s2')
         missing_index = html.find('missing')
-        self.assert_(s1_index < missing_index < s2_index)
+        self.assertTrue(s1_index < missing_index < s2_index)
 
     def test_length_validation(self):
         foo = TextTest()
@@ -150,14 +150,14 @@ class Test(FunctionalWidgetTestCase):
 
         html = Form(foo, request)()
 
-        self.assert_('Value is too short' in html)
+        self.assertTrue('Value is too short' in html)
 
         # submit value for s1 that is too long
         request.form['form.s1'] = u'12345678901'
         request.form['form.actions.apply'] = u''
         html = Form(foo, request)()
 
-        self.assert_('Value is too long' in html)
+        self.assertTrue('Value is too long' in html)
 
     def test_omitted_value(self):
         foo = TextTest()
@@ -166,7 +166,7 @@ class Test(FunctionalWidgetTestCase):
         # confirm default values
         self.assertEqual(foo.s1, '')
         self.assertEqual(foo.s2, u'foo')
-        self.assert_(foo.s3 is None)
+        self.assertTrue(foo.s3 is None)
 
         # submit change with only s2 present -- note that required
         # field s1 is omitted, which should not cause a validation error
@@ -178,7 +178,7 @@ class Test(FunctionalWidgetTestCase):
         # check new values in object
         self.assertEqual(foo.s1, '')
         self.assertEqual(foo.s2, u'bar')
-        self.assert_(foo.s3 is None)
+        self.assertTrue(foo.s3 is None)
 
     def test_conversion(self):
         foo = TextTest()
@@ -195,7 +195,7 @@ class Test(FunctionalWidgetTestCase):
 
         request = TestRequest()
         html = Form(foo, request)()
-        self.assert_(patternExists('line1\r\nline2', html))
+        self.assertTrue(patternExists('line1\r\nline2', html))
 
 
 def test_suite():

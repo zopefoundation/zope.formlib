@@ -86,15 +86,15 @@ class Test(FunctionalWidgetTestCase):
         html = Form(foo, request)()
         
         # i1 and i2 should be displayed in text fields
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<input .* name="form.i1".* value="".*>', html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<input .* name="form.i2".* value="1".*>', html))
         
         # i3 should be in a dropdown
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<select .*name="form.i3".*>', html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option selected="selected" value="2">2</option>',
             html))
 
@@ -141,11 +141,11 @@ class Test(FunctionalWidgetTestCase):
         html = Form2(foo, request)()
 
         # confirm that i1 is has a blank item at top with value=""
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<select id="form.i1" name="form.i1" .*>', html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option value="">.*</option>', html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option selected="selected" value="10">10</option>',
             html))
 
@@ -173,9 +173,9 @@ class Test(FunctionalWidgetTestCase):
         i1_index = html.find('form.i1')
         i2_index = html.find('form.i2')
         i3_index = html.find('form.i3')
-        self.assert_(i1_index < html.find('missing') <  i2_index)
-        self.assert_(html.find('missing', i2_index) == -1)
-        self.assert_(html.find('missing', i3_index) == -1)
+        self.assertTrue(i1_index < html.find('missing') <  i2_index)
+        self.assertTrue(html.find('missing', i2_index) == -1)
+        self.assertTrue(html.find('missing', i3_index) == -1)
 
     def test_invalid_allowed_value(self):
         foo = IntTest()
@@ -189,8 +189,8 @@ class Test(FunctionalWidgetTestCase):
 
         i3_index = html.find('form.i3')
         invalid_index = html.find('Invalid')
-        self.assert_(invalid_index != -1)
-        self.assert_(invalid_index > i3_index)
+        self.assertTrue(invalid_index != -1)
+        self.assertTrue(invalid_index > i3_index)
 
     def test_min_max_validation(self):
         foo = IntTest()
@@ -202,7 +202,7 @@ class Test(FunctionalWidgetTestCase):
         
         html = Form(foo, request)()
 
-        self.assert_('Value is too small' in html)
+        self.assertTrue('Value is too small' in html)
     
         # submit value for i1 that is too high
         request.form['form.i1'] = '11'
@@ -210,13 +210,13 @@ class Test(FunctionalWidgetTestCase):
         
         html = Form(foo, request)()
 
-        self.assert_('Value is too big' in html)
+        self.assertTrue('Value is too big' in html)
 
     def test_omitted_value(self):
         foo = IntTest()
         request = TestRequest()
 
-        self.assert_(foo.i1 is None)
+        self.assertTrue(foo.i1 is None)
         self.assertEqual(foo.i2, 1)
         self.assertEqual(foo.i3, 2)
 
@@ -228,8 +228,8 @@ class Test(FunctionalWidgetTestCase):
         Form(foo, request)()
 
         # check new value in object
-        self.assert_(foo.i1 is None)
-        self.assert_(foo.i2 is None)
+        self.assertTrue(foo.i1 is None)
+        self.assertTrue(foo.i2 is None)
         self.assertEqual(foo.i3, 2)
 
     def test_conversion(self):
@@ -241,7 +241,7 @@ class Test(FunctionalWidgetTestCase):
         
         html = Form(foo, request)()
 
-        self.assert_('Invalid integer data' in html)
+        self.assertTrue('Invalid integer data' in html)
 
 def test_suite():
     suite = unittest.TestSuite()

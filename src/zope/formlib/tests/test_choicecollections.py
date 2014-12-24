@@ -41,7 +41,7 @@ class ListOfChoicesWidgetTest(PlacelessSetup, unittest.TestCase):
         field = List(value_type=Choice(values=[1, 2, 3]))
         bound = field.bind(object())
         widget = CollectionDisplayWidget(bound, TestRequest())
-        self.assert_(isinstance(widget, ItemsMultiDisplayWidget))
+        self.assertTrue(isinstance(widget, ItemsMultiDisplayWidget))
         self.assertEqual(widget.context, bound)
         self.assertEqual(widget.vocabulary, bound.value_type.vocabulary)
 
@@ -56,7 +56,7 @@ class ListOfChoicesWidgetTest(PlacelessSetup, unittest.TestCase):
         field = List(value_type=Choice(values=[1, 2, 3]))
         bound = field.bind(object())
         widget = CollectionInputWidget(bound, TestRequest())
-        self.assert_(isinstance(widget, SelectWidget))
+        self.assertTrue(isinstance(widget, SelectWidget))
         self.assertEqual(widget.context, bound)
         self.assertEqual(widget.vocabulary, bound.value_type.vocabulary)
         

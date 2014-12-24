@@ -67,15 +67,15 @@ class Test(FunctionalWidgetTestCase):
         html = Form(foo, request)()
 
         # f1 and f2 should be displayed in text fields
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<input .* name="form.f1".* value="".*>', html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<input .* name="form.f2".* value="1.1".*>', html))
 
         # f3 should be in a dropdown
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<select .*name="form.f3".*>', html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<option selected="selected" value="2.1">2.1</option>',
             html))
 
@@ -125,8 +125,8 @@ class Test(FunctionalWidgetTestCase):
         # confirm error msgs
         f3_index = html.find('form.f3')
         missing_index = html.find('missing')
-        self.assert_(missing_index > f3_index)
-        self.assert_(missing_index != -1)
+        self.assertTrue(missing_index > f3_index)
+        self.assertTrue(missing_index != -1)
 
     def test_invalid_allowed_value(self):
         foo = FloatTest()
@@ -137,7 +137,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = u''
         html = Form(foo, request)()
 
-        self.assert_('Invalid' in html)
+        self.assertTrue('Invalid' in html)
 
     def test_min_max_validation(self):
         foo = FloatTest()
@@ -148,7 +148,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = u''
         html = Form(foo, request)()
 
-        self.assert_('Value is too small' in html)
+        self.assertTrue('Value is too small' in html)
 
         request = TestRequest()
 
@@ -156,14 +156,14 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = u''
         html = Form(foo, request)()
 
-        self.assert_('Value is too big' in html)
+        self.assertTrue('Value is too big' in html)
 
     def test_omitted_value(self):
         foo = FloatTest()
         request = TestRequest()
 
         # confirm default values
-        self.assert_(foo.f1 is None)
+        self.assertTrue(foo.f1 is None)
         self.assertEqual(foo.f2, 1.1)
         self.assertEqual(foo.f3, 2.1)
 
@@ -174,8 +174,8 @@ class Test(FunctionalWidgetTestCase):
         Form(foo, request)()
 
         # check new value in object
-        self.assert_(foo.f1 is None)
-        self.assert_(foo.f2 is None)
+        self.assertTrue(foo.f1 is None)
+        self.assertTrue(foo.f2 is None)
         self.assertEqual(foo.f3, 2.1)
 
     def test_conversion(self):
@@ -187,7 +187,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = u''
         html = Form(foo, request)()
 
-        self.assert_('Invalid floating point data' in html)
+        self.assertTrue('Invalid floating point data' in html)
 
 def test_suite():
     suite = unittest.TestSuite()

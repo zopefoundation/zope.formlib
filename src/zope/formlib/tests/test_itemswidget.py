@@ -121,7 +121,7 @@ class ItemDisplayWidgetTest(ItemsWidgetBaseTest):
 
     def test_setVocabulary(self):
         widget = self._makeWidget()
-        self.assert_(widget.vocabulary is not None)
+        self.assertTrue(widget.vocabulary is not None)
         self.assertEqual(widget.vocabulary, self._field.vocabulary)
 
     def test__call__(self):
@@ -131,15 +131,15 @@ class ItemDisplayWidgetTest(ItemsWidgetBaseTest):
         self.assertEqual(widget(), 'One')
 
     def test_not_required(self):
-        self.failIf(self._makeWidget().required)
+        self.assertFalse(self._makeWidget().required)
 
 
     def test_toFieldValue(self):
         from zope.formlib.interfaces import ConversionError
         widget = self._makeWidget()
-        self.assertEquals(
+        self.assertEqual(
             widget._toFieldValue(None), self._field.missing_value)
-        self.assertEquals(widget._toFieldValue('token1'), 'one')
+        self.assertEqual(widget._toFieldValue('token1'), 'one')
         self.assertRaises(
             ConversionError, widget._toFieldValue, 'no_such_token')
         self.assertRaises(
@@ -209,7 +209,7 @@ class ItemsMultiDisplayWidgetTest(ItemsWidgetBaseTest):
         numbers = List(value_type=ICollector['choice']).bind(Collector(None))
         request = TestRequest()
         widget = self._widget(numbers, self._vocabulary, request)
-        self.failIf(widget.required)
+        self.assertFalse(widget.required)
 
 
 class ListDisplayWidgetTest(ItemsMultiDisplayWidgetTest):
@@ -272,7 +272,7 @@ class ItemsEditWidgetBaseTest(ItemsWidgetBaseTest):
 ##         widget = self._makeWidget(form={'field.choice': 'ten'})
 ##         widget.setPrefix('field.')
 ##         widget._getFormValue()
-##         self.assert_(isinstance(widget._error, ConversionError))
+##         self.assertTrue(isinstance(widget._error, ConversionError))
 
     def test_hidden(self):
         widget = self._makeWidget(form={'field.choice': 'token2'})
@@ -505,7 +505,7 @@ class ItemsMultiEditWidgetBaseTest(ItemsEditWidgetBaseTest):
 ##         widget = self._makeWidget(form={'field.numbers': ['ten']})
 ##         widget.setPrefix('field.')
 ##         widget._getFormValue()
-##         self.assert_(isinstance(widget._error, ConversionError))
+##         self.assertTrue(isinstance(widget._error, ConversionError))
 
     def test_hidden(self):
         widget = self._makeWidget(
@@ -541,7 +541,7 @@ class ItemsMultiEditWidgetBaseTest(ItemsEditWidgetBaseTest):
         widget.setPrefix('field.')
         field_value = widget.getInputValue()
         self.assertEqual(field_value, frozenset(['two', 'three']))
-        self.assert_(isinstance(field_value, frozenset))
+        self.assertTrue(isinstance(field_value, frozenset))
 
 
 class MultiSelectWidgetTest(ItemsMultiEditWidgetBaseTest):

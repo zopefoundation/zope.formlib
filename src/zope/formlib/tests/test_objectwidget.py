@@ -110,17 +110,17 @@ class ObjectWidgetTest(BrowserWidgetTest):
         self.assertRaises(MissingInputError, widget.getInputValue)
         error_html = widget.error()
         if PY3:
-            self.failUnless(
+            self.assertTrue(
                 "email: MissingInputError('field.foo.email', '', None)"
                 in error_html)
-            self.failUnless(
+            self.assertTrue(
                 "name: MissingInputError('field.foo.name', '', None)"
                 in error_html)
         else:
-            self.failUnless(
+            self.assertTrue(
                 "email: MissingInputError(u'field.foo.email', u'', None)"
                 in error_html)
-            self.failUnless(
+            self.assertTrue(
                 "name: MissingInputError(u'field.foo.name', u'', None)"
                 in error_html)
 

@@ -36,18 +36,18 @@ class IntWidgetTest(SimpleInputWidgetTest):
 
     def test_hasInput(self):
         del self._widget.request.form['field.foo']
-        self.failIf(self._widget.hasInput())
+        self.assertFalse(self._widget.hasInput())
         # widget has input, even if input is an empty string
         self._widget.request.form['field.foo'] = u''
-        self.failUnless(self._widget.hasInput())
+        self.assertTrue(self._widget.hasInput())
         self._widget.request.form['field.foo'] = u'123'
-        self.failUnless(self._widget.hasInput())
+        self.assertTrue(self._widget.hasInput())
 
     def test_getInputValue(self):
         self._widget.request.form['field.foo'] = u''
         self.assertRaises(WidgetInputError, self._widget.getInputValue)
         self._widget.request.form['field.foo'] = u'123'
-        self.assertEquals(self._widget.getInputValue(), 123)
+        self.assertEqual(self._widget.getInputValue(), 123)
         self._widget.request.form['field.foo'] = u'abc'
         self.assertRaises(ConversionError, self._widget.getInputValue)
 

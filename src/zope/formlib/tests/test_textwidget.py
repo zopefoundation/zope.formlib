@@ -138,7 +138,7 @@ class URIDisplayWidgetTest(BrowserWidgetTest):
 
     def testProperties(self):
         # check the default linkTarget
-        self.failIf(self._widget.linkTarget)
+        self.assertFalse(self._widget.linkTarget)
 
     def testRender(self):
         value = "uri:fake"
@@ -150,9 +150,9 @@ class URIDisplayWidgetTest(BrowserWidgetTest):
 
     def testEmptyRenderReturnsEmptyString(self):
         self._widget.setRenderedValue(None)
-        self.assertEquals(self._widget(), "")
+        self.assertEqual(self._widget(), "")
         self._widget.setRenderedValue('')
-        self.assertEquals(self._widget(), "")
+        self.assertEqual(self._widget(), "")
 
 
 class DateDisplayWidgetTest(BrowserWidgetTest):
@@ -166,7 +166,7 @@ class DateDisplayWidgetTest(BrowserWidgetTest):
         self._value = datetime.date(2004, 12, 0o1)
 
     def testDefaultDisplayStyle(self):
-        self.failIf(self._widget.displayStyle)
+        self.assertFalse(self._widget.displayStyle)
 
     def testRenderDefault(self):
         self._widget.setRenderedValue(self._value)
@@ -257,7 +257,7 @@ class TextAreaDisplayWidgetTest(BrowserWidgetTest):
         texttexttexttexttexttexttexttexttexttexttexttexttexttexttext
         """
         self._widget.setRenderedValue(value)
-        self.assert_(value, self._widget._toFieldValue(value))
+        self.assertTrue(value, self._widget._toFieldValue(value))
         self.verifyResult(self._widget(), ["<textarea",
                                            self._widget._toFormValue(value)])
         check_list = (
@@ -282,7 +282,7 @@ class BytesAreaDisplayWidgetTest(BrowserWidgetTest):
         texttexttexttexttexttexttexttexttexttexttexttexttexttexttext
         """
         self._widget.setRenderedValue(value)
-        self.assert_(value, self._widget._toFieldValue(value))
+        self.assertTrue(value, self._widget._toFieldValue(value))
         self.verifyResult(self._widget(), ["<textarea",
                                            self._widget._toFormValue(value)])
         check_list = (
@@ -335,11 +335,11 @@ class PasswordDisplayWidgetTest(BrowserWidgetTest):
     def testUnchangedPassword(self):
         # The password hasn't been set yet, so an empty string
         # is regarded as an empty field.
-        self.assertEquals(None, self._widget._toFieldValue(''))
+        self.assertEqual(None, self._widget._toFieldValue(''))
         # Now the password has been filled in, so the empty string
         # is regarded as the special value for UNCHANGED_PASSWORD.
         self._widget.context.context.foo = u'existing password'
-        self.assertEquals(self._widget.context.UNCHANGED_PASSWORD, 
+        self.assertEqual(self._widget.context.UNCHANGED_PASSWORD, 
                           self._widget._toFieldValue(''))
 
 class FileDisplayWidgetTest(BrowserWidgetTest):

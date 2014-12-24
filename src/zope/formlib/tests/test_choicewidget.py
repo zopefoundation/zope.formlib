@@ -35,7 +35,7 @@ class ChoiceWidgetTest(PlacelessSetup, unittest.TestCase):
         field = Choice(values=[1, 2, 3])
         bound = field.bind(object())
         widget = ChoiceDisplayWidget(bound, TestRequest())
-        self.assert_(isinstance(widget, ItemDisplayWidget))
+        self.assertTrue(isinstance(widget, ItemDisplayWidget))
         self.assertEqual(widget.context, bound)
         self.assertEqual(widget.vocabulary, bound.vocabulary)
     
@@ -46,7 +46,7 @@ class ChoiceWidgetTest(PlacelessSetup, unittest.TestCase):
         field = Choice(values=[1, 2, 3])
         bound = field.bind(object())
         widget = ChoiceInputWidget(bound, TestRequest())
-        self.assert_(isinstance(widget, DropdownWidget))
+        self.assertTrue(isinstance(widget, DropdownWidget))
         self.assertEqual(widget.context, bound)
         self.assertEqual(widget.vocabulary, bound.vocabulary)
         

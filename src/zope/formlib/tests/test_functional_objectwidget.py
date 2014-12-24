@@ -80,7 +80,7 @@ class Test(PlacelessSetup, unittest.TestCase, VerifyResults):
 
         widget = ObjectWidget(field, request, TestContact)
 
-        self.assertEquals(int(widget.hasInput()), 0)
+        self.assertEqual(int(widget.hasInput()), 0)
         check_list = (
             'input', 'name="field.foo.name"',
             'input', 'name="field.foo.email"'
@@ -94,11 +94,11 @@ class Test(PlacelessSetup, unittest.TestCase, VerifyResults):
             })
         field = Object(ITestContact, __name__=u'foo')
         widget = ObjectWidget(field, request, TestContact)
-        self.assertEquals(int(widget.hasInput()), 1)
+        self.assertEqual(int(widget.hasInput()), 1)
         o = widget.getInputValue()
-        self.assertEquals(hasattr(o, 'name'), 1)
-        self.assertEquals(o.name, u'fred')
-        self.assertEquals(o.email, u'fred@fred.com')
+        self.assertEqual(hasattr(o, 'name'), 1)
+        self.assertEqual(o.name, u'fred')
+        self.assertEqual(o.email, u'fred@fred.com')
         check_list = (
             'input', 'name="field.foo.name"', 'value="fred"',
             'input', 'name="field.foo.email"', 'value="fred@fred.com"',

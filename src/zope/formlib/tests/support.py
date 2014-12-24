@@ -45,14 +45,14 @@ class VerifyResults(object):
         start = 0
         for check in check_list:
             pos = result.find(check, start)
-            self.assert_(pos >= 0,
+            self.assertTrue(pos >= 0,
                          "%r not found in %r" % (check, result[start:]))
             if inorder:
                 start = pos + len(check)
 
     def verifyResultMissing(self, result, check_list):
         for check in check_list:
-            self.assert_(result.find(check) < 0,
+            self.assertTrue(result.find(check) < 0,
                          "%r unexpectedly found in %r" % (check, result))
 
 def patternExists(pattern, source, flags=0):

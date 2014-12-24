@@ -51,15 +51,15 @@ class Test(FunctionalWidgetTestCase):
         html = Form(foo, request)()
         
         # b1 and b2 should be displayed in checkbox input fields
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<input .* checked="checked".* name="form.b1".* ' \
             'type="checkbox".* />',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<input .* name="form.b2".* type="checkbox".* />',
             html))
         # confirm that b2 is *not* checked
-        self.assert_(not patternExists(
+        self.assertTrue(not patternExists(
             '<input .* checked="checked".* name="form.b2".* ' \
             'type="checkbox".* />',
             html))
@@ -106,7 +106,7 @@ class Test(FunctionalWidgetTestCase):
         Form(foo, request)()
 
         # confirm b1 is not missing
-        self.assert_(foo.b1 != Bool.missing_value)
+        self.assertTrue(foo.b1 != Bool.missing_value)
 
 def test_suite():
     suite = unittest.TestSuite()

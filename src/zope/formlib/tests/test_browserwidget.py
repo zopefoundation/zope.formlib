@@ -59,17 +59,17 @@ class SimpleInputWidgetTest(BrowserWidgetTest):
 
     def test_required(self):
         # widget required defaults to its context required
-        self.assert_(self._widget.required)
-        self.assert_(self._widget.context.required)
+        self.assertTrue(self._widget.required)
+        self.assertTrue(self._widget.context.required)
         # changing widget context required has no effect on widget required
         self._widget.context.required = False
-        self.assert_(self._widget.required)
-        self.assert_(not self._widget.context.required)
+        self.assertTrue(self._widget.required)
+        self.assertTrue(not self._widget.context.required)
 
     def test_hasInput(self):
-        self.failUnless(self._widget.hasInput())
+        self.assertTrue(self._widget.hasInput())
         del self._widget.request.form['field.foo']
-        self.failIf(self._widget.hasInput())
+        self.assertFalse(self._widget.hasInput())
 
     def testProperties(self):
         self.assertEqual(self._widget.tag, 'input')
@@ -135,18 +135,18 @@ class Test(BrowserWidgetTest):
         self.assertEqual(self._widget.getInputValue(), u'Foo Value')
 
         self._widget.request.form['field.foo'] = (1, 2)
-        self.failIf(self._widget.hasValidInput())
+        self.assertFalse(self._widget.hasValidInput())
 
         self._widget.request.form['field.foo'] = u'barf!'
-        self.failIf(self._widget.hasValidInput())
+        self.assertFalse(self._widget.hasValidInput())
 
         del self._widget.request.form['field.foo']
         self._widget.context.required = True
-        self.failIf(self._widget.hasValidInput())
+        self.assertFalse(self._widget.hasValidInput())
 
         self._widget.context.required = False
         self._widget.request.form['field.foo'] = u''
-        self.failUnless(self._widget.hasValidInput())
+        self.assertTrue(self._widget.hasValidInput())
 
     def test_getInputValue(self):
         self.assertEqual(self._widget.getInputValue(), u'Foo Value')
@@ -169,14 +169,14 @@ class Test(BrowserWidgetTest):
         self.assertEqual(self._widget.applyChanges(self.content), True)
 
     def test_hasInput(self):
-        self.failUnless(self._widget.hasInput())
+        self.assertTrue(self._widget.hasInput())
         del self._widget.request.form['field.foo']
-        self.failIf(self._widget.hasInput())
+        self.assertFalse(self._widget.hasInput())
         self._widget.request.form['field.foo'] = u'foo'
-        self.failUnless(self._widget.hasInput())
+        self.assertTrue(self._widget.hasInput())
         # widget has input, even if input is an empty string
         self._widget.request.form['field.foo'] = u''
-        self.failUnless(self._widget.hasInput())
+        self.assertTrue(self._widget.hasInput())
 
     def test_getFormValue_w_default(self):
         field = Text(__name__ = 'foo', title = u"Foo Title", default=u"def")
@@ -195,12 +195,12 @@ class Test(BrowserWidgetTest):
         # _getFormValue shouldn't replace it.
         request.form['field.foo'] = u'barf!'
         widget._getFormValue()
-        self.assertEquals(widget._error, 'my error')
+        self.assertEqual(widget._error, 'my error')
 
         # _getFormValue shouldn't clear it either
         request.form['field.foo'] = 33
         widget._getFormValue()
-        self.assertEquals(widget._error, 'my error')
+        self.assertEqual(widget._error, 'my error')
 
 
 def test_suite():

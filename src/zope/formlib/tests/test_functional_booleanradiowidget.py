@@ -46,16 +46,16 @@ class Test(FunctionalWidgetTestCase):
         html = Form(foo, request)()
 
         # bar field should be displayed as two radio buttons
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<input .*checked="checked".*name="form.bar".*type="radio".*'
             'value="on".* />',
             html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<input .*name="form.bar".*type="radio".*value="off".* />',
             html))
 
         # a hidden element is used to note that the field is present
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<input name="form.bar-empty-marker" type="hidden" value="1".* />',
             html))
 
@@ -83,8 +83,8 @@ class Test(FunctionalWidgetTestCase):
         Form(foo, request)()
  
         # confirm use of missing_value as new object value
-        self.assert_(IFoo['bar'].missing_value is None)
-        self.assert_(foo.bar is None)
+        self.assertTrue(IFoo['bar'].missing_value is None)
+        self.assertTrue(foo.bar is None)
 
         # restore bar required state
         IFoo['bar'].required = True
@@ -94,7 +94,7 @@ class Test(FunctionalWidgetTestCase):
         foo = Foo()
         request = TestRequest()
 
-        self.assert_(IFoo['bar'].required)
+        self.assertTrue(IFoo['bar'].required)
 
         # submit missing value for bar
         request.form['form.bar-empty-marker'] = ''
@@ -103,7 +103,7 @@ class Test(FunctionalWidgetTestCase):
         html = Form(foo, request)()
         
         # confirm error msgs
-        self.assert_('Required input is missing' in html)
+        self.assertTrue('Required input is missing' in html)
         
 
     def test_invalid_allowed_value(self):
@@ -115,7 +115,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = u''
         html = Form(foo, request)()
 
-        self.assert_('Invalid value' in html)
+        self.assertTrue('Invalid value' in html)
 
 def test_suite():
     suite = unittest.TestSuite()

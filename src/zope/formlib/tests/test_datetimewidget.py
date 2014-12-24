@@ -46,12 +46,12 @@ class DatetimeWidgetTest(SimpleInputWidgetTest):
 
     def test_hasInput(self):
         del self._widget.request.form['field.foo']
-        self.failIf(self._widget.hasInput())
+        self.assertFalse(self._widget.hasInput())
         # widget has input, even if input is an empty string
         self._widget.request.form['field.foo'] = u''
-        self.failUnless(self._widget.hasInput())
+        self.assertTrue(self._widget.hasInput())
         self._widget.request.form['field.foo'] = u'2003-03-26 12:00:00'
-        self.failUnless(self._widget.hasInput())
+        self.assertTrue(self._widget.hasInput())
 
     def test_getInputValue(self,
             value=u'2004-03-26 12:58:59',
@@ -59,7 +59,7 @@ class DatetimeWidgetTest(SimpleInputWidgetTest):
         self._widget.request.form['field.foo'] = u''
         self.assertRaises(WidgetInputError, self._widget.getInputValue)
         self._widget.request.form['field.foo'] = value
-        self.assertEquals(self._widget.getInputValue(), check_value)
+        self.assertEqual(self._widget.getInputValue(), check_value)
         self._widget.request.form['field.foo'] = u'abc'
         self.assertRaises(ConversionError, self._widget.getInputValue)
 
@@ -74,7 +74,7 @@ class DatetimeI18nWidgetTest(SimpleInputWidgetTest):
     _WidgetFactory = DatetimeI18nWidget
 
     def testDefaultDisplayStyle(self):
-        self.failIf(self._widget.displayStyle)
+        self.assertFalse(self._widget.displayStyle)
 
     def testRender(self):
         super(DatetimeI18nWidgetTest, self).testRender(
@@ -114,12 +114,12 @@ class DatetimeI18nWidgetTest(SimpleInputWidgetTest):
 
     def test_hasInput(self):
         del self._widget.request.form['field.foo']
-        self.failIf(self._widget.hasInput())
+        self.assertFalse(self._widget.hasInput())
         # widget has input, even if input is an empty string
         self._widget.request.form['field.foo'] = u''
-        self.failUnless(self._widget.hasInput())
+        self.assertTrue(self._widget.hasInput())
         self._widget.request.form['field.foo'] = u'26.03.2003 12:00:00'
-        self.failUnless(self._widget.hasInput())
+        self.assertTrue(self._widget.hasInput())
 
     def test_getDefaultInputValue(self,
             value=u'26.03.2004 12:58:59',
@@ -127,7 +127,7 @@ class DatetimeI18nWidgetTest(SimpleInputWidgetTest):
         self._widget.request.form['field.foo'] = u''
         self.assertRaises(WidgetInputError, self._widget.getInputValue)
         self._widget.request.form['field.foo'] = value
-        self.assertEquals(self._widget.getInputValue(), check_value)
+        self.assertEqual(self._widget.getInputValue(), check_value)
         self._widget.request.form['field.foo'] = u'abc'
         self.assertRaises(ConversionError, self._widget.getInputValue)
 

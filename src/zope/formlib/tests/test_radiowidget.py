@@ -97,13 +97,13 @@ class RadioWidgetTest(SimpleInputWidgetTest):
 
     def testHasInput(self):
         self._widget.request.form.clear()
-        self.assert_(not self._widget.hasInput())
+        self.assertTrue(not self._widget.hasInput())
         self._widget.request.form['field.foo-empty-marker'] = '1'
-        self.assert_(self._widget.hasInput())
+        self.assertTrue(self._widget.hasInput())
         self._widget.request.form['field.foo'] = u'Foo Value'
-        self.assert_(self._widget.hasInput())
+        self.assertTrue(self._widget.hasInput())
         del self._widget.request.form['field.foo-empty-marker']
-        self.assert_(self._widget.hasInput())
+        self.assertTrue(self._widget.hasInput())
 
 
     def testRenderEmptyMarker(self):

@@ -69,16 +69,16 @@ class Test(FunctionalWidgetTestCase):
         html = Form(foo, request)()
 
         # field should be displayed in a file input element
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<input .* name="form.f1".* type="file".*>', html))
-        self.assert_(patternExists(
+        self.assertTrue(patternExists(
             '<input .* name="form.f2".* type="file".*>', html))
 
     def test_submit_text(self):
         foo = FileTest()
         request = TestRequest()
 
-        self.assert_(foo.f1 is None)
+        self.assertTrue(foo.f1 is None)
         self.assertEqual(foo.f2, 'foo')
 
         # submit a sample text file
@@ -106,7 +106,7 @@ class Test(FunctionalWidgetTestCase):
 
         html = Form(foo, request)()
 
-        self.assert_('Form input is not a file object', html)
+        self.assertTrue('Form input is not a file object', html)
 
     def test_required_validation(self):
         foo = FileTest()
@@ -123,8 +123,8 @@ class Test(FunctionalWidgetTestCase):
         f1_index = html.find('form.f1')
         f2_index = html.find('form.f2')
         missing_index = html.find('Required input is missing')
-        self.assert_(missing_index > f1_index)
-        self.assert_(html.find('Required input is missing', f2_index) == -1)
+        self.assertTrue(missing_index > f1_index)
+        self.assertTrue(html.find('Required input is missing', f2_index) == -1)
 
     def test_empty_file(self):
         foo = FileTest()
@@ -141,7 +141,7 @@ class Test(FunctionalWidgetTestCase):
         Form(foo, request)()
 
         # new value for f1 should be field.missing_value (i.e, None)
-        self.assert_(foo.f1 is None)
+        self.assertTrue(foo.f1 is None)
 
 def test_suite():
     suite = unittest.TestSuite()
