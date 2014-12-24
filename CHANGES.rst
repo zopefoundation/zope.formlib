@@ -2,8 +2,8 @@
 Changes
 =======
 
-4.3.0a2 (unreleased)
-====================
+4.3.0 (unreleased)
+==================
 
 - Explicitly hide span in ``orderedSelectionList.pt``.  This only
   contains hidden inputs, but Internet Explorer 10 was showing them
