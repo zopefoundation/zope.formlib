@@ -22,7 +22,8 @@ import os
 from setuptools import setup, find_packages
 
 def read(*rnames):
-    return open(os.path.join(os.path.dirname(__file__), *rnames)).read()
+    with open(os.path.join(os.path.dirname(__file__), *rnames)) as f:
+        return f.read()
 
 def alltests():
     import os
@@ -44,7 +45,7 @@ setup(name='zope.formlib',
       author='Zope Foundation and Contributors',
       author_email='zope-dev@zope.org',
       description='Form generation and validation library for Zope',
-      long_description=(read('README.txt')
+      long_description=(read('README.rst')
                         + '\n\n' +
                         read('src', 'zope', 'formlib', 'form.txt')
                         + '\n\n' +
@@ -52,7 +53,7 @@ setup(name='zope.formlib',
                         + '\n\n' +
                         read('src', 'zope', 'formlib', 'errors.txt')
                         + '\n\n' +
-                        read('CHANGES.txt')
+                        read('CHANGES.rst')
                         ),
       license='ZPL 2.1',
       keywords="zope3 form widget",
