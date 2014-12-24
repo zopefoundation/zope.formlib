@@ -5,6 +5,9 @@ env:
     - TOXENV=py27
     - TOXENV=py33
     - TOXENV=py34
+    - TOXENV=pypy
+#   - TOxENV=pypy3
+#   pending release of a fix for https://bitbucket.org/pypy/pypy/issue/1946
 install:
     - travis_retry pip install tox
 script:
