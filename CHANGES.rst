@@ -5,6 +5,8 @@ Changes
 4.3.0 (unreleased)
 ==================
 
+- Add support for Python 3.4.
+
 - Add support for testing on Travis.
 
 - Explicitly hide span in ``orderedSelectionList.pt``.  This only
