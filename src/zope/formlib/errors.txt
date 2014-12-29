@@ -1,4 +1,3 @@
-==============
 Error handling
 ==============
 
@@ -6,7 +5,7 @@ These are a couple of functional tests that were written on-the-go ... In the
 future this might become more extensive ...
 
 Displaying invalidation errors
-==============================
+------------------------------
 
 Validation errors, e.g. cause by invariants, are converted into readable text
 by adapting them to IWidgetInputErrorView:
@@ -55,7 +54,7 @@ And yes, we can even handle an i18n message in an Invalid exception:
     u'<span class="error">[[my.domain][My i18n error message]]</span>'
 
 Displaying widget input errors
-==============================
+------------------------------
 
 WidgetInputError exceptions also work with i18n messages:
 

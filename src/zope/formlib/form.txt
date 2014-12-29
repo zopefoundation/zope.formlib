@@ -1,4 +1,3 @@
-=====
 Forms
 =====
 
@@ -69,7 +68,7 @@ setting up the fields:
 
 
 Getting HTML
-============
+------------
 
 Having defined form fields, we can use them to generate HTML
 forms. Typically, this is done at run time by form class
@@ -141,7 +140,7 @@ setUpWidgets.
 
 
 Reading data
-============
+------------
 
 Of course, we don't just want to display inputs.  We want to get the
 input data.  We can use getWidgetsData for that:
@@ -251,7 +250,7 @@ If we provide valid data, we'll get the data back:
 It's up to the form to decide what to do with the information.
 
 Invariants
-==========
+----------
 
 The `getWidgetsData` function checks individual field constraints.
 Interfaces can also provide invariants that we may also want to check.
@@ -384,7 +383,7 @@ invariants are ignored:
 
 
 Edit Forms
-==========
+----------
 
 A common application of forms is edit forms.  Edit forms are special
 in 2 ways:
@@ -587,7 +586,7 @@ The code we included in `MyForm` above is generic: it applies to any
 edit form.
 
 Actions
-=======
+-------
 
 Our commit logic is a little complicated.  It would be far more
 complicated if there were multiple submit buttons.
@@ -870,13 +869,13 @@ Ah, much better.  And our order has been updated:
     1.0
 
 Helpful base classes
-====================
+--------------------
 
 Our form has a lot of repetitive code. A number of helpful base
 classes provide standard form implementation.
 
 Form
-----
+~~~~
 
 The `Form` base class provides a number of common attribute definitions.
 It provides:
@@ -1014,7 +1013,7 @@ Now we can try out our form:
     20.0
 
 EditForm
---------
+~~~~~~~~
 
 Our `handle_edit_action` action is common to edit forms.  An
 `EditForm` base class captures this commonality.  It also sets up
@@ -1077,7 +1076,7 @@ Note that `EditForm` shows the date and time when content are
 modified.
 
 Multiple Schemas and Adapters
-=============================
+-----------------------------
 
 Forms can use fields from multiple schemas.  This can be done in a
 number of ways.  For example, multiple schemas can be passed to
@@ -1207,7 +1206,7 @@ the same way by `setUpWidgets` by passing the dictionary as an
 
 
 Named Widget Access
-===================
+-------------------
 
 The value returned from `setUpWidgets` supports named-based lookup as well as
 iteration:
@@ -1225,14 +1224,14 @@ iteration:
     'form.title'
 
 Form-field manipulations
-========================
+------------------------
 
 The form-field constructor is very flexible.  We've already seen that
 we can supply multiple schemas.  Here are some other things you can
 do.
 
 Specifying individual fields
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can specify individual fields for a form.  Here, we'll create a
 form that collects just the name from `IOrder` and the title from
@@ -1267,7 +1266,7 @@ You can also use stand-alone fields:
 But make sure the fields have a '__name__', as was done above.
 
 Concatenating field collections
--------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It is sometimes convenient to combine multiple field collections.
 Field collections support concatenation. For example, we may want to
@@ -1291,7 +1290,7 @@ combine field definitions:
            size="20" type="text" value=""  />
 
 Using fields for display
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 Normally, any writable fields get input widgets.  We may want to
 indicate that some fields should be used for display only. We can do
@@ -1330,7 +1329,7 @@ by `EditForm` has a condition to prevent it's use when there are no
 input widgets. Check it out for an example of using action conditions.
 
 Using fields for input
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 We may want to indicate that some fields should be used for input even
 if the underlying schema field is read-only. We can do this using the
@@ -1355,7 +1354,7 @@ if the underlying schema field is read-only. We can do this using the
            size="10" type="text" value="20.0"  />
 
 Displaying or editing raw data
-==============================
+------------------------------
 
 Sometimes, you want to display or edit data that doesn't come from an
 object.  One way to do this is to pass the data to setUpWidgets.
@@ -1462,7 +1461,7 @@ fake that quickly by forcing ignore_request to be `True`.
 
 
 Specifying Custom Widgets
-=========================
+-------------------------
 
 It is possible to use custom widgets for specific fields.  This can be
 done for a variety of reasons, but the provided mechanism should work
@@ -1498,7 +1497,7 @@ To set the custom widget factory for a field, assign to the
     <span class="iso-datetime">2005-05-04</span>
 
 Specifying Fields individually
-------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 All of the previous examples set up fields as collections.  We can
 also set up forms individually and pass them to the Fields
@@ -1517,7 +1516,7 @@ written more simply as:
     <span class="iso-datetime">2005-05-04</span>
 
 Computing default values
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 We saw earlier that we could provide initial widget data by passing a
 dictionary to setUpWidgets.  We can also supply a function or method
@@ -1586,12 +1585,12 @@ Note that the function passed must take a form as an argument.  The
 form base classes always pass the form to `setUpWidgets`.
 
 Advanced Usage Hints
-====================
+--------------------
 
 This section documents patterns for advanced usage of the formlib package.
 
 Multiple button groups
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 Multiple button groups can be accomplished many ways, but the way we've found
 that reuses the most code is the following:
@@ -1630,7 +1629,7 @@ and
 But the form machinery can still find the correct button. # TODO: demo
 
 Dividing display of widget errors and invariant errors
-------------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Even though the form machinery only has a single errors attribute, if designers
 wish to render widget errors differently than invariant errors, they can be
@@ -1643,7 +1642,7 @@ Therefore, a simple division such as the following should suffice.
 
 
 Omitting the form prefix
-------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~
 
 For certain use cases (e.g. forms that post data to a different server whose
 software you do not control) it is important to be able to generate forms
@@ -1742,11 +1741,11 @@ It is also possible to keep the form prefix and just suppress the 'actions' pref
            value="Button" class="button" />
 
 Additional Cases
-================
+----------------
 
 
 Automatic Context Adaptation
-----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 As you may know already, the formlib will automatically adapt the context to
 find a widget and data for a particular field. In an early version of
@@ -1809,7 +1808,7 @@ Here are some more places where the behavior was incorrect:
 
 
 Event descriptions
-------------------
+~~~~~~~~~~~~~~~~~~
 
 The ObjectModifiedEvent can be annotated with descriptions about the involved
 schemas and fields. The formlib provides these annotations with the help of the
@@ -1842,7 +1841,7 @@ Cleanup:
     >>> zope.event.subscribers.remove(eventLog)
 
 Actions that cause a redirect
------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When an action causes a redirect, the following `render` phase is omitted as
 the result will not be displayed anyway. This is both a performance
@@ -1877,7 +1876,7 @@ information.
     render was called
 
 Prevent form submit for GET requests
-------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 It can be useful to only accept form submits over POST requests. This, for
 example, prevents replaying data-modifying actions when reloading a page in a
@@ -1976,7 +1975,7 @@ methods are accepted::
     Action: handle {'title': 'Submitted Title'}
 
 Prevent Cross-site Request Forgery (CSRF) attacks
--------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 See also: http://en.wikipedia.org/wiki/Cross-site_request_forgery.
 

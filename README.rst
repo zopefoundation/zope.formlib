@@ -1,8 +1,8 @@
-.. contents::
+``zope.formlib``
+================
 
-========
-Overview
-========
+.. image:: https://travis-ci.org/zopefoundation/zope.interface.png?branch=master
+        :target: https://travis-ci.org/zopefoundation/zope.interface
 
 Forms are web components that use widgets to display and input data.
 Typically a template displays the widgets by accessing an attribute or

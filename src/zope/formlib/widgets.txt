@@ -1,4 +1,3 @@
-===============
 Browser Widgets
 ===============
 
@@ -23,7 +22,7 @@ Some widgets in formlib extend this pattern. The widget registration
 is extended for `Choice` fields and for the `collection` fields.
 
 Default Choice Field Widget Registration and Lookup
-===================================================
+---------------------------------------------------
 
 All field widgets are obtained by looking up a browser `IInputWidget`
 or `IDisplayWidget` view for the field object.  For `Choice` fields,
@@ -47,7 +46,7 @@ Some `Choice` widgets may also need to provide a source interface,
 particularly if the vocabulary is too big to iterate over.
 
 Default Collection Field Widget Registration and Lookup
-=======================================================
+-------------------------------------------------------
 
 The default configured lookup for collection fields -- List, Tuple, and Set, for
 instance -- begins with the usual lookup for a browser widget view for the
@@ -74,7 +73,7 @@ This registration pattern has three implications that should be highlighted.
   field, the `value_type`, and the request as arguments.
 
 Collections of Choices
-----------------------
+~~~~~~~~~~~~~~~~~~~~~~
 
 If a collection field's `value_type` is a `Choice` field, the second widget
 again defers its behavior, this time to a third lookup based on the collection
@@ -89,7 +88,7 @@ a "unique" or "lenient" token depending on the field's value, but this is not
 enabled in the default Zope 3 configuration.
 
 Registering Widgets for a New Collection Field Type
----------------------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Because of this lookup pattern, basic widget registrations for new field types
 must follow a recipe.  For example, a developer may introduce a new Bag field
@@ -147,7 +146,7 @@ any appropriate vocabulary and `BagWidget` is some appropriate widget::
 
 
 Choice widgets and the missing value
-====================================
+------------------------------------
 
 Choice widgets for a non-required field include a "no value" item to allow for
 not selecting any value at all. This value used to be omitted for required
