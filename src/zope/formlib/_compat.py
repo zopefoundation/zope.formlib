@@ -35,8 +35,14 @@ else:
 
     from StringIO import StringIO
     from itertools import imap
-    unicode = toUnicode = unicode
+    unicode = unicode
     basestring = basestring
+
+    def toUnicode(obj):
+        if isinstance(obj, bytes):
+            return unicode(obj, 'utf-8')
+        else:
+            return unicode(obj)
 
     def safeBase64Encode(obj):
         return base64.b64encode(toUnicode(obj)).strip().replace('=', '_')
