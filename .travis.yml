@@ -1,16 +1,20 @@
 language: python
 sudo: false
 python:
-  - 2.7
-  - 3.3
-  - 3.4
-  - 3.5
-  - pypy
-# - pypy3
-#   pending 3.3-compatible release
+    - 2.7
+    - 3.3
+    - 3.4
+    - 3.5
+    - pypy
+    - pypy3.5-5.8.0
 install:
-  - pip install tox-travis
+    - pip install -U pip setuptools
+    - pip install -U coverage coveralls
+    - pip install -U -e .[test]
 script:
-  - tox
+    - coverage run -m zope.testrunner --test-path=src
+after_success:
+    - coveralls
 notifications:
     email: false
+cache: pip
