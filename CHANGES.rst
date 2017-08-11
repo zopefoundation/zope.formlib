@@ -4,9 +4,9 @@ Changes
 4.4.0 (unreleased)
 ==================
 
-- Add support for Python 3.5.
+- Add support for Python 3.5, and 3.6.
 
-- Drop support for Python 2.6.
+- Drop support for Python 2.6 and 3.3.
 
 
 4.3.0 (2014-12-24)
