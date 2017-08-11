@@ -83,6 +83,7 @@ setup(name='zope.formlib',
       extras_require=dict(
           test=['zope.configuration',
                 'zope.testing',
+                'zope.testrunner',
                ]
           ),
       install_requires=[
