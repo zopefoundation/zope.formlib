@@ -8,6 +8,9 @@ Changes
 
 - Drop support for Python 2.6 and 3.3.
 
+- Use ``UTF-8`` as default encoding when casting bytes to unicode for Python 2
+  *and* 3.
+
 
 4.3.0 (2014-12-24)
 ==================

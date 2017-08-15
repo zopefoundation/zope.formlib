@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001, 2002, 2004, 2005 Zope Foundation and Contributors.
@@ -131,6 +132,14 @@ class TextWidgetTest(SimpleInputWidgetTest):
         check_list = ('style="color: red"',) + check_list
         self._widget.extra = 'style="color: red"'
         self.verifyResult(self._widget.hidden(), check_list)
+
+    def testRenderUTF8Input(self):
+        value = u"☃".encode('utf-8')  # results in \u2603
+        self._widget.setRenderedValue(value)
+        check_list = ('type="text"', 'id="field.foo"', 'name="field.foo"',
+                      u'value="\u2603"', 'size="20"')
+        self.verifyResult(self._widget(), check_list)
+
 
 class URIDisplayWidgetTest(BrowserWidgetTest):
 
