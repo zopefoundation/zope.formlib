@@ -1,7 +1,7 @@
 ``zope.formlib``
 ================
 
-.. image:: https://travis-ci.org/zopefoundation/zope.formlib.png?branch=master
+.. image:: https://travis-ci.org/zopefoundation/zope.formlib.svg?branch=master
         :target: https://travis-ci.org/zopefoundation/zope.formlib
 
 Forms are web components that use widgets to display and input data.
