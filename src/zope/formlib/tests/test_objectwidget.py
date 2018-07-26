@@ -145,7 +145,7 @@ def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(ObjectWidgetTest),
         doctest.DocFileSuite(
-                '../objectwidget.txt',
+                '../objectwidget.rst',
                 setUp=testing.setUp, tearDown=testing.tearDown,
                 checker=checker),
         doctest.DocTestSuite(),

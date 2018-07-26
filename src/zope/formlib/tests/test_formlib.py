@@ -759,7 +759,7 @@ def test_suite():
     ])
     return unittest.TestSuite((
         doctest.DocFileSuite(
-            '../errors.txt',
+            '../errors.rst',
             setUp=formSetUp, tearDown=tearDown, checker=checker,
             optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
             ),
@@ -770,7 +770,7 @@ def test_suite():
         #     optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
         #     ),
         doctest.DocFileSuite(
-            '../form.txt',
+            '../form.rst',
             setUp=formSetUp, tearDown=tearDown,
             optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
             checker=checker

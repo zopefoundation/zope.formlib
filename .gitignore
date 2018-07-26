@@ -12,3 +12,6 @@ develop-eggs/
 eggs/
 parts/
 coverage/
+.coverage
+htmlcov/
+docs/_build/

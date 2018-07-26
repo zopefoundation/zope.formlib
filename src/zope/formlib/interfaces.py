@@ -651,13 +651,11 @@ class IFormAPI(Interface):
         that the options don't include the success option.
 
         The function is designed to be used as a decorator (Python 2.4
-        and later), as in:
+        and later), as in::
 
-        @action("Edit")
-        def handle_edit(self, action, data):
-            ...
-
-
+            @action("Edit")
+            def handle_edit(self, action, data):
+                ...
         """
 
     def validate(form, actions, form_prefix, data, default_validate=None):

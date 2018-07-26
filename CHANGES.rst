@@ -1,14 +1,15 @@
-Changes
-=======
+=========
+ Changes
+=========
 
-4.5 (unreleased)
-================
+4.5.0 (unreleased)
+==================
 
-- Nothing changed yet.
+- Move documentation to https://zopeformlib.readthedocs.io
 
 
-4.4 (2017-08-15)
-================
+4.4.0 (2017-08-15)
+==================
 
 - Add support for Python 3.5, and 3.6.
 

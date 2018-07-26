@@ -6,6 +6,10 @@ include tox.ini
 include .travis.yml
 include .coveragerc
 
+recursive-include docs *.py
+recursive-include docs *.rst
+recursive-include docs Makefile
+
 recursive-include src *
 
 global-exclude *.pyc
