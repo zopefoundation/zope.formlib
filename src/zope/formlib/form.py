@@ -10,7 +10,9 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Forms
+"""Forms.
+
+This module provides the `zope.formlib.interfaces.IFormAPI` interface.
 """
 import binascii
 import datetime
@@ -67,7 +69,8 @@ def expandPrefix(prefix):
     return prefix
 
 @interface.implementer(interfaces.IFormField)
-class FormField:
+class FormField(object):
+    """Implementation of `zope.formlib.interfaces.IFormField`. """
 
     def __init__(self, field, name=None, prefix='',
                  for_display=None, for_input=None, custom_widget=None,
@@ -97,6 +100,7 @@ def _initkw(keep_readonly=(), omit_readonly=False, **defaults):
 
 @interface.implementer(interfaces.IFormFields)
 class FormFields(object):
+    """Implementation of `zope.formlib.interfaces.IFormFields`."""
 
     def __init__(self, *args, **kw):
         keep_readonly, omit_readonly, defaults = _initkw(**kw)
@@ -186,6 +190,7 @@ def fields(*args, **kw):
 
 @interface.implementer(interfaces.IWidgets)
 class Widgets(object):
+    """Implementation of `zope.formlib.interfaces.IWidgets`."""
 
     def __init__(self, widgets, prefix_length=None, prefix=None):
         self.__Widgets_widgets_items__ = widgets
@@ -239,7 +244,7 @@ def canWrite(context, field):
 def setUpWidgets(form_fields,
                  form_prefix=None, context=None, request=None, form=None,
                  data=(), adapters=None, ignore_request=False):
-
+    """Sets up widgets."""
     if request is None:
         request = form.request
     if context is None and form is not None:
@@ -340,6 +345,7 @@ def _createWidget(form_field, field, request, iface):
 
 
 def getWidgetsData(widgets, form_prefix, data):
+    """See `zope.formlib.interfaces.IFormAPI.getWidgetsData`"""
     errors = []
     form_prefix = expandPrefix(form_prefix)
 
@@ -508,6 +514,7 @@ class FormData:
 
 
 def checkInvariants(form_fields, form_data, context):
+    """See `zope.formlib.interfaces.IFormAPI.checkInvariants`"""
 
     # First, collect the data for the various schemas
     schema_data = {}
@@ -561,6 +568,7 @@ def applyData(context, form_fields, data, adapters=None):
     return descriptions
 
 def applyChanges(context, form_fields, data, adapters=None):
+    """See `zope.formlib.interfaces.IFormAPI.applyChanges`"""
     return bool(applyData(context, form_fields, data, adapters))
 
 
@@ -575,6 +583,7 @@ def _callify(meth):
 
 @interface.implementer(interfaces.IAction)
 class Action(object):
+    """See `zope.formlib.interfaces.IAction`"""
     _identifier = re.compile('[A-Za-z][a-zA-Z0-9_]*$')
 
     def __init__(self, label, success=None, failure=None,
@@ -663,7 +672,8 @@ def render_submit_button(self):
             (self.__name__, self.__name__, escape(label, quote=True))
             )
 
-class action:
+class action(object):
+    """See `zope.formlib.interfaces.IFormAPI.action`"""
     def __init__(self, label, actions=None, **options):
         caller_locals = sys._getframe(1).f_locals
         if actions is None:
@@ -716,7 +726,7 @@ class Actions(object):
         return self.__class__(*[a.__get__(inst) for a in self.actions])
 
 def handleSubmit(actions, data, default_validate=None):
-
+    """Handle a submit."""
     for action in actions:
         if action.submitted():
             errors = action.validate(data)

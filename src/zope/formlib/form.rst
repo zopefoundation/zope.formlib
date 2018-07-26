@@ -1,5 +1,8 @@
-Forms
-=====
+=======
+ Forms
+=======
+
+.. currentmodule:: zope.formlib.form
 
 Forms are web components that use widgets to display and input data.
 Typically a template displays the widgets by accessing an attribute or
@@ -35,7 +38,7 @@ schema to the `Fields` constructor:
     >>> class MyForm:
     ...     form_fields = form.Fields(IOrder)
 
-This sets up a set of form fields from the interface, IOrder.
+This sets up a set of form fields from the interface, ``IOrder``.
 
     >>> len(MyForm.form_fields)
     6
@@ -58,7 +61,7 @@ or by omitting fields:
     >>> [w.__name__ for w in MyForm.form_fields.omit('now', 'identifier')]
     ['name', 'min_size', 'max_size', 'color']
 
-We can omit read-only fields using the omit_readonly option when
+We can omit read-only fields using the *omit_readonly* option when
 setting up the fields:
 
     >>> class MyForm:
@@ -68,7 +71,7 @@ setting up the fields:
 
 
 Getting HTML
-------------
+============
 
 Having defined form fields, we can use them to generate HTML
 forms. Typically, this is done at run time by form class
@@ -86,8 +89,8 @@ instances. Let's look at an example that displays some input widgets:
     ...             ignore_request=ignore_request)
     ...         return '\n'.join([w() for w in widgets])
 
-Here we used ``form.setUpWidgets`` to create widget instances from our
-form-field specifications.  The second argument to ``setUpWidgets`` is a
+Here we used `setUpWidgets` to create widget instances from our
+form-field specifications.  The second argument to `setUpWidgets` is a
 form prefix.  All of the widgets on this form are given the same
 prefix.  This allows multiple forms to be used within a single form
 tag, assuming that each form uses a different form prefix.
@@ -124,8 +127,8 @@ output:
 
 Sometimes we don't want this behavior: we want to ignore the request values,
 particularly after a form has been processed and before it is drawn again.
-This can be accomplished with the 'ignore_request' argument in
-setUpWidgets.
+This can be accomplished with the *ignore_request* argument in
+`setUpWidgets`.
 
     >>> print(MyForm(None, request)(ignore_request=True))
     ... # doctest: +NORMALIZE_WHITESPACE
@@ -140,10 +143,10 @@ setUpWidgets.
 
 
 Reading data
-------------
+============
 
 Of course, we don't just want to display inputs.  We want to get the
-input data.  We can use getWidgetsData for that:
+input data.  We can use `getWidgetsData` for that:
 
     >>> from pprint import pprint
     >>> class MyForm:
@@ -250,7 +253,7 @@ If we provide valid data, we'll get the data back:
 It's up to the form to decide what to do with the information.
 
 Invariants
-----------
+==========
 
 The `getWidgetsData` function checks individual field constraints.
 Interfaces can also provide invariants that we may also want to check.
@@ -271,7 +274,7 @@ greater than or equal to the minimum:
     ...         if order.max_size < order.min_size:
     ...             raise interface.Invalid("Maximum is less than Minimum")
 
-We can update our form to check the invariant using 'checkInvariants':
+We can update our form to check the invariant using `checkInvariants`:
 
     >>> class MyForm:
     ...     form_fields = form.Fields(IOrder, omit_readonly=True)
@@ -383,7 +386,7 @@ invariants are ignored:
 
 
 Edit Forms
-----------
+==========
 
 A common application of forms is edit forms.  Edit forms are special
 in 2 ways:
@@ -395,9 +398,9 @@ in 2 ways:
   object being edited.
 
 The form package provides some functions to assist with creating edit
-forms.  When we set up our form_fields, we use the `render_context`
-option, which uses data from the context passed to setUpWidgets.
-Let's create a content class that provides `IOrder` and a simple form
+forms.  When we set up our form_fields, we use the *render_context*
+option, which uses data from the context passed to `setUpWidgets`.
+Let's create a content class that provides ``IOrder`` and a simple form
 that uses it:
 
     >>> import datetime
@@ -438,7 +441,7 @@ that uses it:
 
 Note that, in this case, we got the values from the request, because
 we used an old request.  If we want to redraw the form after processing a
-request, it is safest to pass ignore_request = True to setUpWidgets so that
+request, it is safest to pass ``ignore_request = True`` to `setUpWidgets` so that
 the form is redrawn with the values as found in the object, not on the request.
 
     >>> print(MyForm(order, request)(ignore_request=True))
@@ -582,11 +585,11 @@ changes were applied:
 
 because the new and old values are the same.
 
-The code we included in `MyForm` above is generic: it applies to any
+The code we included in ``MyForm`` above is generic: it applies to any
 edit form.
 
 Actions
--------
+=======
 
 Our commit logic is a little complicated.  It would be far more
 complicated if there were multiple submit buttons.
@@ -752,9 +755,9 @@ Lets walk through the `__call__` method.
 
 - We set up our widgets as before.
 
-- We use `form.handleSubmit` to validate our data.  We pass the form,
-  actions, prefix, and `validate` method.  For each action,
-  `form.handleSubmit` checks to see if the action was submitted.  If the
+- We use `handleSubmit` to validate our data.  We pass the form,
+  actions, prefix, and ``validate`` method.  For each action,
+  `handleSubmit` checks to see if the action was submitted.  If the
   action was submitted, it checks to see if it has a validator.  If
   the action has a validator, the action's validator is called,
   otherwise the validator passed is called.  The validator result (a
@@ -869,13 +872,13 @@ Ah, much better.  And our order has been updated:
     1.0
 
 Helpful base classes
---------------------
+====================
 
 Our form has a lot of repetitive code. A number of helpful base
 classes provide standard form implementation.
 
 Form
-~~~~
+----
 
 The `Form` base class provides a number of common attribute definitions.
 It provides:
@@ -953,16 +956,16 @@ We inherited most of our behavior from the base class.
 
 We also used the `action` decorator.  The action decorator:
 
-- creates an `actions` variable if one isn't already created,
+- creates an ``actions`` variable if one isn't already created,
 
 - defines an action with the given label and any other arguments, and
 
-- appends the action to the `actions` list.
+- appends the action to the ``actions`` list.
 
 The `action` decorator accepts the same arguments as the `Action`
-class with the exception of the `success` option.
+class with the exception of the *success* option.
 
-The creation of the `actions` is a bit magic, but provides
+The creation of the ``actions`` is a bit magic, but provides
 simplification in common cases.
 
 Now we can try out our form:
@@ -1013,7 +1016,7 @@ Now we can try out our form:
     20.0
 
 EditForm
-~~~~~~~~
+--------
 
 Our `handle_edit_action` action is common to edit forms.  An
 `EditForm` base class captures this commonality.  It also sets up
@@ -1076,11 +1079,11 @@ Note that `EditForm` shows the date and time when content are
 modified.
 
 Multiple Schemas and Adapters
------------------------------
+=============================
 
 Forms can use fields from multiple schemas.  This can be done in a
 number of ways.  For example, multiple schemas can be passed to
-`form.Fields`:
+`Fields`:
 
     >>> class IDescriptive(interface.Interface):
     ...     title = schema.TextLine(title=u"Title")
@@ -1202,11 +1205,11 @@ name:
 
 If you aren't using `EditForm`, you can get a dictionary populated in
 the same way by `setUpWidgets` by passing the dictionary as an
-`adapters` keyword argument.
+*adapters* keyword argument.
 
 
 Named Widget Access
--------------------
+===================
 
 The value returned from `setUpWidgets` supports named-based lookup as well as
 iteration:
@@ -1224,18 +1227,18 @@ iteration:
     'form.title'
 
 Form-field manipulations
-------------------------
+========================
 
 The form-field constructor is very flexible.  We've already seen that
 we can supply multiple schemas.  Here are some other things you can
 do.
 
 Specifying individual fields
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 You can specify individual fields for a form.  Here, we'll create a
-form that collects just the name from `IOrder` and the title from
-`IDescriptive`:
+form that collects just the name from ``IOrder`` and the title from
+``IDescriptive``:
 
     >>> class MyForm(form.EditForm):
     ...     form_fields = form.Fields(IOrder['name'],
@@ -1266,7 +1269,7 @@ You can also use stand-alone fields:
 But make sure the fields have a '__name__', as was done above.
 
 Concatenating field collections
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------
 
 It is sometimes convenient to combine multiple field collections.
 Field collections support concatenation. For example, we may want to
@@ -1290,11 +1293,11 @@ combine field definitions:
            size="20" type="text" value=""  />
 
 Using fields for display
-~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------
 
 Normally, any writable fields get input widgets.  We may want to
 indicate that some fields should be used for display only. We can do
-this using the `for_display` option when setting up form_fields:
+this using the *for_display* option when setting up form_fields:
 
     >>> class MyForm(form.EditForm):
     ...     form_fields = (
@@ -1329,7 +1332,7 @@ by `EditForm` has a condition to prevent it's use when there are no
 input widgets. Check it out for an example of using action conditions.
 
 Using fields for input
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 We may want to indicate that some fields should be used for input even
 if the underlying schema field is read-only. We can do this using the
@@ -1354,7 +1357,7 @@ if the underlying schema field is read-only. We can do this using the
            size="10" type="text" value="20.0"  />
 
 Displaying or editing raw data
-------------------------------
+==============================
 
 Sometimes, you want to display or edit data that doesn't come from an
 object.  One way to do this is to pass the data to setUpWidgets.
@@ -1431,7 +1434,7 @@ our form fields:
 Note that we didn't get data from the request because we are using all
 display widgets.
 
-Passing `ignore_request=True` to the `setUpWidgets` function ignores
+Passing ``ignore_request=True`` to the `setUpWidgets` function ignores
 the request for all values passed in the data dictionary, in order to
 help with redrawing a form after a successful action handler.  We'll
 fake that quickly by forcing ignore_request to be `True`.
@@ -1461,7 +1464,7 @@ fake that quickly by forcing ignore_request to be `True`.
 
 
 Specifying Custom Widgets
--------------------------
+=========================
 
 It is possible to use custom widgets for specific fields.  This can be
 done for a variety of reasons, but the provided mechanism should work
@@ -1482,7 +1485,7 @@ Let's create a simple custom widget to use in our demonstration::
     ...         return '<span class="iso-datetime">2005-05-04</span>'
 
 To set the custom widget factory for a field, assign to the
-`custom_widget` attribute of the form field object::
+``custom_widget`` attribute of the form field object::
 
     >>> class MyForm(form.Form):
     ...     actions = ()
@@ -1497,7 +1500,7 @@ To set the custom widget factory for a field, assign to the
     <span class="iso-datetime">2005-05-04</span>
 
 Specifying Fields individually
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------
 
 All of the previous examples set up fields as collections.  We can
 also set up forms individually and pass them to the Fields
@@ -1516,13 +1519,13 @@ written more simply as:
     <span class="iso-datetime">2005-05-04</span>
 
 Computing default values
-~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------
 
 We saw earlier that we could provide initial widget data by passing a
 dictionary to setUpWidgets.  We can also supply a function or method
 name when we set up form fields.
 
-We might like to include the `now` field in our forms.  We can provide
+We might like to include the ``now`` field in our forms.  We can provide
 a function for getting the needed initial value:
 
     >>> import datetime
@@ -1585,12 +1588,12 @@ Note that the function passed must take a form as an argument.  The
 form base classes always pass the form to `setUpWidgets`.
 
 Advanced Usage Hints
---------------------
+====================
 
 This section documents patterns for advanced usage of the formlib package.
 
 Multiple button groups
-~~~~~~~~~~~~~~~~~~~~~~
+----------------------
 
 Multiple button groups can be accomplished many ways, but the way we've found
 that reuses the most code is the following:
@@ -1614,22 +1617,24 @@ that reuses the most code is the following:
     ...
 
 The template then can render the button groups separately--something like the
-following, for instance:
+following, for instance::
 
     <input tal:repeat="action view/primary_actions"
        tal:replace="structure action/render"
        />
 
-and
+and::
 
     <input tal:repeat="action view/secondary_actions"
        tal:replace="structure action/render"
        />
 
-But the form machinery can still find the correct button. # TODO: demo
+But the form machinery can still find the correct button.
+
+.. # TODO: demo the above
 
 Dividing display of widget errors and invariant errors
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------------------------------
 
 Even though the form machinery only has a single errors attribute, if designers
 wish to render widget errors differently than invariant errors, they can be
@@ -1638,11 +1643,11 @@ all widget errors should implement zope.formlib.interfaces.IWidgetInputError,
 and invariant errors shouldn't, because they don't come from a widget.
 Therefore, a simple division such as the following should suffice.
 
-# TODO
+.. # TODO
 
 
 Omitting the form prefix
-~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------
 
 For certain use cases (e.g. forms that post data to a different server whose
 software you do not control) it is important to be able to generate forms
@@ -1741,11 +1746,11 @@ It is also possible to keep the form prefix and just suppress the 'actions' pref
            value="Button" class="button" />
 
 Additional Cases
-----------------
+================
 
 
 Automatic Context Adaptation
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+----------------------------
 
 As you may know already, the formlib will automatically adapt the context to
 find a widget and data for a particular field. In an early version of
@@ -1808,7 +1813,7 @@ Here are some more places where the behavior was incorrect:
 
 
 Event descriptions
-~~~~~~~~~~~~~~~~~~
+------------------
 
 The ObjectModifiedEvent can be annotated with descriptions about the involved
 schemas and fields. The formlib provides these annotations with the help of the
@@ -1841,7 +1846,7 @@ Cleanup:
     >>> zope.event.subscribers.remove(eventLog)
 
 Actions that cause a redirect
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-----------------------------
 
 When an action causes a redirect, the following `render` phase is omitted as
 the result will not be displayed anyway. This is both a performance
@@ -1876,7 +1881,7 @@ information.
     render was called
 
 Prevent form submit for GET requests
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+------------------------------------
 
 It can be useful to only accept form submits over POST requests. This, for
 example, prevents replaying data-modifying actions when reloading a page in a
@@ -1975,7 +1980,7 @@ methods are accepted::
     Action: handle {'title': 'Submitted Title'}
 
 Prevent Cross-site Request Forgery (CSRF) attacks
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+-------------------------------------------------
 
 See also: http://en.wikipedia.org/wiki/Cross-site_request_forgery.
 
@@ -2008,8 +2013,8 @@ Issues to research:
 * Tests for applications that use form components with CSRF protection
   enabled, is cumbersome. Can we help that somehow?
 
-* Is using os.urandom() for generating a token sufficient *and*
-  available cross-platform? Could uuid.uuid4() be an alternative?
+* Is using `os.urandom` for generating a token sufficient *and*
+  available cross-platform? Could `uuid.uuid4` be an alternative?
 
 When first visting a form, a CSRF token will be set in the cookie::
 
@@ -2180,7 +2185,7 @@ We can indeed submit data to the forms::
     >>> _ = multi()
     Action: handle in Form Two
 
-There is a view for the InvalidCSRFTokenError::
+There is a view for the `.InvalidCSRFTokenError`::
 
     >>> from zope.component import getMultiAdapter
     >>> from zope.formlib.interfaces import InvalidCSRFTokenError
