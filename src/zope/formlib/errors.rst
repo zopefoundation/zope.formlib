@@ -1,14 +1,17 @@
-Error handling
-==============
+================
+ Error handling
+================
+
+.. currentmodule:: zope.formlib.interfaces
 
 These are a couple of functional tests that were written on-the-go ... In the
 future this might become more extensive ...
 
 Displaying invalidation errors
-------------------------------
+==============================
 
 Validation errors, e.g. cause by invariants, are converted into readable text
-by adapting them to IWidgetInputErrorView:
+by adapting them to `IWidgetInputErrorView`:
 
     >>> from zope.publisher.browser import TestRequest
     >>> from zope.interface.exceptions import Invalid
@@ -20,7 +23,7 @@ by adapting them to IWidgetInputErrorView:
     >>> message
     u'<span class="error">You are wrong!</span>'
 
-Interface invariant methods raise zope.interface.Invalid exception. Test if
+Interface invariant methods raise `zope.interface.Invalid` exception. Test if
 this exception gets handled by the error_views.
 
     >>> myError = Invalid('My error message')
@@ -54,9 +57,9 @@ And yes, we can even handle an i18n message in an Invalid exception:
     u'<span class="error">[[my.domain][My i18n error message]]</span>'
 
 Displaying widget input errors
-------------------------------
+==============================
 
-WidgetInputError exceptions also work with i18n messages:
+`WidgetInputError` exceptions also work with i18n messages:
 
     >>> from zope.formlib.interfaces import WidgetInputError
     >>> myError = WidgetInputError(
