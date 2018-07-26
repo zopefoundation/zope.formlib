@@ -185,6 +185,7 @@ intersphinx_mapping = {
     'http://zopecomponent.readthedocs.io/en/latest': None,
     'http://zopeinterface.readthedocs.io/en/latest': None,
     'http://zopepublisher.readthedocs.io/en/latest': None,
+    'http://zopeschema.readthedocs.io/en/latest': None,
 }
 
 extlinks = {
