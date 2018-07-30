@@ -147,6 +147,7 @@ class ObjectWidget(BrowserWidget, InputWidget):
 
 
     def applyChanges(self, content):
+        """See `zope.formlib.interfaces.IInputWidget.applyChanges`"""
         field = self.context
 
         # create our new object value

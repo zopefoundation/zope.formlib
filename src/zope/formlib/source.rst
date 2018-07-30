@@ -3,7 +3,7 @@ Source Widgets
 ==============
 
 Sources are objects that represent sets of values from which one might choose
-and are used with Choice schema fields. Source widgets currently fall into two
+and are used with `zope.schema.Choice` schema fields. Source widgets currently fall into two
 categories:
 
 - widgets for iterable sources
@@ -23,7 +23,7 @@ All of our examples will be using the component architecture::
   >>> import zope.component
   >>> import zope.schema
 
-This `ITerms` implementation can be used for the sources involved in
+This ``ITerms`` implementation can be used for the sources involved in
 our tests::
 
   >>> import base64
@@ -67,10 +67,11 @@ We'll also need request objects::
 Iterable Source Widgets
 =======================
 
-Iterable sources are expected to be simpler than queriable sources, so they
-represent a good place to start.  The most important aspect of iterable sources
-for widgets is that it's actually possible to enumerate all the values from the
-source.  This allows each possible value to be listed in a  <select> form field.
+Iterable sources are expected to be simpler than queriable sources, so
+they represent a good place to start. The most important aspect of
+iterable sources for widgets is that it's actually possible to
+enumerate all the values from the source. This allows each possible
+value to be listed in a ``<select>`` form field.
 
 Let's start with a simple example.  We have a very trivial source,
 which is basically a list::
@@ -79,7 +80,7 @@ which is basically a list::
   ... class SourceList(list):
   ...     pass
 
-We need to register our `ITerms` view::
+We need to register our ``ITerms`` view::
 
   >>> zope.component.provideAdapter(
   ...     ListTerms,
@@ -166,7 +167,7 @@ selected::
   <input name="field.dog-empty-marker" type="hidden" value="1" />
   </div>
 
-Dropdown widgets are achieved with SourceDropdownWidget, which simply
+Dropdown widgets are achieved with `.SourceDropdownWidget`, which simply
 generates a selection list of size 1::
 
   >>> request = TestRequest()
@@ -178,8 +179,8 @@ generates a selection list of size 1::
   <select id="field.dog" name="field.dog" size="1" >
   <option selected="selected" value="">(nothing selected)</option>...
 
-An alternative to SourceSelectWidget for small numbers of items is
-SourceRadioWidget that provides a radio button group for the items::
+An alternative to `.SourceSelectWidget` for small numbers of items is
+`.SourceRadioWidget` that provides a radio button group for the items::
 
   >>> request = TestRequest()
   >>> widget = zope.formlib.source.SourceRadioWidget(
@@ -227,13 +228,13 @@ We'll select an item by setting the appropriate fields in the request::
   </div>
 
 For list-valued fields with items chosen from iterable sources, there are the
-SourceMultiSelectWidget and SourceOrderedMultiSelectWidget widgets. The latter
+`.SourceMultiSelectWidget` and `.SourceOrderedMultiSelectWidget` widgets. The latter
 widget includes support for re-ording the list items.
-SourceOrderedMultiSelectWidget is configured as the default widget for lists of
+`.SourceOrderedMultiSelectWidget` is configured as the default widget for lists of
 choices.
 
 If you don't need ordering support through the web UI, then you can use
-the simpler SourceMultiSelectWidget::
+the simpler `.SourceMultiSelectWidget`::
 
   >>> dogSource = SourceList([
   ...     u'spot', u'bowser', u'prince', u'duchess', u'lassie'])
@@ -302,7 +303,7 @@ Finally, what does the widget look like now::
   </div>
 
 
-An alternative for small numbers of items is to use SourceMultiCheckBoxWidget::
+An alternative for small numbers of items is to use `.SourceMultiCheckBoxWidget`::
 
   >>> request = TestRequest()
   >>> widget = zope.formlib.source.SourceMultiCheckBoxWidget(
@@ -377,7 +378,7 @@ Finally, what does the widget look like now::
   </div>
 
 
-For list ordering support, use SourceOrderedMultiSelectWidget::
+For list ordering support, use `.SourceOrderedMultiSelectWidget`::
 
   >>> request = TestRequest()
   >>> widget = zope.formlib.source.SourceOrderedMultiSelectWidget(
@@ -427,7 +428,7 @@ Select two items::
   ['spot', 'lassie']
 
 
-For set-valued fields, use SourceMultiSelectSetWidget::
+For set-valued fields, use `.SourceMultiSelectSetWidget`::
 
   >>> dogSet = zope.schema.Set(
   ...     __name__ = 'dogSet',
@@ -509,7 +510,7 @@ The default widgets for selecting values from sources use the
 following approach:
 
 - One or more query objects are obtained from the source by adapting the source
-  to `zope.schema.ISourceQueriables`. If no adapter is obtained, then the
+  to `zope.schema.interfaces.ISourceQueriables`. If no adapter is obtained, then the
   source itself is assumed to be queriable.
 
 - For each queriable found, a
@@ -524,13 +525,13 @@ which is basically a list:
   ... class SourceList(list):
   ...     pass
 
-We need to register our `ITerms` view::
+We need to register our ``ITerms`` view::
 
   >>> zope.component.provideAdapter(
   ...     ListTerms,
   ...     (SourceList, zope.publisher.interfaces.browser.IBrowserRequest))
 
-We aren't going to provide an adapter to `ISourceQueriables`, so the source
+We aren't going to provide an adapter to ``ISourceQueriables``, so the source
 itself will be used as it's own queriable.  We need to provide a query view
 for the source::
 
@@ -611,8 +612,10 @@ in the form and by "selecting" the submit button::
   >>> request.form['field.dog.query.string'] = u'o'
   >>> request.form['field.dog.query'] = u'Search'
 
-Because the field is required, a non-selection is not valid. Thus, while the
-widget still hasInput, it will raise an error when you getInputValue::
+Because the field is required, a non-selection is not valid. Thus,
+while the widget still
+`~zope.formlib.interfaces.IInputWidget.hasInput`, it will raise an
+error when you `~zope.formlib.interfaces.IInputWidget.getInputValue`::
 
   >>> widget.hasInput()
   True
@@ -727,7 +730,7 @@ combines multiple sources::
   ...     def getQueriables(self):
   ...         return self.sources
 
-This multi-source implements `ISourceQueriables`. It assumes that the sources
+This multi-source implements ``ISourceQueriables``. It assumes that the sources
 it's given are queriable and just returns the sources as the queryable objects.
 
 We can reuse our terms view::
@@ -1059,7 +1062,7 @@ Using vocabulary-dependent widgets with sources
 
 if you have a widget that uses old-style vocabularies but don't have the time
 to rewrite it for sources, all is not lost! The wrapper
-IterableSourceVocabulary can be used to make sources and ITerms look like a
+`.IterableSourceVocabulary` can be used to make sources and ``ITerms`` look like a
 vocabulary. This allows us to use vocabulary-based widgets with sources
 instead of vocabularies.
 

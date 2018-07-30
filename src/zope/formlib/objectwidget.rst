@@ -2,7 +2,7 @@
 Object Widget
 =============
 
-The following example shows a Family with Mother and Father.
+The following example shows a ``Family`` with ``Mother`` and ``Father``.
 First define the interface for a person:
 
   >>> from zope.interface import Interface, implementer
@@ -35,8 +35,9 @@ Let's define the interface family:
   ...                     required=False,
   ...                     schema=IPerson)
 
-Let's define the class family with FieldProperty's mother and father
-FieldProperty validate the values if they get added:
+Let's define the class ``Family`` using
+`zope.schema.fieldproperty.FieldProperty` for ``mother`` and ``father``.
+``FieldProperty`` instances validate the values if they get added:
 
   >>> from zope.schema.fieldproperty import FieldProperty
 
@@ -50,7 +51,7 @@ FieldProperty validate the values if they get added:
   ...         self.mother = mother
   ...         self.father = father
 
-Let's make an instance of Family with None attributes:
+Let's make an instance of Family with `None` attributes:
 
   >>> family = Family()
   >>> bool(family.mother == None)
@@ -77,7 +78,7 @@ Let's define a dummy class which doesn't implements IPerson:
   ...     def __init__(self, name=''):
   ...         self.name = name
 
-Raise a SchemaNotProvided exception if we add a Dummy instance to a Family
+Raise a `zope.schema.interfaces.SchemaNotProvided` exception if we add a Dummy instance to a Family
 object:
 
   >>> foo = Dummy('foo')
@@ -97,7 +98,7 @@ Now let's setup a enviroment for use the widget like in a real application:
   >>> from zope.formlib.widgets import ObjectWidget
   >>> from zope.formlib.interfaces import IInputWidget
 
-Register the TextLine widget used in the IPerson interface for the field 'name'.
+Register the `zope.schema.TextLine` widget used in the IPerson interface for the field 'name'.
 
   >>> from zope.publisher.interfaces.browser import IDefaultBrowserLayer
   >>> from zope.component import provideAdapter
@@ -116,22 +117,21 @@ instance on the family object:
   >>> family.mother.name
   u'Margrith'
 
-Now let's initialize a ObjectWidget with the right attributes:
+Now let's initialize a `.ObjectWidget` with the right attributes:
 
   >>> mother_field = IFamily['mother']
   >>> factory = Person
   >>> widget = ObjectWidget(mother_field, request, factory)
 
-Now comes the magic. Apply changes means we force the ObjectWidget to read
-the request, extract the value and save it on the content. The ObjectWidget
+Now comes the magic. Apply changes means we force the `.ObjectWidget` to read
+the request, extract the value and save it on the content. The `.ObjectWidget`
 instance uses a real Person class (factory) for add the value. The value is
-temporary stored in this factory class. The ObjectWidget reads the value from
+temporary stored in this factory class. The `.ObjectWidget` reads the value from
 this factory and set it to the attribute 'name' of the instance mother
 (The object mother is already there). If we don't have an instance mother
 already stored in the family object, the factory instance will be stored
 directly to the family attribute mother. For more information see the method
-'applyChanges()' in the interface
-zope.formlib.objectwidget.ObjectWidget.
+`zope.formlib.objectwidget.ObjectWidget.applyChanges`.
 
   >>> widget.applyChanges(family)
   True
@@ -145,4 +145,4 @@ Test the updated mother's name value on the object family:
   True
 
 So, now you know my mothers and fathers name. I hope it's also clear how to
-use the Object field and the ObjectWidget.
+use the `zope.schema.Object` field and the `.ObjectWidget`.

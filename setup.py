@@ -45,16 +45,11 @@ setup(name='zope.formlib',
       author='Zope Foundation and Contributors',
       author_email='zope-dev@zope.org',
       description='Form generation and validation library for Zope',
-      long_description=(read('README.rst')
-                        + '\n\n' +
-                        read('src', 'zope', 'formlib', 'form.txt')
-                        + '\n\n' +
-                        read('src', 'zope', 'formlib', 'widgets.txt')
-                        + '\n\n' +
-                        read('src', 'zope', 'formlib', 'errors.txt')
-                        + '\n\n' +
-                        read('CHANGES.rst')
-                        ),
+      long_description=(
+          read('README.rst')
+          + '\n\n' +
+          read('CHANGES.rst')
+      ),
       license='ZPL 2.1',
       keywords="zope3 form widget",
       classifiers=[
@@ -75,40 +70,46 @@ setup(name='zope.formlib',
           'Operating System :: OS Independent',
           'Topic :: Internet :: WWW/HTTP',
           'Framework :: Zope3',
-          ],
+      ],
       url='https://github.com/zopefoundation/zope.formlib',
       packages=find_packages('src'),
-      package_dir = {'': 'src'},
+      package_dir={'': 'src'},
       namespace_packages=['zope',],
-      extras_require=dict(
-          test=['zope.configuration',
-                'zope.testing',
-                'zope.testrunner',
-               ]
-          ),
+      extras_require={
+          'test': [
+              'zope.configuration',
+              'zope.testing',
+              'zope.testrunner',
+          ],
+          'docs': [
+              'Sphinx',
+              'sphinx_rtd_theme',
+              'repoze.sphinx.autointerface',
+          ],
+      },
       install_requires=[
-        'setuptools',
-        'pytz',
-        'zope.browser>=1.1',
-        'zope.browserpage>=3.11.0',
-        'zope.component',
-        'zope.event',
-        'zope.i18n',
-        'zope.i18nmessageid',
-        'zope.interface',
-        'zope.lifecycleevent',
-        'zope.publisher',
-        'zope.schema>=3.5.1',
-        'zope.security',
-        'zope.traversing',
-        'zope.datetime',
-        ],
-      tests_require = [
+          'setuptools',
+          'pytz',
+          'zope.browser>=1.1',
+          'zope.browserpage>=3.11.0',
+          'zope.component',
+          'zope.event',
+          'zope.i18n',
+          'zope.i18nmessageid',
+          'zope.interface',
+          'zope.lifecycleevent',
+          'zope.publisher',
+          'zope.schema>=3.5.1',
+          'zope.security',
+          'zope.traversing',
+          'zope.datetime',
+      ],
+      tests_require=[
           'zope.configuration',
           'zope.testing',
           'zope.testrunner',
-          ],
-      test_suite = '__main__.alltests',
-      include_package_data = True,
-      zip_safe = False,
-      )
+      ],
+      test_suite='__main__.alltests',
+      include_package_data=True,
+      zip_safe=False,
+)

@@ -382,7 +382,7 @@ class ISubPage(Interface):
 
 
 class IFormAPI(Interface):
-    """API to facilitate creating forms, provided by zope.formlib.form
+    """API to facilitate creating forms, provided by `zope.formlib.form`
     """
 
     def Field(schema_field, **options):
@@ -420,7 +420,7 @@ class IFormAPI(Interface):
 
 
     def Fields(*arguments, **options):
-        """Create form-fields collection (IFormFields)
+        """Create form-fields collection (`IFormFields`)
 
         Creates a form-field collection from a collection of:
 
@@ -651,13 +651,11 @@ class IFormAPI(Interface):
         that the options don't include the success option.
 
         The function is designed to be used as a decorator (Python 2.4
-        and later), as in:
+        and later), as in::
 
-        @action("Edit")
-        def handle_edit(self, action, data):
-            ...
-
-
+            @action("Edit")
+            def handle_edit(self, action, data):
+                ...
         """
 
     def validate(form, actions, form_prefix, data, default_validate=None):
@@ -779,7 +777,7 @@ class IFormBaseCustomization(ISubPage, IBrowserPage):
 
 
 class IFormFields(Interface):
-    """A colection of form fields (IFormField objects)
+    """A colection of form fields (`IFormField` objects)
     """
 
     def __len__():
@@ -811,7 +809,7 @@ class IFormFields(Interface):
         """
 
     def __add__(form_fields):
-        """Add two form fields collections (IFormFields)
+        """Add two form fields collections (`IFormFields`)
 
         Return a new IFormFields that is the concatination of the two
         IFormFields.
@@ -820,8 +818,8 @@ class IFormFields(Interface):
     def select(*names):
         """Select fields with given names in order
 
-        Return a new IFormFields that is a selection from the original
-        IFormFields that has the named fields in the specified order.
+        Return a new `IFormFields` that is a selection from the original
+        `IFormFields` that has the named fields in the specified order.
         """
 
     def omit(*names):
