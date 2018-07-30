@@ -1982,12 +1982,13 @@ methods are accepted::
 Prevent Cross-site Request Forgery (CSRF) attacks
 -------------------------------------------------
 
-See also: http://en.wikipedia.org/wiki/Cross-site_request_forgery.
-
-The CSRF protection in zope.formlib assumes the attacker cannot get hold of
-information stored in a cookie that is send to the domain handling the form
-submit. zope.formlib verifies that the token as sent with the cookie is
-identical to the value as sent with the form (as a hidden input field).
+The `cross-site request forgery
+<https://en.wikipedia.org/wiki/Cross-site_request_forgery.>`_
+protection in zope.formlib assumes the attacker cannot get hold of
+information stored in a cookie that is send to the domain handling the
+form submit. zope.formlib verifies that the token as sent with the
+cookie is identical to the value as sent with the form (as a hidden
+input field).
 
 zope.formlib will set a random token in the cookie when first accessing the
 form. Any subsequent form rendering and submit handling will use the token
