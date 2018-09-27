@@ -5,6 +5,9 @@
 4.5.0 (unreleased)
 ==================
 
+- (#17) Fix IE issue in /@@user-information?user_id=TestUser for
+  orderedSelectionList.
+
 - Move documentation to https://zopeformlib.readthedocs.io
 
 
