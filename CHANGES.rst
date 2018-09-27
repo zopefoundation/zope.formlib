@@ -2,11 +2,11 @@
  Changes
 =========
 
-4.5.0 (unreleased)
+4.5.0 (2018-09-27)
 ==================
 
-- (#17) Fix IE issue in /@@user-information?user_id=TestUser for
-  orderedSelectionList.
+- Fix IE issue in /@@user-information?user_id=TestUser for
+  orderedSelectionList (GH#17)
 
 - Move documentation to https://zopeformlib.readthedocs.io
 
