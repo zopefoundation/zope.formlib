@@ -84,6 +84,7 @@ object:
   >>> foo = Dummy('foo')
   >>> bar = Dummy('bar')
   >>> family = Family(foo, bar)
+  ... # doctest: +IGNORE_EXCEPTION_DETAIL
   Traceback (most recent call last):
   ...
   SchemaNotProvided
