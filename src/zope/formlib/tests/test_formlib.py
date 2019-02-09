@@ -273,7 +273,8 @@ translation domain.  We'll create one for our needs:
     ... class MyDomain:
     ...
     ...     def translate(self, msgid, mapping=None, context=None,
-    ...                   target_language=None, default=None):
+    ...                   target_language=None, default=None,
+    ...                   msgid_plural=None, default_plural=None, number=None):
     ...         print(msgid)
     ...         print(mapping)
     ...         print(context)

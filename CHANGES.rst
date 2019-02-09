@@ -5,7 +5,7 @@
 4.5.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Make the tests compatible with ``zope.i18n >= 4.5``.
 
 
 4.5.0 (2018-09-27)
