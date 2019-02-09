@@ -5,7 +5,7 @@
 4.5.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Add support for Python 3.7.
 
 
 4.5.0 (2018-09-27)
