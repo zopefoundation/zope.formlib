@@ -757,6 +757,8 @@ def test_suite():
                   r"\n <exceptions.ValueError instance at ...>"),
       (re.compile(r" ValueError\('could not convert string to float: bob',\)"),
                   r"\n <exceptions.ValueError instance at ...>"),
+      (re.compile(r"\(Invalid\('value bigger than max',\),\)"),
+       r"(Invalid('value bigger than max'),)"),
     ])
     return unittest.TestSuite((
         doctest.DocFileSuite(

@@ -5,6 +5,8 @@
 4.5.1 (unreleased)
 ==================
 
+- Add support for Python 3.7.
+
 - Make the tests compatible with ``zope.i18n >= 4.5``.
 
 
