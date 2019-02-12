@@ -7,6 +7,8 @@
 
 - Add support for Python 3.7.
 
+- Make the tests compatible with ``zope.i18n >= 4.5``.
+
 
 4.5.0 (2018-09-27)
 ==================
