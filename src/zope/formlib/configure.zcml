@@ -602,6 +602,7 @@
       permission="zope.Public"
       />
 
+  <include package="zope.browserresource" file="meta.zcml" />
   <browser:resourceDirectory
     name="zope.formlib"
     directory="js" />
