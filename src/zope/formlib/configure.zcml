@@ -602,4 +602,8 @@
       permission="zope.Public"
       />
 
+  <browser:resourceDirectory
+    name="zope.formlib"
+    directory="js" />
+
 </configure>

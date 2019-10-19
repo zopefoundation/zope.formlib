@@ -5,7 +5,11 @@
 4.7.0 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Move inline javascript function definitions containing "<", ">" or "&"
+  into external files to follow the XHTML recommendation concerning
+  XML/HTML compatibility
+  (`#25 <https://github.com/zopefoundation/zope.formlib/issues/25>`_)
+  
 
 
 4.6.0 (2019-02-12)
