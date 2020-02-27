@@ -10,9 +10,8 @@ recursive-include docs *.py
 recursive-include docs *.rst
 recursive-include docs Makefile
 
-recursive-include src *.pt *.rst *.zcml
+recursive-include src *.pt *.rst *.zcml *.js
 
 global-exclude *.pyc
 global-exclude *.so
 global-exclude *.dll
-
