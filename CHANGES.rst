@@ -2,7 +2,7 @@
  Changes
 =========
 
-4.7.0 (unreleased)
+4.7.0 (2020-02-27)
 ==================
 
 - Move inline javascript function definitions containing "<", ">" or "&"
