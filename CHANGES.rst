@@ -9,7 +9,10 @@
   into external files to follow the XHTML recommendation concerning
   XML/HTML compatibility
   (`#25 <https://github.com/zopefoundation/zope.formlib/issues/25>`_)
-  
+
+- Add support for Python 3.8.
+
+- Drop support for Python 3.4.
 
 
 4.6.0 (2019-02-12)
