@@ -26,7 +26,7 @@ def read(*rnames):
         return f.read()
 
 setup(name='zope.formlib',
-      version='4.7.1.dev0',
+      version='4.7.1',
       author='Zope Foundation and Contributors',
       author_email='zope-dev@zope.org',
       description='Form generation and validation library for Zope',
