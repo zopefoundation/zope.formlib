@@ -30,18 +30,20 @@ def test_implemented_interfaces():
     `IBrowserWidget`.
 
     >>> from zope.formlib.interfaces import IBrowserWidget
+    >>> from zope.interface import implementedBy
+    >>> from zope.interface.verify import verifyClass
+    >>> IBrowserWidget in implementedBy(DisplayWidget)
+    True
     >>> verifyClass(IBrowserWidget, DisplayWidget)
     True
 
     But unlike most other widgets in this package, the display widget is *not*
     an `IInputWidget`.
 
+
     >>> from zope.formlib.interfaces import IInputWidget
-    >>> try:
-    ...     verifyClass(IInputWidget, DisplayWidget)
-    ... except DoesNotImplement:
-    ...     'not implemented'
-    'not implemented'
+    >>> IInputWidget in implementedBy(DisplayWidget)
+    False
     """
 
 def test_not_required():

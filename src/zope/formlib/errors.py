@@ -53,7 +53,7 @@ class InvalidErrorView(object):
         return u'<span class="error">%s</span>' % escape(msg)
 
 
-@implementer(IBrowserPage)
+
 @adapter(IInvalidCSRFTokenError, IBrowserRequest)
 class InvalidCSRFTokenErrorView(BrowserPage):
 

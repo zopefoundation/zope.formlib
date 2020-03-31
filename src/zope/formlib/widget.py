@@ -15,16 +15,17 @@
 """
 __docformat__ = 'restructuredtext'
 
+import warnings
 from xml.sax.saxutils import quoteattr, escape
 
-from zope.component import getMultiAdapter, provideAdapter
+from zope.component import getMultiAdapter
 from zope.interface import implementer
 from zope.schema.interfaces import ValidationError
 from zope.publisher.browser import BrowserView
-from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 from zope.formlib.interfaces import ConversionError
 from zope.formlib.interfaces import WidgetInputError, MissingInputError
+from zope.formlib.interfaces import IInputWidget
 from zope.formlib.interfaces import IBrowserWidget
 from zope.formlib.interfaces import ISimpleInputWidget
 from zope.formlib.interfaces import IWidgetInputErrorView
@@ -33,8 +34,6 @@ from zope.formlib._compat import toUnicode
 
 from zope.i18n import translate
 from zope.schema.interfaces import IChoice, ICollection
-
-import warnings
 
 
 if quoteattr("\r") != '"&13;"':
@@ -167,6 +166,8 @@ class BrowserWidget(Widget, BrowserView):
     view that is registered as providing `IWidgetInputErrorView`. To
     illustrate, we can create and register a simple error display view:
 
+        >>> from zope.component import provideAdapter
+        >>> from zope.publisher.interfaces.browser import IDefaultBrowserLayer
         >>> from zope.formlib.interfaces import IWidgetInputError
         >>> @implementer(IWidgetInputErrorView)
         ... class SnippetErrorView:
@@ -533,6 +534,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
                              value=self._getFormValue(),
                              cssClass=self.cssClass,
                              extra=self.extra)
+
 
 class DisplayWidget(BrowserWidget):
 

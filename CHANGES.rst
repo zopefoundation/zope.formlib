@@ -5,8 +5,11 @@
 4.7.1 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Ensure all objects have consistent interface resolution orders.
+  See `issue 30
+  <https://github.com/zopefoundation/zope.formlib/issues/30>`_.
 
+- Remove support for deprecated ``python setup.py test`` command.
 
 4.7.0 (2020-02-27)
 ==================
@@ -78,7 +81,7 @@
 4.2.1 (2013-02-22)
 ==================
 
-- Moved default values for the `BooleanDisplayWidget` from module to class
+- Moved default values for the ``BooleanDisplayWidget`` from module to class
   definition to make them changeable in instance.
 
 

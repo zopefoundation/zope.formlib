@@ -17,7 +17,6 @@ __docformat__ = 'restructuredtext'
 from xml.sax.saxutils import escape
 
 from zope import component
-from zope.interface import implementer
 from zope.i18n import translate
 from zope.schema.interfaces import InvalidValue
 from zope.schema.interfaces import ITitledTokenizedTerm
@@ -299,7 +298,7 @@ class SetDisplayWidget(ItemsMultiDisplayWidget):
 EXPLICIT_EMPTY_SELECTION = True
 
 
-@implementer(IInputWidget)
+
 class ItemsEditWidgetBase(SingleDataHelper, ItemsWidgetBase):
     """Widget Base for rendering item-related fields.
 
@@ -628,4 +627,3 @@ class MultiCheckBoxWidget(ItemsMultiEditWidgetBase):
         return renderElement(u'label',
                              contents=contents,
                              **{'for': id})
-

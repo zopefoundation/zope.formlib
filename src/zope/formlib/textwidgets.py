@@ -536,7 +536,6 @@ class IntWidget(TextWidget):
                 raise ConversionError(_("Invalid integer data"), v)
 
 
-@implementer(IInputWidget)
 class FloatWidget(TextWidget):
     displayWidth = 10
 
@@ -549,7 +548,7 @@ class FloatWidget(TextWidget):
             except ValueError as v:
                 raise ConversionError(_("Invalid floating point data"), v)
 
-@implementer(IInputWidget)
+
 class DecimalWidget(TextWidget):
     displayWidth = 10
 
