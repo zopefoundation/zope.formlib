@@ -44,6 +44,7 @@ from zope.formlib.tests.test_browserwidget import BrowserWidgetTest
 from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
 from zope.formlib.tests.support import checker
 
+
 class TextWidgetTest(SimpleInputWidgetTest):
     """Documents and tests the text widget.
     >>> setUp()
@@ -210,7 +211,7 @@ class DateDisplayWidgetTest(BrowserWidgetTest):
                           ["<span",
                            'class="%s"' % self.expected_class,
                            u"1 \u0434\u0435\u043a\u0430\u0431\u0440\u044f"
-                                u" 2004 \u0433.",
+                           u" 2004 \u0433.",
                            "</span"])
 
     def testRenderFull(self):
@@ -220,7 +221,7 @@ class DateDisplayWidgetTest(BrowserWidgetTest):
                           ["<span",
                            'class="%s"' % self.expected_class,
                            u"1 \u0434\u0435\u043a\u0430\u0431\u0440\u044f"
-                                u" 2004 \u0433.",
+                           u" 2004 \u0433.",
                            "</span"])
 
 
@@ -254,6 +255,7 @@ class DatetimeDisplayWidgetTest(DateDisplayWidgetTest):
         super(DatetimeDisplayWidgetTest, self).testRenderFull()
         self.verifyResult(self._widget(), ["14:39:01 +000"])
 
+
 class TextAreaDisplayWidgetTest(BrowserWidgetTest):
 
     _WidgetFactory = TextAreaWidget
@@ -272,12 +274,13 @@ class TextAreaDisplayWidgetTest(BrowserWidgetTest):
         check_list = (
             ('id', 'field.foo'),
             ('name', 'field.foo'),
-            #('value', ), tested above
+            # ('value', ), tested above
             ('cols', '60'),
             ('rows', '15'),
-            )
+        )
         for a, v in check_list:
             self.verifyResult(self._widget(), [a, v])
+
 
 class BytesAreaDisplayWidgetTest(BrowserWidgetTest):
 
@@ -297,12 +300,13 @@ class BytesAreaDisplayWidgetTest(BrowserWidgetTest):
         check_list = (
             ('id', 'field.foo'),
             ('name', 'field.foo'),
-            #('value', ), tested above
+            # ('value', ), tested above
             ('cols', '60'),
             ('rows', '15'),
-            )
+        )
         for a, v in check_list:
             self.verifyResult(self._widget(), [a, v])
+
 
 class BytesDisplayWidgetTest(BrowserWidgetTest):
 
@@ -313,8 +317,9 @@ class BytesDisplayWidgetTest(BrowserWidgetTest):
         value = "Food Value"
         self._widget.setRenderedValue(value)
         check_list = ('type="text"', 'id="field.foo"', 'name="field.foo"',
-                      'value="%s"'%value, 'size="20"')
+                      'value="%s"' % value, 'size="20"')
         self.verifyResult(self._widget(), check_list)
+
 
 class ASCIIDisplayWidgetTest(BrowserWidgetTest):
 
@@ -325,8 +330,9 @@ class ASCIIDisplayWidgetTest(BrowserWidgetTest):
         value = "Food Value"
         self._widget.setRenderedValue(value)
         check_list = ('type="text"', 'id="field.foo"', 'name="field.foo"',
-                      'value="%s"'%value, 'size="20"')
+                      'value="%s"' % value, 'size="20"')
         self.verifyResult(self._widget(), check_list)
+
 
 class PasswordDisplayWidgetTest(BrowserWidgetTest):
 
@@ -348,8 +354,9 @@ class PasswordDisplayWidgetTest(BrowserWidgetTest):
         # Now the password has been filled in, so the empty string
         # is regarded as the special value for UNCHANGED_PASSWORD.
         self._widget.context.context.foo = u'existing password'
-        self.assertEqual(self._widget.context.UNCHANGED_PASSWORD, 
-                          self._widget._toFieldValue(''))
+        self.assertEqual(self._widget.context.UNCHANGED_PASSWORD,
+                         self._widget._toFieldValue(''))
+
 
 class FileDisplayWidgetTest(BrowserWidgetTest):
 
@@ -368,6 +375,7 @@ class FileDisplayWidgetTest(BrowserWidgetTest):
         self._widget.extra = 'style="color: red"'
         self.verifyResult(self._widget.hidden(), check_list)
 
+
 class IntDisplayWidgetTest(BrowserWidgetTest):
 
     _WidgetFactory = IntWidget
@@ -377,8 +385,9 @@ class IntDisplayWidgetTest(BrowserWidgetTest):
         value = 1
         self._widget.setRenderedValue(value)
         check_list = ('type="text"', 'id="field.foo"', 'name="field.foo"',
-                      'size="10"', 'value="%s"'%str(value))
+                      'size="10"', 'value="%s"' % str(value))
         self.verifyResult(self._widget(), check_list)
+
 
 class FloatDisplayWidgetTest(BrowserWidgetTest):
 
@@ -389,8 +398,9 @@ class FloatDisplayWidgetTest(BrowserWidgetTest):
         value = 1.2
         self._widget.setRenderedValue(value)
         check_list = ('type="text"', 'id="field.foo"', 'name="field.foo"',
-                      'size="10"', 'value="%s"'%str(value))
+                      'size="10"', 'value="%s"' % str(value))
         self.verifyResult(self._widget(), check_list)
+
 
 def test_w_nonrequired_and_missing_value_and_no_inout():
     """
@@ -418,6 +428,7 @@ def test_w_nonrequired_and_missing_value_and_no_inout():
 
     """
 
+
 def test_no_error_on_render_only():
     """This is really a test of a bug fix to SimpleInputWidget.
 
@@ -434,6 +445,7 @@ def test_no_error_on_render_only():
 
 
     """
+
 
 def test_text_area_works_with_missing_value():
     """
@@ -463,6 +475,7 @@ def test_text_area_works_with_missing_value():
       />
       """
 
+
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(TextWidgetTest),
@@ -478,7 +491,4 @@ def test_suite():
         unittest.makeSuite(BytesDisplayWidgetTest),
         unittest.makeSuite(ASCIIDisplayWidgetTest),
         doctest.DocTestSuite(checker=checker),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

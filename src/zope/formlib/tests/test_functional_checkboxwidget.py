@@ -24,6 +24,7 @@ from zope.formlib.widgets import CheckBoxWidget
 from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 import zope.schema.interfaces
 
+
 class IBoolTest(Interface):
 
     b1 = Bool(
@@ -32,6 +33,7 @@ class IBoolTest(Interface):
     b2 = Bool(
         required=False)
 
+
 @implementer(IBoolTest)
 class BoolTest(object):
 
@@ -39,20 +41,22 @@ class BoolTest(object):
         self.b1 = True
         self.b2 = False
 
+
 class Form(form.EditForm):
     form_fields = form.fields(IBoolTest)
-           
+
+
 class Test(FunctionalWidgetTestCase):
     widgets = [(zope.schema.interfaces.IBool, CheckBoxWidget)]
-    
+
     def test_display_editform(self):
         foo = BoolTest()
         request = TestRequest()
         html = Form(foo, request)()
-        
+
         # b1 and b2 should be displayed in checkbox input fields
         self.assertTrue(patternExists(
-            '<input .* checked="checked".* name="form.b1".* ' \
+            '<input .* checked="checked".* name="form.b1".* '
             'type="checkbox".* />',
             html))
         self.assertTrue(patternExists(
@@ -60,7 +64,7 @@ class Test(FunctionalWidgetTestCase):
             html))
         # confirm that b2 is *not* checked
         self.assertTrue(not patternExists(
-            '<input .* checked="checked".* name="form.b2".* ' \
+            '<input .* checked="checked".* name="form.b2".* '
             'type="checkbox".* />',
             html))
 
@@ -71,7 +75,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.b1'] = ''
         request.form['form.b2'] = 'on'
         request.form['form.actions.apply'] = u''
-                
+
         Form(foo, request)()
 
         # check new values in object
@@ -82,7 +86,7 @@ class Test(FunctionalWidgetTestCase):
         foo = BoolTest()
         foo.b1 = True
         foo.b2 = True
-        
+
         request = TestRequest()
         request.form['form.b1'] = 'true'
         request.form['form.b2'] = 'foo'
@@ -99,18 +103,17 @@ class Test(FunctionalWidgetTestCase):
         # test confirms that one cannot set a Bool field to None.
         foo = BoolTest()
         self.assertEqual(foo.b1, True)
-        
+
         request = TestRequest()
         request.form['form.b1'] = CheckBoxWidget._missing
-        
+
         Form(foo, request)()
 
         # confirm b1 is not missing
         self.assertTrue(foo.b1 != Bool.missing_value)
 
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(Test))
     return suite
-
-

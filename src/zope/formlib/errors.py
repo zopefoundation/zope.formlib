@@ -24,7 +24,6 @@ from zope.i18n import Message
 from zope.i18n import translate
 
 from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.publisher.interfaces.browser import IBrowserPage
 from zope.publisher.browser import BrowserPage
 from zope.formlib.interfaces import IWidgetInputErrorView
 from zope.formlib.interfaces import IInvalidCSRFTokenError
@@ -51,7 +50,6 @@ class InvalidErrorView(object):
         if isinstance(msg, Message):
             msg = translate(msg, context=self.request)
         return u'<span class="error">%s</span>' % escape(msg)
-
 
 
 @adapter(IInvalidCSRFTokenError, IBrowserRequest)

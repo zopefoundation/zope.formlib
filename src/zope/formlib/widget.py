@@ -25,7 +25,6 @@ from zope.publisher.browser import BrowserView
 
 from zope.formlib.interfaces import ConversionError
 from zope.formlib.interfaces import WidgetInputError, MissingInputError
-from zope.formlib.interfaces import IInputWidget
 from zope.formlib.interfaces import IBrowserWidget
 from zope.formlib.interfaces import ISimpleInputWidget
 from zope.formlib.interfaces import IWidgetInputErrorView
@@ -41,7 +40,7 @@ if quoteattr("\r") != '"&13;"':
 
     def quoteattr(data):
         return _quoteattr(
-            data, {'\n': '&#10;', '\r': '&#13;', '\t':'&#9;'})
+            data, {'\n': '&#10;', '\r': '&#13;', '\t': '&#9;'})
 
 
 @implementer(IWidget)
@@ -131,6 +130,7 @@ class CustomWidgetFactory(object):
             args = (context, request) + self.args
 
         return self._create(args)
+
 
 @implementer(IBrowserWidget)
 class BrowserWidget(Widget, BrowserView):
@@ -372,7 +372,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
 
 
     >>> tearDown()
-    """
+    """  # noqa: E501 line too long
 
     tag = u'input'
     type = u'text'
@@ -541,7 +541,6 @@ class DisplayWidget(BrowserWidget):
     def __init__(self, context, request):
         super(DisplayWidget, self).__init__(context, request)
         self.required = False
-
 
     def __call__(self):
         if self._renderedValueSet():

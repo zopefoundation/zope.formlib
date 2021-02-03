@@ -27,7 +27,7 @@ from zope.schema import Decimal
 
 class DecimalWidgetTest(SimpleInputWidgetTest):
     """Documents and tests the float widget.
-        
+
         >>> verifyClass(IInputWidget, DecimalWidget)
         True
     """
@@ -49,7 +49,7 @@ class DecimalWidgetTest(SimpleInputWidgetTest):
         self.assertRaises(WidgetInputError, self._widget.getInputValue)
         self._widget.request.form['field.foo'] = u'123.45'
         self.assertEqual(self._widget.getInputValue(),
-                          decimal.Decimal("123.45"))
+                         decimal.Decimal("123.45"))
         self._widget.request.form['field.foo'] = u'abc'
         self.assertRaises(ConversionError, self._widget.getInputValue)
 
@@ -58,7 +58,4 @@ def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(DecimalWidgetTest),
         doctest.DocTestSuite(),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

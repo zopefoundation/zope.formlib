@@ -14,7 +14,6 @@
 """Object Widget tests
 """
 import unittest
-import sys
 from zope.component import testing
 from zope.interface import Interface, implementer
 from zope.publisher.browser import TestRequest
@@ -31,13 +30,16 @@ from zope.formlib.tests.test_browserwidget import BrowserWidgetTest
 from zope.formlib.interfaces import IWidgetInputErrorView
 from .support import checker
 
+
 class ITestContact(Interface):
     name = TextLine()
     email = TextLine()
 
+
 @implementer(ITestContact)
 class TestContact(object):
     pass
+
 
 @implementer(IWidgetInputErrorView)
 class ObjectWidgetInputErrorView(object):
@@ -49,6 +51,7 @@ class ObjectWidgetInputErrorView(object):
     def snippet(self):
         return repr(self.error)
 
+
 class ObjectWidgetTest(BrowserWidgetTest):
     """Documents and tests the object widget.
 
@@ -58,6 +61,7 @@ class ObjectWidgetTest(BrowserWidgetTest):
     """
 
     _FieldFactory = Object
+
     def _WidgetFactory(self, context, request, **kw):
         kw.update({'factory': TestContact})
         return ObjectWidget(context, request, **kw)
@@ -68,10 +72,11 @@ class ObjectWidgetTest(BrowserWidgetTest):
 
         class ITestContent(Interface):
             foo = self._FieldFactory(
-                    ITestContact,
-                    title=title,
-                    description=desc
-                    )
+                ITestContact,
+                title=title,
+                description=desc
+            )
+
         @implementer(ITestContent)
         class TestObject(object):
             pass
@@ -109,14 +114,14 @@ class ObjectWidgetTest(BrowserWidgetTest):
         widget = self._WidgetFactory(self.field, self.request)
         self.assertRaises(MissingInputError, widget.getInputValue)
         error_html = widget.error()
-        if PY3:
+        if PY3:  # pragma: PY3
             self.assertTrue(
                 "email: MissingInputError('field.foo.email', '', None)"
                 in error_html)
             self.assertTrue(
                 "name: MissingInputError('field.foo.name', '', None)"
                 in error_html)
-        else:
+        else:  # pragma: PY2
             self.assertTrue(
                 "email: MissingInputError(u'field.foo.email', u'', None)"
                 in error_html)
@@ -145,11 +150,8 @@ def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(ObjectWidgetTest),
         doctest.DocFileSuite(
-                '../objectwidget.rst',
-                setUp=testing.setUp, tearDown=testing.tearDown,
-                checker=checker),
+            '../objectwidget.rst',
+            setUp=testing.setUp, tearDown=testing.tearDown,
+            checker=checker),
         doctest.DocTestSuite(),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

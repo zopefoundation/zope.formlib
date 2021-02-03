@@ -51,14 +51,15 @@ class DateWidgetTest(SimpleInputWidgetTest):
         self.assertTrue(self._widget.hasInput())
 
     def test_getInputValue(self,
-            value=u'2004-03-26',
-            check_value=datetime.date(2004, 3, 26)):
+                           value=u'2004-03-26',
+                           check_value=datetime.date(2004, 3, 26)):
         self._widget.request.form['field.foo'] = u''
         self.assertRaises(WidgetInputError, self._widget.getInputValue)
         self._widget.request.form['field.foo'] = value
         self.assertEqual(self._widget.getInputValue(), check_value)
         self._widget.request.form['field.foo'] = u'abc'
         self.assertRaises(ConversionError, self._widget.getInputValue)
+
 
 class DateI18nWidgetTest(SimpleInputWidgetTest):
     """Documents and tests the i18n date widget.
@@ -116,8 +117,8 @@ class DateI18nWidgetTest(SimpleInputWidgetTest):
         self.assertTrue(self._widget.hasInput())
 
     def test_getDefaultInputValue(self,
-            value=u'26.03.2004',
-            check_value=datetime.date(2004, 3, 26)):
+                                  value=u'26.03.2004',
+                                  check_value=datetime.date(2004, 3, 26)):
         self._widget.request.form['field.foo'] = u''
         self.assertRaises(WidgetInputError, self._widget.getInputValue)
         self._widget.request.form['field.foo'] = value
@@ -137,13 +138,13 @@ class DateI18nWidgetTest(SimpleInputWidgetTest):
         self._widget.displayStyle = "long"
         self.test_getDefaultInputValue(
             u'26 \u043c\u0430\u0440\u0442\u0430 2004 \u0433.'
-            )
+        )
 
     def test_getFullInputValue(self):
         self._widget.displayStyle = "full"
         self.test_getDefaultInputValue(
             u'26 \u043c\u0430\u0440\u0442\u0430 2004 \u0433.'
-            )
+        )
 
 
 def test_suite():
@@ -151,7 +152,4 @@ def test_suite():
         unittest.makeSuite(DateWidgetTest),
         unittest.makeSuite(DateI18nWidgetTest),
         doctest.DocTestSuite(),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

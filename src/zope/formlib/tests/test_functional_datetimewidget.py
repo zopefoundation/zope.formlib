@@ -22,10 +22,12 @@ from zope.interface import Interface, implementer
 from zope.schema import Datetime, Choice
 from zope.formlib import form
 from zope.publisher.browser import TestRequest
-from zope.formlib.widgets import DatetimeWidget, DropdownWidget, ChoiceInputWidget
+from zope.formlib.widgets import ChoiceInputWidget
+from zope.formlib.widgets import DatetimeWidget, DropdownWidget
 from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 import zope.schema.interfaces
 from zope.datetime import parseDatetimetz, tzinfo
+
 
 class IDatetimeTest(Interface):
     d1 = Datetime(
@@ -43,6 +45,7 @@ class IDatetimeTest(Interface):
             datetime(2003, 10, 15, tzinfo=tzinfo(0))),
         missing_value=datetime(2000, 1, 1, tzinfo=tzinfo(0)))
 
+
 @implementer(IDatetimeTest)
 class DatetimeTest(object):
 
@@ -51,17 +54,19 @@ class DatetimeTest(object):
         self.d2 = datetime(2003, 8, 6, tzinfo=tzinfo(0))
         self.d3 = None
 
+
 class Form(form.EditForm):
     form_fields = form.fields(IDatetimeTest)
-    
+
+
 class Test(FunctionalWidgetTestCase):
 
     widgets = [
         (zope.schema.interfaces.IDatetime, DatetimeWidget),
         (zope.schema.interfaces.IChoice, ChoiceInputWidget),
-        ((zope.schema.interfaces.IChoice, zope.schema.interfaces.IVocabularyTokenized),
-         DropdownWidget)]
-    
+        ((zope.schema.interfaces.IChoice,
+          zope.schema.interfaces.IVocabularyTokenized), DropdownWidget)]
+
     def getDateForField(self, field, source):
         """Returns a datetime object for the specified field in source.
 
@@ -85,14 +90,13 @@ class Test(FunctionalWidgetTestCase):
         request = TestRequest()
 
         html = Form(foo, request)()
-        
+
         # confirm date values in form with actual values
         self.assertEqual(self.getDateForField('d1', html),
-            foo.d1)
+                         foo.d1)
         self.assertEqual(self.getDateForField('d2', html),
-            foo.d2)
+                         foo.d2)
         self.assertTrue(self.getDateForField('d3', html) is None)
-
 
     def test_submit_editform(self):
         foo = DatetimeTest()
@@ -119,8 +123,8 @@ class Test(FunctionalWidgetTestCase):
 
         request.form['form.actions.apply'] = u''
         Form(foo, request)()
-        
-        self.assertTrue(foo.d2 is None) # default missing_value for dates
+
+        self.assertTrue(foo.d2 is None)  # default missing_value for dates
         # 2000-1-1 is missing_value for d3
         self.assertEqual(foo.d3, datetime(2000, 1, 1, tzinfo=tzinfo(0)))
 
@@ -134,7 +138,7 @@ class Test(FunctionalWidgetTestCase):
 
         request.form['form.actions.apply'] = u''
         html = Form(foo, request)()
-        
+
         # confirm error msgs
 
         # only Required input is missing after d1
@@ -143,7 +147,6 @@ class Test(FunctionalWidgetTestCase):
         # but not after d2 or further
         d2_index = html.find('form.d2')
         self.assertTrue(html.find('Required input is missing', d2_index) == -1)
-        
 
     def test_invalid_value(self):
         foo = DatetimeTest()
@@ -166,8 +169,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.d1'] = u'2002-12-31 12:00:00+00:00'
         request.form['form.actions.apply'] = u''
         html = Form(foo, request)()
-        
-        d1_index = html.find('form.d1')
+
         self.assertTrue(html.find('Value is too small') != -1)
         d2_index = html.find('form.d2')
         self.assertTrue(html.find('Value is too small', d2_index) == -1)
@@ -185,7 +187,7 @@ class Test(FunctionalWidgetTestCase):
     def test_omitted_value(self):
         foo = DatetimeTest()
         request = TestRequest()
-        
+
         # remember default values
         d1 = foo.d1
         d2 = foo.d2
@@ -198,11 +200,12 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = u''
 
         Form(foo, request)()
-        
+
         # check new value in object
         self.assertEqual(foo.d1, d1)
         self.assertTrue(foo.d2 is None)
         self.assertEqual(foo.d3, d3)
+
 
 def test_suite():
     suite = unittest.TestSuite()

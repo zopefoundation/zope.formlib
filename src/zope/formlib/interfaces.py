@@ -22,16 +22,19 @@ from zope.schema import Bool
 from zope.exceptions.interfaces import UserError
 from zope.formlib._compat import basestring
 
+
 class IInvalidFormError(Interface):
 
     def doc():
         """The form submit could not be validated.
         """
 
+
 @implementer(IInvalidFormError)
 class InvalidFormError(Exception):
     """The form submit could not be validated.
     """
+
 
 class IInvalidCSRFTokenError(Interface):
 
@@ -40,17 +43,20 @@ class IInvalidCSRFTokenError(Interface):
         or incorrect.
         """
 
+
 @implementer(IInvalidCSRFTokenError)
 class InvalidCSRFTokenError(InvalidFormError):
     """The form submit could not be handled as the CSRF token is missing
     or incorrect.
     """
 
+
 class IWidgetInputError(Interface):
     """Placeholder for a snippet View"""
 
     def doc():
         """Returns a string that represents the error message."""
+
 
 @implementer(IWidgetInputError)
 class WidgetInputError(UserError):
@@ -92,6 +98,7 @@ class ConversionError(Exception):
     def doc(self):
         return self.error_name
 
+
 InputErrors = WidgetInputError, ValidationError, ConversionError
 
 
@@ -114,9 +121,10 @@ class ErrorContainer(Exception):
         return "\n".join(
             ["%s: %s" % (error.__class__.__name__, error)
              for error in self.args]
-            )
+        )
 
     __repr__ = __str__
+
 
 class WidgetsError(ErrorContainer):
     """A collection of errors from widget processing.
@@ -128,6 +136,7 @@ class WidgetsError(ErrorContainer):
     def __init__(self, errors, widgetsData={}):
         ErrorContainer.__init__(self, *errors)
         self.widgetsData = widgetsData
+
 
 class IWidget(IView):
     """Generically describes the behavior of a widget.
@@ -190,6 +199,7 @@ class IWidget(IView):
 
         """
 
+
 class IInputWidget(IWidget):
     """A widget for editing a field value."""
 
@@ -249,6 +259,7 @@ class IInputWidget(IWidget):
         based on the field constraints.
         """
 
+
 class IDisplayWidget(IWidget):
     """A widget for displaying a field value."""
 
@@ -259,15 +270,18 @@ class IDisplayWidget(IWidget):
         Display widgets should never be required.
         """)
 
+
 class IWidgetFactory(Interface):
     """A factory that creates the widget"""
 
     def __call__(context, request):
         """Return a widget"""
 
+
 class FormError(Exception):
     """There was an error in managing the form
     """
+
 
 class IBrowserWidget(IWidget):
     """A widget for use in a web browser UI."""
@@ -310,19 +324,20 @@ class ITextBrowserWidget(ISimpleInputWidget):
 
     convert_missing_value = schema.Bool(
         title=u'Translate Input Value',
-        description=
-            u'If True, an empty string is converted to field.missing_value.',
+        description=(
+            u'If True, an empty string is converted to field.missing_value.'),
         default=True)
 
-# XXX this seems to be buggy (since at least 2005)
-# it returns None, and prefix_re is never defined.
+
 def reConstraint(pat, explanation):
     pat = re.compile(pat)
 
     def constraint(value):
-        if prefix_re.match(value):
+        if pat.match(value):
             return True
         raise Invalid(value, explanation)
+    return constraint
+
 
 class IWidgetInputErrorView(Interface):
     """Display an input error as a snippet of text."""
@@ -351,6 +366,7 @@ class ISourceQueryView(Interface):
         None may be returned to indicate that there are no results.
         """
 
+
 class ISubPage(Interface):
     """A component that computes part of a page
     """
@@ -374,7 +390,7 @@ class ISubPage(Interface):
         followed by a dot.
         """,
         readonly=True,
-        )
+    )
 
     def setPrefix(prefix):
         """Update the subpage prefix
@@ -417,7 +433,6 @@ class IFormAPI(Interface):
            rendered value.  See IFormField.
 
         """
-
 
     def Fields(*arguments, **options):
         """Create form-fields collection (`IFormFields`)
@@ -691,6 +706,7 @@ class IFormAPI(Interface):
     IFormBaseCustomization.
     """)
 
+
 class IFormBaseCustomization(ISubPage, IBrowserPage):
     """Attributes provided by the Form base class
 
@@ -775,7 +791,6 @@ class IFormBaseCustomization(ISubPage, IBrowserPage):
         """
 
 
-
 class IFormFields(Interface):
     """A colection of form fields (`IFormField` objects)
     """
@@ -826,8 +841,10 @@ class IFormFields(Interface):
         """Omit fields with given names
         """
 
+
 SKIP_UNAUTHORIZED = 2
 DISPLAY_UNWRITEABLE = 4
+
 
 class IFormField(Interface):
     """Definition of a field to be included in a form
@@ -838,17 +855,17 @@ class IFormField(Interface):
     __name__ = schema.ASCII(
         constraint=reConstraint('[a-zA-Z][a-zA-Z0-9_]*',
                                 "Must be an identifier"),
-        title = u"Field name",
+        title=u"Field name",
         description=u"""\
         This is the name, without any proefix, used for the field.
         It is usually the same as the name of the for field's schem field.
         """
-        )
+    )
 
     field = Attribute(
         """Schema field that defines the data of the form field
         """
-        )
+    )
 
     prefix = schema.ASCII(
         constraint=reConstraint('[a-zA-Z][a-zA-Z0-9_]*',
@@ -859,8 +876,8 @@ class IFormField(Interface):
         disambiguate fields with the same name (e.g. from different
         schema) within a collection of form fields.
         """,
-        default="",
-        )
+        default="form_field",
+    )
 
     for_display = schema.Bool(
         title=u"Is the form field for display only?",
@@ -868,7 +885,7 @@ class IFormField(Interface):
         If this attribute has a true value, then a display widget will be
         used for the field even if it is writable.
         """
-        )
+    )
 
     for_input = schema.Bool(
         title=u"Is the form field for input?",
@@ -876,14 +893,14 @@ class IFormField(Interface):
         If this attribute has a true value, then an input widget will be
         used for the field even if it is readonly.
         """
-        )
+    )
 
     custom_widget = Attribute(
         """Factory to use for widget construction.
 
         If not set, normal view lookup will be used.
         """
-        )
+    )
 
     render_context = schema.Choice(
         title=u"Should the rendered value come from the form context?",
@@ -919,10 +936,10 @@ class IFormField(Interface):
             DISPLAY_UNWRITEABLE,
             SKIP_UNAUTHORIZED,
             DISPLAY_UNWRITEABLE | SKIP_UNAUTHORIZED,
-            )),
+        )),
         default=False,
         missing_value=False,
-        )
+    )
 
     get_rendered = Attribute(
         """Object to call to get a rendered value
@@ -938,7 +955,8 @@ class IFormField(Interface):
         - Data for the value is passed to setUpWidgets.
 
         """
-        )
+    )
+
 
 class IWidgets(Interface):
     """A widget collection
@@ -984,6 +1002,7 @@ class IWidgets(Interface):
 
         """
 
+
 class IForm(Interface):
     """Base type for forms
 
@@ -991,6 +1010,7 @@ class IForm(Interface):
     form-related conponents.
 
     """
+
 
 class ISubPageForm(IForm, ISubPage):
     """A component that displays a part of a page.
@@ -1000,9 +1020,11 @@ class ISubPageForm(IForm, ISubPage):
 
     """
 
+
 class IPageForm(IForm, IBrowserPage):
     """A component that displays a form as a page.
     """
+
 
 class IAction(ISubPage):
     """Form submit actions
@@ -1072,6 +1094,7 @@ class IAction(ISubPage):
         valid only after the action has been bound to a form.
         """
 
+
 class IActions(Interface):
     """An action collection
 
@@ -1102,6 +1125,7 @@ class IActions(Interface):
         The bahavior is undefined if the names overlap.
 
         """
+
 
 class IBoundAction(IAction):
     """An action that has been bound to a form

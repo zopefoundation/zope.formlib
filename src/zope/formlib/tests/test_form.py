@@ -26,31 +26,28 @@ class FormBaseTests(unittest.TestCase):
         class _Context(object):
             pass
         context = _Context()
-        for k, v in kw.items():
-            setattr(context, k, v)
         return context
 
     def _makeRequest(self, **kw):
         from zope.publisher.browser import TestRequest
         return TestRequest(**kw)
 
-    def _makeOne(self, context=None, request=None):
-        if context is None:
-            context = self._makeContext()
-        if request is None:
-            request = self._makeRequest()
+    def _makeOne(self, request):
+        context = self._makeContext()
         return self._getTargetClass()(context, request)
 
     def test___call___does_not_render_on_redirects(self):
         for status in (301, 302, 303, 307):
             request = self._makeRequest()
             request.response.setStatus(status)
+
             def _raise(*args, **kw):
                 self.fail("DON'T GO HERE")
             form = self._makeOne(request=request)
             form.form_fields = form.actions = ()
             form.template = _raise
             self.assertEqual(form(), '')
+
 
 def test_suite():
     return unittest.TestSuite((

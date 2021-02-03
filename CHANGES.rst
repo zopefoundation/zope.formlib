@@ -2,10 +2,12 @@
  Changes
 =========
 
-4.7.2 (unreleased)
+4.8.0 (unreleased)
 ==================
 
-- Nothing changed yet.
+- Add support for Python 3.8.
+
+- Remove unused non-BBB imports.
 
 
 4.7.1 (2020-03-31)

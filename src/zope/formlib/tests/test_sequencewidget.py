@@ -39,14 +39,16 @@ from zope.formlib.tests.test_browserwidget import BrowserWidgetTest
 from zope.traversing.testing import setUp as traversingSetUp
 from zope.testing.cleanup import tearDown as traversingTearDown
 
+
 class SequenceWidgetTestHelper(object):
 
     def setUpContent(self, desc=u'', title=u'Foo Title'):
         class ITestContent(Interface):
             foo = self._FieldFactory(
-                    title=title,
-                    description=desc,
-                    )
+                title=title,
+                description=desc,
+            )
+
         @implementer(ITestContent)
         class TestObject(object):
             pass
@@ -109,7 +111,7 @@ class SequenceWidgetTest(SequenceWidgetTestHelper, BrowserWidgetTest):
         """
 
         value_type = TextLine(__name__=u'bar')
-        self.field = List( __name__=u'foo', value_type=value_type )
+        self.field = List(__name__=u'foo', value_type=value_type)
         request = TestRequest()
 
         # set up the custom widget factory and verify that it works
@@ -119,7 +121,8 @@ class SequenceWidgetTest(SequenceWidgetTestHelper, BrowserWidgetTest):
         assert widget.context.value_type is value_type
 
         # set up a variant that specifies the subwidget to use and verify it
-        class PollOption(object) : pass
+        class PollOption(object):
+            pass
         ow = CustomWidgetFactory(ObjectWidget, PollOption)
         sw = CustomWidgetFactory(ListSequenceWidget, subwidget=ow)
         widget = sw(self.field, request)
@@ -134,7 +137,8 @@ class SequenceWidgetTest(SequenceWidgetTestHelper, BrowserWidgetTest):
                           value_type=TextLine(__name__=u'bar'))
         request = TestRequest()
 
-        class PollOption(object) : pass
+        class PollOption(object):
+            pass
         ow = CustomWidgetFactory(ObjectWidget, PollOption)
         widget = SequenceWidget(
             self.field, self.field.value_type, request, subwidget=ow)
@@ -203,7 +207,7 @@ class SequenceWidgetTest(SequenceWidgetTestHelper, BrowserWidgetTest):
         self.assertRaises(MissingInputError, widget.getInputValue)
         check_list = (
             'checkbox', 'field.foo.remove_0', 'input', 'field.foo.0.bar',
-                'existing',
+            'existing',
             'submit', 'submit', 'field.foo.add',
             'field.foo.count" value="1"',
         )
@@ -213,9 +217,9 @@ class SequenceWidgetTest(SequenceWidgetTestHelper, BrowserWidgetTest):
         self.assertRaises(MissingInputError, widget.getInputValue)
         check_list = (
             'checkbox', 'field.foo.remove_0', 'input', 'field.foo.0.bar',
-                'existing',
+            'existing',
             'checkbox', 'field.foo.remove_1', 'input', 'field.foo.1.bar',
-                'second',
+            'second',
             'submit', 'submit', 'field.foo.add',
             'field.foo.count" value="2"',
         )
@@ -233,9 +237,9 @@ class SequenceWidgetTest(SequenceWidgetTestHelper, BrowserWidgetTest):
         self.assertEqual(widget.getInputValue(), (u'second',))
         check_list = (
             'checkbox', 'field.foo.remove_0', 'input', 'field.foo.0.bar',
-                'existing',
+            'existing',
             'checkbox', 'field.foo.remove_1', 'input', 'field.foo.1.bar',
-                'second',
+            'second',
             'submit', 'submit', 'field.foo.add',
             'field.foo.count" value="2"',
         )
@@ -350,7 +354,7 @@ class SequenceWidgetTest(SequenceWidgetTestHelper, BrowserWidgetTest):
 
 
 class SequenceDisplayWidgetTest(
-    VerifyResults, SequenceWidgetTestHelper, unittest.TestCase):
+        VerifyResults, SequenceWidgetTestHelper, unittest.TestCase):
 
     def _WidgetFactory(self, *args, **kw):
         w = SequenceDisplayWidget(*args, **kw)
@@ -423,6 +427,7 @@ def setUp(test):
                    (IWidgetInputError, IDefaultBrowserLayer),
                    IWidgetInputErrorView)
 
+
 def tearDown(test):
     traversingTearDown()
 
@@ -432,10 +437,7 @@ def test_suite():
         unittest.makeSuite(SequenceWidgetTest),
         doctest.DocTestSuite(setUp=setUp, tearDown=tearDown,
                              optionflags=doctest.ELLIPSIS
-                             |doctest.NORMALIZE_WHITESPACE
-                             |doctest.REPORT_NDIFF),
+                             | doctest.NORMALIZE_WHITESPACE
+                             | doctest.REPORT_NDIFF),
         unittest.makeSuite(SequenceDisplayWidgetTest),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

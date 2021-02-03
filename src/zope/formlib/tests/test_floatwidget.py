@@ -26,7 +26,7 @@ from zope.schema import Float
 
 class FloatWidgetTest(SimpleInputWidgetTest):
     """Documents and tests the float widget.
-        
+
         >>> verifyClass(IInputWidget, FloatWidget)
         True
     """
@@ -56,7 +56,4 @@ def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(FloatWidgetTest),
         doctest.DocTestSuite(),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

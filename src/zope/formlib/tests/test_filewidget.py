@@ -23,6 +23,7 @@ from zope.formlib.widgets import FileWidget
 from zope.formlib.tests.test_browserwidget import (
     SimpleInputWidgetTest)
 
+
 class FileWidgetTest(SimpleInputWidgetTest):
     """Documents and tests the file widget.
 
@@ -47,7 +48,7 @@ class FileWidgetTest(SimpleInputWidgetTest):
         self.assertEqual(self._widget.displayWidth, 20)
         self.assertEqual(self._widget.displayMaxWidth, '')
 
-    def test_hasInput(self): # override the usual one
+    def test_hasInput(self):  # override the usual one
         del self._widget.request.form['field.foo']
         self._widget.request.form['field.foo.used'] = ''
         self.assertTrue(self._widget.hasInput())
@@ -72,7 +73,4 @@ def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(FileWidgetTest),
         doctest.DocTestSuite(),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

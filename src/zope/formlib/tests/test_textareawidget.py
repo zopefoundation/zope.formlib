@@ -20,6 +20,7 @@ from zope.formlib.widgets import TextAreaWidget
 from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
 from zope.interface.verify import verifyClass
 
+
 class TextAreaWidgetTest(SimpleInputWidgetTest):
     """Documents and tests the text area widget.
 
@@ -55,7 +56,4 @@ def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(TextAreaWidgetTest),
         doctest.DocTestSuite(),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

@@ -19,22 +19,26 @@ from zope.publisher.browser import TestRequest
 from zope.interface import Interface, implementer
 from zope.schema import Field
 from zope.schema.interfaces import IField
-from zope.formlib import form, _compat
+from zope.formlib import form
 from zope.formlib._compat import StringIO
 from zope.formlib.tests.support import patternExists
 from zope.formlib.widgets import FileWidget
 from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 
+
 class IFileField(IField):
     """Field for representing a file that can be edited by FileWidget."""
+
 
 @implementer(IFileField)
 class FileField(Field):
     pass
 
+
 class IFileTest(Interface):
     f1 = FileField(required=True)
     f2 = FileField(required=False)
+
 
 @implementer(IFileTest)
 class FileTest(object):
@@ -43,15 +47,18 @@ class FileTest(object):
         self.f1 = None
         self.f2 = 'foo'
 
+
 class Form(form.EditForm):
     form_fields = form.fields(IFileTest)
     form_fields['f1'].custom_widget = FileWidget
     form_fields['f2'].custom_widget = FileWidget
 
+
 class SampleTextFile(StringIO):
     def __init__(self, buf, filename=''):
         StringIO.__init__(self, buf)
         self.filename = filename
+
 
 class Test(FunctionalWidgetTestCase):
 
@@ -143,8 +150,8 @@ class Test(FunctionalWidgetTestCase):
         # new value for f1 should be field.missing_value (i.e, None)
         self.assertTrue(foo.f1 is None)
 
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(Test))
     return suite
-

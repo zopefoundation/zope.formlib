@@ -47,9 +47,8 @@ from zope.browserpage import namedtemplate
 from zope.formlib._compat import basestring, unicode
 from zope.formlib.interfaces import IWidgetInputErrorView
 from zope.formlib.interfaces import IInputWidget, IDisplayWidget
-from zope.formlib.interfaces import WidgetsError, MissingInputError
 from zope.formlib.interfaces import InputErrors, WidgetInputError
-from zope.formlib.interfaces import InvalidFormError, InvalidCSRFTokenError
+from zope.formlib.interfaces import InvalidCSRFTokenError
 
 from zope.formlib import interfaces
 from zope.i18nmessageid import MessageFactory
@@ -67,6 +66,7 @@ def expandPrefix(prefix):
     if prefix and not prefix.endswith('.'):
         return prefix + '.'
     return prefix
+
 
 @interface.implementer(interfaces.IFormField)
 class FormField(object):
@@ -91,6 +91,7 @@ class FormField(object):
         self.render_context = render_context
         self.get_rendered = get_rendered
 
+
 Field = FormField
 
 
@@ -114,7 +115,7 @@ class FormFields(object):
                 name = arg.__name__
                 if not name:
                     raise ValueError(
-                            "Field has no name")
+                        "Field has no name")
 
                 fields.append((name, arg, arg.interface))
             elif isinstance(arg, FormFields):
@@ -123,12 +124,11 @@ class FormFields(object):
                         (form_field.__name__,
                          form_field,
                          form_field.interface)
-                        )
+                    )
             elif isinstance(arg, FormField):
                 fields.append((arg.__name__, arg, arg.interface))
             else:
                 raise TypeError("Unrecognized argument type", arg)
-
 
         seq = []
         byname = {}
@@ -175,6 +175,7 @@ class FormFields(object):
         """Return a modified instance omitting given fields."""
         return self.__class__(*[ff for ff in self if ff.__name__ not in names])
 
+
 Fields = FormFields
 
 
@@ -182,6 +183,8 @@ def fields_initkw(keep_all_readonly=False, **other):
     return keep_all_readonly, other
 
 # Backward compat
+
+
 def fields(*args, **kw):
     keep_all_readonly, other = fields_initkw(**kw)
     other['omit_readonly'] = not keep_all_readonly
@@ -200,15 +203,15 @@ class Widgets(object):
             if prefix_length is None:
                 raise TypeError(
                     "One of 'prefix_length' and 'prefix' is required."
-                    )
+                )
             self.__Widgets_widgets_dict__ = dict(
                 [(w.name[prefix_length:], w) for (i, w) in widgets]
-                )
+            )
         else:
             prefix = expandPrefix(prefix)
             self.__Widgets_widgets_dict__ = dict(
                 [(_widgetKey(w, prefix), w) for (i, w) in widgets]
-                )
+            )
 
     def __iter__(self):
         return iter(self.__Widgets_widgets_list__)
@@ -223,8 +226,8 @@ class Widgets(object):
     def __iter_input_and_widget__(self):
         return iter(self.__Widgets_widgets_items__)
 
-
     # TODO need test
+
     def __add__(self, other):
         widgets = self.__class__([], 0)
         widgets.__Widgets_widgets_items__ = (
@@ -235,11 +238,13 @@ class Widgets(object):
         widgets.__Widgets_widgets_dict__.update(other.__Widgets_widgets_dict__)
         return widgets
 
+
 def canWrite(context, field):
     writer = getattr(field, 'writer', None)
     if writer is not None:
         return zope.security.canAccess(context, writer.__name__)
     return zope.security.canWrite(context, field.__name__)
+
 
 def setUpWidgets(form_fields,
                  form_prefix=None, context=None, request=None, form=None,
@@ -280,7 +285,7 @@ def setUpWidgets(form_fields,
         readonly = readonly or (
             (form_field.render_context & interfaces.DISPLAY_UNWRITEABLE)
             and not canWrite(adapter, field)
-            )
+        )
 
         if form_field.custom_widget is not None:
             widget = form_field.custom_widget(field, request)
@@ -312,6 +317,7 @@ def setUpWidgets(form_fields,
         widgets.append((not readonly, widget))
 
     return Widgets(widgets, prefix=form_prefix)
+
 
 def setUpInputWidgets(form_fields, form_prefix, context, request,
                       form=None, ignore_request=False):
@@ -367,6 +373,7 @@ def getWidgetsData(widgets, form_prefix, data):
 
     return errors
 
+
 def _widgetKey(widget, form_prefix):
     name = widget.name
     if name.startswith(form_prefix):
@@ -374,6 +381,7 @@ def _widgetKey(widget, form_prefix):
     else:
         raise ValueError("Name does not match prefix", name, form_prefix)
     return name
+
 
 def setUpEditWidgets(form_fields, form_prefix, context, request,
                      adapters=None, for_display=False,
@@ -403,7 +411,7 @@ def setUpEditWidgets(form_fields, form_prefix, context, request,
         readonly = readonly or (
             (form_field.render_context & interfaces.DISPLAY_UNWRITEABLE)
             and not canWrite(adapter, field)
-            )
+        )
         readonly = readonly or for_display
 
         if readonly:
@@ -427,6 +435,7 @@ def setUpEditWidgets(form_fields, form_prefix, context, request,
 
     return Widgets(widgets, prefix=form_prefix)
 
+
 def setUpDataWidgets(form_fields, form_prefix, context, request, data=(),
                      for_display=False, ignore_request=False):
     widgets = []
@@ -446,8 +455,7 @@ def setUpDataWidgets(form_fields, form_prefix, context, request, data=(),
         widget.setPrefix(prefix)
 
         if ((form_field.__name__ in data)
-            and (ignore_request or readonly or not widget.hasInput())
-            ):
+                and (ignore_request or readonly or not widget.hasInput())):
             widget.setRenderedValue(data[form_field.__name__])
 
         widgets.append((not readonly, widget))
@@ -467,6 +475,7 @@ class NoInputData(interface.Invalid):
     This exception is part of the internal implementation of checkInvariants.
 
     """
+
 
 class FormData:
 
@@ -505,7 +514,8 @@ class FormData:
                 if not IField.providedBy(field):
                     raise RuntimeError(
                         "Data value is not a schema field", name)
-                v = lambda: value
+
+                def v(): return value
             else:
                 v = value
             setattr(self, name, v)
@@ -536,9 +546,10 @@ def checkInvariants(form_fields, form_data, context):
         try:
             schema.validateInvariants(FormData(schema, data, context), errors)
         except interface.Invalid:
-            pass # Just collect the errors
+            pass  # Just collect the errors
 
     return [error for error in errors if not isinstance(error, NoInputData)]
+
 
 def applyData(context, form_fields, data, adapters=None):
     if adapters is None:
@@ -559,13 +570,14 @@ def applyData(context, form_fields, data, adapters=None):
             adapters[interface] = adapter
 
         name = form_field.__name__
-        newvalue = data.get(name, form_field) # using form_field as marker
+        newvalue = data.get(name, form_field)  # using form_field as marker
         if (newvalue is not form_field) \
-        and (field.get(adapter) != newvalue):
+                and (field.get(adapter) != newvalue):
             descriptions.setdefault(interface, []).append(field.__name__)
             field.set(adapter, newvalue)
 
     return descriptions
+
 
 def applyChanges(context, form_fields, data, adapters=None):
     """See `zope.formlib.interfaces.IFormAPI.applyChanges`"""
@@ -587,16 +599,16 @@ class Action(object):
     _identifier = re.compile('[A-Za-z][a-zA-Z0-9_]*$')
 
     def __init__(self, label, success=None, failure=None,
-                condition=None, validator=None, prefix='actions',
-                name=None, data=None):
+                 condition=None, validator=None, prefix='actions',
+                 name=None, data=None):
 
         self.label = label
         self.setPrefix(prefix)
         self.setName(name)
         self.bindMethods(success_handler=success,
-                        failure_handler=failure,
-                        condition=condition,
-                        validator=validator)
+                         failure_handler=failure,
+                         condition=condition,
+                         validator=validator)
 
         if data is None:
             data = {}
@@ -660,6 +672,7 @@ class Action(object):
 
     render = namedtemplate.NamedTemplate('render')
 
+
 @namedtemplate.implementation(interfaces.IAction)
 def render_submit_button(self):
     if not self.available():
@@ -672,8 +685,10 @@ def render_submit_button(self):
             (self.__name__, self.__name__, escape(label, quote=True))
             )
 
+
 class action(object):
     """See `zope.formlib.interfaces.IFormAPI.action`"""
+
     def __init__(self, label, actions=None, **options):
         caller_locals = sys._getframe(1).f_locals
         if actions is None:
@@ -707,7 +722,7 @@ class Actions(object):
             if isinstance(name, slice):
                 return self.__class__(
                     *self.actions[name.start:name.stop:name.step]
-                    )
+                )
 
     def append(self, action):
         self.actions += (action, )
@@ -725,6 +740,7 @@ class Actions(object):
             return self
         return self.__class__(*[a.__get__(inst) for a in self.actions])
 
+
 def handleSubmit(actions, data, default_validate=None):
     """Handle a submit."""
     for action in actions:
@@ -737,6 +753,8 @@ def handleSubmit(actions, data, default_validate=None):
     return None, None
 
 # TODO need test for this
+
+
 def availableActions(form, actions):
     result = []
     for action in actions:
@@ -790,7 +808,7 @@ class FormBase(zope.publisher.browser.BrowserPage):
                     path='/',
                     expires=None,  # equivalent to "remove on browser quit"
                     httpOnly=True,  # no javascript access please.
-                    )
+                )
 
     def checkToken(self):
         cookietoken = self.request.getCookies().get('__csrftoken__')
@@ -891,10 +909,11 @@ class FormBase(zope.publisher.browser.BrowserPage):
                 view = component.getMultiAdapter(
                     (error, self.request),
                     IWidgetInputErrorView)
-                title = getattr(error, 'widget_title', None) # duck typing
+                title = getattr(error, 'widget_title', None)  # duck typing
                 if title:
                     if isinstance(title, zope.i18n.Message):
-                        title = zope.i18n.translate(title, context=self.request)
+                        title = zope.i18n.translate(
+                            title, context=self.request)
                     yield '%s: %s' % (title, view.snippet())
                 else:
                     yield view.snippet()
@@ -907,6 +926,7 @@ def haveInputWidgets(form, action):
     else:
         return False
 
+
 class EditFormBase(FormBase):
 
     def setUpWidgets(self, ignore_request=False):
@@ -914,15 +934,15 @@ class EditFormBase(FormBase):
         self.widgets = setUpEditWidgets(
             self.form_fields, self.prefix, self.context, self.request,
             adapters=self.adapters, ignore_request=ignore_request
-            )
+        )
 
     @action(_("Apply"), condition=haveInputWidgets)
     def handle_edit_action(self, action, data):
         descriptions = applyData(self.context, self.form_fields, data,
-                                self.adapters)
+                                 self.adapters)
         if descriptions:
             descriptions = [Attributes(interface, *tuple(keys))
-                           for interface, keys in descriptions.items()]
+                            for interface, keys in descriptions.items()]
             zope.event.notify(ObjectModifiedEvent(self.context, *descriptions))
             formatter = self.request.locale.dates.getFormatter(
                 'dateTime', 'medium')
@@ -935,13 +955,14 @@ class EditFormBase(FormBase):
             status = _("Updated on ${date_time}",
                        mapping={'date_time':
                                 formatter.format(
-                                   datetime.datetime.now(time_zone)
-                                   )
-                        }
+                                    datetime.datetime.now(time_zone)
+                                )
+                                }
                        )
             self.status = status
         else:
             self.status = _('No changes')
+
 
 class DisplayFormBase(FormBase):
 
@@ -951,7 +972,7 @@ class DisplayFormBase(FormBase):
             self.form_fields, self.prefix, self.context, self.request,
             adapters=self.adapters, for_display=True,
             ignore_request=ignore_request
-            )
+        )
 
     actions = ()
 
@@ -964,7 +985,6 @@ class AddFormBase(FormBase):
 
     ignoreContext = True
 
-
     def __init__(self, context, request):
         self.__parent__ = context
         super(AddFormBase, self).__init__(context, request)
@@ -973,7 +993,7 @@ class AddFormBase(FormBase):
         self.widgets = setUpInputWidgets(
             self.form_fields, self.prefix, self.context, self.request,
             ignore_request=ignore_request,
-            )
+        )
 
     @action(_("Add"), condition=haveInputWidgets)
     def handle_add(self, action, data):
@@ -1013,37 +1033,48 @@ default_page_template = namedtemplate.NamedTemplateImplementation(
 default_subpage_template = namedtemplate.NamedTemplateImplementation(
     ViewPageTemplateFile('subpageform.pt'), interfaces.ISubPageForm)
 
+
 @interface.implementer(interfaces.IPageForm)
 class PageForm(FormBase):
     pass
 
+
 Form = PageForm
+
 
 @interface.implementer(interfaces.IPageForm)
 class PageEditForm(EditFormBase):
     pass
 
+
 EditForm = PageEditForm
+
 
 @interface.implementer(interfaces.IPageForm)
 class PageDisplayForm(DisplayFormBase):
     pass
 
+
 DisplayForm = PageDisplayForm
+
 
 @interface.implementer(interfaces.IPageForm)
 class PageAddForm(AddFormBase):
     pass
 
+
 AddForm = PageAddForm
+
 
 @interface.implementer(interfaces.ISubPageForm)
 class SubPageForm(FormBase):
     pass
 
+
 @interface.implementer(interfaces.ISubPageForm)
 class SubPageEditForm(EditFormBase):
     pass
+
 
 @interface.implementer(interfaces.ISubPageForm)
 class SubPageDisplayForm(DisplayFormBase):

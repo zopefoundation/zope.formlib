@@ -19,6 +19,7 @@ import unittest
 import zope.i18n
 import zope.schema.interfaces
 
+
 @adapter(IForm)
 @NamedTemplateImplementation
 def TestTemplate(self):
@@ -43,6 +44,7 @@ def TestTemplate(self):
 
     return '\n'.join(result)
 
+
 def formSetUp(test):
     setUp(test)
     i18nSetUp(test)
@@ -56,32 +58,31 @@ def formSetUp(test):
             widget,
             field,
             IInputWidget)
-        
+
     provideAdapter(
-       WidgetInputErrorView,
+        WidgetInputErrorView,
         (IWidgetInputError,
          IBrowserRequest),
         IWidgetInputErrorView,
-        )
+    )
     provideAdapter(
         InvalidErrorView,
         (Invalid,
          IBrowserRequest),
         IWidgetInputErrorView,
-        )
+    )
 
     provideAdapter(TestTemplate, name='default')
     provideAdapter(requestToTZInfo)
     provideAdapter(
         form.render_submit_button, name='render')
 
+
 class FunctionalWidgetTestCase(unittest.TestCase):
     widgets = []
-    
+
     def setUp(self):
         formSetUp(self)
 
     def tearDown(self):
         tearDown(self)
-
-

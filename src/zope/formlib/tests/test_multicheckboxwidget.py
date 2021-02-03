@@ -11,7 +11,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-"""Multi-Checkbox Widget Tests 
+"""Multi-Checkbox Widget Tests
 """
 import unittest
 import doctest
@@ -24,9 +24,10 @@ from zope.formlib.widgets import MultiCheckBoxWidget
 from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
 from zope.interface.verify import verifyClass
 
+
 class MultiCheckBoxWidgetTest(SimpleInputWidgetTest):
     """Documents and tests the multi checkbox widget.
-        
+
         >>> verifyClass(IInputWidget, MultiCheckBoxWidget)
         True
     """
@@ -37,10 +38,11 @@ class MultiCheckBoxWidgetTest(SimpleInputWidgetTest):
     def setUpContent(self, desc=u'', title=u'Foo Title'):
         class ITestContent(Interface):
             foo = self._FieldFactory(
-                    title=title,
-                    description=desc,
-                    value_type=Choice(values=[u'foo', u'bar'])
-                    )
+                title=title,
+                description=desc,
+                value_type=Choice(values=[u'foo', u'bar'])
+            )
+
         @implementer(ITestContent)
         class TestObject(object):
             pass
@@ -57,7 +59,6 @@ class MultiCheckBoxWidgetTest(SimpleInputWidgetTest):
         self.assertEqual(self._widget.cssClass, "")
         self.assertEqual(self._widget.extra, '')
         self.assertEqual(self._widget.orientation, 'vertical')
-
 
     def testRenderItem(self):
         check_list = ('type="checkbox"', 'id="field.bar.',
@@ -92,15 +93,17 @@ class MultiCheckBoxWidgetTest(SimpleInputWidgetTest):
         self.verifyResult('\n'.join(self._widget.renderItems(['bar'])),
                           check_list)
 
-
     def testRender(self):
         check_list = ('type="checkbox"', 'id="field.foo.',
                       'name="field.foo"', 'value="bar"', 'bar',
                       'value="foo"', 'foo', 'checked="checked"')
         self.verifyResult(self._widget(), check_list)
 
-        check_list = ('type="hidden"', 'id="field.foo', 'name="field.foo:list"',
-                      'value="bar"')
+        check_list = (
+            'type="hidden"',
+            'id="field.foo',
+            'name="field.foo:list"',
+            'value="bar"')
         self.verifyResult(self._widget.hidden(), check_list)
         check_list = ('style="color: red"',) + check_list
         self._widget.extra = 'style="color: red"'
@@ -111,7 +114,4 @@ def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(MultiCheckBoxWidgetTest),
         doctest.DocTestSuite(),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

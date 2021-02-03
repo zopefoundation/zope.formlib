@@ -16,12 +16,9 @@
 from zope.component import testing
 from .support import checker
 
+
 def test_suite():
     import doctest
     return doctest.DocFileSuite(
         '../source.rst',
         setUp=testing.setUp, tearDown=testing.tearDown, checker=checker)
-
-if __name__ == '__main__':
-    import unittest
-    unittest.main(defaultTest='test_suite')

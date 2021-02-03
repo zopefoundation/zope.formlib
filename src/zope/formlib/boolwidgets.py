@@ -26,10 +26,10 @@ from zope.formlib.itemswidgets import SelectWidget, DropdownWidget
 
 class CheckBoxWidget(SimpleInputWidget):
     """A checkbox widget used to display Bool fields.
-    
+
     For more detailed documentation, including sample code, see
     ``tests/test_checkboxwidget.py``.
-    """    
+    """
     type = 'checkbox'
     default = 0
     extra = ''
@@ -48,8 +48,8 @@ class CheckBoxWidget(SimpleInputWidget):
         return "%s %s" % (
             renderElement(self.tag,
                           type='hidden',
-                          name=self.name+".used",
-                          id=self.name+".used",
+                          name=self.name + ".used",
+                          id=self.name + ".used",
                           value=""
                           ),
             renderElement(self.tag,
@@ -60,7 +60,7 @@ class CheckBoxWidget(SimpleInputWidget):
                           extra=self.extra,
                           value="on",
                           **kw),
-            )
+        )
 
     def _toFieldValue(self, input):
         """Convert from HTML presentation to Python bool."""
@@ -77,9 +77,9 @@ class CheckBoxWidget(SimpleInputWidget):
 
     def _getFormInput(self):
         """Returns the form input used by `_toFieldValue`.
-        
+
         Return values:
-        
+
           ``'on'``  checkbox is checked
           ``''``    checkbox is not checked
           ``None``  form input was not provided
@@ -94,14 +94,14 @@ class CheckBoxWidget(SimpleInputWidget):
 
 
 def BooleanRadioWidget(field, request, true=_('on'), false=_('off')):
-    vocabulary = SimpleVocabulary.fromItems( ((true, True), (false, False)) ) 
+    vocabulary = SimpleVocabulary.fromItems(((true, True), (false, False)))
     widget = RadioWidget(field, vocabulary, request)
     widget.required = False
     return widget
 
 
 def BooleanSelectWidget(field, request, true=_('on'), false=_('off')):
-    vocabulary = SimpleVocabulary.fromItems( ((true, True), (false, False)) )
+    vocabulary = SimpleVocabulary.fromItems(((true, True), (false, False)))
     widget = SelectWidget(field, vocabulary, request)
     widget.size = 2
     widget.required = False
@@ -109,7 +109,7 @@ def BooleanSelectWidget(field, request, true=_('on'), false=_('off')):
 
 
 def BooleanDropdownWidget(field, request, true=_('on'), false=_('off')):
-    vocabulary = SimpleVocabulary.fromItems( ((true, True), (false, False)) )
+    vocabulary = SimpleVocabulary.fromItems(((true, True), (false, False)))
     widget = DropdownWidget(field, vocabulary, request)
     widget.required = False
     return widget

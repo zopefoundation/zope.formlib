@@ -34,6 +34,7 @@ def ChoiceDisplayWidget(field, request):
     return component.getMultiAdapter((field, field.vocabulary, request),
                                      IDisplayWidget)
 
+
 def ChoiceInputWidget(field, request):
     return component.getMultiAdapter((field, field.vocabulary, request),
                                      IInputWidget)
@@ -42,9 +43,11 @@ def ChoiceInputWidget(field, request):
 # value_type.  If the value_type is None we may fall over.  We may
 # not be able to do any better than that.
 
+
 def CollectionDisplayWidget(field, request):
     return component.getMultiAdapter((field, field.value_type, request),
                                      IDisplayWidget)
+
 
 def CollectionInputWidget(field, request):
     return component.getMultiAdapter((field, field.value_type, request),
@@ -53,19 +56,23 @@ def CollectionInputWidget(field, request):
 # for collections of choices, we want to make the widget a view of the field,
 # the value type, and the vocabulary.
 
+
 def ChoiceCollectionDisplayWidget(field, value_type, request):
     return component.getMultiAdapter((field, value_type.vocabulary, request),
                                      IDisplayWidget)
 
+
 def ChoiceCollectionInputWidget(field, value_type, request):
     return component.getMultiAdapter((field, value_type.vocabulary, request),
                                      IInputWidget)
+
 
 class TranslationHook(object):
     """A mixin class that provides the translation capabilities."""
 
     def translate(self, msgid):
         return translate(msgid, context=self.request, default=msgid)
+
 
 class ItemsWidgetBase(TranslationHook, SimpleInputWidget):
     """Convenience base class for widgets displaying items/choices."""
@@ -90,7 +97,7 @@ class ItemsWidgetBase(TranslationHook, SimpleInputWidget):
         """Render the widget to HTML."""
         raise NotImplementedError(
             "__call__() must be implemented by a subclass; use _getFormValue()"
-            )
+        )
 
     def textForValue(self, term):
         """Extract a string from the `term`.
@@ -157,7 +164,7 @@ class SingleDataHelper(object):
             return self.context.missing_value
 
     def hidden(self):
-        #XXX: _getFormValue() should return a string value that can be
+        # XXX: _getFormValue() should return a string value that can be
         #     used in a HTML form, but it doesn't. When
         #     http://www.zope.org/Collectors/Zope3-dev/584 gets fixed
         #     this hack should be reverted.
@@ -205,7 +212,6 @@ class MultiDataHelper(object):
         else:
             return values
 
-
     def _getDefault(self):
         # Return the default value for this widget;
         # may be overridden by subclasses.
@@ -215,7 +221,7 @@ class MultiDataHelper(object):
         return val
 
 
-## Display-Widgets for Items-related fields.
+# Display-Widgets for Items-related fields.
 
 class ItemDisplayWidget(SingleDataHelper, ItemsWidgetBase):
     """Simple single-selection display that can be used in many cases."""
@@ -276,12 +282,14 @@ class ItemsMultiDisplayWidget(MultiDataHelper, ItemsWidgetBase):
                 contents=escape(self.textForValue(term))))
         return items
 
+
 class ListDisplayWidget(ItemsMultiDisplayWidget):
     """Display widget for ordered multi-selection fields.
 
     This can be used for both Sequence, List, and Tuple fields.
     """
     tag = 'ol'
+
 
 class SetDisplayWidget(ItemsMultiDisplayWidget):
     """Display widget for unordered multi-selection fields.
@@ -291,12 +299,11 @@ class SetDisplayWidget(ItemsMultiDisplayWidget):
     tag = 'ul'
 
 
-## Edit-Widgets for Items-related fields.
+# Edit-Widgets for Items-related fields.
 
 # BBB Set to False to never display an item for the missing value if the field
 # is required, which was the behaviour of versions up to and including 3.5.0.
 EXPLICIT_EMPTY_SELECTION = True
-
 
 
 class ItemsEditWidgetBase(SingleDataHelper, ItemsWidgetBase):
@@ -327,7 +334,6 @@ class ItemsEditWidgetBase(SingleDataHelper, ItemsWidgetBase):
         """
         super(ItemsEditWidgetBase, self).setPrefix(prefix)
 
-
     def __call__(self):
         """See IBrowserWidget."""
         value = self._getFormValue()
@@ -338,7 +344,6 @@ class ItemsEditWidgetBase(SingleDataHelper, ItemsWidgetBase):
 
         return self._div(self.cssClass, "\n".join(contents))
 
-
     def _div(self, cssClass, contents, **kw):
         """Render a simple div tag."""
         if contents:
@@ -347,7 +352,6 @@ class ItemsEditWidgetBase(SingleDataHelper, ItemsWidgetBase):
                                  contents="\n%s\n" % contents,
                                  **kw)
         return ""
-
 
     def renderItemsWithValues(self, values):
         """Render the list of possible values, with those found in
@@ -364,11 +368,11 @@ class ItemsEditWidgetBase(SingleDataHelper, ItemsWidgetBase):
         missing = self._toFormValue(self.context.missing_value)
 
         if self._displayItemForMissingValue and (
-            not self.context.required or
-            EXPLICIT_EMPTY_SELECTION and
-            self.explicit_empty_selection and
-            missing in values and
-            self.context.default is None):
+                not self.context.required or
+                EXPLICIT_EMPTY_SELECTION and
+                self.explicit_empty_selection and
+                missing in values and
+                self.context.default is None):
 
             if missing in values:
                 render = self.renderSelectedItem
@@ -376,10 +380,10 @@ class ItemsEditWidgetBase(SingleDataHelper, ItemsWidgetBase):
                 render = self.renderItem
 
             missing_item = render(count,
-                self.translate(self._messageNoValue),
-                missing,
-                self.name,
-                cssClass)
+                                  self.translate(self._messageNoValue),
+                                  missing,
+                                  self.name,
+                                  cssClass)
             rendered_items.append(missing_item)
             count += 1
 
@@ -393,10 +397,10 @@ class ItemsEditWidgetBase(SingleDataHelper, ItemsWidgetBase):
                 render = self.renderItem
 
             rendered_item = render(count,
-                item_text,
-                term.token,
-                self.name,
-                cssClass)
+                                   item_text,
+                                   term.token,
+                                   self.name,
+                                   cssClass)
 
             rendered_items.append(rendered_item)
             count += 1
@@ -427,7 +431,7 @@ class SelectWidget(ItemsEditWidgetBase):
 
     def renderValue(self, value):
         rendered_items = self.renderItems(value)
-        contents = "\n%s\n" %"\n".join(rendered_items)
+        contents = "\n%s\n" % "\n".join(rendered_items)
         return renderElement('select',
                              name=self.name,
                              id=self.name,
@@ -521,7 +525,7 @@ class ItemsMultiEditWidgetBase(MultiDataHelper, ItemsEditWidgetBase):
             items.append(
                 renderElement(u'input',
                               type='hidden',
-                              name=self.name+':list',
+                              name=self.name + ':list',
                               id=self.name,
                               value=self.vocabulary.getTerm(item).token,
                               cssClass=self.cssClass,
@@ -551,6 +555,7 @@ class MultiSelectFrozenSetWidget(MultiSelectWidget):
         if isinstance(value, list):
             value = frozenset(value)
         return value
+
 
 class OrderedMultiSelectWidget(ItemsMultiEditWidgetBase):
     """A multi-selection widget with ordering support."""

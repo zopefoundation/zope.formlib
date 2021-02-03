@@ -42,17 +42,12 @@ from zope.browserpage.namedtemplate import NamedTemplateImplementation
 
 from zope.configuration.xmlconfig import XMLConfig
 
+
 @zope.interface.implementer(zope.interface.common.idatetime.ITZInfo)
 @adapter(zope.publisher.interfaces.IRequest)
 def requestToTZInfo(request):
     return pytz.timezone('US/Hawaii')
 
-def pageSetUp(test):
-    setUp(test)
-    provideAdapter(
-        zope.traversing.adapters.DefaultTraversable,
-        [None],
-        )
 
 @adapter(zope.formlib.interfaces.IForm)
 @NamedTemplateImplementation
@@ -91,6 +86,7 @@ def TestTemplate(self):
 
     return '\n'.join(result)
 
+
 def formSetUp(test):
     setUp(test)
     i18nSetUp(test)
@@ -100,70 +96,70 @@ def formSetUp(test):
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IInputWidget,
-        )
+    )
     provideAdapter(
         FloatWidget,
         [zope.schema.interfaces.IFloat,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IInputWidget,
-        )
+    )
     provideAdapter(
         UnicodeDisplayWidget,
         [zope.schema.interfaces.IInt,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IDisplayWidget,
-        )
+    )
     provideAdapter(
         IntWidget,
         [zope.schema.interfaces.IInt,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IInputWidget,
-        )
+    )
     provideAdapter(
         UnicodeDisplayWidget,
         [zope.schema.interfaces.IFloat,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IDisplayWidget,
-        )
+    )
     provideAdapter(
         UnicodeDisplayWidget,
         [zope.schema.interfaces.ITextLine,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IDisplayWidget,
-        )
+    )
     provideAdapter(
         DatetimeDisplayWidget,
         [zope.schema.interfaces.IDatetime,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IDisplayWidget,
-        )
+    )
     provideAdapter(
         DatetimeWidget,
         [zope.schema.interfaces.IDatetime,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         zope.formlib.interfaces.IInputWidget,
-        )
+    )
     provideAdapter(
         exception.WidgetInputErrorView,
         [zope.formlib.interfaces.IWidgetInputError,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         IWidgetInputErrorView,
-        )
+    )
     provideAdapter(
         zope.formlib.errors.InvalidErrorView,
         [zope.interface.Invalid,
          zope.publisher.interfaces.browser.IBrowserRequest,
          ],
         IWidgetInputErrorView,
-        )
+    )
     provideAdapter(TestTemplate, name='default')
     provideAdapter(requestToTZInfo)
     provideAdapter(
@@ -174,12 +170,14 @@ def formSetUp(test):
 
 # Classes used in tests
 
+
 class IOrder(zope.interface.Interface):
     identifier = zope.schema.Int(title=u"Identifier", readonly=True)
     name = zope.schema.TextLine(title=u"Name")
     min_size = zope.schema.Float(title=u"Minimum size")
     max_size = zope.schema.Float(title=u"Maximum size")
     now = zope.schema.Datetime(title=u"Now", readonly=True)
+
 
 class IDescriptive(zope.interface.Interface):
     title = zope.schema.TextLine(title=u"Title")
@@ -206,6 +204,7 @@ class Descriptive(object):
                 return self.context.__title
             except AttributeError:
                 return ''
+
         def set(self, v):
             self.context.__title = v
         return property(get, set)
@@ -217,6 +216,7 @@ class Descriptive(object):
                 return self.context.__description
             except AttributeError:
                 return ''
+
         def set(self, v):
             self.context.__description = v
         return property(get, set)
@@ -244,6 +244,7 @@ def makeSureRenderCanBeCalledWithoutCallingUpdate():
            value="Apply" class="button" />
 
 """
+
 
 def make_sure_i18n_is_called_correctly_for_actions():
     """\
@@ -300,6 +301,7 @@ data passed to translate:
 
 """
 
+
 def test_error_handling():
     """\
 
@@ -344,11 +346,13 @@ in the formlib as a fallback if some widget doen't handle errors correct. (ri)
     >>> widget = Widget()
     >>> inputs = [(True, widget)]
     >>> widgets = zope.formlib.form.Widgets(inputs, 5)
-    >>> errors = zope.formlib.form.getWidgetsData(widgets, 'form', {'summary':'value'})
+    >>> errors = zope.formlib.form.getWidgetsData(
+    ...     widgets, 'form', {'summary':'value'})
     >>> errors #doctest: +ELLIPSIS
     [<zope.formlib.interfaces.WidgetInputError instance at ...>]
 
 """
+
 
 def test_form_template_i18n():
     """\
@@ -531,6 +535,7 @@ def test_setUpWidgets_prefix():
 
     """
 
+
 def check_action_name():
     """
 We want to make sure that Action name setting adheres to the specification.
@@ -708,7 +713,6 @@ The error is not triggered, too,  if ``ignoreContext`` is set to ``True`` as
 """
 
 
-
 def FormData___getattr___handles_zope_interrface_attributes_correctly():
     """
 `FormData.__getattr__` reads objects defined as zope.interface.Attribute in
@@ -749,25 +753,28 @@ read the object from context:
 def test_suite():
     import doctest
     checker = support.checker + zope.testing.renormalizing.RENormalizing([
-      (re.compile(r"\[WidgetInputError\('form.summary', 'summary', ValidationError\('A error message'\)\)\]"),
-                  r"[<zope.formlib.interfaces.WidgetInputError instance at ...>]"),
-      (re.compile(r"\[WidgetInputError\('summary', u'Summary', None\)\]"),
-                  r"[<zope.formlib.interfaces.WidgetInputError instance at ...>]"),
-      (re.compile(r" ValueError\('invalid literal for float\(\): (bob'|10/0'),\)"),
-                  r"\n <exceptions.ValueError instance at ...>"),
-      (re.compile(r" ValueError\('could not convert string to float: bob',\)"),
-                  r"\n <exceptions.ValueError instance at ...>"),
-      (re.compile(r"\(Invalid\('value bigger than max',\),\)"),
-       r"(Invalid('value bigger than max'),)"),
+        (re.compile(r"\[WidgetInputError\('form.summary', 'summary',"
+                    r" ValidationError\('A error message'\)\)\]"),
+         r"[<zope.formlib.interfaces.WidgetInputError instance at ...>]"),
+        (re.compile(r"\[WidgetInputError\('summary', u'Summary', None\)\]"),
+            r"[<zope.formlib.interfaces.WidgetInputError instance at ...>]"),
+        (re.compile(r" ValueError\('invalid literal for float\(\):"
+                    r" (bob'|10/0'),\)"),
+            r"\n <exceptions.ValueError instance at ...>"),
+        (re.compile(r" ValueError\('could not convert string to float:"
+                    r" bob',\)"),
+            r"\n <exceptions.ValueError instance at ...>"),
+        (re.compile(r"\(Invalid\('value bigger than max',\),\)"),
+            r"(Invalid('value bigger than max'),)"),
     ])
     return unittest.TestSuite((
         doctest.DocFileSuite(
             '../errors.rst',
             setUp=formSetUp, tearDown=tearDown, checker=checker,
-            optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
-            ),
+            optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS,
+        ),
         # The following test needs some zope.security test setup
-        #doctest.DocFileSuite(
+        # doctest.DocFileSuite(
         #     'bugs.txt',
         #     setUp=formSetUp, tearDown=tearDown,
         #     optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
@@ -775,13 +782,13 @@ def test_suite():
         doctest.DocFileSuite(
             '../form.rst',
             setUp=formSetUp, tearDown=tearDown,
-            optionflags=doctest.NORMALIZE_WHITESPACE|doctest.ELLIPSIS,
+            optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS,
             checker=checker
-            ),
+        ),
         doctest.DocTestSuite(
             setUp=formSetUp, tearDown=tearDown,
             checker=checker
-            ),
+        ),
         doctest.DocTestSuite(
             'zope.formlib.errors', checker=checker),
-        ))
+    ))

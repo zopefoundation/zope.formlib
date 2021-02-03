@@ -27,6 +27,7 @@ from zope.formlib.widgets import (
 from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 import zope.schema.interfaces
 
+
 class IDecimalTest(Interface):
 
     f1 = Decimal(
@@ -58,19 +59,20 @@ class DecimalTest(object):
 class Form(form.EditForm):
     form_fields = form.fields(IDecimalTest)
 
+
 class Test(FunctionalWidgetTestCase):
     widgets = [
         (zope.schema.interfaces.IDecimal, DecimalWidget),
         (zope.schema.interfaces.IChoice, ChoiceInputWidget),
-        ((zope.schema.interfaces.IChoice, zope.schema.interfaces.IVocabularyTokenized),
-         DropdownWidget)]
+        ((zope.schema.interfaces.IChoice,
+          zope.schema.interfaces.IVocabularyTokenized), DropdownWidget)]
 
     def test_display_editform(self):
         foo = DecimalTest()
         request = TestRequest()
-        
+
         html = Form(foo, request)()
-        
+
         # f1 and f2 should be displayed in text fields
         self.assertTrue(patternExists(
             '<input .* name="form.f1".* value="".*>', html))
@@ -111,13 +113,14 @@ class Test(FunctionalWidgetTestCase):
 
         # check new values in object
         self.assertEqual(foo.f1, None)
-        self.assertEqual(foo.f2, None) # None is default missing_value
-        self.assertEqual(foo.f3, decimal.Decimal("1.1"))  # 0 is from f3.missing_value=0
+        self.assertEqual(foo.f2, None)  # None is default missing_value
+        # 0 is from f3.missing_value=0
+        self.assertEqual(foo.f3, decimal.Decimal("1.1"))
 
     def test_required_validation(self):
         foo = DecimalTest()
         request = TestRequest()
-        
+
         request.form['form.f1'] = ''
         request.form['form.f2'] = ''
         request.form['form.f3'] = ''
@@ -145,7 +148,7 @@ class Test(FunctionalWidgetTestCase):
     def test_min_max_validation(self):
         foo = DecimalTest()
         request = TestRequest()
-        
+
         # submit value for f1 that is too low
         request.form['form.f1'] = '-1'
         request.form['form.actions.apply'] = u''
@@ -202,10 +205,9 @@ class Test(FunctionalWidgetTestCase):
         invalid_index = html.find('Invalid decimal data')
         self.assertTrue(invalid_index > f1_index)
         self.assertTrue(html.find('Invalid decimal data', f2_index) == -1)
-        
+
 
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(Test))
     return suite
-
