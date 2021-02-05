@@ -2,10 +2,23 @@
  Changes
 =========
 
-4.8.0 (unreleased)
+5.0.0 (unreleased)
 ==================
 
+Breaking changes
+----------------
+
+- Fix checking of constraints on field contents. This requires the default
+  prefix of an ``IFormField`` to be non-empty. It now defaults to
+  ``form_field``.
+
+Features
+--------
+
 - Add support for Python 3.9.
+
+Other changes
+-------------
 
 - Remove unused non-BBB imports.
 
