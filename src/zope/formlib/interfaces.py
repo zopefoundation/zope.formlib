@@ -328,15 +328,17 @@ class ITextBrowserWidget(ISimpleInputWidget):
             u'If True, an empty string is converted to field.missing_value.'),
         default=True)
 
+# XXX this seems to be buggy (since at least 2005)
+# it returns None, and prefix_re is never defined.
+
 
 def reConstraint(pat, explanation):
     pat = re.compile(pat)
 
     def constraint(value):
-        if pat.match(value):
+        if prefix_re.match(value):  # noqa: F821 undefined name
             return True
         raise Invalid(value, explanation)
-    return constraint
 
 
 class IWidgetInputErrorView(Interface):
@@ -876,7 +878,7 @@ class IFormField(Interface):
         disambiguate fields with the same name (e.g. from different
         schema) within a collection of form fields.
         """,
-        default="form_field",
+        default="",
     )
 
     for_display = schema.Bool(
