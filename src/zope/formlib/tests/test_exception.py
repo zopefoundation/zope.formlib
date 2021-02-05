@@ -17,10 +17,8 @@ import unittest
 from doctest import DocTestSuite
 from .support import checker
 
+
 def test_suite():
     return unittest.TestSuite((
         DocTestSuite('zope.formlib.exception', checker=checker),
-        ))
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

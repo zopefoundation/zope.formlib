@@ -21,12 +21,14 @@
 import os
 from setuptools import setup, find_packages
 
+
 def read(*rnames):
     with open(os.path.join(os.path.dirname(__file__), *rnames)) as f:
         return f.read()
 
+
 setup(name='zope.formlib',
-      version='4.7.2.dev0',
+      version='4.8.0.dev0',
       author='Zope Foundation and Contributors',
       author_email='zope-dev@zope.org',
       description='Form generation and validation library for Zope',
@@ -50,6 +52,7 @@ setup(name='zope.formlib',
           'Programming Language :: Python :: 3.6',
           'Programming Language :: Python :: 3.7',
           'Programming Language :: Python :: 3.8',
+          'Programming Language :: Python :: 3.9',
           'Programming Language :: Python :: Implementation :: CPython',
           'Programming Language :: Python :: Implementation :: PyPy',
           'Natural Language :: English',
@@ -60,7 +63,7 @@ setup(name='zope.formlib',
       url='https://github.com/zopefoundation/zope.formlib',
       packages=find_packages('src'),
       package_dir={'': 'src'},
-      namespace_packages=['zope',],
+      namespace_packages=['zope'],
       extras_require={
           'test': [
               'zope.configuration',
@@ -106,4 +109,4 @@ setup(name='zope.formlib',
           '!=3.3.*',
           '!=3.4.*',
       ]),
-)
+      )

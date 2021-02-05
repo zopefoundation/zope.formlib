@@ -37,11 +37,12 @@ from zope.formlib.interfaces import IWidgetFactory
 # accept a 'value' argument.
 no_value = object()
 
+
 def _fieldlist(names, schema):
     if not names:
         fields = getFieldsInOrder(schema)
     else:
-        fields = [ (name, schema[name]) for name in names ]
+        fields = [(name, schema[name]) for name in names]
     return fields
 
 
@@ -49,6 +50,7 @@ def _createWidget(context, field, viewType, request):
     """Creates a widget given a `context`, `field`, and `viewType`."""
     field = field.bind(context)
     return component.getMultiAdapter((field, request), viewType)
+
 
 def _widgetHasStickyValue(widget):
     """Returns ``True`` if the widget has a sticky value.
@@ -60,6 +62,7 @@ def _widgetHasStickyValue(widget):
     the object.
     """
     return IInputWidget.providedBy(widget) and widget.hasInput()
+
 
 def setUpWidget(view, name, field, viewType, value=no_value, prefix=None,
                 ignoreStickyValues=False, context=None):
@@ -97,7 +100,7 @@ def setUpWidget(view, name, field, viewType, value=no_value, prefix=None,
         widget.setPrefix(prefix)
 
     if value is not no_value and (
-        ignoreStickyValues or not _widgetHasStickyValue(widget)):
+            ignoreStickyValues or not _widgetHasStickyValue(widget)):
         widget.setRenderedValue(value)
 
 

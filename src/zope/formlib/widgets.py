@@ -13,8 +13,6 @@
 ##############################################################################
 """Browser widgets
 """
-__docformat__ = 'restructuredtext'
-
 from zope.formlib.widget import BrowserWidget, DisplayWidget
 from zope.formlib.widget import UnicodeDisplayWidget
 

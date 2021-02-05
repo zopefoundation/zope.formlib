@@ -29,6 +29,7 @@ from zope.formlib.widgets import ChoiceCollectionDisplayWidget
 from zope.formlib.widgets import ChoiceCollectionInputWidget
 from zope.formlib.widgets import ItemsMultiDisplayWidget, SelectWidget
 
+
 class ListOfChoicesWidgetTest(PlacelessSetup, unittest.TestCase):
 
     def test_ListOfChoicesDisplayWidget(self):
@@ -45,7 +46,6 @@ class ListOfChoicesWidgetTest(PlacelessSetup, unittest.TestCase):
         self.assertEqual(widget.context, bound)
         self.assertEqual(widget.vocabulary, bound.value_type.vocabulary)
 
-
     def test_ChoiceSequenceEditWidget(self):
         provideAdapter(ChoiceCollectionInputWidget,
                        (IList, IChoice, IBrowserRequest),
@@ -59,13 +59,9 @@ class ListOfChoicesWidgetTest(PlacelessSetup, unittest.TestCase):
         self.assertTrue(isinstance(widget, SelectWidget))
         self.assertEqual(widget.context, bound)
         self.assertEqual(widget.vocabulary, bound.value_type.vocabulary)
-        
 
 
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(ListOfChoicesWidgetTest),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

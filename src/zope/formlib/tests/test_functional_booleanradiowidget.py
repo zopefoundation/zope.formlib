@@ -24,19 +24,22 @@ from zope.formlib.widgets import BooleanRadioWidget
 from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 import zope.schema.interfaces
 
+
 class IFoo(Interface):
     bar = Bool(title=u'Bar')
+
 
 @implementer(IFoo)
 class Foo(object):
     def __init__(self):
         self.bar = True
 
+
 class Form(form.EditForm):
     form_fields = form.fields(IFoo)
     form_fields['bar'].custom_widget = BooleanRadioWidget
 
-    
+
 class Test(FunctionalWidgetTestCase):
     widgets = [(zope.schema.interfaces.IBool, BooleanRadioWidget)]
 
@@ -59,7 +62,6 @@ class Test(FunctionalWidgetTestCase):
             '<input name="form.bar-empty-marker" type="hidden" value="1".* />',
             html))
 
-
     def test_submit_editform(self):
         foo = Foo()
         request = TestRequest()
@@ -72,7 +74,7 @@ class Test(FunctionalWidgetTestCase):
     def test_missing_value(self):
         foo = Foo()
         request = TestRequest()
-        
+
         # temporarily make bar field not required
         IFoo['bar'].required = False
 
@@ -81,14 +83,13 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = u''
 
         Form(foo, request)()
- 
+
         # confirm use of missing_value as new object value
         self.assertTrue(IFoo['bar'].missing_value is None)
         self.assertTrue(foo.bar is None)
 
         # restore bar required state
         IFoo['bar'].required = True
-
 
     def test_required_validation(self):
         foo = Foo()
@@ -101,10 +102,9 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = u''
 
         html = Form(foo, request)()
-        
+
         # confirm error msgs
         self.assertTrue('Required input is missing' in html)
-        
 
     def test_invalid_allowed_value(self):
         foo = Foo()
@@ -116,6 +116,7 @@ class Test(FunctionalWidgetTestCase):
         html = Form(foo, request)()
 
         self.assertTrue('Invalid value' in html)
+
 
 def test_suite():
     suite = unittest.TestSuite()

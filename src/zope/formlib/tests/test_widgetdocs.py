@@ -17,6 +17,7 @@ import unittest
 from doctest import DocTestSuite
 from .support import checker
 
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(

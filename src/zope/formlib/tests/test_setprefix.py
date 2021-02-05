@@ -20,10 +20,11 @@ from zope.formlib.tests import support
 from zope.publisher.browser import TestRequest
 from zope.schema import Text
 
+
 class Test(support.VerifyResults, unittest.TestCase):
 
     def setUp(self):
-        field = Text(__name__ = 'foo')
+        field = Text(__name__='foo')
         request = TestRequest()
         request.form['spam.foo'] = u'Foo Value'
         self._widget = TextWidget(field, request)
@@ -44,10 +45,11 @@ class Test(support.VerifyResults, unittest.TestCase):
         self._widget.extra = 'style="color: red"'
         self.verifyResult(self._widget.hidden(), check_list)
 
+
 class TestEmpty(support.VerifyResults, unittest.TestCase):
 
     def setUp(self):
-        field = Text(__name__ = 'foo')
+        field = Text(__name__='foo')
         request = TestRequest()
         request.form['foo'] = u'Foo Value'
         self._widget = TextWidget(field, request)
@@ -61,11 +63,9 @@ class TestEmpty(support.VerifyResults, unittest.TestCase):
         self.verifyResult(self._widget(), check_list)
         self.verifyResult(self._widget.hidden(), check_list)
 
+
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(Test),
         unittest.makeSuite(TestEmpty),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

@@ -21,7 +21,7 @@ from zope.datetime import DateTimeError
 from zope.i18n.format import DateTimeParseError
 
 from zope.formlib._compat import toUnicode, unicode, PY3
-from zope.formlib.interfaces import IInputWidget, ConversionError
+from zope.formlib.interfaces import ConversionError
 from zope.formlib.i18n import _
 from zope.formlib.interfaces import ITextBrowserWidget
 from zope.formlib.widget import SimpleInputWidget, renderElement
@@ -32,6 +32,7 @@ def escape(str):
     if str is not None:
         str = saxutils.escape(str)
     return str
+
 
 @implementer(ITextBrowserWidget)
 class TextWidget(SimpleInputWidget):
@@ -127,7 +128,8 @@ class TextWidget(SimpleInputWidget):
                   'size': self.displayWidth,
                   'extra': self.extra}
         if self.displayMaxWidth:
-            kwargs['maxlength'] = self.displayMaxWidth # TODO This is untested.
+            # TODO This is untested.
+            kwargs['maxlength'] = self.displayMaxWidth
 
         return renderElement(self.tag, **kwargs)
 
@@ -151,6 +153,7 @@ class Text(SimpleInputWidget):
     def _toFieldValue(self, input):
         return super(Text, self)._toFieldValue(input)
 
+
 class Bytes(SimpleInputWidget):
 
     def _toFieldValue(self, input):
@@ -161,6 +164,7 @@ class Bytes(SimpleInputWidget):
             except UnicodeError as v:
                 raise ConversionError(_("Invalid textual data"), v)
         return value
+
 
 class BytesWidget(Bytes, TextWidget):
     """Bytes widget.
@@ -178,6 +182,7 @@ class BytesWidget(Bytes, TextWidget):
     'Bob'
     """
 
+
 class BytesDisplayWidget(DisplayWidget):
     """Bytes display widget"""
 
@@ -188,15 +193,17 @@ class BytesDisplayWidget(DisplayWidget):
             content = self.context.default
         return renderElement("pre", contents=escape(content))
 
+
 # for things which are of the str type on both Python 2 and 3
-if PY3: #pragma NO COVER
+if PY3:  # pragma NO COVER
     NativeString = Text
     NativeStringWidget = TextWidget
     NativeStringDisplayWidget = DisplayWidget
-else: #pragma NO COVER
+else:  # pragma NO COVER
     NativeString = Bytes
     NativeStringWidget = BytesWidget
     NativeStringDisplayWidget = BytesDisplayWidget
+
 
 class ASCII(NativeString):
     """ASCII"""
@@ -208,8 +215,10 @@ class ASCIIWidget(NativeStringWidget):
     Single-line data (string) input
     """
 
+
 class ASCIIDisplayWidget(NativeStringDisplayWidget):
     """ASCII display widget"""
+
 
 class URIDisplayWidget(DisplayWidget):
     """URI display widget.
@@ -381,6 +390,7 @@ class TextAreaWidget(SimpleInputWidget):
                              contents=escape(self._getFormValue()),
                              extra=self.extra)
 
+
 class BytesAreaWidget(Bytes, TextAreaWidget):
     """BytesArea widget.
 
@@ -397,6 +407,7 @@ class BytesAreaWidget(Bytes, TextAreaWidget):
     'Hello\\nworld!'
     """
 
+
 class ASCIIAreaWidget(NativeString, TextAreaWidget):
     """ASCIIArea widget.
 
@@ -412,6 +423,7 @@ class ASCIIAreaWidget(NativeString, TextAreaWidget):
     >>> widget.getInputValue()
     'Hello\\nworld!'
     """
+
 
 class PasswordWidget(TextWidget):
     """Password Widget"""
@@ -465,8 +477,8 @@ class FileWidget(TextWidget):
         displayMaxWidth = self.displayMaxWidth or 0
         hidden = renderElement(self.tag,
                                type='hidden',
-                               name=self.name+".used",
-                               id=self.name+".used",
+                               name=self.name + ".used",
+                               id=self.name + ".used",
                                value="")
         if displayMaxWidth > 0:
             elem = renderElement(self.tag,
@@ -504,10 +516,11 @@ class FileWidget(TextWidget):
                 return self.context.missing_value
 
     def hasInput(self):
-        return ((self.name+".used" in self.request.form)
+        return ((self.name + ".used" in self.request.form)
                 or
                 (self.name in self.request.form)
                 )
+
 
 class IntWidget(TextWidget):
     """Integer number widget.
@@ -586,6 +599,7 @@ class DatetimeWidget(TextWidget):
             except (DateTimeError, ValueError, IndexError) as v:
                 raise ConversionError(_("Invalid datetime data"), v)
 
+
 class DateWidget(DatetimeWidget):
     """Date entry widget.
     """
@@ -595,6 +609,7 @@ class DateWidget(DatetimeWidget):
         if v != self.context.missing_value:
             v = v.date()
         return v
+
 
 class DateI18nWidget(TextWidget):
     """I18n date entry widget.
@@ -623,7 +638,7 @@ class DateI18nWidget(TextWidget):
                 return formatter.parse(input)
             except (DateTimeParseError, ValueError) as v:
                 raise ConversionError(_("Invalid datetime data"),
-                    "%s (%r)" % (v, input))
+                                      "%s (%r)" % (v, input))
 
     def _toFormValue(self, value):
         value = super(DateI18nWidget, self)._toFormValue(value)
@@ -632,6 +647,7 @@ class DateI18nWidget(TextWidget):
                 self._category, (self.displayStyle or None))
             value = formatter.format(value)
         return value
+
 
 class DatetimeI18nWidget(DateI18nWidget):
     """I18n datetime entry widget.
@@ -648,6 +664,7 @@ class DatetimeI18nWidget(DateI18nWidget):
     """
 
     _category = "dateTime"
+
 
 class DateDisplayWidget(DisplayWidget):
     """Date display widget.

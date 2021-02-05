@@ -14,14 +14,11 @@
 """Generic Text Widgets tests
 """
 import unittest
-from zope.interface.verify import verifyClass
-from zope.interface.exceptions import DoesNotImplement
-from zope.publisher.browser import TestRequest
-from zope.schema import TextLine
 from doctest import DocTestSuite
 
 from zope.formlib.widget import DisplayWidget, UnicodeDisplayWidget
 from .support import checker
+
 
 def test_implemented_interfaces():
     """Make sure that the display widget implements the correct interfaces.
@@ -46,9 +43,12 @@ def test_implemented_interfaces():
     False
     """
 
+
 def test_not_required():
     """Make sure that display widgets are not required
 
+    >>> from zope.publisher.browser import TestRequest
+    >>> from zope.schema import TextLine
     >>> field = TextLine(title = u'Title',
     ...                  __name__ = u'title',
     ...                  default = u'<My Title>')
@@ -58,10 +58,13 @@ def test_not_required():
 
     """
 
+
 def test_value_escaping():
     """Make sure that the returned values are correctly escaped.
 
     First we need to create a field that is the context of the display widget.
+
+    >>> from zope.schema import TextLine
     >>> field = TextLine(title = u'Title',
     ...                  __name__ = u'title',
     ...                  default = u'<My Title>')
@@ -70,6 +73,7 @@ def test_value_escaping():
 
     Now we are ready to instantiate our widget.
 
+    >>> from zope.publisher.browser import TestRequest
     >>> widget = DisplayWidget(field, TestRequest())
 
     If no data was specified in the widget, the field's default value will be
@@ -88,6 +92,7 @@ def test_value_escaping():
     When the value is the missing_value, the empty string should be
     displayed::
 
+    >>> from zope.publisher.browser import TestRequest
     >>> field = TextLine(title = u'Title',
     ...                  __name__ = u'title',
     ...                  required = False)
@@ -120,11 +125,10 @@ def test_value_escaping():
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(DocTestSuite(checker=checker))
     suite.addTest(DocTestSuite(
-            checker=checker,
-            extraglobs={"DisplayWidget": UnicodeDisplayWidget}))
+        checker=checker,
+        extraglobs={"DisplayWidget": DisplayWidget}))
+    suite.addTest(DocTestSuite(
+        checker=checker,
+        extraglobs={"DisplayWidget": UnicodeDisplayWidget}))
     return suite
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')

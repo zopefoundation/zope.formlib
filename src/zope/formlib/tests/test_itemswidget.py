@@ -42,6 +42,7 @@ vocab = SimpleVocabulary(
         ('two', 'token2', 'Two'),
         ('three', 'token3', 'Three'))])
 
+
 class ICollector(Interface):
     choice = Choice(
         title=u"Number",
@@ -93,21 +94,21 @@ class ItemsWidgetBaseTest(VerifyResults, PlacelessSetup, unittest.TestCase):
         name = self._field.getName()
         # Default prefix
         self.assertEqual(widget._prefix, 'field.')
-        self.assertEqual(widget.name, 'field.%s' %name)
+        self.assertEqual(widget.name, 'field.%s' % name)
         self.assertEqual(widget.empty_marker_name,
-                         'field.%s-empty-marker' %name)
+                         'field.%s-empty-marker' % name)
         # Declaring custom prefix
         widget.setPrefix('foo')
         self.assertEqual(widget._prefix, 'foo.')
-        self.assertEqual(widget.name, 'foo.%s' %name)
+        self.assertEqual(widget.name, 'foo.%s' % name)
         self.assertEqual(widget.empty_marker_name,
-                         'foo.%s-empty-marker' %name)
+                         'foo.%s-empty-marker' % name)
         # Declaring empty prefix
         widget.setPrefix('')
         self.assertEqual(widget._prefix, '')
         self.assertEqual(widget.name, name)
         self.assertEqual(widget.empty_marker_name,
-                         '%s-empty-marker' %name)
+                         '%s-empty-marker' % name)
 
     def test_convertTokensToValues(self):
         widget = self._makeWidget()
@@ -133,7 +134,6 @@ class ItemDisplayWidgetTest(ItemsWidgetBaseTest):
     def test_not_required(self):
         self.assertFalse(self._makeWidget().required)
 
-
     def test_toFieldValue(self):
         from zope.formlib.interfaces import ConversionError
         widget = self._makeWidget()
@@ -152,6 +152,7 @@ containerVocab = SimpleVocabulary(
         ((1,), 'container2', 'Container Two'),
         ((2,), 'container3', 'Container Three'))])
 
+
 class ITestContainer(Interface):
     container = Choice(
         title=u"Container",
@@ -159,11 +160,13 @@ class ITestContainer(Interface):
         vocabulary=containerVocab,
         required=True)
 
+
 @implementer(ITestContainer)
 class TestContainer(object):
 
     def __init__(self, container=None):
         self.container = container
+
 
 class ContainerItemDisplayWidgetTest(VerifyResults,
                                      PlacelessSetup,
@@ -178,6 +181,7 @@ class ContainerItemDisplayWidgetTest(VerifyResults,
         widget = ItemDisplayWidget(bound, field.vocabulary, request)
 
         self.assertEqual(widget(), 'Container One')
+
 
 class ItemsMultiDisplayWidgetTest(ItemsWidgetBaseTest):
 
@@ -194,7 +198,7 @@ class ItemsMultiDisplayWidgetTest(ItemsWidgetBaseTest):
             widget(),
             '<%s id="field.numbers" >'
             '<li>One</li>\n<li>Two</li>'
-            '</%s>' %(self._tag, self._tag))
+            '</%s>' % (self._tag, self._tag))
 
     def test_renderItems(self):
         widget = self._makeWidget()
@@ -203,7 +207,6 @@ class ItemsMultiDisplayWidgetTest(ItemsWidgetBaseTest):
             [u'<li>One</li>', u'<li>Two</li>'])
         self.assertRaises(LookupError, widget.renderItems, 'one')
         self.assertRaises(TypeError, widget.renderItems, 1)
-
 
     def test_not_required(self):
         numbers = List(value_type=ICollector['choice']).bind(Collector(None))
@@ -246,12 +249,12 @@ class ItemsEditWidgetBaseTest(ItemsWidgetBaseTest):
     def test_renderSelectedItem(self):
         widget = self._makeWidget()
         self.verifyResult(
-          widget.renderSelectedItem('', 'Foo', 'foo', '', None),
-          ['<option', 'value="foo"', 'selected="selected"', '>Foo</option>'])
+            widget.renderSelectedItem('', 'Foo', 'foo', '', None),
+            ['<option', 'value="foo"', 'selected="selected"', '>Foo</option>'])
         self.verifyResult(
-          widget.renderSelectedItem('', 'Foo', 'foo', '', 'klass'),
-          ['<option', 'class="klass"', 'value="foo"', 'selected="selected"',
-           '>Foo</option>'])
+            widget.renderSelectedItem('', 'Foo', 'foo', '', 'klass'),
+            ['<option', 'class="klass"', 'value="foo"', 'selected="selected"',
+                '>Foo</option>'])
 
     def test_renderItemsWithValues(self):
         widget = self._makeWidget()
@@ -266,14 +269,6 @@ class ItemsEditWidgetBaseTest(ItemsWidgetBaseTest):
              u'<option value="token2">Two</option>',
              u'<option value="token3">Three</option>'])
 
-# This test is disabled because it tests for the presense of a missfeature,
-# which has been removed.  Did someone actually *want* this?
-##     def test_error(self):
-##         widget = self._makeWidget(form={'field.choice': 'ten'})
-##         widget.setPrefix('field.')
-##         widget._getFormValue()
-##         self.assertTrue(isinstance(widget._error, ConversionError))
-
     def test_hidden(self):
         widget = self._makeWidget(form={'field.choice': 'token2'})
         widget.setPrefix('field.')
@@ -282,6 +277,7 @@ class ItemsEditWidgetBaseTest(ItemsWidgetBaseTest):
             widget.hidden(),
             ['<input', 'type="hidden"', 'value="token2"', 'id="field.choice"',
              'name="field.choice"'])
+
 
 class SelectWidgetTest(ItemsEditWidgetBaseTest):
 
@@ -303,7 +299,7 @@ class SelectWidgetTest(ItemsEditWidgetBaseTest):
             '<option value="token3">Three</option>\n'
             '</select>\n</div>\n'
             '<input name="field.choice-empty-marker" '
-            'type="hidden" value="1" />\n</div>' %self._size)
+            'type="hidden" value="1" />\n</div>' % self._size)
 
     def test_renderValue(self):
         widget = self._makeWidget()
@@ -314,7 +310,7 @@ class SelectWidgetTest(ItemsEditWidgetBaseTest):
             '<option selected="selected" value="token1">One</option>\n'
             '<option value="token2">Two</option>\n'
             '<option value="token3">Three</option>\n'
-            '</select>' %self._size)
+            '</select>' % self._size)
 
     def test_renderItems(self):
         widget = self._makeWidget()
@@ -351,7 +347,8 @@ class SelectWidgetTest(ItemsEditWidgetBaseTest):
         widget.setPrefix('field.')
         widget.firstItem = True
         self.assertEqual(
-            widget.renderItems(widget._toFormValue(widget.context.missing_value)),
+            widget.renderItems(widget._toFormValue(
+                widget.context.missing_value)),
             [u'<option value="token1">One</option>',
              u'<option value="token2">Two</option>',
              u'<option value="token3">Three</option>'])
@@ -367,8 +364,10 @@ class DropdownWidgetTest(SelectWidgetTest):
         widget.setPrefix('field.')
         widget.firstItem = True
         self.assertEqual(
-            widget.renderItems(widget._toFormValue(widget.context.missing_value)),
-            [u'<option selected="selected" value="">(nothing selected)</option>',
+            widget.renderItems(widget._toFormValue(
+                widget.context.missing_value)),
+            [u'<option selected="selected" value="">'
+             u'(nothing selected)</option>',
              u'<option value="token1">One</option>',
              u'<option value="token2">Two</option>',
              u'<option value="token3">Three</option>'])
@@ -376,7 +375,8 @@ class DropdownWidgetTest(SelectWidgetTest):
             # test BBB starting with 3.6.0
             zope.formlib.itemswidgets.EXPLICIT_EMPTY_SELECTION = False
             self.assertEqual(
-                widget.renderItems(widget._toFormValue(widget.context.missing_value)),
+                widget.renderItems(widget._toFormValue(
+                    widget.context.missing_value)),
                 [u'<option value="token1">One</option>',
                  u'<option value="token2">Two</option>',
                  u'<option value="token3">Three</option>'])
@@ -413,26 +413,35 @@ class RadioWidgetTest(ItemsEditWidgetBaseTest):
     def test_renderItemsWithValues(self):
         widget = self._makeWidget()
         items = widget.renderItemsWithValues(['one'])
-        values = [('token1','One'), ('token2','Two'), ('token3','Three')]
+        values = [('token1', 'One'), ('token2', 'Two'), ('token3', 'Three')]
         for index, item in enumerate(items):
             self.verifyResult(
                 item,
-                ['<label', '<input', 'class="radioType"', 'name="field.choice"',
-                 'id="field.choice.%i' %index, 'type="radio"',
-                 'value="%s"' %values[index][0],
-                 '&nbsp;%s' %values[index][1]])
+                ['<label',
+                 '<input',
+                 'class="radioType"',
+                 'name="field.choice"',
+                 'id="field.choice.%i' % index,
+                 'type="radio"',
+                 'value="%s"' % values[index][0],
+                 '&nbsp;%s' % values[index][1]])
         self.verifyResult(items[0], ['checked="checked"'])
 
     def test_renderItems(self):
         widget = self._makeWidget()
         items = widget.renderItems('one')
-        values = [('token1','One'), ('token2','Two'), ('token3','Three')]
+        values = [('token1', 'One'), ('token2', 'Two'), ('token3', 'Three')]
         for index, item in enumerate(items):
             self.verifyResult(
                 item,
-                ['<label', '<input', 'class="radioType"', 'name="field.choice"',
-                 'id="field.choice.%i' %index, 'type="radio"',
-                 'value="%s"' %values[index][0], '&nbsp;%s' %values[index][1]])
+                ['<label',
+                 '<input',
+                 'class="radioType"',
+                 'name="field.choice"',
+                 'id="field.choice.%i' % index,
+                 'type="radio"',
+                 'value="%s"' % values[index][0],
+                 '&nbsp;%s' % values[index][1]])
         self.verifyResult(items[0], ['checked="checked"'])
 
     def test_renderItems_notRequired(self):
@@ -440,21 +449,24 @@ class RadioWidgetTest(ItemsEditWidgetBaseTest):
         widget.context.required = False
         items = widget.renderItems([])
         values = [('', '(nothing selected)'),
-                  ('token1','One'),
-                  ('token2','Two'),
-                  ('token3','Three')]
+                  ('token1', 'One'),
+                  ('token2', 'Two'),
+                  ('token3', 'Three')]
         for index, item in enumerate(items):
-            self.verifyResult(
-                item,
-                ['<label', '<input', 'class="radioType"',
-                 'name="field.choice"', 'type="radio"',
-                 'value="%s"' %values[index][0], '&nbsp;%s' %values[index][1]])
+            self.verifyResult(item,
+                              ['<label',
+                               '<input',
+                               'class="radioType"',
+                               'name="field.choice"',
+                               'type="radio"',
+                               'value="%s"' % values[index][0],
+                               '&nbsp;%s' % values[index][1]])
 
     def test_renderItems_firstItem(self):
         widget = self._makeWidget()
         items = widget.renderItems(
-                widget._toFormValue(widget.context.missing_value))
-        values = [('token1','One'), ('token2','Two'), ('token3','Three')]
+            widget._toFormValue(widget.context.missing_value))
+        values = [('token1', 'One'), ('token2', 'Two'), ('token3', 'Three')]
         for index, item in enumerate(items):
             self.verifyResult(
                 item,
@@ -499,17 +511,9 @@ class ItemsMultiEditWidgetBaseTest(ItemsEditWidgetBaseTest):
              u'<option value="token2">Two</option>',
              u'<option value="token3">Three</option>'])
 
-# This test is disabled because it tests for the presense of a missfeature,
-# which has been removed.  Did someone actually *want* this?
-##     def test_error(self):
-##         widget = self._makeWidget(form={'field.numbers': ['ten']})
-##         widget.setPrefix('field.')
-##         widget._getFormValue()
-##         self.assertTrue(isinstance(widget._error, ConversionError))
-
     def test_hidden(self):
         widget = self._makeWidget(
-            form={'field.numbers': ['two','three']})
+            form={'field.numbers': ['two', 'three']})
         widget.setPrefix('field.')
         widget.context.required = False
         self.verifyResult(
@@ -555,15 +559,13 @@ class OrderedMultiSelectWidgetTest(ItemsMultiEditWidgetBaseTest):
 
     def test_choices(self):
         widget = self._makeWidget()
-        choices = [choice['text'] for choice in widget.choices()]
-        choices.sort()
+        choices = sorted([choice['text'] for choice in widget.choices()])
         self.assertEqual(choices, ['One', 'Three', 'Two'])
 
     def test_selected(self):
         widget = self._makeWidget(nums=['one'])
         widget._data = ['two']
-        selected = [select['text'] for select in widget.selected()]
-        selected.sort()
+        selected = sorted([select['text'] for select in widget.selected()])
         self.assertEqual(selected, ['One', 'Two'])
         widget._data = ['one']
         selected = [select['text'] for select in widget.selected()]
@@ -600,19 +602,19 @@ class MultiCheckBoxWidgetTest(ItemsMultiEditWidgetBaseTest):
     def test_renderValue(self):
         widget = self._makeWidget()
         self.verifyResult(widget.renderValue(None), ['<br /><label for='])
-        widget.orientation='horizontal'
+        widget.orientation = 'horizontal'
         self.verifyResult(widget.renderValue(None),
                           ['&nbsp;&nbsp;<label for='])
 
     def test_renderItemsWithValues(self):
         widget = self._makeWidget()
         items = widget.renderItemsWithValues(['one'])
-        values = [('token1','One'), ('token2','Two'), ('token3','Three')]
+        values = [('token1', 'One'), ('token2', 'Two'), ('token3', 'Three')]
         for index, item in enumerate(items):
             self.verifyResult(
                 item,
                 ['<input', 'class="checkboxType',
-                 'id="field.numbers.%i"' %index, 'type="checkbox"',
+                 'id="field.numbers.%i"' % index, 'type="checkbox"',
                  'value="%s"' % values[index][0],
                  '/>&nbsp;%s' % values[index][1]])
 
@@ -634,6 +636,3 @@ def test_suite():
     suite.addTest(unittest.makeSuite(OrderedMultiSelectWidgetTest))
     suite.addTest(unittest.makeSuite(MultiCheckBoxWidgetTest))
     return suite
-
-if __name__ == '__main__':
-    unittest.main(defaultTest="test_suite")

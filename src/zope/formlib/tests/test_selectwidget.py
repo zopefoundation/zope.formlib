@@ -19,24 +19,6 @@ from zope.schema import Choice, List
 from zope.formlib.widgets import SelectWidget
 from zope.publisher.browser import TestRequest
 
-choice = Choice(
-    title=u"Number",
-    description=u"The Number",
-    values=[1, 2, 3])
-
-sequence = List(
-    title=u"Numbers",
-    description=u"The Numbers",
-    value_type=choice)
-
-
-class SelectWidgetTest(unittest.TestCase):
-    
-    def _makeWidget(self, form):
-        request = TestRequest(form=form)
-        return SelectWidget(sequence, choice.vocabulary, request) 
-
-
 select_html = '''<div>
 <div class="value">
 <select id="field.terms" name="field.terms" size="5" >
@@ -48,8 +30,9 @@ select_html = '''<div>
 <input name="field.terms-empty-marker" type="hidden" value="1" />
 </div>'''
 
+
 class SelectWidgetHTMLEncodingTest(unittest.TestCase):
-    
+
     def testOptionEncoding(self):
         choice = Choice(
             title=u"Number",
@@ -61,17 +44,14 @@ class SelectWidgetHTMLEncodingTest(unittest.TestCase):
             title=u"Numbers",
             description=u"The Numbers",
             value_type=choice)
-        
+
         request = TestRequest()
         sequence = sequence.bind(object())
-        widget = SelectWidget(sequence, choice.vocabulary, request) 
+        widget = SelectWidget(sequence, choice.vocabulary, request)
         self.assertEqual(widget(), select_html)
+
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(SelectWidgetTest),
         unittest.makeSuite(SelectWidgetHTMLEncodingTest)
-        ))
-
-if __name__ == '__main__':
-    unittest.main(defaultTest="test_suite")
+    ))

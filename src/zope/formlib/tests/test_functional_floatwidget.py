@@ -26,6 +26,7 @@ from zope.formlib.widgets import (
 from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 import zope.schema.interfaces
 
+
 class IFloatTest(Interface):
 
     f1 = Float(
@@ -41,6 +42,7 @@ class IFloatTest(Interface):
         values=(0.0, 1.1, 2.1, 3.1, 5.1, 7.1, 11.1),
         missing_value=0)
 
+
 @implementer(IFloatTest)
 class FloatTest(object):
 
@@ -49,16 +51,18 @@ class FloatTest(object):
         self.f2 = 1.1
         self.f3 = 2.1
 
+
 class Form(form.EditForm):
     form_fields = form.fields(IFloatTest)
-    
+
+
 class Test(FunctionalWidgetTestCase):
     widgets = [
         (zope.schema.interfaces.IFloat, FloatWidget),
         (zope.schema.interfaces.IChoice, ChoiceInputWidget),
-        ((zope.schema.interfaces.IChoice, zope.schema.interfaces.IVocabularyTokenized),
-         DropdownWidget)]
-    
+        ((zope.schema.interfaces.IChoice,
+          zope.schema.interfaces.IVocabularyTokenized), DropdownWidget)]
+
     def test_display_editform(self):
         foo = FloatTest()
         request = TestRequest()
@@ -89,7 +93,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.f3'] = '11.1'
         request.form['form.actions.apply'] = u''
         Form(foo, request)()
-        
+
         # check new values in object
         self.assertEqual(foo.f1, 1.123)
         self.assertEqual(foo.f2, 2.23456789012345)
@@ -105,16 +109,16 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.f3'] = '1.1'
         request.form['form.actions.apply'] = u''
         Form(foo, request)()
- 
+
         # check new values in object
         self.assertEqual(foo.f1, None)
-        self.assertEqual(foo.f2, None) # None is default missing_value
+        self.assertEqual(foo.f2, None)  # None is default missing_value
         self.assertEqual(foo.f3, 1.1)  # 0 is from f3.missing_value=0
 
     def test_required_validation(self):
         foo = FloatTest()
         request = TestRequest()
-        
+
         # submit missing values for required field f1
         request.form['form.f1'] = ''
         request.form['form.f2'] = ''
@@ -131,7 +135,7 @@ class Test(FunctionalWidgetTestCase):
     def test_invalid_allowed_value(self):
         foo = FloatTest()
         request = TestRequest()
-        
+
         # submit a value for f3 that isn't allowed
         request.form['form.f3'] = '10000'
         request.form['form.actions.apply'] = u''
@@ -189,8 +193,8 @@ class Test(FunctionalWidgetTestCase):
 
         self.assertTrue('Invalid floating point data' in html)
 
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(Test))
     return suite
-

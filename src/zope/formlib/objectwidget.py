@@ -82,8 +82,8 @@ class ObjectWidget(BrowserWidget, InputWidget):
     def _setUpEditWidgets(self):
         # subwidgets need a new name
         setUpWidgets(self, self.context.schema, IInputWidget,
-                         prefix=self.name, names=self.names,
-                         context=self.context)
+                     prefix=self.name, names=self.names,
+                     context=self.context)
 
     def __call__(self):
         return self.view()
@@ -145,7 +145,6 @@ class ObjectWidget(BrowserWidget, InputWidget):
 
         return content
 
-
     def applyChanges(self, content):
         """See `zope.formlib.interfaces.IInputWidget.applyChanges`"""
         field = self.context
@@ -188,4 +187,5 @@ class ObjectWidget(BrowserWidget, InputWidget):
         # re-call setupwidgets with the content
         self._setUpEditWidgets()
         for name in self.names:
-            self.getSubWidget(name).setRenderedValue(getattr(value, name, None))
+            self.getSubWidget(name).setRenderedValue(
+                getattr(value, name, None))

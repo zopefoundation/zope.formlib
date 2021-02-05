@@ -40,6 +40,7 @@ from zope.formlib.widgets import (
 from zope.formlib.widget import DisplayWidget, InputWidget
 from zope.formlib._compat import safeBase64Encode
 
+
 @implementer(IDisplayWidget)
 class SourceDisplayWidget(DisplayWidget):
 
@@ -69,7 +70,7 @@ class SourceDisplayWidget(DisplayWidget):
                                       default="Nothing"))
         else:
             terms = getMultiAdapter((self.source, self.request),
-                zope.browser.interfaces.ITerms)
+                                    zope.browser.interfaces.ITerms)
 
             try:
                 term = terms.getTerm(value)
@@ -99,7 +100,7 @@ class SourceSequenceDisplayWidget(SourceDisplayWidget):
             seq = self.context.default
 
         terms = getMultiAdapter((self.source, self.request),
-            zope.browser.interfaces.ITerms)
+                                zope.browser.interfaces.ITerms)
         result = []
         for value in seq:
             try:
@@ -120,12 +121,11 @@ class SourceInputWidget(InputWidget):
 
     _error = None
 
-
     def __init__(self, field, source, request):
         super(SourceInputWidget, self).__init__(field, request)
         self.source = source
         self.terms = getMultiAdapter((source, self.request),
-            zope.browser.interfaces.ITerms)
+                                     zope.browser.interfaces.ITerms)
 
     def queryviews(self):
         queriables = ISourceQueriables(self.source, None)
@@ -135,14 +135,14 @@ class SourceInputWidget(InputWidget):
         else:
             queriables = [
                 (self.name + '.' + safeBase64Encode(i), s)
-                          for (i, s) in queriables.getQueriables()]
+                for (i, s) in queriables.getQueriables()]
 
         return [
             (name, getMultiAdapter(
-                    (source, self.request),
-                    ISourceQueryView,
-                    )
-             ) for (name, source) in queriables]
+                (source, self.request),
+                ISourceQueryView,
+            )
+            ) for (name, source) in queriables]
 
     queryviews = property(queryviews)
 
@@ -151,8 +151,8 @@ class SourceInputWidget(InputWidget):
             value = self._data
         else:
             for name, queryview in self.queryviews:
-                if name+'.apply' in self.request:
-                    token = self.request.form.get(name+'.selection')
+                if name + '.apply' in self.request:
+                    token = self.request.form.get(name + '.selection')
                     if token is not None:
                         break
                 else:
@@ -171,7 +171,7 @@ class SourceInputWidget(InputWidget):
     def hidden(self):
         value = self._value()
         if value == self.context.missing_value:
-            return '' # Nothing to hide ;)
+            return ''  # Nothing to hide ;)
 
         try:
             term = self.terms.getTerm(value)
@@ -276,7 +276,7 @@ class SourceInputWidget(InputWidget):
                     for (title, token) in terms]),
                name,
                apply)
-            )
+        )
 
     def renderTermForDisplay(self, term):
         # Provide a rendering of `term` for display; this is not for
@@ -287,8 +287,8 @@ class SourceInputWidget(InputWidget):
 
     def getInputValue(self):
         for name, queryview in self.queryviews:
-            if name+'.apply' in self.request:
-                token = self.request.form.get(name+'.selection')
+            if name + '.apply' in self.request:
+                token = self.request.form.get(name + '.selection')
                 if token is not None:
                     break
         else:
@@ -301,7 +301,7 @@ class SourceInputWidget(InputWidget):
                 # TODO This code path is untested.
                 raise MissingInputError(
                     field.__name__, self.label,
-                    )
+                )
             return field.missing_value
 
         try:
@@ -325,24 +325,26 @@ class SourceInputWidget(InputWidget):
         return value
 
     def hasInput(self):
-        if self.name in self.request or self.name+'.displayed' in self.request:
+        if (self.name in self.request
+                or self.name + '.displayed' in self.request):
             return True
 
         for name, queryview in self.queryviews:
-            if name+'.apply' in self.request:
-                token = self.request.form.get(name+'.selection')
+            if name + '.apply' in self.request:
+                token = self.request.form.get(name + '.selection')
                 if token is not None:
                     return True
 
         return False
+
 
 class SourceListInputWidget(SourceInputWidget):
 
     def _input_value(self):
         tokens = self.request.form.get(self.name)
         for name, queryview in self.queryviews:
-            if name+'.apply' in self.request:
-                newtokens = self.request.form.get(name+'.selection')
+            if name + '.apply' in self.request:
+                newtokens = self.request.form.get(name + '.selection')
                 if newtokens:
                     if tokens:
                         tokens = tokens + newtokens
@@ -350,8 +352,8 @@ class SourceListInputWidget(SourceInputWidget):
                         tokens = newtokens
 
         if tokens:
-            remove = self.request.form.get(self.name+'.checked')
-            if remove and (self.name+'.remove' in self.request):
+            remove = self.request.form.get(self.name + '.checked')
+            if remove and (self.name + '.remove' in self.request):
                 tokens = [token
                           for token in tokens
                           if token not in remove
@@ -361,11 +363,11 @@ class SourceListInputWidget(SourceInputWidget):
                 try:
                     v = self.terms.getValue(str(token))
                 except LookupError:
-                    pass # skip invalid tokens (shrug)
+                    pass  # skip invalid tokens (shrug)
                 else:
                     value.append(v)
         else:
-            if self.name+'.displayed' in self.request:
+            if self.name + '.displayed' in self.request:
                 value = []
             else:
                 value = self.context.missing_value
@@ -392,7 +394,7 @@ class SourceListInputWidget(SourceInputWidget):
     def hidden(self):
         value = self._value()
         if value == self.context.missing_value:
-            return '' # Nothing to hide ;)
+            return ''  # Nothing to hide ;)
 
         result = []
         for v in value:
@@ -406,7 +408,7 @@ class SourceListInputWidget(SourceInputWidget):
                 result.append(
                     '<input type="hidden" name="%s:list" value=%s />'
                     % (self.name, xml.sax.saxutils.quoteattr(term.token))
-                    )
+                )
 
     def __call__(self):
         result = ['<div class="value">']
@@ -417,13 +419,13 @@ class SourceListInputWidget(SourceInputWidget):
                 try:
                     term = self.terms.getTerm(v)
                 except LookupError:
-                    continue # skip
+                    continue  # skip
                 else:
                     result.append(
                         '  <input type="checkbox" name="%s.checked:list"'
                         ' value=%s />'
                         % (self.name, xml.sax.saxutils.quoteattr(term.token))
-                        )
+                    )
                     result.append('  ' + self.renderTermForDisplay(term))
                     result.append(
                         '  <input type="hidden" name="%s:list" value=%s />'
@@ -435,7 +437,7 @@ class SourceListInputWidget(SourceInputWidget):
                 % (self.name,
                    self._translate(_("MultipleSourceInputWidget-remove",
                                      default="Remove")))
-                )
+            )
             result.append('  <br />')
 
         result.append('  <input type="hidden" name="%s.displayed" value="y" />'
@@ -478,7 +480,7 @@ class SourceListInputWidget(SourceInputWidget):
                           for (title, token) in terms]),
                name,
                apply)
-            )
+        )
 
     def getInputValue(self):
         value = self._input_value()
@@ -497,7 +499,7 @@ class SourceListInputWidget(SourceInputWidget):
         return value
 
     def hasInput(self):
-        return self.name+'.displayed' in self.request.form
+        return self.name + '.displayed' in self.request.form
 
 
 # Input widgets for IIterableSource:
@@ -522,7 +524,7 @@ class IterableSourceVocabulary(object):
     def __init__(self, source, request):
         self.source = source
         self.terms = getMultiAdapter((source, request),
-            zope.browser.interfaces.ITerms)
+                                     zope.browser.interfaces.ITerms)
 
     def getTerm(self, value):
         return self.terms.getTerm(value)
@@ -554,11 +556,13 @@ class SourceSelectWidget(SelectWidget):
             # worry the user about it:
             self.required = False
 
+
 class SourceDropdownWidget(SourceSelectWidget):
     """Variation of the SourceSelectWidget that uses a drop-down list."""
 
     size = 1
     explicit_empty_selection = True
+
 
 class SourceRadioWidget(RadioWidget):
     """Radio widget for single item choices."""
@@ -567,12 +571,14 @@ class SourceRadioWidget(RadioWidget):
         super(SourceRadioWidget, self).__init__(
             field, IterableSourceVocabulary(source, request), request)
 
+
 class SourceMultiSelectWidget(MultiSelectWidget):
     """A multi-selection widget with ordering support."""
 
     def __init__(self, field, source, request):
         super(SourceMultiSelectWidget, self).__init__(
             field, IterableSourceVocabulary(source, request), request)
+
 
 class SourceOrderedMultiSelectWidget(OrderedMultiSelectWidget):
     """A multi-selection widget with ordering support."""
@@ -581,6 +587,7 @@ class SourceOrderedMultiSelectWidget(OrderedMultiSelectWidget):
         super(SourceOrderedMultiSelectWidget, self).__init__(
             field, IterableSourceVocabulary(source, request), request)
 
+
 class SourceMultiSelectSetWidget(MultiSelectSetWidget):
     """Provide a selection list for the set to be selected."""
 
@@ -588,12 +595,14 @@ class SourceMultiSelectSetWidget(MultiSelectSetWidget):
         super(SourceMultiSelectSetWidget, self).__init__(
             field, IterableSourceVocabulary(source, request), request)
 
+
 class SourceMultiSelectFrozenSetWidget(MultiSelectFrozenSetWidget):
     """Provide a selection list for the frozenset to be selected."""
 
     def __init__(self, field, source, request):
         super(SourceMultiSelectFrozenSetWidget, self).__init__(
             field, IterableSourceVocabulary(source, request), request)
+
 
 class SourceMultiCheckBoxWidget(MultiCheckBoxWidget):
     """Provide a list of checkboxes that provide the choice for the list."""

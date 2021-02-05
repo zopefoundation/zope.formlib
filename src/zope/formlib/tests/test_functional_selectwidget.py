@@ -26,6 +26,7 @@ from zope.formlib.widgets import (
 from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 import zope.schema.interfaces
 
+
 class IRadioTest(Interface):
 
     s3 = Choice(
@@ -36,6 +37,7 @@ class IRadioTest(Interface):
         required=True,
         values=(u'1', u'2', u'3'))
 
+
 @implementer(IRadioTest)
 class RadioTest(object):
 
@@ -43,15 +45,17 @@ class RadioTest(object):
         self.s3 = None
         self.s4 = u'1'
 
+
 class Form(form.EditForm):
     form_fields = form.fields(IRadioTest)
-    
+
+
 class Test(FunctionalWidgetTestCase):
     widgets = [
         (zope.schema.interfaces.ITextLine, TextWidget),
         (zope.schema.interfaces.IChoice, ChoiceInputWidget),
-        ((zope.schema.interfaces.IChoice, zope.schema.interfaces.IVocabularyTokenized),
-         DropdownWidget)]
+        ((zope.schema.interfaces.IChoice,
+          zope.schema.interfaces.IVocabularyTokenized), DropdownWidget)]
 
     def test_display_editform(self):
         foo = RadioTest()
@@ -59,7 +63,7 @@ class Test(FunctionalWidgetTestCase):
 
         # display edit view
         html = Form(foo, request)()
-        
+
         # S3
         self.assertTrue(patternExists(
             '<select .* name="form.s3".*>',
@@ -102,7 +106,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.s3'] = u'Bob'
         request.form['form.s4'] = u'2'
         request.form['form.actions.apply'] = u''
-        
+
         # display edit view
         html = Form(foo, request)()
 
@@ -113,7 +117,6 @@ class Test(FunctionalWidgetTestCase):
             '<option selected="selected" value="2">',
             html))
 
-        
         html = Form(foo, request)()
         self.assertTrue(patternExists(
             '<option selected="selected" value="Bob">',
@@ -125,7 +128,7 @@ class Test(FunctionalWidgetTestCase):
         request = TestRequest()
         request.form['form.s3'] = u''
         request.form['form.actions.apply'] = u''
-        
+
         html = Form(foo, request)()
         self.assertTrue(patternExists(
             '<option selected="selected" value="">',
@@ -141,8 +144,8 @@ class Test(FunctionalWidgetTestCase):
             '<option selected="selected" value="">',
             html))
 
+
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(Test))
     return suite
-

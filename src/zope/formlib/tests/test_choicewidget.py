@@ -38,7 +38,7 @@ class ChoiceWidgetTest(PlacelessSetup, unittest.TestCase):
         self.assertTrue(isinstance(widget, ItemDisplayWidget))
         self.assertEqual(widget.context, bound)
         self.assertEqual(widget.vocabulary, bound.vocabulary)
-    
+
     def test_ChoiceInputWidget(self):
         provideAdapter(DropdownWidget,
                        (IChoice, IIterableVocabulary, IBrowserRequest),
@@ -49,13 +49,9 @@ class ChoiceWidgetTest(PlacelessSetup, unittest.TestCase):
         self.assertTrue(isinstance(widget, DropdownWidget))
         self.assertEqual(widget.context, bound)
         self.assertEqual(widget.vocabulary, bound.vocabulary)
-        
 
 
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(ChoiceWidgetTest),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

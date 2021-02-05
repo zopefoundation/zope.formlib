@@ -24,6 +24,7 @@ from zope.formlib.interfaces import IInputWidget
 from zope.formlib.widgets import RadioWidget
 from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
 
+
 class RadioWidgetTest(SimpleInputWidgetTest):
     """Documents and tests the radio widget.
 
@@ -37,10 +38,11 @@ class RadioWidgetTest(SimpleInputWidgetTest):
     def setUpContent(self, desc=u'', title=u'Foo Title'):
         class ITestContent(Interface):
             foo = self._FieldFactory(
-                    title=title,
-                    description=desc,
-                    values=(u'foo', u'bar')
-                    )
+                title=title,
+                description=desc,
+                values=(u'foo', u'bar')
+            )
+
         @implementer(ITestContent)
         class TestObject(object):
             pass
@@ -57,7 +59,6 @@ class RadioWidgetTest(SimpleInputWidgetTest):
         self.assertEqual(self._widget.extra, '')
         self.assertEqual(self._widget.orientation, 'vertical')
 
-
     def testRenderItem(self):
         check_list = ('type="radio"', 'id="field.bar.0"',
                       'name="field.bar"', 'value="foo"', 'Foo')
@@ -70,14 +71,12 @@ class RadioWidgetTest(SimpleInputWidgetTest):
                 0, 'Foo', 'foo', 'field.bar', None),
             check_list)
 
-
     def testRenderItems(self):
         check_list = ('type="radio"', 'id="field.foo.0"', 'name="field.foo"',
                       'value="bar"', 'bar', 'value="foo"', 'foo',
                       'checked="checked"')
         self.verifyResult('\n'.join(self._widget.renderItems('bar')),
                           check_list)
-
 
     def testRender(self):
         value = 'bar'
@@ -94,7 +93,6 @@ class RadioWidgetTest(SimpleInputWidgetTest):
         self._widget.extra = 'style="color: red"'
         self.verifyResult(self._widget.hidden(), check_list)
 
-
     def testHasInput(self):
         self._widget.request.form.clear()
         self.assertTrue(not self._widget.hasInput())
@@ -104,7 +102,6 @@ class RadioWidgetTest(SimpleInputWidgetTest):
         self.assertTrue(self._widget.hasInput())
         del self._widget.request.form['field.foo-empty-marker']
         self.assertTrue(self._widget.hasInput())
-
 
     def testRenderEmptyMarker(self):
         self.verifyResult(self._widget(), ('field.foo-empty-marker',))
@@ -118,7 +115,4 @@ def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(RadioWidgetTest),
         doctest.DocTestSuite(),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

@@ -26,6 +26,7 @@ from zope.formlib.widgets import (
 from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 import zope.schema.interfaces
 
+
 class ITextLineTest(Interface):
     s1 = TextLine(
         required=True,
@@ -40,6 +41,7 @@ class ITextLineTest(Interface):
         required=False,
         values=(u'Bob', u'is', u'Your', u'Uncle'))
 
+
 @implementer(ITextLineTest)
 class TextLineTest(object):
 
@@ -48,15 +50,17 @@ class TextLineTest(object):
         self.s2 = u'foo'
         self.s3 = None
 
+
 class Form(form.EditForm):
     form_fields = form.fields(ITextLineTest)
+
 
 class Test(FunctionalWidgetTestCase):
     widgets = [
         (zope.schema.interfaces.ITextLine, TextWidget),
         (zope.schema.interfaces.IChoice, ChoiceInputWidget),
-        ((zope.schema.interfaces.IChoice, zope.schema.interfaces.IVocabularyTokenized),
-         DropdownWidget)]
+        ((zope.schema.interfaces.IChoice,
+          zope.schema.interfaces.IVocabularyTokenized), DropdownWidget)]
 
     def test_display_editform(self):
         foo = TextLineTest()
@@ -197,6 +201,7 @@ class Test(FunctionalWidgetTestCase):
         self.assertEqual(foo.s1, '')
         self.assertEqual(foo.s2, u'bar')
         self.assertTrue(foo.s3 is None)
+
 
 def test_suite():
     suite = unittest.TestSuite()

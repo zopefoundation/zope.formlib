@@ -13,9 +13,6 @@
 ##############################################################################
 """Test widget registrations.
 """
-import unittest
-
-from zope.component import getMultiAdapter
 from zope.configuration import xmlconfig
 from zope.interface import implementer
 from zope.publisher.browser import TestRequest
@@ -33,167 +30,175 @@ import zope.schema as fields
 from zope.schema import interfaces
 from zope.schema import vocabulary
 
+
 class ISampleObject(interfaces.IField):
     pass
+
 
 @implementer(ISampleObject)
 class SampleObject(object):
     pass
 
+
 class ISampleVocabulary(interfaces.IVocabularyTokenized,
                         interfaces.IVocabulary):
     pass
+
 
 @implementer(ISampleVocabulary)
 class SampleVocabulary(vocabulary.SimpleVocabulary):
     pass
 
+
 request = TestRequest()
 sample = SampleObject()
 vocab = SampleVocabulary([])
+
 
 def setUp(test):
     testing.setUp()
     xmlconfig.file("tests/registerWidgets.zcml",
                    zope.formlib)
 
+
 class Tests(object):
     """Documents and tests widgets registration for specific field types.
-    
+
     Standard Widgets
     ------------------------------------------------------------------------
     The relationships between field types and standard widgets are listed
     below.
-    
+
     IField, IDisplayWidget -> DisplayWidget
-        
+
+        >>> from zope.component import getMultiAdapter
         >>> field = fields.Field()
         >>> widget = getMultiAdapter((field, request), IDisplayWidget)
         >>> isinstance(widget, DisplayWidget)
         True
-        
-    ITextLine, IInputWidget -> TextWidget 
-        
+
+    ITextLine, IInputWidget -> TextWidget
+
         >>> field = fields.TextLine()
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, TextWidget)
         True
-        
+
     IText, IInputWidget -> TextAreaWidget
-    
+
         >>> field = fields.Text()
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, TextAreaWidget)
         True
-        
+
     ISourceText, IInputWidget -> TextAreaWidget
-    
+
         >>> field = fields.SourceText()
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, TextAreaWidget)
         True
 
     IBytesLine, IInputWidget -> BytesWidget
-    
+
         >>> field = fields.BytesLine()
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, BytesWidget)
         True
 
     IBytes, IInputWidget -> FileWidget
-    
+
         >>> field = fields.Bytes()
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, FileWidget)
         True
-        		
+
     IASCIILine, IInputWidget -> ASCIIWidget
-    
+
         >>> field = fields.ASCIILine()
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, ASCIIWidget)
         True
-        
+
     IASCII, IInputWidget -> ASCIIAreaWidget
-    
+
         >>> field = fields.ASCII()
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, ASCIIAreaWidget)
         True
-        
+
     IInt, IInputWidget -> IntWidget
-    
+
         >>> field = fields.Int()
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, IntWidget)
         True
-        
+
     IFloat, IInputWidget -> FloatWidget
-    
+
         >>> field = fields.Float()
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, FloatWidget)
         True
 
     IDecimal, IInputWidget -> DecimalWidget
-    
+
         >>> field = fields.Decimal()
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, DecimalWidget)
         True
-        
+
     IDatetime, IInputWidget -> DatetimeWidget
-    
+
         >>> field = fields.Datetime()
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, DatetimeWidget)
         True
-        
+
     IDate, IInputWidget -> DateWidget
-    
+
         >>> field = fields.Date()
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, DateWidget)
         True
-        
+
     IBool, IInputWidget -> CheckBoxWidget
-    
+
         >>> field = fields.Bool()
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, CheckBoxWidget)
         True
-        
+
     ITuple, IInputWidget -> TupleSequenceWidget
-    
+
         >>> field = fields.Tuple(value_type=fields.Int())
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, TupleSequenceWidget)
         True
 
     IList, IInputWidget -> ListSequenceWidget
-    
+
         >>> field = fields.List(value_type=fields.Int())
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, ListSequenceWidget)
         True
 
     IPassword, IInputWidget -> PasswordWidget
-    
+
         >>> field = fields.Password()
         >>> widget = getMultiAdapter((field, request), IInputWidget)
         >>> isinstance(widget, PasswordWidget)
         True
 
     IChoice, IDisplayWidget -> ItemDisplayWidget
-    
+
         >>> field = fields.Choice(vocabulary=vocab)
         >>> field = field.bind(sample)
         >>> widget = getMultiAdapter((field, request), IDisplayWidget)
         >>> isinstance(widget, ItemDisplayWidget)
         True
-                
+
     IChoice, IInputWidget -> DropdownWidget
-    
+
         >>> field = fields.Choice(vocabulary=vocab)
         >>> field = field.bind(sample)
         >>> widget = getMultiAdapter((field, request), IInputWidget)
@@ -201,15 +206,15 @@ class Tests(object):
         True
 
     IList with IChoice value_type, IDisplayWidget -> ItemsMultiDisplayWidget
-    
+
         >>> field = fields.List(value_type=fields.Choice(vocabulary=vocab))
         >>> field = field.bind(sample)
         >>> widget = getMultiAdapter((field, request), IDisplayWidget)
         >>> isinstance(widget, ItemsMultiDisplayWidget)
         True
-                
+
     IList with IChoice value_type, IInputWidget -> MultiSelectWidget
-    
+
         >>> field = fields.List(value_type=fields.Choice(vocabulary=vocab))
         >>> field = field.bind(sample)
         >>> widget = getMultiAdapter((field, request), IInputWidget)
@@ -217,8 +222,6 @@ class Tests(object):
         True
     """
 
-def test_suite():    
-    return DocTestSuite(setUp=setUp, tearDown=testing.tearDown)
 
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+def test_suite():
+    return DocTestSuite(setUp=setUp, tearDown=testing.tearDown)

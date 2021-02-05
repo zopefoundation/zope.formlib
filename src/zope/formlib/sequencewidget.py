@@ -81,7 +81,6 @@ class SequenceWidget(BrowserWidget, InputWidget):
         title = translate(title, context=self.request, default=title)
         return button_label % title
 
-
     def _getWidget(self, i):
         """Return a widget for the i-th number of the sequence.
 

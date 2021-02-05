@@ -20,6 +20,7 @@ from zope.formlib.widgets import PasswordWidget
 from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
 from zope.interface.verify import verifyClass
 
+
 class PasswordWidgetTest(SimpleInputWidgetTest):
     """Documents and tests the password widget.
 
@@ -48,11 +49,9 @@ class PasswordWidgetTest(SimpleInputWidgetTest):
     def testHidden(self):
         self.assertRaises(NotImplementedError, self._widget.hidden)
 
+
 def test_suite():
     return unittest.TestSuite((
         unittest.makeSuite(PasswordWidgetTest),
         doctest.DocTestSuite(),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

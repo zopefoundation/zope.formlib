@@ -26,6 +26,7 @@ from zope.formlib.interfaces import WidgetInputError, MissingInputError
 
 from zope.formlib.tests import support
 
+
 class BrowserWidgetTest(PlacelessSetup,
                         support.VerifyResults,
                         unittest.TestCase):
@@ -36,8 +37,10 @@ class BrowserWidgetTest(PlacelessSetup,
     def setUpContent(self, desc=u'', title=u'Foo Title'):
         field = self._FieldFactory(
             __name__='foo', title=title, description=desc)
+
         class ITestContent(Interface):
             foo = field
+
         @implementer(ITestContent)
         class TestObject:
             pass
@@ -107,6 +110,7 @@ class TestWidget(SimpleInputWidget):
             raise ConversionError('ralph')
         return v or None
 
+
 class Test(BrowserWidgetTest):
 
     _WidgetFactory = TestWidget
@@ -120,7 +124,7 @@ class Test(BrowserWidgetTest):
             def _toFormValue(self, v):
                 return v and v[1:] or ''
 
-        field = Text(__name__ = 'foo', title = u"Foo Title")
+        field = Text(__name__='foo', title=u"Foo Title")
         request = TestRequest()
 
         w = W(field, request)
@@ -179,13 +183,13 @@ class Test(BrowserWidgetTest):
         self.assertTrue(self._widget.hasInput())
 
     def test_getFormValue_w_default(self):
-        field = Text(__name__ = 'foo', title = u"Foo Title", default=u"def")
+        field = Text(__name__='foo', title=u"Foo Title", default=u"def")
         request = TestRequest()
         widget = self._WidgetFactory(field, request)
         self.assertEqual(widget._getFormValue(), u'def')
 
     def test_getFormValue_preserves_errors(self):
-        field = Int(__name__ = 'foo', title = u"Foo Title", default=42)
+        field = Int(__name__='foo', title=u"Foo Title", default=42)
         request = TestRequest()
         widget = self._WidgetFactory(field, request)
 
@@ -208,6 +212,3 @@ def test_suite():
     suite.addTest(unittest.makeSuite(Test))
     suite.addTest(DocTestSuite("zope.formlib.widget", checker=support.checker))
     return suite
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='test_suite')

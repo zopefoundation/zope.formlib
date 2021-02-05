@@ -54,14 +54,15 @@ class DatetimeWidgetTest(SimpleInputWidgetTest):
         self.assertTrue(self._widget.hasInput())
 
     def test_getInputValue(self,
-            value=u'2004-03-26 12:58:59',
-            check_value=parseDatetimetz('2004-03-26 12:58:59')):
+                           value=u'2004-03-26 12:58:59',
+                           check_value=parseDatetimetz('2004-03-26 12:58:59')):
         self._widget.request.form['field.foo'] = u''
         self.assertRaises(WidgetInputError, self._widget.getInputValue)
         self._widget.request.form['field.foo'] = value
         self.assertEqual(self._widget.getInputValue(), check_value)
         self._widget.request.form['field.foo'] = u'abc'
         self.assertRaises(ConversionError, self._widget.getInputValue)
+
 
 class DatetimeI18nWidgetTest(SimpleInputWidgetTest):
     """Documents and tests the i18n datetime widget.
@@ -121,9 +122,16 @@ class DatetimeI18nWidgetTest(SimpleInputWidgetTest):
         self._widget.request.form['field.foo'] = u'26.03.2003 12:00:00'
         self.assertTrue(self._widget.hasInput())
 
-    def test_getDefaultInputValue(self,
-            value=u'26.03.2004 12:58:59',
-            check_value=datetime.datetime(2004, 3, 26, 12, 58, 59)):
+    def test_getDefaultInputValue(
+        self,
+        value=u'26.03.2004 12:58:59',
+        check_value=datetime.datetime(
+            2004,
+            3,
+            26,
+            12,
+            58,
+            59)):
         self._widget.request.form['field.foo'] = u''
         self.assertRaises(WidgetInputError, self._widget.getInputValue)
         self._widget.request.form['field.foo'] = value
@@ -136,32 +144,32 @@ class DatetimeI18nWidgetTest(SimpleInputWidgetTest):
         self.test_getDefaultInputValue(
             value=u'26.03.04 12:58',
             check_value=datetime.datetime(2004, 3, 26, 12, 58)
-            )
+        )
 
     def test_getMediumInputValue(self):
         self._widget.displayStyle = "medium"
         self.test_getDefaultInputValue(
             value=u'26.03.2004 12:58:59',
             check_value=datetime.datetime(2004, 3, 26, 12, 58, 59)
-            )
+        )
 
     def test_getLongInputValue(self):
         self._widget.displayStyle = "long"
         self.test_getDefaultInputValue(
             value=(u'26 \u043c\u0430\u0440\u0442\u0430 2004 \u0433.'
-                u' 12:58:59 +030'),
+                   u' 12:58:59 +030'),
             check_value=datetime.datetime(2004, 3, 26, 12, 58, 59,
-                tzinfo=tzinfo(30))
-            )
+                                          tzinfo=tzinfo(30))
+        )
 
     def test_getFullInputValue(self):
         self._widget.displayStyle = "full"
         self.test_getDefaultInputValue(
             value=(u'26 \u043c\u0430\u0440\u0442\u0430 2004 \u0433.'
-                u' 12:58:59 +030'),
+                   u' 12:58:59 +030'),
             check_value=datetime.datetime(2004, 3, 26, 12, 58, 59,
-                tzinfo=tzinfo(30))
-            )
+                                          tzinfo=tzinfo(30))
+        )
 
 
 def test_suite():
@@ -169,7 +177,4 @@ def test_suite():
         unittest.makeSuite(DatetimeWidgetTest),
         unittest.makeSuite(DatetimeI18nWidgetTest),
         doctest.DocTestSuite(),
-        ))
-
-if __name__=='__main__':
-    unittest.main(defaultTest='test_suite')
+    ))

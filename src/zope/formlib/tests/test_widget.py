@@ -13,7 +13,7 @@
 ##############################################################################
 """Generic Widget Tests
 """
-from unittest import TestSuite, main
+from unittest import TestSuite
 
 from zope.component.testing import setUp, tearDown
 from zope.publisher.browser import TestRequest
@@ -22,16 +22,20 @@ from doctest import DocTestSuite
 from zope.formlib.widget import Widget
 from .support import checker
 
+
 class TestContext(object):
     __name__ = 'Test'
     title = 'My Test Context'
     description = 'A test context.'
 
+
 class FooWidget(Widget):
     pass
 
+
 context = TestContext()
 request = TestRequest()
+
 
 class TestWidget(object):
     """Tests basic widget characteristics.
@@ -92,6 +96,7 @@ class TestWidget(object):
     browser widget will render the specified value in HTML.
     """
 
+
 class TestInputWidget(object):
     """Tests the input widget mixin.
 
@@ -146,6 +151,7 @@ class TestInputWidget(object):
         >>> widget.hasValidInput()
         True
     """
+
 
 class TestCustomWidgetFactory(object):
     """Tests the custom widget factory.
@@ -218,7 +224,4 @@ class TestCustomWidgetFactory(object):
 def test_suite():
     return TestSuite((
         DocTestSuite(setUp=setUp, tearDown=tearDown, checker=checker),
-        ))
-
-if __name__=='__main__':
-    main(defaultTest='test_suite')
+    ))
