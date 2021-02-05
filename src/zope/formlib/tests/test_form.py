@@ -22,7 +22,7 @@ class FormBaseTests(unittest.TestCase):
         from zope.formlib.form import FormBase
         return FormBase
 
-    def _makeContext(self, **kw):
+    def _makeContext(self):
         class _Context(object):
             pass
         context = _Context()
