@@ -5,7 +5,7 @@
 4.8.0 (unreleased)
 ==================
 
-- Add support for Python 3.8.
+- Add support for Python 3.9.
 
 - Remove unused non-BBB imports.
 
