@@ -871,7 +871,7 @@ class IFormField(Interface):
 
     prefix = schema.ASCII(
         constraint=reConstraint(
-            r'[a-zA-Z][a-zA-Z0-9_\.]*', "Must be an identifier or empty",
+            r'[a-zA-Z][a-zA-Z0-9_.]*', "Must be an identifier or empty",
             can_be_empty=True),
         title=u"Prefix",
         description=u"""\
