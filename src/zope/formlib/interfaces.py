@@ -329,10 +329,12 @@ class ITextBrowserWidget(ISimpleInputWidget):
         default=True)
 
 
-def reConstraint(pat, explanation):
+def reConstraint(pat, explanation, can_be_empty=False):
     pat = re.compile(pat)
 
     def constraint(value):
+        if not value and can_be_empty:
+            return True
         if pat.match(value):
             return True
         raise Invalid(value, explanation)
@@ -868,15 +870,17 @@ class IFormField(Interface):
     )
 
     prefix = schema.ASCII(
-        constraint=reConstraint('[a-zA-Z][a-zA-Z0-9_]*',
-                                "Must be an identifier"),
+        constraint=reConstraint(
+            r'[a-zA-Z][a-zA-Z0-9_\.]*', "Must be an identifier or empty",
+            can_be_empty=True),
         title=u"Prefix",
         description=u"""\
         Form-field prefix.  The form-field prefix is used to
         disambiguate fields with the same name (e.g. from different
         schema) within a collection of form fields.
         """,
-        default="form_field",
+        required=False,
+        default="",
     )
 
     for_display = schema.Bool(

@@ -5,12 +5,11 @@
 5.0.0 (unreleased)
 ==================
 
-Breaking changes
-----------------
+Possibly breaking changes
+-------------------------
 
-- Fix checking of constraints on field contents. This requires the default
-  prefix of an ``IFormField`` to be non-empty. It now defaults to
-  ``form_field``.
+- Fix checking of constraints on field contents. The ``prefix`` of an
+  ``IFormField`` can still be empty and now officially allows dots.
 
 Features
 --------
