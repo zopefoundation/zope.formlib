@@ -10,6 +10,8 @@ Possibly breaking changes
 
 - Fix checking of constraints on field contents. The ``prefix`` of an
   ``IFormField`` can still be empty and now officially allows dots.
+  See `pull request 35
+  <https://github.com/zopefoundation/zope.formlib/pull/35>`_.
 
 Features
 --------
