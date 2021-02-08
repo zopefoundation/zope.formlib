@@ -328,17 +328,17 @@ class ITextBrowserWidget(ISimpleInputWidget):
             u'If True, an empty string is converted to field.missing_value.'),
         default=True)
 
-# XXX this seems to be buggy (since at least 2005)
-# it returns None, and prefix_re is never defined.
 
-
-def reConstraint(pat, explanation):
+def reConstraint(pat, explanation, can_be_empty=False):
     pat = re.compile(pat)
 
     def constraint(value):
-        if prefix_re.match(value):  # noqa: F821 undefined name
+        if not value and can_be_empty:
+            return True
+        if pat.match(value):
             return True
         raise Invalid(value, explanation)
+    return constraint
 
 
 class IWidgetInputErrorView(Interface):
@@ -870,14 +870,16 @@ class IFormField(Interface):
     )
 
     prefix = schema.ASCII(
-        constraint=reConstraint('[a-zA-Z][a-zA-Z0-9_]*',
-                                "Must be an identifier"),
+        constraint=reConstraint(
+            r'[a-zA-Z][a-zA-Z0-9_.]*', "Must be an identifier or empty",
+            can_be_empty=True),
         title=u"Prefix",
         description=u"""\
         Form-field prefix.  The form-field prefix is used to
         disambiguate fields with the same name (e.g. from different
         schema) within a collection of form fields.
         """,
+        required=False,
         default="",
     )
 

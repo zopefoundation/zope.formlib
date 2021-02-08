@@ -2,10 +2,22 @@
  Changes
 =========
 
-4.8.0 (unreleased)
+5.0.0 (unreleased)
 ==================
 
+Possibly breaking changes
+-------------------------
+
+- Fix checking of constraints on field contents. The ``prefix`` of an
+  ``IFormField`` can still be empty and now officially allows dots.
+
+Features
+--------
+
 - Add support for Python 3.9.
+
+Other changes
+-------------
 
 - Remove unused non-BBB imports.
 
