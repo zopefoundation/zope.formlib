@@ -165,7 +165,7 @@ class CheckBoxWidgetTest(SimpleInputWidgetTest):
         # checkbox widgets are never required, since there's no way to
         # set it to "no value"
         self.assertFalse(self._widget.required)
-        self.assertTrue(self._widget.context.required)
+        self.assertFalse(self._widget.context.required)
 
 
 def test_suite():

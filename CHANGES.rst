@@ -23,6 +23,8 @@ Other changes
 
 - Remove unused non-BBB imports.
 
+- Adjust checkbox widget test to new default for ``required`` on boolean fields
+
 
 4.7.1 (2020-03-31)
 ==================
