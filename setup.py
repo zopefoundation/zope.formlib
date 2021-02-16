@@ -67,6 +67,7 @@ setup(name='zope.formlib',
       extras_require={
           'test': [
               'zope.configuration',
+              'zope.schema >= 6.1',
               'zope.testing',
               'zope.testrunner',
           ],
