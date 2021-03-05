@@ -2,7 +2,7 @@
 # https://github.com/zopefoundation/meta/tree/master/config/pure-python
 [meta]
 template = "pure-python"
-commit-id = "2fa8d158f9126abfb50e9bf0779ef7b374c3f819"
+commit-id = "9eb3f8c0509c4389a028555a80d8c1aa7a80a030"
 
 [python]
 with-appveyor = false
@@ -25,6 +25,8 @@ additional-config = [
     "    src/zope/formlib/widgets.py: F401",
     "    src/zope/formlib/tests/test_registrations.py: F403, F405",
     ]
+
+[tox]
 testenv-additional = [
     "setenv =",
     "    ZOPE_INTERFACE_STRICT_IRO=1",
