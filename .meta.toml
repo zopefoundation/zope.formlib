@@ -2,7 +2,7 @@
 # https://github.com/zopefoundation/meta/tree/master/config/pure-python
 [meta]
 template = "pure-python"
-commit-id = "9eb3f8c0509c4389a028555a80d8c1aa7a80a030"
+commit-id = "f8468b0bc5c92479b3043372d89cf5852176015d"
 
 [python]
 with-appveyor = false
@@ -31,10 +31,14 @@ testenv-additional = [
     "setenv =",
     "    ZOPE_INTERFACE_STRICT_IRO=1",
     ]
+use-flake8 = true
 
 [manifest]
 additional-rules = [
     "recursive-include src *.js",
+    "recursive-include src *.pt",
+    "recursive-include src *.rst",
+    "recursive-include src *.zcml",
     ]
 
 [check-manifest]
