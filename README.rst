@@ -2,8 +2,8 @@
  zope.formlib
 ==============
 
-.. image:: https://travis-ci.com/zopefoundation/zope.formlib.svg?branch=master
-        :target: https://travis-ci.com/zopefoundation/zope.formlib
+.. image:: https://github.com/zopefoundation/zope.formlib/actions/workflows/tests.yml/badge.svg
+        :target: https://github.com/zopefoundation/zope.formlib/actions/workflows/tests.yml
 
 .. image:: https://readthedocs.org/projects/zopeformlib/badge/?version=latest
         :target: https://zopeformlib.readthedocs.io/en/latest/
