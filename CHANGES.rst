@@ -28,7 +28,7 @@ Possibly breaking changes
 Features
 --------
 
-- Add support for Python 3.9 and 3.10.
+- Add support for Python 3.9.
 
 Other changes
 -------------
