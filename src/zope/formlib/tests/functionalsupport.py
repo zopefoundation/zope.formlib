@@ -1,23 +1,27 @@
 """Support code for functional widget tests.
 """
 
+import unittest
+
+import zope.i18n
+import zope.schema.interfaces
 from zope.browserpage.namedtemplate import NamedTemplateImplementation
 from zope.component import adapter
 from zope.component import provideAdapter
-from zope.component.testing import setUp, tearDown
-from zope.formlib import form
-from zope.formlib.errors import InvalidErrorView
-from zope.formlib.exception import WidgetInputErrorView
-from zope.formlib.interfaces import (
-    IInputWidget, IForm,
-    IWidgetInputError, IWidgetInputErrorView)
-from zope.formlib.tests.test_formlib import requestToTZInfo
+from zope.component.testing import setUp
+from zope.component.testing import tearDown
 from zope.i18n.testing import setUp as i18nSetUp
 from zope.interface import Invalid
 from zope.publisher.interfaces.browser import IBrowserRequest
-import unittest
-import zope.i18n
-import zope.schema.interfaces
+
+from zope.formlib import form
+from zope.formlib.errors import InvalidErrorView
+from zope.formlib.exception import WidgetInputErrorView
+from zope.formlib.interfaces import IForm
+from zope.formlib.interfaces import IInputWidget
+from zope.formlib.interfaces import IWidgetInputError
+from zope.formlib.interfaces import IWidgetInputErrorView
+from zope.formlib.tests.test_formlib import requestToTZInfo
 
 
 @adapter(IForm)

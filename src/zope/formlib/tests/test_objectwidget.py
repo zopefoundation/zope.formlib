@@ -13,21 +13,27 @@
 ##############################################################################
 """Object Widget tests
 """
-import unittest
-from zope.component import testing
-from zope.interface import Interface, implementer
-from zope.publisher.browser import TestRequest
-from zope.schema import Object, TextLine
-from zope.schema.interfaces import ITextLine
 import doctest
-from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+import unittest
+
 from zope.component import provideAdapter
+from zope.component import testing
+from zope.interface import Interface
+from zope.interface import implementer
+from zope.publisher.browser import TestRequest
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
+from zope.schema import Object
+from zope.schema import TextLine
+from zope.schema.interfaces import ITextLine
 
 from zope.formlib._compat import PY3
-from zope.formlib.interfaces import IInputWidget, MissingInputError
-from zope.formlib.widgets import TextWidget, ObjectWidget
-from zope.formlib.tests.test_browserwidget import BrowserWidgetTest
+from zope.formlib.interfaces import IInputWidget
 from zope.formlib.interfaces import IWidgetInputErrorView
+from zope.formlib.interfaces import MissingInputError
+from zope.formlib.tests.test_browserwidget import BrowserWidgetTest
+from zope.formlib.widgets import ObjectWidget
+from zope.formlib.widgets import TextWidget
+
 from .support import checker
 
 

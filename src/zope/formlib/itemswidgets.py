@@ -16,16 +16,18 @@
 __docformat__ = 'restructuredtext'
 from xml.sax.saxutils import escape
 
-from zope import component
+from zope.browserpage import ViewPageTemplateFile
 from zope.i18n import translate
 from zope.schema.interfaces import InvalidValue
 from zope.schema.interfaces import ITitledTokenizedTerm
 
-from zope.formlib.widget import SimpleInputWidget, renderElement
-from zope.formlib.interfaces import IInputWidget, IDisplayWidget
-from zope.formlib.interfaces import ConversionError
+from zope import component
 from zope.formlib.i18n import _
-from zope.browserpage import ViewPageTemplateFile
+from zope.formlib.interfaces import ConversionError
+from zope.formlib.interfaces import IDisplayWidget
+from zope.formlib.interfaces import IInputWidget
+from zope.formlib.widget import SimpleInputWidget
+from zope.formlib.widget import renderElement
 
 
 # For choices, we want to make the widget a view of the field and vocabulary.

@@ -18,15 +18,15 @@ except ImportError:     # pragma: NO COVER
     from cgi import escape
 
 from zope.component import adapter
-from zope.interface import implementer
-from zope.interface import Invalid
 from zope.i18n import Message
 from zope.i18n import translate
-
-from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.interface import Invalid
+from zope.interface import implementer
 from zope.publisher.browser import BrowserPage
-from zope.formlib.interfaces import IWidgetInputErrorView
+from zope.publisher.interfaces.browser import IBrowserRequest
+
 from zope.formlib.interfaces import IInvalidCSRFTokenError
+from zope.formlib.interfaces import IWidgetInputErrorView
 
 
 @implementer(IWidgetInputErrorView)

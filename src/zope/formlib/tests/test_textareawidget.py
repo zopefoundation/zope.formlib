@@ -13,12 +13,14 @@
 ##############################################################################
 """Textarea Widget tests
 """
-import unittest
 import doctest
-from zope.formlib.interfaces import IInputWidget
-from zope.formlib.widgets import TextAreaWidget
-from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
+import unittest
+
 from zope.interface.verify import verifyClass
+
+from zope.formlib.interfaces import IInputWidget
+from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
+from zope.formlib.widgets import TextAreaWidget
 
 
 class TextAreaWidgetTest(SimpleInputWidgetTest):

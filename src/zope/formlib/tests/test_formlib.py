@@ -11,36 +11,38 @@
 #
 ##############################################################################
 from __future__ import print_function
-import unittest
+
 import re
+import unittest
+
 import pytz
-
-from zope.component.testing import setUp, tearDown
-from zope.component import adapter
-from zope.component import provideAdapter, provideUtility
-
-from zope.i18n.testing import setUp as i18nSetUp
 import zope.interface.common.idatetime
 import zope.publisher.interfaces
 import zope.publisher.interfaces.browser
 import zope.schema.interfaces
 import zope.testing.renormalizing
 import zope.traversing.adapters
-
-from zope.formlib.widgets import (
-    TextWidget, FloatWidget, UnicodeDisplayWidget, IntWidget,
-    DatetimeDisplayWidget, DatetimeWidget)
-
-from zope.formlib import exception
-from zope.formlib.interfaces import IWidgetInputErrorView
+from zope.browserpage.namedtemplate import NamedTemplateImplementation
+from zope.component import adapter
+from zope.component import provideAdapter
+from zope.component import provideUtility
+from zope.component.testing import setUp
+from zope.component.testing import tearDown
+from zope.configuration.xmlconfig import XMLConfig
+from zope.i18n.testing import setUp as i18nSetUp
 
 import zope.formlib
 import zope.formlib.form
 import zope.formlib.interfaces
+from zope.formlib import exception
+from zope.formlib.interfaces import IWidgetInputErrorView
 from zope.formlib.tests import support
-from zope.browserpage.namedtemplate import NamedTemplateImplementation
-
-from zope.configuration.xmlconfig import XMLConfig
+from zope.formlib.widgets import DatetimeDisplayWidget
+from zope.formlib.widgets import DatetimeWidget
+from zope.formlib.widgets import FloatWidget
+from zope.formlib.widgets import IntWidget
+from zope.formlib.widgets import TextWidget
+from zope.formlib.widgets import UnicodeDisplayWidget
 
 
 @zope.interface.implementer(zope.interface.common.idatetime.ITZInfo)

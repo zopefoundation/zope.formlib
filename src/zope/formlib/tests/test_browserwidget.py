@@ -14,17 +14,20 @@
 """Test Browser Widget
 """
 import unittest
-from zope.component.testing import PlacelessSetup
-from zope.interface import Interface, implementer
-from zope.publisher.browser import TestRequest
-from zope.schema import Text, Int
 from doctest import DocTestSuite
 
-from zope.formlib.widget import SimpleInputWidget
-from zope.formlib.interfaces import ConversionError
-from zope.formlib.interfaces import WidgetInputError, MissingInputError
+from zope.component.testing import PlacelessSetup
+from zope.interface import Interface
+from zope.interface import implementer
+from zope.publisher.browser import TestRequest
+from zope.schema import Int
+from zope.schema import Text
 
+from zope.formlib.interfaces import ConversionError
+from zope.formlib.interfaces import MissingInputError
+from zope.formlib.interfaces import WidgetInputError
 from zope.formlib.tests import support
+from zope.formlib.widget import SimpleInputWidget
 
 
 class BrowserWidgetTest(PlacelessSetup,

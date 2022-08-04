@@ -13,16 +13,18 @@
 ##############################################################################
 """Radio Widget Tests
 """
-import unittest
 import doctest
-from zope.interface import Interface, implementer
+import unittest
+
+from zope.interface import Interface
+from zope.interface import implementer
 from zope.interface.verify import verifyClass
 from zope.publisher.browser import TestRequest
 from zope.schema import Choice
 
 from zope.formlib.interfaces import IInputWidget
-from zope.formlib.widgets import RadioWidget
 from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
+from zope.formlib.widgets import RadioWidget
 
 
 class RadioWidgetTest(SimpleInputWidgetTest):

@@ -15,9 +15,12 @@
 """
 import unittest
 
-from zope.schema import Choice, List
-from zope.formlib.widgets import SelectWidget
 from zope.publisher.browser import TestRequest
+from zope.schema import Choice
+from zope.schema import List
+
+from zope.formlib.widgets import SelectWidget
+
 
 select_html = '''<div>
 <div class="value">

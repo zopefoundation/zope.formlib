@@ -13,20 +13,24 @@
 ##############################################################################
 """DateTime Widget Functional Tests
 """
-import unittest
-
 import re
+import unittest
 from datetime import datetime
 
-from zope.interface import Interface, implementer
-from zope.schema import Datetime, Choice
-from zope.formlib import form
-from zope.publisher.browser import TestRequest
-from zope.formlib.widgets import ChoiceInputWidget
-from zope.formlib.widgets import DatetimeWidget, DropdownWidget
-from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 import zope.schema.interfaces
-from zope.datetime import parseDatetimetz, tzinfo
+from zope.datetime import parseDatetimetz
+from zope.datetime import tzinfo
+from zope.interface import Interface
+from zope.interface import implementer
+from zope.publisher.browser import TestRequest
+from zope.schema import Choice
+from zope.schema import Datetime
+
+from zope.formlib import form
+from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
+from zope.formlib.widgets import ChoiceInputWidget
+from zope.formlib.widgets import DatetimeWidget
+from zope.formlib.widgets import DropdownWidget
 
 
 class IDatetimeTest(Interface):

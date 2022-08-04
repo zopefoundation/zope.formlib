@@ -16,25 +16,32 @@
 import unittest
 
 from zope.component.testing import PlacelessSetup
-from zope.interface import Interface, implementer
+from zope.interface import Interface
+from zope.interface import implementer
 from zope.publisher.browser import TestRequest
-from zope.schema import Choice, List, Set, FrozenSet
-from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
+from zope.schema import Choice
+from zope.schema import FrozenSet
+from zope.schema import List
+from zope.schema import Set
+from zope.schema.vocabulary import SimpleTerm
+from zope.schema.vocabulary import SimpleVocabulary
 
 import zope.formlib.itemswidgets
-from zope.formlib.itemswidgets import ItemsWidgetBase
+from zope.formlib.itemswidgets import DropdownWidget
 from zope.formlib.itemswidgets import ItemDisplayWidget
-from zope.formlib.itemswidgets import ItemsMultiDisplayWidget
-from zope.formlib.itemswidgets import ListDisplayWidget
-from zope.formlib.itemswidgets import SetDisplayWidget
 from zope.formlib.itemswidgets import ItemsEditWidgetBase
-from zope.formlib.itemswidgets import SelectWidget, DropdownWidget
-from zope.formlib.itemswidgets import RadioWidget
+from zope.formlib.itemswidgets import ItemsMultiDisplayWidget
 from zope.formlib.itemswidgets import ItemsMultiEditWidgetBase
+from zope.formlib.itemswidgets import ItemsWidgetBase
+from zope.formlib.itemswidgets import ListDisplayWidget
+from zope.formlib.itemswidgets import MultiCheckBoxWidget
 from zope.formlib.itemswidgets import MultiSelectWidget
 from zope.formlib.itemswidgets import OrderedMultiSelectWidget
-from zope.formlib.itemswidgets import MultiCheckBoxWidget
+from zope.formlib.itemswidgets import RadioWidget
+from zope.formlib.itemswidgets import SelectWidget
+from zope.formlib.itemswidgets import SetDisplayWidget
 from zope.formlib.tests.support import VerifyResults
+
 
 vocab = SimpleVocabulary(
     [SimpleTerm(value, token, title) for value, token, title in (

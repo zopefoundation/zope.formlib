@@ -13,13 +13,18 @@
 """Form interfaces
 """
 import re
-from zope import schema
-from zope.publisher.interfaces.browser import IBrowserPage
-from zope.schema.interfaces import ValidationError
-from zope.publisher.interfaces import IView
-from zope.interface import Attribute, Interface, implementer, Invalid
-from zope.schema import Bool
+
 from zope.exceptions.interfaces import UserError
+from zope.interface import Attribute
+from zope.interface import Interface
+from zope.interface import Invalid
+from zope.interface import implementer
+from zope.publisher.interfaces import IView
+from zope.publisher.interfaces.browser import IBrowserPage
+from zope.schema import Bool
+from zope.schema.interfaces import ValidationError
+
+from zope import schema
 from zope.formlib._compat import basestring
 
 

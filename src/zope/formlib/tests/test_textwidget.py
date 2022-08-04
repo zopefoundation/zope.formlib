@@ -15,34 +15,32 @@
 """Text Widget tests
 """
 import datetime
-import unittest
 import doctest
-from zope.component.testing import setUp, tearDown
+import unittest
+
+from zope.component.testing import setUp
+from zope.component.testing import tearDown
 from zope.interface.verify import verifyClass
-from zope.schema import TextLine
 from zope.publisher.browser import TestRequest
-
 from zope.schema import Password
+from zope.schema import TextLine
+
 from zope.formlib.interfaces import IInputWidget
-
-from zope.formlib.widgets import TextWidget
-
-from zope.formlib.widgets import TextAreaWidget
-from zope.formlib.widgets import BytesAreaWidget
-from zope.formlib.widgets import PasswordWidget
-from zope.formlib.widgets import FileWidget
-from zope.formlib.widgets import IntWidget
-from zope.formlib.widgets import FloatWidget
-from zope.formlib.widgets import BytesWidget
-from zope.formlib.widgets import ASCIIWidget
-
-from zope.formlib.widgets import DateDisplayWidget
-from zope.formlib.widgets import DatetimeDisplayWidget
-from zope.formlib.widgets import URIDisplayWidget
-
+from zope.formlib.tests.support import checker
 from zope.formlib.tests.test_browserwidget import BrowserWidgetTest
 from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
-from zope.formlib.tests.support import checker
+from zope.formlib.widgets import ASCIIWidget
+from zope.formlib.widgets import BytesAreaWidget
+from zope.formlib.widgets import BytesWidget
+from zope.formlib.widgets import DateDisplayWidget
+from zope.formlib.widgets import DatetimeDisplayWidget
+from zope.formlib.widgets import FileWidget
+from zope.formlib.widgets import FloatWidget
+from zope.formlib.widgets import IntWidget
+from zope.formlib.widgets import PasswordWidget
+from zope.formlib.widgets import TextAreaWidget
+from zope.formlib.widgets import TextWidget
+from zope.formlib.widgets import URIDisplayWidget
 
 
 class TextWidgetTest(SimpleInputWidgetTest):

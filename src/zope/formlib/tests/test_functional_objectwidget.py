@@ -13,24 +13,27 @@
 ##############################################################################
 """Test object widget
 """
+import os
 import unittest
 
-from zope.pagetemplate.pagetemplate import PageTemplate
+import zope.schema.interfaces
 import zope.traversing.interfaces
 from zope.component import provideAdapter
-from zope.traversing.adapters import DefaultTraversable
 from zope.component.testing import PlacelessSetup
-from zope.interface import Interface, implementer
-from zope.schema import TextLine, Object
-from zope.formlib import form
-from zope.publisher.browser import TestRequest
-from zope.formlib.widgets import ObjectWidget
-from zope.formlib.tests.support import VerifyResults
-import zope.schema.interfaces
-from zope.traversing.testing import setUp as traversingSetUp
 from zope.configuration import xmlconfig
+from zope.interface import Interface
+from zope.interface import implementer
+from zope.pagetemplate.pagetemplate import PageTemplate
+from zope.publisher.browser import TestRequest
+from zope.schema import Object
+from zope.schema import TextLine
+from zope.traversing.adapters import DefaultTraversable
+from zope.traversing.testing import setUp as traversingSetUp
+
 import zope.formlib
-import os
+from zope.formlib import form
+from zope.formlib.tests.support import VerifyResults
+from zope.formlib.widgets import ObjectWidget
 
 
 class ITestContact(Interface):

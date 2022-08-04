@@ -20,10 +20,11 @@ try:
 except ImportError:     # pragma: NO COVER
     from cgi import escape
 
-from zope.interface import implementer
 from zope.i18n import translate
+from zope.interface import implementer
 
-from zope.formlib.interfaces import IWidgetInputError, IWidgetInputErrorView
+from zope.formlib.interfaces import IWidgetInputError
+from zope.formlib.interfaces import IWidgetInputErrorView
 
 
 @implementer(IWidgetInputErrorView)

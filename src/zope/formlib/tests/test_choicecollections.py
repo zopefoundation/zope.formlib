@@ -14,20 +14,25 @@
 """Test the choice collections widgets (function).
 """
 import unittest
-from zope.component.testing import PlacelessSetup
-from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.publisher.browser import TestRequest
-from zope.schema.interfaces import IList, IChoice, IIterableVocabulary
-from zope.schema import Choice, List
 
 from zope.component import provideAdapter
+from zope.component.testing import PlacelessSetup
+from zope.publisher.browser import TestRequest
+from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.schema import Choice
+from zope.schema import List
+from zope.schema.interfaces import IChoice
+from zope.schema.interfaces import IIterableVocabulary
+from zope.schema.interfaces import IList
 
-from zope.formlib.interfaces import IInputWidget, IDisplayWidget
-from zope.formlib.widgets import CollectionDisplayWidget
-from zope.formlib.widgets import CollectionInputWidget
+from zope.formlib.interfaces import IDisplayWidget
+from zope.formlib.interfaces import IInputWidget
 from zope.formlib.widgets import ChoiceCollectionDisplayWidget
 from zope.formlib.widgets import ChoiceCollectionInputWidget
-from zope.formlib.widgets import ItemsMultiDisplayWidget, SelectWidget
+from zope.formlib.widgets import CollectionDisplayWidget
+from zope.formlib.widgets import CollectionInputWidget
+from zope.formlib.widgets import ItemsMultiDisplayWidget
+from zope.formlib.widgets import SelectWidget
 
 
 class ListOfChoicesWidgetTest(PlacelessSetup, unittest.TestCase):

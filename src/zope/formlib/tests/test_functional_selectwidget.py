@@ -15,16 +15,18 @@
 """
 import unittest
 
-from zope.interface import Interface, implementer
-from zope.schema import Choice
-from zope.formlib import form
-from zope.publisher.browser import TestRequest
-from zope.formlib.tests.support import patternExists
-from zope.formlib.widgets import (
-    TextWidget,
-    DropdownWidget, ChoiceInputWidget)
-from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 import zope.schema.interfaces
+from zope.interface import Interface
+from zope.interface import implementer
+from zope.publisher.browser import TestRequest
+from zope.schema import Choice
+
+from zope.formlib import form
+from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
+from zope.formlib.tests.support import patternExists
+from zope.formlib.widgets import ChoiceInputWidget
+from zope.formlib.widgets import DropdownWidget
+from zope.formlib.widgets import TextWidget
 
 
 class IRadioTest(Interface):

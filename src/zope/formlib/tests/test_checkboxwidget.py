@@ -13,16 +13,17 @@
 ##############################################################################
 """Checkbox Widget tests
 """
-import unittest
 import doctest
-from zope.formlib.interfaces import IInputWidget
-from zope.formlib.widgets import CheckBoxWidget
+import unittest
+
+from zope.interface.verify import verifyClass
 from zope.publisher.browser import TestRequest
 from zope.schema import Bool
-from zope.interface.verify import verifyClass
 
+from zope.formlib.interfaces import IInputWidget
 from zope.formlib.interfaces import MissingInputError
 from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
+from zope.formlib.widgets import CheckBoxWidget
 
 
 class CheckBoxWidgetTest(SimpleInputWidgetTest):

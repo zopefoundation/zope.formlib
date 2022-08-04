@@ -16,7 +16,9 @@
 import unittest
 from doctest import DocTestSuite
 
-from zope.formlib.widget import DisplayWidget, UnicodeDisplayWidget
+from zope.formlib.widget import DisplayWidget
+from zope.formlib.widget import UnicodeDisplayWidget
+
 from .support import checker
 
 

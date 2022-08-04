@@ -13,31 +13,38 @@
 ##############################################################################
 """Sequence Field Widget tests.
 """
+import doctest
 import unittest
-from zope.interface import Interface, implementer
-from zope.schema import Tuple, List, TextLine
-from zope.schema.interfaces import ITextLine
+
 from zope.component import provideAdapter
+from zope.interface import Interface
+from zope.interface import implementer
 from zope.publisher.browser import TestRequest
 from zope.publisher.interfaces.browser import IDefaultBrowserLayer
-import doctest
+from zope.schema import List
+from zope.schema import TextLine
+from zope.schema import Tuple
+from zope.schema.interfaces import ITextLine
+from zope.testing.cleanup import tearDown as traversingTearDown
+from zope.traversing.testing import setUp as traversingSetUp
 
-from zope.formlib.widgets import TextWidget, ObjectWidget, DisplayWidget
-from zope.formlib.widgets import TupleSequenceWidget, ListSequenceWidget
-from zope.formlib.widgets import SequenceDisplayWidget
-from zope.formlib.widgets import SequenceWidget
-from zope.formlib.interfaces import IDisplayWidget
-from zope.formlib.interfaces import IInputWidget, MissingInputError
-from zope.formlib.interfaces import IWidgetInputError, WidgetInputError
-from zope.formlib.interfaces import IWidgetInputErrorView
-from zope.formlib.widget import CustomWidgetFactory
 from zope.formlib.exception import WidgetInputErrorView
-
+from zope.formlib.interfaces import IDisplayWidget
+from zope.formlib.interfaces import IInputWidget
+from zope.formlib.interfaces import IWidgetInputError
+from zope.formlib.interfaces import IWidgetInputErrorView
+from zope.formlib.interfaces import MissingInputError
+from zope.formlib.interfaces import WidgetInputError
 from zope.formlib.tests.support import VerifyResults
 from zope.formlib.tests.test_browserwidget import BrowserWidgetTest
-
-from zope.traversing.testing import setUp as traversingSetUp
-from zope.testing.cleanup import tearDown as traversingTearDown
+from zope.formlib.widget import CustomWidgetFactory
+from zope.formlib.widgets import DisplayWidget
+from zope.formlib.widgets import ListSequenceWidget
+from zope.formlib.widgets import ObjectWidget
+from zope.formlib.widgets import SequenceDisplayWidget
+from zope.formlib.widgets import SequenceWidget
+from zope.formlib.widgets import TextWidget
+from zope.formlib.widgets import TupleSequenceWidget
 
 
 class SequenceWidgetTestHelper(object):
@@ -106,7 +113,7 @@ class SequenceWidgetTest(SequenceWidgetTestHelper, BrowserWidgetTest):
         self.assertTrue(self._widget.hasInput())
 
     def test_customWidgetFactory(self):
-        """Verify that the widget can be constructed via the CustomWidgetFactory
+        """Verify that the widget can be constructed via CustomWidgetFactory
         (Issue #293)
         """
 
