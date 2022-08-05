@@ -15,16 +15,17 @@
 """
 __docformat__ = 'restructuredtext'
 
-from zope import component
+from zope.browserpage import ViewPageTemplateFile
 from zope.interface import implementer
 from zope.schema import getFieldNamesInOrder
 
+from zope import component
 from zope.formlib.interfaces import IInputWidget
-from zope.formlib.widget import InputWidget
-from zope.formlib.widget import BrowserWidget
-from zope.formlib.utility import setUpWidgets, applyWidgetsChanges
-from zope.browserpage import ViewPageTemplateFile
 from zope.formlib.interfaces import IWidgetInputErrorView
+from zope.formlib.utility import applyWidgetsChanges
+from zope.formlib.utility import setUpWidgets
+from zope.formlib.widget import BrowserWidget
+from zope.formlib.widget import InputWidget
 
 
 class ObjectWidgetView:

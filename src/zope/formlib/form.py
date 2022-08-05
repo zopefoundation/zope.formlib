@@ -19,7 +19,10 @@ import datetime
 import os
 import re
 import sys
+
 import pytz
+
+
 try:
     from html import escape
 except ImportError:     # pragma: NO COVER
@@ -29,29 +32,36 @@ import zope.browser.interfaces
 import zope.event
 import zope.i18n
 import zope.i18nmessageid
-import zope.security
 import zope.interface.interfaces
 import zope.publisher.browser
 import zope.publisher.interfaces.browser
-from zope import component, interface, schema
+import zope.security
 from zope.browserpage import ViewPageTemplateFile
+from zope.browserpage import namedtemplate
+from zope.i18nmessageid import MessageFactory
 from zope.interface.common import idatetime
 from zope.interface.interface import InterfaceClass
+from zope.lifecycleevent import Attributes
+from zope.lifecycleevent import ObjectCreatedEvent
+from zope.lifecycleevent import ObjectModifiedEvent
 from zope.publisher.interfaces.http import MethodNotAllowed
 from zope.schema.interfaces import IField
 from zope.schema.interfaces import ValidationError
-from zope.lifecycleevent import ObjectCreatedEvent, ObjectModifiedEvent
-from zope.lifecycleevent import Attributes
-from zope.browserpage import namedtemplate
 
-from zope.formlib._compat import basestring, unicode
-from zope.formlib.interfaces import IWidgetInputErrorView
-from zope.formlib.interfaces import IInputWidget, IDisplayWidget
-from zope.formlib.interfaces import InputErrors, WidgetInputError
-from zope.formlib.interfaces import InvalidCSRFTokenError
-
+from zope import component
+from zope import interface
+from zope import schema
 from zope.formlib import interfaces
-from zope.i18nmessageid import MessageFactory
+from zope.formlib._compat import basestring
+from zope.formlib._compat import unicode
+from zope.formlib.interfaces import IDisplayWidget
+from zope.formlib.interfaces import IInputWidget
+from zope.formlib.interfaces import InputErrors
+from zope.formlib.interfaces import InvalidCSRFTokenError
+from zope.formlib.interfaces import IWidgetInputErrorView
+from zope.formlib.interfaces import WidgetInputError
+
+
 _ = MessageFactory("zope")
 
 

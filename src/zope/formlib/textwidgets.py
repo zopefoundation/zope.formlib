@@ -15,17 +15,21 @@
 """
 import decimal
 from xml.sax import saxutils
-from zope.interface import implementer
-from zope.datetime import parseDatetimetz
-from zope.datetime import DateTimeError
-from zope.i18n.format import DateTimeParseError
 
-from zope.formlib._compat import toUnicode, unicode, PY3
-from zope.formlib.interfaces import ConversionError
+from zope.datetime import DateTimeError
+from zope.datetime import parseDatetimetz
+from zope.i18n.format import DateTimeParseError
+from zope.interface import implementer
+
+from zope.formlib._compat import PY3
+from zope.formlib._compat import toUnicode
+from zope.formlib._compat import unicode
 from zope.formlib.i18n import _
+from zope.formlib.interfaces import ConversionError
 from zope.formlib.interfaces import ITextBrowserWidget
-from zope.formlib.widget import SimpleInputWidget, renderElement
 from zope.formlib.widget import DisplayWidget
+from zope.formlib.widget import SimpleInputWidget
+from zope.formlib.widget import renderElement
 
 
 def escape(str):

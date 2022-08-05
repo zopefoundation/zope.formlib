@@ -13,13 +13,15 @@
 ##############################################################################
 """Generic Widget Tests
 """
+from doctest import DocTestSuite
 from unittest import TestSuite
 
-from zope.component.testing import setUp, tearDown
+from zope.component.testing import setUp
+from zope.component.testing import tearDown
 from zope.publisher.browser import TestRequest
-from doctest import DocTestSuite
 
 from zope.formlib.widget import Widget
+
 from .support import checker
 
 

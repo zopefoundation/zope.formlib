@@ -13,15 +13,17 @@
 ##############################################################################
 """Float Widget tests
 """
-import unittest
 import doctest
-from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
-from zope.formlib.interfaces import IInputWidget
-from zope.formlib.widgets import FloatWidget
-from zope.formlib.interfaces import ConversionError, WidgetInputError
-from zope.interface.verify import verifyClass
+import unittest
 
+from zope.interface.verify import verifyClass
 from zope.schema import Float
+
+from zope.formlib.interfaces import ConversionError
+from zope.formlib.interfaces import IInputWidget
+from zope.formlib.interfaces import WidgetInputError
+from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
+from zope.formlib.widgets import FloatWidget
 
 
 class FloatWidgetTest(SimpleInputWidgetTest):

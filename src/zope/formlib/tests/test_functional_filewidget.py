@@ -15,15 +15,17 @@
 """
 import unittest
 
+from zope.interface import Interface
+from zope.interface import implementer
 from zope.publisher.browser import TestRequest
-from zope.interface import Interface, implementer
 from zope.schema import Field
 from zope.schema.interfaces import IField
+
 from zope.formlib import form
 from zope.formlib._compat import StringIO
+from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 from zope.formlib.tests.support import patternExists
 from zope.formlib.widgets import FileWidget
-from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 
 
 class IFileField(IField):

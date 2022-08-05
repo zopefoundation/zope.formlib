@@ -25,13 +25,15 @@ uses the infrastructure provided by zope.formlib itself.
 """
 __docformat__ = 'restructuredtext'
 
-from zope import component
 from zope.schema import getFieldsInOrder
-from zope.formlib.interfaces import IWidget
-from zope.formlib.interfaces import WidgetsError
-from zope.formlib.interfaces import InputErrors
+
+from zope import component
 from zope.formlib.interfaces import IInputWidget
+from zope.formlib.interfaces import InputErrors
+from zope.formlib.interfaces import IWidget
 from zope.formlib.interfaces import IWidgetFactory
+from zope.formlib.interfaces import WidgetsError
+
 
 # A marker that indicates 'no value' for any of the utility functions that
 # accept a 'value' argument.

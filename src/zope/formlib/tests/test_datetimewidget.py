@@ -14,18 +14,20 @@
 """Datetime Widget Tests
 """
 import datetime
-import unittest
 import doctest
+import unittest
 
-from zope.schema import Datetime
-from zope.datetime import parseDatetimetz, tzinfo
+from zope.datetime import parseDatetimetz
+from zope.datetime import tzinfo
 from zope.interface.verify import verifyClass
+from zope.schema import Datetime
 
-from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
+from zope.formlib.interfaces import ConversionError
 from zope.formlib.interfaces import IInputWidget
-from zope.formlib.widgets import DatetimeWidget
+from zope.formlib.interfaces import WidgetInputError
+from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
 from zope.formlib.widgets import DatetimeI18nWidget
-from zope.formlib.interfaces import ConversionError, WidgetInputError
+from zope.formlib.widgets import DatetimeWidget
 
 
 class DatetimeWidgetTest(SimpleInputWidgetTest):

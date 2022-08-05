@@ -16,23 +16,27 @@
 __docformat__ = 'restructuredtext'
 
 import warnings
-from xml.sax.saxutils import quoteattr, escape
+from xml.sax.saxutils import escape
+from xml.sax.saxutils import quoteattr
 
 from zope.component import getMultiAdapter
-from zope.interface import implementer
-from zope.schema.interfaces import ValidationError
-from zope.publisher.browser import BrowserView
-
-from zope.formlib.interfaces import ConversionError
-from zope.formlib.interfaces import WidgetInputError, MissingInputError
-from zope.formlib.interfaces import IBrowserWidget
-from zope.formlib.interfaces import ISimpleInputWidget
-from zope.formlib.interfaces import IWidgetInputErrorView
-from zope.formlib.interfaces import IWidget, InputErrors, IWidgetFactory
-from zope.formlib._compat import toUnicode
-
 from zope.i18n import translate
-from zope.schema.interfaces import IChoice, ICollection
+from zope.interface import implementer
+from zope.publisher.browser import BrowserView
+from zope.schema.interfaces import IChoice
+from zope.schema.interfaces import ICollection
+from zope.schema.interfaces import ValidationError
+
+from zope.formlib._compat import toUnicode
+from zope.formlib.interfaces import ConversionError
+from zope.formlib.interfaces import IBrowserWidget
+from zope.formlib.interfaces import InputErrors
+from zope.formlib.interfaces import ISimpleInputWidget
+from zope.formlib.interfaces import IWidget
+from zope.formlib.interfaces import IWidgetFactory
+from zope.formlib.interfaces import IWidgetInputErrorView
+from zope.formlib.interfaces import MissingInputError
+from zope.formlib.interfaces import WidgetInputError
 
 
 if quoteattr("\r") != '"&13;"':

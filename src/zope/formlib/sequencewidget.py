@@ -15,18 +15,21 @@
 """
 __docformat__ = 'restructuredtext'
 
-from zope import component
-from zope.interface import implementer
+from zope.browserpage import ViewPageTemplateFile
 from zope.i18n import translate
+from zope.interface import implementer
 from zope.schema.interfaces import ValidationError
 
-from zope.formlib.interfaces import IDisplayWidget, IInputWidget
-from zope.formlib.interfaces import WidgetInputError, MissingInputError
-from zope.formlib.widget import InputWidget
+from zope import component
 from zope.formlib.i18n import _
+from zope.formlib.interfaces import IDisplayWidget
+from zope.formlib.interfaces import IInputWidget
+from zope.formlib.interfaces import MissingInputError
+from zope.formlib.interfaces import WidgetInputError
 from zope.formlib.widget import BrowserWidget
-from zope.formlib.widget import DisplayWidget, renderElement
-from zope.browserpage import ViewPageTemplateFile
+from zope.formlib.widget import DisplayWidget
+from zope.formlib.widget import InputWidget
+from zope.formlib.widget import renderElement
 
 
 @implementer(IInputWidget)

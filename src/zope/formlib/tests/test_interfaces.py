@@ -1,6 +1,8 @@
-from .. interfaces import reConstraint
 import unittest
+
 import zope.interface
+
+from ..interfaces import reConstraint
 
 
 class TestReConstraint(unittest.TestCase):

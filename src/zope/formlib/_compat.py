@@ -15,6 +15,7 @@
 import base64
 import sys
 
+
 PY3 = sys.version_info[0] >= 3
 
 if PY3:
@@ -33,8 +34,9 @@ if PY3:
 
 else:
 
-    from StringIO import StringIO
     from itertools import imap
+
+    from StringIO import StringIO
     unicode = unicode
     basestring = basestring
 

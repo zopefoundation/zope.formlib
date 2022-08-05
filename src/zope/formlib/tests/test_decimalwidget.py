@@ -13,16 +13,18 @@
 ##############################################################################
 """Decimal Widget tests
 """
-import unittest
 import decimal
 import doctest
-from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
-from zope.formlib.interfaces import IInputWidget
-from zope.formlib.widgets import DecimalWidget
-from zope.formlib.interfaces import ConversionError, WidgetInputError
-from zope.interface.verify import verifyClass
+import unittest
 
+from zope.interface.verify import verifyClass
 from zope.schema import Decimal
+
+from zope.formlib.interfaces import ConversionError
+from zope.formlib.interfaces import IInputWidget
+from zope.formlib.interfaces import WidgetInputError
+from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
+from zope.formlib.widgets import DecimalWidget
 
 
 class DecimalWidgetTest(SimpleInputWidgetTest):

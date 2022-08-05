@@ -15,30 +15,37 @@
 """
 import xml.sax.saxutils
 
-from zope.component import adapter, getMultiAdapter
-from zope.interface import implementer
 import zope.browser.interfaces
 import zope.schema.interfaces
-from zope.schema.interfaces import \
-    ISourceQueriables, ValidationError, IVocabularyTokenized, IIterableSource
+from zope.component import adapter
+from zope.component import getMultiAdapter
+from zope.interface import implementer
+from zope.schema.interfaces import IIterableSource
+from zope.schema.interfaces import ISourceQueriables
+from zope.schema.interfaces import IVocabularyTokenized
+from zope.schema.interfaces import ValidationError
 
 import zope.formlib.interfaces
-import zope.formlib.widget
 import zope.formlib.itemswidgets
+import zope.formlib.widget
 from zope.formlib._compat import imap
-from zope.formlib.interfaces import (
-    WidgetInputError,
-    MissingInputError,
-    ISourceQueryView,
-    IWidgetInputErrorView,
-    IDisplayWidget,
-    IInputWidget)
-from zope.formlib.i18n import _
-from zope.formlib.widgets import (
-    SelectWidget, RadioWidget, MultiSelectWidget, OrderedMultiSelectWidget,
-    MultiCheckBoxWidget, MultiSelectSetWidget, MultiSelectFrozenSetWidget)
-from zope.formlib.widget import DisplayWidget, InputWidget
 from zope.formlib._compat import safeBase64Encode
+from zope.formlib.i18n import _
+from zope.formlib.interfaces import IDisplayWidget
+from zope.formlib.interfaces import IInputWidget
+from zope.formlib.interfaces import ISourceQueryView
+from zope.formlib.interfaces import IWidgetInputErrorView
+from zope.formlib.interfaces import MissingInputError
+from zope.formlib.interfaces import WidgetInputError
+from zope.formlib.widget import DisplayWidget
+from zope.formlib.widget import InputWidget
+from zope.formlib.widgets import MultiCheckBoxWidget
+from zope.formlib.widgets import MultiSelectFrozenSetWidget
+from zope.formlib.widgets import MultiSelectSetWidget
+from zope.formlib.widgets import MultiSelectWidget
+from zope.formlib.widgets import OrderedMultiSelectWidget
+from zope.formlib.widgets import RadioWidget
+from zope.formlib.widgets import SelectWidget
 
 
 @implementer(IDisplayWidget)

@@ -17,11 +17,13 @@ __docformat__ = 'restructuredtext'
 
 from zope.schema.vocabulary import SimpleVocabulary
 
-from zope.formlib.widget import SimpleInputWidget, renderElement
-from zope.formlib.widget import DisplayWidget
 from zope.formlib.i18n import _
+from zope.formlib.itemswidgets import DropdownWidget
 from zope.formlib.itemswidgets import RadioWidget
-from zope.formlib.itemswidgets import SelectWidget, DropdownWidget
+from zope.formlib.itemswidgets import SelectWidget
+from zope.formlib.widget import DisplayWidget
+from zope.formlib.widget import SimpleInputWidget
+from zope.formlib.widget import renderElement
 
 
 class CheckBoxWidget(SimpleInputWidget):

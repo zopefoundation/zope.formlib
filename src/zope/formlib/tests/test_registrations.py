@@ -13,22 +13,22 @@
 ##############################################################################
 """Test widget registrations.
 """
+from doctest import DocTestSuite
+
+import zope.schema as fields
+from zope.component import testing
 from zope.configuration import xmlconfig
 from zope.interface import implementer
 from zope.publisher.browser import TestRequest
-from doctest import DocTestSuite
+from zope.schema import interfaces
+from zope.schema import vocabulary
 
-from zope.component import testing
+import zope.formlib
+from zope.formlib.interfaces import IDisplayWidget
+from zope.formlib.interfaces import IInputWidget
 # import all widgets (in this case, importing * is ok, since we
 # absolutely know what we're importing)
 from zope.formlib.widgets import *
-
-from zope.formlib.interfaces import IDisplayWidget, IInputWidget
-import zope.formlib
-
-import zope.schema as fields
-from zope.schema import interfaces
-from zope.schema import vocabulary
 
 
 class ISampleObject(interfaces.IField):

@@ -15,10 +15,11 @@
 """
 import unittest
 
-from zope.formlib.widgets import TextWidget
-from zope.formlib.tests import support
 from zope.publisher.browser import TestRequest
 from zope.schema import Text
+
+from zope.formlib.tests import support
+from zope.formlib.widgets import TextWidget
 
 
 class Test(support.VerifyResults, unittest.TestCase):

@@ -13,16 +13,19 @@
 ##############################################################################
 """Multi-Checkbox Widget Tests
 """
-import unittest
 import doctest
-from zope.interface import Interface, implementer
+import unittest
+
+from zope.interface import Interface
+from zope.interface import implementer
+from zope.interface.verify import verifyClass
 from zope.publisher.browser import TestRequest
-from zope.schema import Choice, List
+from zope.schema import Choice
+from zope.schema import List
 
 from zope.formlib.interfaces import IInputWidget
-from zope.formlib.widgets import MultiCheckBoxWidget
 from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
-from zope.interface.verify import verifyClass
+from zope.formlib.widgets import MultiCheckBoxWidget
 
 
 class MultiCheckBoxWidgetTest(SimpleInputWidgetTest):

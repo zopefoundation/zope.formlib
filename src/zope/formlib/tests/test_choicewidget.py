@@ -14,16 +14,21 @@
 """Test the Choice display and edit widget (function).
 """
 import unittest
-from zope.component.testing import PlacelessSetup
-from zope.publisher.interfaces.browser import IBrowserRequest
-from zope.publisher.browser import TestRequest
-from zope.schema.interfaces import IChoice, IIterableVocabulary
-from zope.schema import Choice
 
 from zope.component import provideAdapter
-from zope.formlib.interfaces import IInputWidget, IDisplayWidget
-from zope.formlib.widgets import ChoiceDisplayWidget, ChoiceInputWidget
-from zope.formlib.widgets import ItemDisplayWidget, DropdownWidget
+from zope.component.testing import PlacelessSetup
+from zope.publisher.browser import TestRequest
+from zope.publisher.interfaces.browser import IBrowserRequest
+from zope.schema import Choice
+from zope.schema.interfaces import IChoice
+from zope.schema.interfaces import IIterableVocabulary
+
+from zope.formlib.interfaces import IDisplayWidget
+from zope.formlib.interfaces import IInputWidget
+from zope.formlib.widgets import ChoiceDisplayWidget
+from zope.formlib.widgets import ChoiceInputWidget
+from zope.formlib.widgets import DropdownWidget
+from zope.formlib.widgets import ItemDisplayWidget
 
 
 class ChoiceWidgetTest(PlacelessSetup, unittest.TestCase):
