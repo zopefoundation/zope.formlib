@@ -36,7 +36,7 @@ class ISampleObject(interfaces.IField):
 
 
 @implementer(ISampleObject)
-class SampleObject(object):
+class SampleObject:
     pass
 
 
@@ -61,7 +61,7 @@ def setUp(test):
                    zope.formlib)
 
 
-class Tests(object):
+class Tests:
     """Documents and tests widgets registration for specific field types.
 
     Standard Widgets

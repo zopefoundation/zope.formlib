@@ -171,6 +171,6 @@ class CheckBoxWidgetTest(SimpleInputWidgetTest):
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(CheckBoxWidgetTest),
+        unittest.defaultTestLoader.loadTestsFromTestCase(CheckBoxWidgetTest),
         doctest.DocTestSuite(),
     ))

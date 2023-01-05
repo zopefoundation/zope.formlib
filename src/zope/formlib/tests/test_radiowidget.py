@@ -37,23 +37,23 @@ class RadioWidgetTest(SimpleInputWidgetTest):
     _FieldFactory = Choice
     _WidgetFactory = RadioWidget
 
-    def setUpContent(self, desc=u'', title=u'Foo Title'):
+    def setUpContent(self, desc='', title='Foo Title'):
         class ITestContent(Interface):
             foo = self._FieldFactory(
                 title=title,
                 description=desc,
-                values=(u'foo', u'bar')
+                values=('foo', 'bar')
             )
 
         @implementer(ITestContent)
-        class TestObject(object):
+        class TestObject:
             pass
 
         self.content = TestObject()
         field = ITestContent['foo']
         field = field.bind(self.content)
         request = TestRequest(HTTP_ACCEPT_LANGUAGE='pl')
-        request.form['field.foo'] = u'Foo Value'
+        request.form['field.foo'] = 'Foo Value'
         self._widget = self._WidgetFactory(field, field.vocabulary, request)
 
     def testProperties(self):
@@ -100,21 +100,21 @@ class RadioWidgetTest(SimpleInputWidgetTest):
         self.assertTrue(not self._widget.hasInput())
         self._widget.request.form['field.foo-empty-marker'] = '1'
         self.assertTrue(self._widget.hasInput())
-        self._widget.request.form['field.foo'] = u'Foo Value'
+        self._widget.request.form['field.foo'] = 'Foo Value'
         self.assertTrue(self._widget.hasInput())
         del self._widget.request.form['field.foo-empty-marker']
         self.assertTrue(self._widget.hasInput())
 
     def testRenderEmptyMarker(self):
         self.verifyResult(self._widget(), ('field.foo-empty-marker',))
-        self._widget.setRenderedValue(u'bar')
+        self._widget.setRenderedValue('bar')
         self.verifyResult(self._widget(), ('field.foo-empty-marker',))
-        self._widget.setRenderedValue(u'not a legal value')
+        self._widget.setRenderedValue('not a legal value')
         self.verifyResult(self._widget(), ('field.foo-empty-marker',))
 
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(RadioWidgetTest),
+        unittest.defaultTestLoader.loadTestsFromTestCase(RadioWidgetTest),
         doctest.DocTestSuite(),
     ))

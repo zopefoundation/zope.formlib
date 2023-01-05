@@ -19,15 +19,9 @@ import datetime
 import os
 import re
 import sys
+from html import escape
 
 import pytz
-
-
-try:
-    from html import escape
-except ImportError:     # pragma: NO COVER
-    from cgi import escape
-
 import zope.browser.interfaces
 import zope.event
 import zope.i18n
@@ -52,8 +46,6 @@ from zope import component
 from zope import interface
 from zope import schema
 from zope.formlib import interfaces
-from zope.formlib._compat import basestring
-from zope.formlib._compat import unicode
 from zope.formlib.interfaces import IDisplayWidget
 from zope.formlib.interfaces import IInputWidget
 from zope.formlib.interfaces import InputErrors
@@ -79,7 +71,7 @@ def expandPrefix(prefix):
 
 
 @interface.implementer(interfaces.IFormField)
-class FormField(object):
+class FormField:
     """Implementation of `zope.formlib.interfaces.IFormField`. """
 
     def __init__(self, field, name=None, prefix='',
@@ -110,7 +102,7 @@ def _initkw(keep_readonly=(), omit_readonly=False, **defaults):
 
 
 @interface.implementer(interfaces.IFormFields)
-class FormFields(object):
+class FormFields:
     """Implementation of `zope.formlib.interfaces.IFormFields`."""
 
     def __init__(self, *args, **kw):
@@ -202,7 +194,7 @@ def fields(*args, **kw):
 
 
 @interface.implementer(interfaces.IWidgets)
-class Widgets(object):
+class Widgets:
     """Implementation of `zope.formlib.interfaces.IWidgets`."""
 
     def __init__(self, widgets, prefix_length=None, prefix=None):
@@ -214,14 +206,14 @@ class Widgets(object):
                 raise TypeError(
                     "One of 'prefix_length' and 'prefix' is required."
                 )
-            self.__Widgets_widgets_dict__ = dict(
-                [(w.name[prefix_length:], w) for (i, w) in widgets]
-            )
+            self.__Widgets_widgets_dict__ = {
+                w.name[prefix_length:]: w for (i, w) in widgets
+            }
         else:
             prefix = expandPrefix(prefix)
-            self.__Widgets_widgets_dict__ = dict(
-                [(_widgetKey(w, prefix), w) for (i, w) in widgets]
-            )
+            self.__Widgets_widgets_dict__ = {
+                _widgetKey(w, prefix): w for (i, w) in widgets
+            }
 
     def __iter__(self):
         return iter(self.__Widgets_widgets_list__)
@@ -604,7 +596,7 @@ def _callify(meth):
 
 
 @interface.implementer(interfaces.IAction)
-class Action(object):
+class Action:
     """See `zope.formlib.interfaces.IAction`"""
     _identifier = re.compile('[A-Za-z][a-zA-Z0-9_]*$')
 
@@ -638,7 +630,7 @@ class Action(object):
             if self._identifier.match(name):
                 name = name.lower()
             else:
-                if isinstance(name, unicode):
+                if isinstance(name, str):
                     name = name.encode("utf-8")
                 name = binascii.hexlify(name).decode()
         self.name = name
@@ -696,7 +688,7 @@ def render_submit_button(self):
             )
 
 
-class action(object):
+class action:
     """See `zope.formlib.interfaces.IFormAPI.action`"""
 
     def __init__(self, label, actions=None, **options):
@@ -716,11 +708,11 @@ class action(object):
 
 
 @interface.implementer(interfaces.IActions)
-class Actions(object):
+class Actions:
 
     def __init__(self, *actions):
         self.actions = actions
-        self.byname = dict([(a.__name__, a) for a in actions])
+        self.byname = {a.__name__: a for a in actions}
 
     def __iter__(self):
         return iter(self.actions)
@@ -777,7 +769,7 @@ def availableActions(form, actions):
 @interface.implementer(interfaces.IForm)
 class FormBase(zope.publisher.browser.BrowserPage):
 
-    label = u''
+    label = ''
 
     prefix = 'form'
 
@@ -913,7 +905,7 @@ class FormBase(zope.publisher.browser.BrowserPage):
 
     def error_views(self):
         for error in self.errors:
-            if isinstance(error, basestring):
+            if isinstance(error, str):
                 yield error
             else:
                 view = component.getMultiAdapter(
@@ -924,7 +916,7 @@ class FormBase(zope.publisher.browser.BrowserPage):
                     if isinstance(title, zope.i18n.Message):
                         title = zope.i18n.translate(
                             title, context=self.request)
-                    yield '%s: %s' % (title, view.snippet())
+                    yield '{}: {}'.format(title, view.snippet())
                 else:
                     yield view.snippet()
 
@@ -997,7 +989,7 @@ class AddFormBase(FormBase):
 
     def __init__(self, context, request):
         self.__parent__ = context
-        super(AddFormBase, self).__init__(context, request)
+        super().__init__(context, request)
 
     def setUpWidgets(self, ignore_request=False):
         self.widgets = setUpInputWidgets(
@@ -1031,7 +1023,7 @@ class AddFormBase(FormBase):
         if self._finished_add:
             self.request.response.redirect(self.nextURL())
             return ""
-        return super(AddFormBase, self).render()
+        return super().render()
 
     def nextURL(self):
         return self.context.nextURL()

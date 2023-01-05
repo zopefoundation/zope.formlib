@@ -58,5 +58,5 @@ class ChoiceWidgetTest(PlacelessSetup, unittest.TestCase):
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(ChoiceWidgetTest),
+        unittest.defaultTestLoader.loadTestsFromTestCase(ChoiceWidgetTest),
     ))

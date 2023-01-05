@@ -58,7 +58,7 @@ class ObjectWidget(BrowserWidget, InputWidget):
     _request_parsed = False
 
     def __init__(self, context, request, factory, **kw):
-        super(ObjectWidget, self).__init__(context, request)
+        super().__init__(context, request)
 
         # define view that renders the widget
         self.view = ObjectWidgetView(self, request)
@@ -77,7 +77,7 @@ class ObjectWidget(BrowserWidget, InputWidget):
         self._setUpEditWidgets()
 
     def setPrefix(self, prefix):
-        super(ObjectWidget, self).setPrefix(prefix)
+        super().setPrefix(prefix)
         self._setUpEditWidgets()
 
     def _setUpEditWidgets(self):

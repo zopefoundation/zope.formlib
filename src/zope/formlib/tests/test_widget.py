@@ -22,10 +22,8 @@ from zope.publisher.browser import TestRequest
 
 from zope.formlib.widget import Widget
 
-from .support import checker
 
-
-class TestContext(object):
+class TestContext:
     __name__ = 'Test'
     title = 'My Test Context'
     description = 'A test context.'
@@ -39,7 +37,7 @@ context = TestContext()
 request = TestRequest()
 
 
-class TestWidget(object):
+class TestWidget:
     """Tests basic widget characteristics.
 
     Widget implements IWidget:
@@ -68,13 +66,13 @@ class TestWidget(object):
     change them in specific contexts without needing to affect information
     stored in the data model (the schema):
 
-        >>> widget.label = u'My Alternate Label'
+        >>> widget.label = 'My Alternate Label'
         >>> widget.label
-        u'My Alternate Label'
+        'My Alternate Label'
 
-        >>> widget.hint = u'Better help would be good.'
+        >>> widget.hint = 'Better help would be good.'
         >>> widget.hint
-        u'Better help would be good.'
+        'Better help would be good.'
 
     In the last example, the widget name consists of a prefix, a dot, and the
     field name. You can change the prefix used by the widget as follows:
@@ -99,7 +97,7 @@ class TestWidget(object):
     """
 
 
-class TestInputWidget(object):
+class TestInputWidget:
     """Tests the input widget mixin.
 
     InputWidget is a simple mixin that provides default implementations for
@@ -155,7 +153,7 @@ class TestInputWidget(object):
     """
 
 
-class TestCustomWidgetFactory(object):
+class TestCustomWidgetFactory:
     """Tests the custom widget factory.
 
     Custom widgets can be created using a custom widget factory. Factories
@@ -181,8 +179,8 @@ class TestCustomWidgetFactory(object):
 
         >>> from zope.schema import TextLine, List
         >>> from zope.formlib.widgets import ListSequenceWidget
-        >>> value_type = TextLine(__name__=u'bar')
-        >>> field = List( __name__=u'foo', value_type=value_type )
+        >>> value_type = TextLine(__name__='bar')
+        >>> field = List( __name__='foo', value_type=value_type )
 
         >>> factory = CustomWidgetFactory(ListSequenceWidget,
         ...     subwidget=CustomWidgetFactory(FooWidget, bar='baz'))
@@ -205,7 +203,7 @@ class TestCustomWidgetFactory(object):
 
         >>> from zope.schema import Choice
         >>> from zope.formlib.widgets import RadioWidget
-        >>> field = Choice( __name__=u'foo', values=['1', '2', '3'] )
+        >>> field = Choice( __name__='foo', values=['1', '2', '3'] )
         >>> bound = field.bind(context)
 
         >>> factory = CustomWidgetFactory(RadioWidget,
@@ -224,6 +222,4 @@ class TestCustomWidgetFactory(object):
 
 
 def test_suite():
-    return TestSuite((
-        DocTestSuite(setUp=setUp, tearDown=tearDown, checker=checker),
-    ))
+    return TestSuite((DocTestSuite(setUp=setUp, tearDown=tearDown)))

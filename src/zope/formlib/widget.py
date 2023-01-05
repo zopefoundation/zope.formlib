@@ -27,7 +27,7 @@ from zope.schema.interfaces import IChoice
 from zope.schema.interfaces import ICollection
 from zope.schema.interfaces import ValidationError
 
-from zope.formlib._compat import toUnicode
+from zope.formlib._compat import toStr
 from zope.formlib.interfaces import ConversionError
 from zope.formlib.interfaces import IBrowserWidget
 from zope.formlib.interfaces import InputErrors
@@ -48,7 +48,7 @@ if quoteattr("\r") != '"&13;"':
 
 
 @implementer(IWidget)
-class Widget(object):
+class Widget:
     """Mixin class providing functionality common across widget types."""
 
     _prefix = 'field.'
@@ -106,7 +106,7 @@ class InputWidget(Widget):
 
 
 @implementer(IWidgetFactory)
-class CustomWidgetFactory(object):
+class CustomWidgetFactory:
     """Custom Widget Factory."""
 
     def __init__(self, widget_factory, *args, **kw):
@@ -199,7 +199,7 @@ class BrowserWidget(Widget, BrowserView):
     _error = None
 
     def __init__(self, context, request):
-        super(BrowserWidget, self).__init__(context, request)
+        super().__init__(context, request)
         self.required = context.required
 
     def error(self):
@@ -223,13 +223,13 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
 
         >>> from zope.publisher.browser import TestRequest
         >>> request = TestRequest(form={
-        ...     'field.foo': u'hello\\r\\nworld',
-        ...     'baz.foo': u'bye world'})
+        ...     'field.foo': 'hello\\r\\nworld',
+        ...     'baz.foo': 'bye world'})
 
     Like all widgets, simple input widgets are a view to a field context:
 
         >>> from zope.schema import Field
-        >>> field = Field(__name__='foo', title=u'Foo')
+        >>> field = Field(__name__='foo', title='Foo')
         >>> widget = SimpleInputWidget(field, request)
 
     Widgets are named using their field's name:
@@ -240,7 +240,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
     The default implementation for the widget label is to use the field title:
 
         >>> widget.label
-        u'Foo'
+        'Foo'
 
     According the request, the widget has input because 'field.foo' is
     present:
@@ -248,7 +248,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
         >>> widget.hasInput()
         True
         >>> widget.getInputValue()
-        u'hello\\r\\nworld'
+        'hello\\r\\nworld'
 
     Widgets maintain an error state, which is used to communicate invalid
     input or other errors:
@@ -264,7 +264,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
 
         >>> widget.setRenderedValue('Hey\\nfolks')
         >>> widget.getInputValue()
-        u'hello\\r\\nworld'
+        'hello\\r\\nworld'
         >>> widget._error is None
         True
         >>> widget.error()
@@ -291,14 +291,14 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
     form input:
 
         >>> request.form[widget.name]
-        u'bye world'
+        'bye world'
 
     This input violates the new field constraint and therefore causes an
     error when `getInputValue` is called:
 
         >>> widget.getInputValue() #doctest: +IGNORE_EXCEPTION_DETAIL
         Traceback (most recent call last):
-        WidgetInputError: ('foo', u'Foo', ConstraintNotSatisfied(u'bye world'))
+        WidgetInputError: ('foo', 'Foo', ConstraintNotSatisfied('bye world'))
 
     Simple input widgets require that input be available in the form request.
     If input is not present, a ``MissingInputError`` is raised:
@@ -306,7 +306,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
         >>> del request.form[widget.name]
         >>> widget.getInputValue() #doctest: +IGNORE_EXCEPTION_DETAIL
         Traceback (most recent call last):
-        MissingInputError: ('baz.foo', u'Foo', None)
+        MissingInputError: ('baz.foo', 'Foo', None)
 
     A ``MissingInputError`` indicates that input is missing from the form
     altogether. It does not indicate that the user failed to provide a value
@@ -328,7 +328,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
         >>> field.required = True
         >>> widget.getInputValue() #doctest: +IGNORE_EXCEPTION_DETAIL
         Traceback (most recent call last):
-        WidgetInputError: ('foo', u'Foo', RequiredMissing('foo'))
+        WidgetInputError: ('foo', 'Foo', RequiredMissing('foo'))
 
     However, if the field is not required, the empty string will be converted
     by the widget into the field's `missing_value` and read as a legal field
@@ -343,7 +343,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
     floating point.
 
         >>> from zope.schema import Float
-        >>> field = Float(__name__='price', title=u'Price')
+        >>> field = Float(__name__='price', title='Price')
 
         >>> from zope.formlib.interfaces import ConversionError
         >>> class FloatWidget(SimpleInputWidget):
@@ -357,14 +357,14 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
         ...         value = super(FloatWidget, self)._toFormValue(value)
         ...         return '%.2f' % value
 
-        >>> request = TestRequest(form={'field.price': u'32.0'})
+        >>> request = TestRequest(form={'field.price': '32.0'})
         >>> widget = FloatWidget(field, request)
         >>> widget.getInputValue()
         32.0
         >>> widget()
-        u'<input class="textType" id="field.price" name="field.price" required="True" type="text" value="32.00"  />'
+        '<input class="textType" id="field.price" name="field.price" required="True" type="text" value="32.00"  />'
 
-        >>> request = TestRequest(form={'field.price': u'<p>foo</p>'})
+        >>> request = TestRequest(form={'field.price': '<p>foo</p>'})
         >>> widget = FloatWidget(field, request)
         >>> try:
         ...     widget.getInputValue()
@@ -372,17 +372,17 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
         ...     print(error.doc())
         Invalid floating point data
         >>> widget()
-        u'<input class="textType" id="field.price" name="field.price" required="True" type="text" value="&lt;p&gt;foo&lt;/p&gt;"  />'
+        '<input class="textType" id="field.price" name="field.price" required="True" type="text" value="&lt;p&gt;foo&lt;/p&gt;"  />'
 
 
     >>> tearDown()
     """  # noqa: E501 line too long
 
-    tag = u'input'
-    type = u'text'
-    cssClass = u''
-    extra = u''
-    _missing = u''
+    tag = 'input'
+    type = 'text'
+    cssClass = ''
+    extra = ''
+    _missing = ''
 
     def hasInput(self):
         """See IWidget.hasInput.
@@ -543,7 +543,7 @@ class SimpleInputWidget(BrowserWidget, InputWidget):
 class DisplayWidget(BrowserWidget):
 
     def __init__(self, context, request):
-        super(DisplayWidget, self).__init__(context, request)
+        super().__init__(context, request)
         self.required = False
 
     def __call__(self):
@@ -566,7 +566,7 @@ class UnicodeDisplayWidget(DisplayWidget):
             value = self.context.default
         if value == self.context.missing_value:
             return ""
-        return escape(toUnicode(value))
+        return escape(toStr(value))
 
 
 def renderTag(tag, **kw):
@@ -574,30 +574,30 @@ def renderTag(tag, **kw):
     attr_list = []
 
     # special case handling for cssClass
-    cssClass = kw.pop('cssClass', u'')
+    cssClass = kw.pop('cssClass', '')
 
     # If the 'type' attribute is given, append this plus 'Type' as a
     # css class. This allows us to do subselector stuff in css without
     # necessarily having a browser that supports css subselectors.
     # This is important if you want to style radio inputs differently than
     # text inputs.
-    cssWidgetType = kw.get('type', u'')
+    cssWidgetType = kw.get('type', '')
     if cssWidgetType:
-        cssWidgetType += u'Type'
+        cssWidgetType += 'Type'
     names = [c for c in (cssClass, cssWidgetType) if c]
     if names:
-        attr_list.append(u'class="%s"' % u' '.join(names))
+        attr_list.append('class="%s"' % ' '.join(names))
 
-    style = kw.pop('style', u'')
+    style = kw.pop('style', '')
     if style:
-        attr_list.append(u'style=%s' % quoteattr(style))
+        attr_list.append('style=%s' % quoteattr(style))
 
     # special case handling for extra 'raw' code
     if 'extra' in kw:
         # could be empty string but we don't care
-        extra = u" " + kw.pop('extra')
+        extra = " " + kw.pop('extra')
     else:
-        extra = u''
+        extra = ''
 
     # handle other attributes
     if kw:
@@ -612,20 +612,20 @@ def renderTag(tag, **kw):
                     % key,
                     DeprecationWarning, stacklevel=2)
                 value = key
-            attr_list.append(u'%s=%s' % (key, quoteattr(toUnicode(value))))
+            attr_list.append('{}={}'.format(key, quoteattr(toStr(value))))
 
     if attr_list:
-        attr_str = u" ".join(attr_list)
-        return u"<%s %s%s" % (tag, attr_str, extra)
+        attr_str = " ".join(attr_list)
+        return "<{} {}{}".format(tag, attr_str, extra)
     else:
-        return u"<%s%s" % (tag, extra)
+        return "<{}{}".format(tag, extra)
 
 
 def renderElement(tag, **kw):
     contents = kw.pop('contents', None)
     if contents is not None:
         # Do not quote contents, since it often contains generated HTML.
-        return u"%s>%s</%s>" % (renderTag(tag, **kw), contents, tag)
+        return "{}>{}</{}>".format(renderTag(tag, **kw), contents, tag)
     else:
         return renderTag(tag, **kw) + " />"
 

@@ -13,13 +13,11 @@
 ##############################################################################
 """Source Widget Tests
 """
-from zope.component import testing
+import doctest
 
-from .support import checker
+from zope.component import testing
 
 
 def test_suite():
-    import doctest
     return doctest.DocFileSuite(
-        '../source.rst',
-        setUp=testing.setUp, tearDown=testing.tearDown, checker=checker)
+        '../source.rst', setUp=testing.setUp, tearDown=testing.tearDown)

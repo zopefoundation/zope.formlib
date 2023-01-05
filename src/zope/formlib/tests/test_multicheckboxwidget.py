@@ -38,23 +38,23 @@ class MultiCheckBoxWidgetTest(SimpleInputWidgetTest):
     _WidgetFactory = MultiCheckBoxWidget
     _FieldFactory = List
 
-    def setUpContent(self, desc=u'', title=u'Foo Title'):
+    def setUpContent(self, desc='', title='Foo Title'):
         class ITestContent(Interface):
             foo = self._FieldFactory(
                 title=title,
                 description=desc,
-                value_type=Choice(values=[u'foo', u'bar'])
+                value_type=Choice(values=['foo', 'bar'])
             )
 
         @implementer(ITestContent)
-        class TestObject(object):
+        class TestObject:
             pass
 
         self.content = TestObject()
         field = ITestContent['foo']
         field = field.bind(self.content)
         request = TestRequest(HTTP_ACCEPT_LANGUAGE='pl',
-                              form={'field.foo': u'bar'})
+                              form={'field.foo': 'bar'})
         self._widget = self._WidgetFactory(field, field.value_type.vocabulary,
                                            request)
 
@@ -115,6 +115,7 @@ class MultiCheckBoxWidgetTest(SimpleInputWidgetTest):
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(MultiCheckBoxWidgetTest),
-        doctest.DocTestSuite(),
+        unittest.defaultTestLoader.loadTestsFromTestCase(
+            MultiCheckBoxWidgetTest),
+        doctest.DocTestSuite()
     ))

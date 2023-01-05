@@ -13,12 +13,7 @@
 ##############################################################################
 """Form-related exception views
 """
-__docformat__ = 'restructuredtext'
-
-try:
-    from html import escape
-except ImportError:     # pragma: NO COVER
-    from cgi import escape
+from html import escape
 
 from zope.i18n import translate
 from zope.interface import implementer
@@ -28,7 +23,7 @@ from zope.formlib.interfaces import IWidgetInputErrorView
 
 
 @implementer(IWidgetInputErrorView)
-class WidgetInputErrorView(object):
+class WidgetInputErrorView:
     """Display an input error as a snippet of text."""
 
     __used_for__ = IWidgetInputError
@@ -46,7 +41,7 @@ class WidgetInputErrorView(object):
         >>> err = WidgetInputError("foo", "Foo", TooSmallError())
         >>> view = WidgetInputErrorView(err, None)
         >>> view.snippet()
-        u'<span class="error">Foo input &lt; 1</span>'
+        '<span class="error">Foo input &lt; 1</span>'
 
         The only method that IWidgetInputError promises to implement is
         `doc()`. Therefore, other implementations of the interface should also
@@ -56,8 +51,8 @@ class WidgetInputErrorView(object):
         >>> err = ConversionError('Could not convert to float.')
         >>> view = WidgetInputErrorView(err, None)
         >>> view.snippet()
-        u'<span class="error">Could not convert to float.</span>'
+        '<span class="error">Could not convert to float.</span>'
         """
         message = self.context.doc()
         translated = translate(message, context=self.request, default=message)
-        return u'<span class="error">%s</span>' % escape(translated)
+        return '<span class="error">%s</span>' % escape(translated)

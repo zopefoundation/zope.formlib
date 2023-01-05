@@ -23,7 +23,7 @@ class FormBaseTests(unittest.TestCase):
         return FormBase
 
     def _makeContext(self):
-        class _Context(object):
+        class _Context:
             pass
         context = _Context()
         return context
@@ -51,5 +51,5 @@ class FormBaseTests(unittest.TestCase):
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(FormBaseTests),
+        unittest.defaultTestLoader.loadTestsFromTestCase(FormBaseTests),
     ))

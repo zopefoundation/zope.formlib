@@ -52,33 +52,33 @@ vocab = SimpleVocabulary(
 
 class ICollector(Interface):
     choice = Choice(
-        title=u"Number",
-        description=u"The Number",
+        title="Number",
+        description="The Number",
         # we want to be able to distinguish between tokens and values
         vocabulary=vocab,
         required=True)
 
     numbers = List(
-        title=u"Numbers",
-        description=u"The Numbers",
+        title="Numbers",
+        description="The Numbers",
         value_type=choice,
         required=False)
 
     letters = Set(
-        title=u"Letters",
-        description=u"The Letters",
+        title="Letters",
+        description="The Letters",
         value_type=choice,
         required=False)
 
     frozenLetters = FrozenSet(
-        title=u"Frozen Letters",
-        description=u"The Frozen Letters",
+        title="Frozen Letters",
+        description="The Frozen Letters",
         value_type=choice,
         required=False)
 
 
 @implementer(ICollector)
-class Collector(object):
+class Collector:
 
     def __init__(self, numbers=None):
         self.numbers = numbers or []
@@ -162,14 +162,14 @@ containerVocab = SimpleVocabulary(
 
 class ITestContainer(Interface):
     container = Choice(
-        title=u"Container",
-        description=u"The container",
+        title="Container",
+        description="The container",
         vocabulary=containerVocab,
         required=True)
 
 
 @implementer(ITestContainer)
-class TestContainer(object):
+class TestContainer:
 
     def __init__(self, container=None):
         self.container = container
@@ -211,7 +211,7 @@ class ItemsMultiDisplayWidgetTest(ItemsWidgetBaseTest):
         widget = self._makeWidget()
         self.assertEqual(
             widget.renderItems(['one', 'two']),
-            [u'<li>One</li>', u'<li>Two</li>'])
+            ['<li>One</li>', '<li>Two</li>'])
         self.assertRaises(LookupError, widget.renderItems, 'one')
         self.assertRaises(TypeError, widget.renderItems, 1)
 
@@ -267,14 +267,14 @@ class ItemsEditWidgetBaseTest(ItemsWidgetBaseTest):
         widget = self._makeWidget()
         self.assertEqual(
             widget.renderItemsWithValues(['one', 'two']),
-            [u'<option selected="selected" value="token1">One</option>',
-             u'<option selected="selected" value="token2">Two</option>',
-             u'<option value="token3">Three</option>'])
+            ['<option selected="selected" value="token1">One</option>',
+             '<option selected="selected" value="token2">Two</option>',
+             '<option value="token3">Three</option>'])
         self.assertEqual(
             widget.renderItemsWithValues([]),
-            [u'<option value="token1">One</option>',
-             u'<option value="token2">Two</option>',
-             u'<option value="token3">Three</option>'])
+            ['<option value="token1">One</option>',
+             '<option value="token2">Two</option>',
+             '<option value="token3">Three</option>'])
 
     def test_hidden(self):
         widget = self._makeWidget(form={'field.choice': 'token2'})
@@ -324,19 +324,19 @@ class SelectWidgetTest(ItemsEditWidgetBaseTest):
         widget.setPrefix('field.')
         self.assertEqual(
             widget.renderItems('one'),
-            [u'<option selected="selected" value="token1">One</option>',
-             u'<option value="token2">Two</option>',
-             u'<option value="token3">Three</option>'])
+            ['<option selected="selected" value="token1">One</option>',
+             '<option value="token2">Two</option>',
+             '<option value="token3">Three</option>'])
         self.assertEqual(
             widget.renderItems('two'),
-            [u'<option value="token1">One</option>',
-             u'<option selected="selected" value="token2">Two</option>',
-             u'<option value="token3">Three</option>'])
+            ['<option value="token1">One</option>',
+             '<option selected="selected" value="token2">Two</option>',
+             '<option value="token3">Three</option>'])
         self.assertEqual(
             widget.renderItems(None),
-            [u'<option value="token1">One</option>',
-             u'<option value="token2">Two</option>',
-             u'<option value="token3">Three</option>'])
+            ['<option value="token1">One</option>',
+             '<option value="token2">Two</option>',
+             '<option value="token3">Three</option>'])
 
     def test_renderItems_notRequired(self):
         widget = self._makeWidget()
@@ -344,10 +344,10 @@ class SelectWidgetTest(ItemsEditWidgetBaseTest):
         widget.context.required = False
         self.assertEqual(
             widget.renderItems([]),
-            [u'<option value="">(nothing selected)</option>',
-             u'<option value="token1">One</option>',
-             u'<option value="token2">Two</option>',
-             u'<option value="token3">Three</option>'])
+            ['<option value="">(nothing selected)</option>',
+             '<option value="token1">One</option>',
+             '<option value="token2">Two</option>',
+             '<option value="token3">Three</option>'])
 
     def test_renderItems_firstItem(self):
         widget = self._makeWidget()
@@ -356,9 +356,9 @@ class SelectWidgetTest(ItemsEditWidgetBaseTest):
         self.assertEqual(
             widget.renderItems(widget._toFormValue(
                 widget.context.missing_value)),
-            [u'<option value="token1">One</option>',
-             u'<option value="token2">Two</option>',
-             u'<option value="token3">Three</option>'])
+            ['<option value="token1">One</option>',
+             '<option value="token2">Two</option>',
+             '<option value="token3">Three</option>'])
 
 
 class DropdownWidgetTest(SelectWidgetTest):
@@ -373,20 +373,20 @@ class DropdownWidgetTest(SelectWidgetTest):
         self.assertEqual(
             widget.renderItems(widget._toFormValue(
                 widget.context.missing_value)),
-            [u'<option selected="selected" value="">'
-             u'(nothing selected)</option>',
-             u'<option value="token1">One</option>',
-             u'<option value="token2">Two</option>',
-             u'<option value="token3">Three</option>'])
+            ['<option selected="selected" value="">'
+             '(nothing selected)</option>',
+             '<option value="token1">One</option>',
+             '<option value="token2">Two</option>',
+             '<option value="token3">Three</option>'])
         try:
             # test BBB starting with 3.6.0
             zope.formlib.itemswidgets.EXPLICIT_EMPTY_SELECTION = False
             self.assertEqual(
                 widget.renderItems(widget._toFormValue(
                     widget.context.missing_value)),
-                [u'<option value="token1">One</option>',
-                 u'<option value="token2">Two</option>',
-                 u'<option value="token3">Three</option>'])
+                ['<option value="token1">One</option>',
+                 '<option value="token2">Two</option>',
+                 '<option value="token3">Three</option>'])
         finally:
             zope.formlib.itemswidgets.EXPLICIT_EMPTY_SELECTION = True
 
@@ -509,14 +509,14 @@ class ItemsMultiEditWidgetBaseTest(ItemsEditWidgetBaseTest):
         widget = self._makeWidget()
         self.assertEqual(
             widget.renderItemsWithValues(['one', 'two']),
-            [u'<option selected="selected" value="token1">One</option>',
-             u'<option selected="selected" value="token2">Two</option>',
-             u'<option value="token3">Three</option>'])
+            ['<option selected="selected" value="token1">One</option>',
+             '<option selected="selected" value="token2">Two</option>',
+             '<option value="token3">Three</option>'])
         self.assertEqual(
             widget.renderItemsWithValues([]),
-            [u'<option value="token1">One</option>',
-             u'<option value="token2">Two</option>',
-             u'<option value="token3">Three</option>'])
+            ['<option value="token1">One</option>',
+             '<option value="token2">Two</option>',
+             '<option value="token3">Three</option>'])
 
     def test_hidden(self):
         widget = self._makeWidget(
@@ -536,10 +536,10 @@ class ItemsMultiEditWidgetBaseTest(ItemsEditWidgetBaseTest):
         self._field = ICollector.get('letters')
         widget = self._makeWidget(form={'field.letters-empty-marker': '1'})
         widget.setPrefix('field.')
-        self.assertEqual(widget.getInputValue(), set([]))
+        self.assertEqual(widget.getInputValue(), set())
         widget = self._makeWidget(form={'field.letters': ['token2', 'token3']})
         widget.setPrefix('field.')
-        self.assertEqual(widget.getInputValue(), set(['two', 'three']))
+        self.assertEqual(widget.getInputValue(), {'two', 'three'})
 
         self._field = ICollector.get('frozenLetters')
         widget = self._makeWidget(form={'field.frozenLetters-empty-marker':
@@ -575,8 +575,7 @@ class OrderedMultiSelectWidgetTest(ItemsMultiEditWidgetBaseTest):
         selected = sorted([select['text'] for select in widget.selected()])
         self.assertEqual(selected, ['One', 'Two'])
         widget._data = ['one']
-        selected = [select['text'] for select in widget.selected()]
-        selected.sort()
+        selected = sorted([select['text'] for select in widget.selected()])
         self.assertEqual(selected, ['One'])
 
 
@@ -629,17 +628,30 @@ class MultiCheckBoxWidgetTest(ItemsMultiEditWidgetBaseTest):
 
 
 def test_suite():
-    suite = unittest.makeSuite(ItemDisplayWidgetTest)
-    suite.addTest(unittest.makeSuite(ContainerItemDisplayWidgetTest))
-    suite.addTest(unittest.makeSuite(ItemsMultiDisplayWidgetTest))
-    suite.addTest(unittest.makeSuite(ListDisplayWidgetTest))
-    suite.addTest(unittest.makeSuite(SetDisplayWidgetTest))
-    suite.addTest(unittest.makeSuite(ItemsEditWidgetBaseTest))
-    suite.addTest(unittest.makeSuite(SelectWidgetTest))
-    suite.addTest(unittest.makeSuite(DropdownWidgetTest))
-    suite.addTest(unittest.makeSuite(RadioWidgetTest))
-    suite.addTest(unittest.makeSuite(ItemsMultiEditWidgetBaseTest))
-    suite.addTest(unittest.makeSuite(MultiSelectWidgetTest))
-    suite.addTest(unittest.makeSuite(OrderedMultiSelectWidgetTest))
-    suite.addTest(unittest.makeSuite(MultiCheckBoxWidgetTest))
+    suite = unittest.defaultTestLoader.loadTestsFromTestCase(
+        ItemDisplayWidgetTest)
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(
+        ContainerItemDisplayWidgetTest))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(
+        ItemsMultiDisplayWidgetTest))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(
+        ListDisplayWidgetTest))
+    suite.addTest(
+        unittest.defaultTestLoader.loadTestsFromTestCase(SetDisplayWidgetTest))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(
+        ItemsEditWidgetBaseTest))
+    suite.addTest(
+        unittest.defaultTestLoader.loadTestsFromTestCase(SelectWidgetTest))
+    suite.addTest(
+        unittest.defaultTestLoader.loadTestsFromTestCase(DropdownWidgetTest))
+    suite.addTest(
+        unittest.defaultTestLoader.loadTestsFromTestCase(RadioWidgetTest))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(
+        ItemsMultiEditWidgetBaseTest))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(
+        MultiSelectWidgetTest))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(
+        OrderedMultiSelectWidgetTest))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(
+        MultiCheckBoxWidgetTest))
     return suite

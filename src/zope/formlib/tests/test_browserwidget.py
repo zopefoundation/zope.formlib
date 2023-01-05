@@ -37,7 +37,7 @@ class BrowserWidgetTest(PlacelessSetup,
     _FieldFactory = Text
     _WidgetFactory = None
 
-    def setUpContent(self, desc=u'', title=u'Foo Title'):
+    def setUpContent(self, desc='', title='Foo Title'):
         field = self._FieldFactory(
             __name__='foo', title=title, description=desc)
 
@@ -51,11 +51,11 @@ class BrowserWidgetTest(PlacelessSetup,
         field = ITestContent['foo']
         field = field.bind(self.content)
         request = TestRequest(HTTP_ACCEPT_LANGUAGE='ru')
-        request.form['field.foo'] = u'Foo Value'
+        request.form['field.foo'] = 'Foo Value'
         self._widget = self._WidgetFactory(field, request)
 
     def setUp(self):
-        super(BrowserWidgetTest, self).setUp()
+        super().setUp()
         self.setUpContent()
 
 
@@ -98,18 +98,18 @@ class SimpleInputWidgetTest(BrowserWidgetTest):
         self.verifyResult(self._widget.hidden(), check_list)
 
     def testLabel(self):
-        self.setUpContent(title=u'Foo:')
-        self.assertEqual(self._widget.label, u'Foo:')
+        self.setUpContent(title='Foo:')
+        self.assertEqual(self._widget.label, 'Foo:')
 
     def testHint(self):
-        self.setUpContent(desc=u'Foo Description')
-        self.assertEqual(self._widget.hint, u'Foo Description')
+        self.setUpContent(desc='Foo Description')
+        self.assertEqual(self._widget.hint, 'Foo Description')
 
 
 class TestWidget(SimpleInputWidget):
 
     def _toFieldValue(self, v):
-        if v == u'barf!':
+        if v == 'barf!':
             raise ConversionError('ralph')
         return v or None
 
@@ -122,12 +122,12 @@ class Test(BrowserWidgetTest):
 
         class W(SimpleInputWidget):
             def _toFieldValue(self, v):
-                return u'X' + (v or '')
+                return 'X' + (v or '')
 
             def _toFormValue(self, v):
                 return v and v[1:] or ''
 
-        field = Text(__name__='foo', title=u"Foo Title")
+        field = Text(__name__='foo', title="Foo Title")
         request = TestRequest()
 
         w = W(field, request)
@@ -139,12 +139,12 @@ class Test(BrowserWidgetTest):
         self.assertEqual(w._getFormValue(), 'foo')
 
     def test_hasValidInput(self):
-        self.assertEqual(self._widget.getInputValue(), u'Foo Value')
+        self.assertEqual(self._widget.getInputValue(), 'Foo Value')
 
         self._widget.request.form['field.foo'] = (1, 2)
         self.assertFalse(self._widget.hasValidInput())
 
-        self._widget.request.form['field.foo'] = u'barf!'
+        self._widget.request.form['field.foo'] = 'barf!'
         self.assertFalse(self._widget.hasValidInput())
 
         del self._widget.request.form['field.foo']
@@ -152,16 +152,16 @@ class Test(BrowserWidgetTest):
         self.assertFalse(self._widget.hasValidInput())
 
         self._widget.context.required = False
-        self._widget.request.form['field.foo'] = u''
+        self._widget.request.form['field.foo'] = ''
         self.assertTrue(self._widget.hasValidInput())
 
     def test_getInputValue(self):
-        self.assertEqual(self._widget.getInputValue(), u'Foo Value')
+        self.assertEqual(self._widget.getInputValue(), 'Foo Value')
 
         self._widget.request.form['field.foo'] = (1, 2)
         self.assertRaises(WidgetInputError, self._widget.getInputValue)
 
-        self._widget.request.form['field.foo'] = u'barf!'
+        self._widget.request.form['field.foo'] = 'barf!'
         self.assertRaises(ConversionError, self._widget.getInputValue)
 
         del self._widget.request.form['field.foo']
@@ -169,7 +169,7 @@ class Test(BrowserWidgetTest):
         self.assertRaises(MissingInputError, self._widget.getInputValue)
 
         self._widget.context.required = False
-        self._widget.request.form['field.foo'] = u''
+        self._widget.request.form['field.foo'] = ''
         self.assertEqual(self._widget.getInputValue(), None)
 
     def test_applyChanges(self):
@@ -179,20 +179,20 @@ class Test(BrowserWidgetTest):
         self.assertTrue(self._widget.hasInput())
         del self._widget.request.form['field.foo']
         self.assertFalse(self._widget.hasInput())
-        self._widget.request.form['field.foo'] = u'foo'
+        self._widget.request.form['field.foo'] = 'foo'
         self.assertTrue(self._widget.hasInput())
         # widget has input, even if input is an empty string
-        self._widget.request.form['field.foo'] = u''
+        self._widget.request.form['field.foo'] = ''
         self.assertTrue(self._widget.hasInput())
 
     def test_getFormValue_w_default(self):
-        field = Text(__name__='foo', title=u"Foo Title", default=u"def")
+        field = Text(__name__='foo', title="Foo Title", default="def")
         request = TestRequest()
         widget = self._WidgetFactory(field, request)
-        self.assertEqual(widget._getFormValue(), u'def')
+        self.assertEqual(widget._getFormValue(), 'def')
 
     def test_getFormValue_preserves_errors(self):
-        field = Int(__name__='foo', title=u"Foo Title", default=42)
+        field = Int(__name__='foo', title="Foo Title", default=42)
         request = TestRequest()
         widget = self._WidgetFactory(field, request)
 
@@ -200,7 +200,7 @@ class Test(BrowserWidgetTest):
         widget._error = 'my error'
 
         # _getFormValue shouldn't replace it.
-        request.form['field.foo'] = u'barf!'
+        request.form['field.foo'] = 'barf!'
         widget._getFormValue()
         self.assertEqual(widget._error, 'my error')
 
@@ -212,6 +212,6 @@ class Test(BrowserWidgetTest):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Test))
-    suite.addTest(DocTestSuite("zope.formlib.widget", checker=support.checker))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(Test))
+    suite.addTest(DocTestSuite("zope.formlib.widget"))
     return suite

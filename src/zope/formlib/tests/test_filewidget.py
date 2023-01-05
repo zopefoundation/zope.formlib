@@ -15,10 +15,10 @@
 """
 import doctest
 import unittest
+from io import StringIO
 
 from zope.interface.verify import verifyClass
 
-from zope.formlib._compat import StringIO
 from zope.formlib.interfaces import IInputWidget
 from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
 from zope.formlib.widgets import FileWidget
@@ -34,7 +34,7 @@ class FileWidgetTest(SimpleInputWidgetTest):
     _WidgetFactory = FileWidget
 
     def setUp(self):
-        super(FileWidgetTest, self).setUp()
+        super().setUp()
         file = StringIO('Foo Value')
         file.filename = 'test.txt'
         self._widget.request.form['field.foo'] = file
@@ -71,6 +71,6 @@ class FileWidgetTest(SimpleInputWidgetTest):
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(FileWidgetTest),
+        unittest.defaultTestLoader.loadTestsFromTestCase(FileWidgetTest),
         doctest.DocTestSuite(),
     ))

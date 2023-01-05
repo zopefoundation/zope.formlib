@@ -33,19 +33,19 @@ class IRadioTest(Interface):
 
     s3 = Choice(
         required=False,
-        values=(u'Bob', u'is', u'Your', u'Uncle'))
+        values=('Bob', 'is', 'Your', 'Uncle'))
 
     s4 = Choice(
         required=True,
-        values=(u'1', u'2', u'3'))
+        values=('1', '2', '3'))
 
 
 @implementer(IRadioTest)
-class RadioTest(object):
+class RadioTest:
 
     def __init__(self):
         self.s3 = None
-        self.s4 = u'1'
+        self.s4 = '1'
 
 
 class Form(form.EditForm):
@@ -105,9 +105,9 @@ class Test(FunctionalWidgetTestCase):
             html))
 
         request = TestRequest()
-        request.form['form.s3'] = u'Bob'
-        request.form['form.s4'] = u'2'
-        request.form['form.actions.apply'] = u''
+        request.form['form.s3'] = 'Bob'
+        request.form['form.s4'] = '2'
+        request.form['form.actions.apply'] = ''
 
         # display edit view
         html = Form(foo, request)()
@@ -128,8 +128,8 @@ class Test(FunctionalWidgetTestCase):
             html))
 
         request = TestRequest()
-        request.form['form.s3'] = u''
-        request.form['form.actions.apply'] = u''
+        request.form['form.s3'] = ''
+        request.form['form.actions.apply'] = ''
 
         html = Form(foo, request)()
         self.assertTrue(patternExists(
@@ -149,5 +149,5 @@ class Test(FunctionalWidgetTestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Test))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(Test))
     return suite

@@ -13,6 +13,7 @@
 ##############################################################################
 """Source widgets support
 """
+import base64
 import xml.sax.saxutils
 
 import zope.browser.interfaces
@@ -28,8 +29,6 @@ from zope.schema.interfaces import ValidationError
 import zope.formlib.interfaces
 import zope.formlib.itemswidgets
 import zope.formlib.widget
-from zope.formlib._compat import imap
-from zope.formlib._compat import safeBase64Encode
 from zope.formlib.i18n import _
 from zope.formlib.interfaces import IDisplayWidget
 from zope.formlib.interfaces import IInputWidget
@@ -48,11 +47,16 @@ from zope.formlib.widgets import RadioWidget
 from zope.formlib.widgets import SelectWidget
 
 
+def safeBase64Encode(obj):
+    return base64.b64encode(
+        obj.encode()).strip().replace(b'=', b'_').decode()
+
+
 @implementer(IDisplayWidget)
 class SourceDisplayWidget(DisplayWidget):
 
     def __init__(self, field, source, request):
-        super(SourceDisplayWidget, self).__init__(field, request)
+        super().__init__(field, request)
         self.source = source
 
     required = False
@@ -129,7 +133,7 @@ class SourceInputWidget(InputWidget):
     _error = None
 
     def __init__(self, field, source, request):
-        super(SourceInputWidget, self).__init__(field, request)
+        super().__init__(field, request)
         self.source = source
         self.terms = getMultiAdapter((source, self.request),
                                      zope.browser.interfaces.ITerms)
@@ -207,13 +211,13 @@ class SourceInputWidget(InputWidget):
         if value == field.missing_value:
             result.append('  <div class="row">')
             result.append('    <div class="label">')
-            result.append(u'     ' +
+            result.append('     ' +
                           self._translate(_("SourceDisplayWidget-label",
                                             default="Selected"))
                           )
             result.append('    </div>')
             result.append('    <div class="field">')
-            result.append(u'     ' +
+            result.append('     ' +
                           self._translate(_("SourceDisplayWidget-missing",
                                             default="Nothing"))
                           )
@@ -223,20 +227,20 @@ class SourceInputWidget(InputWidget):
             try:
                 term = self.terms.getTerm(value)
             except LookupError:
-                result.append(u'  ' +
+                result.append('  ' +
                               self._translate(_("SourceDisplayWidget-missing",
                                                 default="Nothing Valid"))
                               )
             else:
                 result.append('  <div class="row">')
                 result.append('    <div class="label">')
-                result.append(u'     ' +
+                result.append('     ' +
                               self._translate(_("SourceDisplayWidget-label",
                                                 default="Selected"))
                               )
                 result.append('    </div>')
                 result.append('    <div class="field">')
-                result.append(u'     ' + self.renderTermForDisplay(term))
+                result.append('     ' + self.renderTermForDisplay(term))
                 result.append('    </div>')
                 result.append('  </div>')
                 result.append(
@@ -483,7 +487,7 @@ class SourceListInputWidget(SourceInputWidget):
             '</select>\n'
             '<input type="submit" name="%s.apply" value="%s" />'
             % (name,
-               '\n'.join([('<option value="%s">%s</option>' % (token, title))
+               '\n'.join([(f'<option value="{token}">{title}</option>')
                           for (title, token) in terms]),
                name,
                apply)
@@ -519,7 +523,7 @@ class SourceListInputWidget(SourceInputWidget):
 
 @implementer(IVocabularyTokenized)
 @adapter(IIterableSource)
-class IterableSourceVocabulary(object):
+class IterableSourceVocabulary:
 
     """Adapts an iterable source into a legacy vocabulary.
 
@@ -541,7 +545,7 @@ class IterableSourceVocabulary(object):
         return self.getTerm(value)
 
     def __iter__(self):
-        return imap(
+        return map(
             lambda value: self.getTerm(value), self.source.__iter__())
 
     def __len__(self):
@@ -555,7 +559,7 @@ class SourceSelectWidget(SelectWidget):
     """Provide a selection list for the item."""
 
     def __init__(self, field, source, request):
-        super(SourceSelectWidget, self).__init__(
+        super().__init__(
             field, IterableSourceVocabulary(source, request), request)
         # BBB
         if not zope.formlib.itemswidgets.EXPLICIT_EMPTY_SELECTION:
@@ -575,7 +579,7 @@ class SourceRadioWidget(RadioWidget):
     """Radio widget for single item choices."""
 
     def __init__(self, field, source, request):
-        super(SourceRadioWidget, self).__init__(
+        super().__init__(
             field, IterableSourceVocabulary(source, request), request)
 
 
@@ -583,7 +587,7 @@ class SourceMultiSelectWidget(MultiSelectWidget):
     """A multi-selection widget with ordering support."""
 
     def __init__(self, field, source, request):
-        super(SourceMultiSelectWidget, self).__init__(
+        super().__init__(
             field, IterableSourceVocabulary(source, request), request)
 
 
@@ -591,7 +595,7 @@ class SourceOrderedMultiSelectWidget(OrderedMultiSelectWidget):
     """A multi-selection widget with ordering support."""
 
     def __init__(self, field, source, request):
-        super(SourceOrderedMultiSelectWidget, self).__init__(
+        super().__init__(
             field, IterableSourceVocabulary(source, request), request)
 
 
@@ -599,7 +603,7 @@ class SourceMultiSelectSetWidget(MultiSelectSetWidget):
     """Provide a selection list for the set to be selected."""
 
     def __init__(self, field, source, request):
-        super(SourceMultiSelectSetWidget, self).__init__(
+        super().__init__(
             field, IterableSourceVocabulary(source, request), request)
 
 
@@ -607,7 +611,7 @@ class SourceMultiSelectFrozenSetWidget(MultiSelectFrozenSetWidget):
     """Provide a selection list for the frozenset to be selected."""
 
     def __init__(self, field, source, request):
-        super(SourceMultiSelectFrozenSetWidget, self).__init__(
+        super().__init__(
             field, IterableSourceVocabulary(source, request), request)
 
 
@@ -615,5 +619,5 @@ class SourceMultiCheckBoxWidget(MultiCheckBoxWidget):
     """Provide a list of checkboxes that provide the choice for the list."""
 
     def __init__(self, field, source, request):
-        super(SourceMultiCheckBoxWidget, self).__init__(
+        super().__init__(
             field, IterableSourceVocabulary(source, request), request)

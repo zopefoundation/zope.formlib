@@ -27,12 +27,12 @@ class Test(support.VerifyResults, unittest.TestCase):
     def setUp(self):
         field = Text(__name__='foo')
         request = TestRequest()
-        request.form['spam.foo'] = u'Foo Value'
+        request.form['spam.foo'] = 'Foo Value'
         self._widget = TextWidget(field, request)
         self._widget.setPrefix('spam')
 
     def testGetData(self):
-        self.assertEqual(self._widget.getInputValue(), u'Foo Value')
+        self.assertEqual(self._widget.getInputValue(), 'Foo Value')
 
     def testRender(self):
         value = 'Foo Value 2'
@@ -52,12 +52,12 @@ class TestEmpty(support.VerifyResults, unittest.TestCase):
     def setUp(self):
         field = Text(__name__='foo')
         request = TestRequest()
-        request.form['foo'] = u'Foo Value'
+        request.form['foo'] = 'Foo Value'
         self._widget = TextWidget(field, request)
         self._widget.setPrefix('')
 
     def testGetData(self):
-        self.assertEqual(self._widget.getInputValue(), u'Foo Value')
+        self.assertEqual(self._widget.getInputValue(), 'Foo Value')
 
     def testRender(self):
         check_list = ('id="foo"', 'name="foo"')
@@ -67,6 +67,6 @@ class TestEmpty(support.VerifyResults, unittest.TestCase):
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(Test),
-        unittest.makeSuite(TestEmpty),
+        unittest.defaultTestLoader.loadTestsFromTestCase(Test),
+        unittest.defaultTestLoader.loadTestsFromTestCase(TestEmpty),
     ))

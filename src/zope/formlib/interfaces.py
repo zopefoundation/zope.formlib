@@ -25,7 +25,6 @@ from zope.schema import Bool
 from zope.schema.interfaces import ValidationError
 
 from zope import schema
-from zope.formlib._compat import basestring
 
 
 class IInvalidFormError(Interface):
@@ -80,7 +79,7 @@ class WidgetInputError(UserError):
     def doc(self):
         # TODO this duck typing is to get the code working.  See
         # collector issue 372
-        if isinstance(self.errors, basestring):
+        if isinstance(self.errors, str):
             return self.errors
         elif getattr(self.errors, 'doc', None) is not None:
             return self.errors.doc()
@@ -124,7 +123,7 @@ class ErrorContainer(Exception):
 
     def __str__(self):
         return "\n".join(
-            ["%s: %s" % (error.__class__.__name__, error)
+            ["{}: {}".format(error.__class__.__name__, error)
              for error in self.args]
         )
 
@@ -209,8 +208,8 @@ class IInputWidget(IWidget):
     """A widget for editing a field value."""
 
     required = Bool(
-        title=u"Required",
-        description=u"""If True, widget should be displayed as requiring input.
+        title="Required",
+        description="""If True, widget should be displayed as requiring input.
 
         By default, this value is the field's 'required' attribute. This
         field can be set to False for widgets that always provide input (e.g.
@@ -269,8 +268,8 @@ class IDisplayWidget(IWidget):
     """A widget for displaying a field value."""
 
     required = Bool(
-        title=u"Required",
-        description=u"""If True, widget should be displayed as requiring input.
+        title="Required",
+        description="""If True, widget should be displayed as requiring input.
 
         Display widgets should never be required.
         """)
@@ -306,31 +305,31 @@ class ISimpleInputWidget(IBrowserWidget, IInputWidget):
     """A widget that uses a single HTML element to collect user input."""
 
     tag = schema.TextLine(
-        title=u'Tag',
-        description=u'The widget HTML element.')
+        title='Tag',
+        description='The widget HTML element.')
 
     type = schema.TextLine(
-        title=u'Type',
-        description=u'The element type attribute',
+        title='Type',
+        description='The element type attribute',
         required=False)
 
     cssClass = schema.TextLine(
-        title=u'CSS Class',
-        description=u'The element class attribute.',
+        title='CSS Class',
+        description='The element class attribute.',
         required=False)
 
     extra = schema.TextLine(
-        title=u'Extra',
-        description=u'The element extra attribute.',
+        title='Extra',
+        description='The element extra attribute.',
         required=False)
 
 
 class ITextBrowserWidget(ISimpleInputWidget):
 
     convert_missing_value = schema.Bool(
-        title=u'Translate Input Value',
+        title='Translate Input Value',
         description=(
-            u'If True, an empty string is converted to field.missing_value.'),
+            'If True, an empty string is converted to field.missing_value.'),
         default=True)
 
 
@@ -390,7 +389,7 @@ class ISubPage(Interface):
         constraint=reConstraint(
             '[a-zA-Z][a-zA-Z0-9_]*([.][a-zA-Z][a-zA-Z0-9_]*)*',
             "Must be a sequence of not-separated identifiers"),
-        description=u"""Page-element prefix
+        description="""Page-element prefix
 
         All named or identified page elements in a subpage should have
         names and identifiers that begin with a subpage prefix
@@ -672,8 +671,7 @@ class IFormAPI(Interface):
         The options are the same as for the Action constructor except
         that the options don't include the success option.
 
-        The function is designed to be used as a decorator (Python 2.4
-        and later), as in::
+        The function is designed to be used as a decorator, as in::
 
             @action("Edit")
             def handle_edit(self, action, data):
@@ -862,8 +860,8 @@ class IFormField(Interface):
     __name__ = schema.ASCII(
         constraint=reConstraint('[a-zA-Z][a-zA-Z0-9_]*',
                                 "Must be an identifier"),
-        title=u"Field name",
-        description=u"""\
+        title="Field name",
+        description="""\
         This is the name, without any proefix, used for the field.
         It is usually the same as the name of the for field's schem field.
         """
@@ -878,8 +876,8 @@ class IFormField(Interface):
         constraint=reConstraint(
             r'[a-zA-Z][a-zA-Z0-9_.]*', "Must be an identifier or empty",
             can_be_empty=True),
-        title=u"Prefix",
-        description=u"""\
+        title="Prefix",
+        description="""\
         Form-field prefix.  The form-field prefix is used to
         disambiguate fields with the same name (e.g. from different
         schema) within a collection of form fields.
@@ -889,16 +887,16 @@ class IFormField(Interface):
     )
 
     for_display = schema.Bool(
-        title=u"Is the form field for display only?",
-        description=u"""\
+        title="Is the form field for display only?",
+        description="""\
         If this attribute has a true value, then a display widget will be
         used for the field even if it is writable.
         """
     )
 
     for_input = schema.Bool(
-        title=u"Is the form field for input?",
-        description=u"""\
+        title="Is the form field for input?",
+        description="""\
         If this attribute has a true value, then an input widget will be
         used for the field even if it is readonly.
         """
@@ -912,8 +910,8 @@ class IFormField(Interface):
     )
 
     render_context = schema.Choice(
-        title=u"Should the rendered value come from the form context?",
-        description=u"""\
+        title="Should the rendered value come from the form context?",
+        description="""\
 
         If this attribute has a true value, and there is no other
         source of rendered data, then use data from the form context
@@ -1039,12 +1037,12 @@ class IAction(ISubPage):
     """Form submit actions
     """
 
-    label = schema.TextLine(title=u"Action label")
+    label = schema.TextLine(title="Action label")
 
-    name = schema.TextLine(title=u"Action name")
-    __name__ = schema.TextLine(title=u"Action name with its prefix")
+    name = schema.TextLine(title="Action name")
+    __name__ = schema.TextLine(title="Action name with its prefix")
 
-    data = schema.Dict(title=u"Application data")
+    data = schema.Dict(title="Application data")
 
     condition = Attribute(
         """Action condition

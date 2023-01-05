@@ -56,7 +56,7 @@ class IIntTest2(Interface):
 
 
 @implementer(IIntTest)
-class IntTest(object):
+class IntTest:
 
     def __init__(self):
         self.i1 = None
@@ -65,7 +65,7 @@ class IntTest(object):
 
 
 @implementer(IIntTest2)
-class IntTest2(object):
+class IntTest2:
 
     def __init__(self):
         self.i1 = 10
@@ -112,7 +112,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.i1'] = '1'
         request.form['form.i2'] = '2'
         request.form['form.i3'] = '3'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         Form(foo, request)()
 
@@ -129,7 +129,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.i1'] = '1'
         request.form['form.i2'] = ''
         request.form['form.i3-empty-marker'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         Form(foo, request)()
 
@@ -158,7 +158,7 @@ class Test(FunctionalWidgetTestCase):
 
         # submit form as if top item is selected
         request.form['form.i1-empty-marker'] = '1'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         html = Form2(foo, request)()
 
         # confirm new value is -1 -- i1.missing_value
@@ -172,7 +172,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.i1'] = ''
         request.form['form.i2'] = ''
         request.form['form.i3'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         html = Form(foo, request)()
 
@@ -190,7 +190,7 @@ class Test(FunctionalWidgetTestCase):
 
         # submit a value for i3 that isn't allowed
         request.form['form.i3'] = '12'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         html = Form(foo, request)()
 
@@ -205,7 +205,7 @@ class Test(FunctionalWidgetTestCase):
 
         # submit value for i1 that is too low
         request.form['form.i1'] = '-1'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         html = Form(foo, request)()
 
@@ -213,7 +213,7 @@ class Test(FunctionalWidgetTestCase):
 
         # submit value for i1 that is too high
         request.form['form.i1'] = '11'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         html = Form(foo, request)()
 
@@ -230,7 +230,7 @@ class Test(FunctionalWidgetTestCase):
         # submit change with only i2 present -- note that required
         # field i1 is omitted, which should not cause a validation error
         request.form['form.i2'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         Form(foo, request)()
 
@@ -244,7 +244,7 @@ class Test(FunctionalWidgetTestCase):
         request = TestRequest()
 
         request.form['form.i1'] = 'foo'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         html = Form(foo, request)()
 
@@ -253,5 +253,5 @@ class Test(FunctionalWidgetTestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Test))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(Test))
     return suite

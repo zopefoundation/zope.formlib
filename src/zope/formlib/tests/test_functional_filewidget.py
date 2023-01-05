@@ -14,6 +14,7 @@
 """File Widget Tests
 """
 import unittest
+from io import StringIO
 
 from zope.interface import Interface
 from zope.interface import implementer
@@ -22,7 +23,6 @@ from zope.schema import Field
 from zope.schema.interfaces import IField
 
 from zope.formlib import form
-from zope.formlib._compat import StringIO
 from zope.formlib.tests.functionalsupport import FunctionalWidgetTestCase
 from zope.formlib.tests.support import patternExists
 from zope.formlib.widgets import FileWidget
@@ -43,7 +43,7 @@ class IFileTest(Interface):
 
 
 @implementer(IFileTest)
-class FileTest(object):
+class FileTest:
 
     def __init__(self):
         self.f1 = None
@@ -95,7 +95,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.f2'] = self.sampleTextFile
         request.form['form.f1.used'] = ''
         request.form['form.f2.used'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         Form(foo, request)()
 
@@ -111,7 +111,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.f1'] = 'not a file - same as missing input'
         request.form['form.f1.used'] = ''
         request.form['form.f2.used'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         html = Form(foo, request)()
 
@@ -124,7 +124,7 @@ class Test(FunctionalWidgetTestCase):
         # submit missing value for required field f1
         request.form['form.f1.used'] = ''
         request.form['form.f2.used'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         html = Form(foo, request)()
 
@@ -142,7 +142,7 @@ class Test(FunctionalWidgetTestCase):
         # submit missing value for required field f1
         request.form['form.f2'] = self.emptyFile
         request.form['form.f2.used'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         # we don't let f1 know that it was rendered
         # or else it will complain (see test_required_validation) and the
         # change will not succeed.
@@ -155,5 +155,5 @@ class Test(FunctionalWidgetTestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Test))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(Test))
     return suite

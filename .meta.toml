@@ -2,15 +2,15 @@
 # https://github.com/zopefoundation/meta/tree/master/config/pure-python
 [meta]
 template = "pure-python"
-commit-id = "ae61f414cfef4e129d275679c6a76dc67b1a2c11"
+commit-id = "d03ad585"
 
 [python]
 with-pypy = true
-with-legacy-python = true
 with-docs = true
 with-sphinx-doctests = false
 with-windows = false
 with-future-python = false
+with-macos = false
 
 [coverage]
 fail-under = 93
@@ -21,7 +21,6 @@ additional-config = [
     "# F403 'from X import *' used; unable to detect undefined names",
     "# F405 may be undefined, or defined from star imports",
     "per-file-ignores =",
-    "    src/zope/formlib/_compat.py: F401",
     "    src/zope/formlib/namedtemplate.py: F401",
     "    src/zope/formlib/widgets.py: F401",
     "    src/zope/formlib/tests/test_registrations.py: F403, F405",

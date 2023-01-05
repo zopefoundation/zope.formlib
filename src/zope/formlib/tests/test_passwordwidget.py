@@ -54,6 +54,6 @@ class PasswordWidgetTest(SimpleInputWidgetTest):
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(PasswordWidgetTest),
+        unittest.defaultTestLoader.loadTestsFromTestCase(PasswordWidgetTest),
         doctest.DocTestSuite(),
     ))

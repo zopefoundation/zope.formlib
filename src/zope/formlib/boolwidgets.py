@@ -37,7 +37,7 @@ class CheckBoxWidget(SimpleInputWidget):
     extra = ''
 
     def __init__(self, context, request):
-        super(CheckBoxWidget, self).__init__(context, request)
+        super().__init__(context, request)
         self.required = False
 
     def __call__(self):
@@ -47,7 +47,7 @@ class CheckBoxWidget(SimpleInputWidget):
             kw = {'checked': 'checked'}
         else:
             kw = {}
-        return "%s %s" % (
+        return "{} {}".format(
             renderElement(self.tag,
                           type='hidden',
                           name=self.name + ".used",
@@ -75,7 +75,7 @@ class CheckBoxWidget(SimpleInputWidget):
     def hasInput(self):
         """Check whether the field is represented in the form."""
         return self.name + ".used" in self.request.form or \
-            super(CheckBoxWidget, self).hasInput()
+            super().hasInput()
 
     def _getFormInput(self):
         """Returns the form input used by `_toFieldValue`.

@@ -45,7 +45,7 @@ class SequenceWidget(BrowserWidget, InputWidget):
     _type = tuple
 
     def __init__(self, context, field, request, subwidget=None):
-        super(SequenceWidget, self).__init__(context, request)
+        super().__init__(context, request)
         self.subwidget = subwidget
 
         # The subwidgets are cached in this dict if preserve_widgets is True.
@@ -258,10 +258,10 @@ class ListSequenceWidget(SequenceWidget):
 class SequenceDisplayWidget(DisplayWidget):
 
     _missingValueMessage = _("sequence-value-not-provided",
-                             u"(no value available)")
+                             "(no value available)")
 
     _emptySequenceMessage = _("sequence-value-is-empty",
-                              u"(no values)")
+                              "(no values)")
 
     tag = "ol"
     itemTag = "li"
@@ -269,7 +269,7 @@ class SequenceDisplayWidget(DisplayWidget):
     extra = ""
 
     def __init__(self, context, field, request, subwidget=None):
-        super(SequenceDisplayWidget, self).__init__(context, request)
+        super().__init__(context, request)
         self.subwidget = subwidget
 
     def __call__(self):
@@ -292,7 +292,7 @@ class SequenceDisplayWidget(DisplayWidget):
             widget.setRenderedValue(item)
             s = widget()
             if self.itemTag:
-                s = "<%s>%s</%s>" % (self.itemTag, s, self.itemTag)
+                s = "<{}>{}</{}>".format(self.itemTag, s, self.itemTag)
             parts.append(s)
         contents = "\n".join(parts)
         if self.tag:

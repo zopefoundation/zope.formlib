@@ -38,19 +38,19 @@ class ITextLineTest(Interface):
 
     s2 = TextLine(
         required=False,
-        missing_value=u'')
+        missing_value='')
 
     s3 = Choice(
         required=False,
-        values=(u'Bob', u'is', u'Your', u'Uncle'))
+        values=('Bob', 'is', 'Your', 'Uncle'))
 
 
 @implementer(ITextLineTest)
-class TextLineTest(object):
+class TextLineTest:
 
     def __init__(self):
         self.s1 = ''
-        self.s2 = u'foo'
+        self.s2 = 'foo'
         self.s3 = None
 
 
@@ -91,16 +91,16 @@ class Test(FunctionalWidgetTestCase):
         request = TestRequest()
 
         # submit edit view
-        request.form['form.s1'] = u'foo'
-        request.form['form.s2'] = u'bar'
-        request.form['form.s3'] = u'Uncle'
-        request.form['form.actions.apply'] = u''
+        request.form['form.s1'] = 'foo'
+        request.form['form.s2'] = 'bar'
+        request.form['form.s3'] = 'Uncle'
+        request.form['form.actions.apply'] = ''
         Form(foo, request)()
 
         # check new values in object
-        self.assertEqual(foo.s1, u'foo')
-        self.assertEqual(foo.s2, u'bar')
-        self.assertEqual(foo.s3, u'Uncle')
+        self.assertEqual(foo.s1, 'foo')
+        self.assertEqual(foo.s2, 'bar')
+        self.assertEqual(foo.s3, 'Uncle')
 
     def test_invalid_type(self):
         """Tests text widget's handling of invalid unicode input.
@@ -113,7 +113,7 @@ class Test(FunctionalWidgetTestCase):
 
         # submit invalid type for text line
         request.form['form.s1'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         # We don't have a invalid field value
@@ -124,25 +124,25 @@ class Test(FunctionalWidgetTestCase):
         foo = TextLineTest()
         request = TestRequest()
 
-        request.form['form.s1'] = u'foo'
-        request.form['form.s2'] = u''
-        request.form['form.s3'] = u''
-        request.form['form.actions.apply'] = u''
+        request.form['form.s1'] = 'foo'
+        request.form['form.s2'] = ''
+        request.form['form.s3'] = ''
+        request.form['form.actions.apply'] = ''
         Form(foo, request)()
 
         # check new values in object
-        self.assertEqual(foo.s1, u'foo')
-        self.assertEqual(foo.s2, u'')   # default missing_value
+        self.assertEqual(foo.s1, 'foo')
+        self.assertEqual(foo.s2, '')   # default missing_value
         self.assertEqual(foo.s3, None)  # None is s3's missing_value
 
     def test_required_validation(self):
         foo = TextLineTest()
         request = TestRequest()
 
-        request.form['form.s1'] = u''
-        request.form['form.s2'] = u''
-        request.form['form.s3'] = u''
-        request.form['form.actions.apply'] = u''
+        request.form['form.s1'] = ''
+        request.form['form.s2'] = ''
+        request.form['form.s3'] = ''
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         # confirm error msgs
@@ -158,8 +158,8 @@ class Test(FunctionalWidgetTestCase):
         request = TestRequest()
 
         # submit a value for s3 that isn't allowed
-        request.form['form.s3'] = u'Bob is *Not* My Uncle'
-        request.form['form.actions.apply'] = u''
+        request.form['form.s3'] = 'Bob is *Not* My Uncle'
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         s3_index = html.find('form.s3')
@@ -172,15 +172,15 @@ class Test(FunctionalWidgetTestCase):
         request = TestRequest()
 
         # submit value for s1 that is too short
-        request.form['form.s1'] = u'a'
-        request.form['form.actions.apply'] = u''
+        request.form['form.s1'] = 'a'
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         self.assertTrue('Value is too short' in html)
 
         # submit value for s1 that is too long
-        request.form['form.s1'] = u'12345678901'
-        request.form['form.actions.apply'] = u''
+        request.form['form.s1'] = '12345678901'
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         self.assertTrue('Value is too long' in html)
@@ -191,22 +191,22 @@ class Test(FunctionalWidgetTestCase):
 
         # confirm default values
         self.assertEqual(foo.s1, '')
-        self.assertEqual(foo.s2, u'foo')
+        self.assertEqual(foo.s2, 'foo')
         self.assertTrue(foo.s3 is None)
 
         # submit change with only s2 present -- note that required
         # field s1 is omitted, which should not cause a validation error
-        request.form['form.s2'] = u'bar'
-        request.form['form.actions.apply'] = u''
+        request.form['form.s2'] = 'bar'
+        request.form['form.actions.apply'] = ''
         Form(foo, request)()
 
         # check new value in object
         self.assertEqual(foo.s1, '')
-        self.assertEqual(foo.s2, u'bar')
+        self.assertEqual(foo.s2, 'bar')
         self.assertTrue(foo.s3 is None)
 
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Test))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(Test))
     return suite

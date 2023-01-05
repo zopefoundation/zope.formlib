@@ -38,23 +38,17 @@ class SelectWidgetHTMLEncodingTest(unittest.TestCase):
 
     def testOptionEncoding(self):
         choice = Choice(
-            title=u"Number",
-            description=u"The Number",
+            title="Number",
+            description="The Number",
             values=['< foo', 'bar/>', '&blah&'])
 
         sequence = List(
             __name__="terms",
-            title=u"Numbers",
-            description=u"The Numbers",
+            title="Numbers",
+            description="The Numbers",
             value_type=choice)
 
         request = TestRequest()
         sequence = sequence.bind(object())
         widget = SelectWidget(sequence, choice.vocabulary, request)
         self.assertEqual(widget(), select_html)
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(SelectWidgetHTMLEncodingTest)
-    ))

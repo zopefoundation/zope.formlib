@@ -26,15 +26,12 @@ from zope.schema import Object
 from zope.schema import TextLine
 from zope.schema.interfaces import ITextLine
 
-from zope.formlib._compat import PY3
 from zope.formlib.interfaces import IInputWidget
 from zope.formlib.interfaces import IWidgetInputErrorView
 from zope.formlib.interfaces import MissingInputError
 from zope.formlib.tests.test_browserwidget import BrowserWidgetTest
 from zope.formlib.widgets import ObjectWidget
 from zope.formlib.widgets import TextWidget
-
-from .support import checker
 
 
 class ITestContact(Interface):
@@ -43,12 +40,12 @@ class ITestContact(Interface):
 
 
 @implementer(ITestContact)
-class TestContact(object):
+class TestContact:
     pass
 
 
 @implementer(IWidgetInputErrorView)
-class ObjectWidgetInputErrorView(object):
+class ObjectWidgetInputErrorView:
 
     def __init__(self, error, request):
         self.error = error
@@ -72,7 +69,7 @@ class ObjectWidgetTest(BrowserWidgetTest):
         kw.update({'factory': TestContact})
         return ObjectWidget(context, request, **kw)
 
-    def setUpContent(self, desc=u'', title=u'Foo Title'):
+    def setUpContent(self, desc='', title='Foo Title'):
         provideAdapter(TextWidget, (ITextLine, IDefaultBrowserLayer),
                        IInputWidget)
 
@@ -84,32 +81,32 @@ class ObjectWidgetTest(BrowserWidgetTest):
             )
 
         @implementer(ITestContent)
-        class TestObject(object):
+        class TestObject:
             pass
 
         self.content = TestObject()
         self.field = ITestContent['foo']
         self.request = TestRequest(HTTP_ACCEPT_LANGUAGE='pl')
-        self.request.form['field.foo'] = u'Foo Value'
+        self.request.form['field.foo'] = 'Foo Value'
         self._widget = self._WidgetFactory(self.field, self.request)
 
     def setUp(self):
-        super(ObjectWidgetTest, self).setUp()
-        self.field = Object(ITestContact, __name__=u'foo')
+        super().setUp()
+        self.field = Object(ITestContact, __name__='foo')
         provideAdapter(TextWidget,
                        (ITextLine, IDefaultBrowserLayer),
                        IInputWidget)
 
     def test_applyChanges(self):
-        self.request.form['field.foo.name'] = u'Foo Name'
-        self.request.form['field.foo.email'] = u'foo@foo.test'
+        self.request.form['field.foo.name'] = 'Foo Name'
+        self.request.form['field.foo.email'] = 'foo@foo.test'
         widget = self._WidgetFactory(self.field, self.request)
 
         self.assertEqual(widget.applyChanges(self.content), True)
         self.assertEqual(hasattr(self.content, 'foo'), True)
         self.assertEqual(isinstance(self.content.foo, TestContact), True)
-        self.assertEqual(self.content.foo.name, u'Foo Name')
-        self.assertEqual(self.content.foo.email, u'foo@foo.test')
+        self.assertEqual(self.content.foo.name, 'Foo Name')
+        self.assertEqual(self.content.foo.email, 'foo@foo.test')
 
     def test_error(self):
         provideAdapter(
@@ -120,44 +117,34 @@ class ObjectWidgetTest(BrowserWidgetTest):
         widget = self._WidgetFactory(self.field, self.request)
         self.assertRaises(MissingInputError, widget.getInputValue)
         error_html = widget.error()
-        if PY3:  # pragma: PY3
-            self.assertTrue(
-                "email: MissingInputError('field.foo.email', '', None)"
-                in error_html)
-            self.assertTrue(
-                "name: MissingInputError('field.foo.name', '', None)"
-                in error_html)
-        else:  # pragma: PY2
-            self.assertTrue(
-                "email: MissingInputError(u'field.foo.email', u'', None)"
-                in error_html)
-            self.assertTrue(
-                "name: MissingInputError(u'field.foo.name', u'', None)"
-                in error_html)
+        self.assertIn(
+            "email: MissingInputError('field.foo.email', '', None)",
+            error_html)
+        self.assertIn(
+            "name: MissingInputError('field.foo.name', '', None)", error_html)
 
     def test_applyChangesNoChange(self):
         self.content.foo = TestContact()
-        self.content.foo.name = u'Foo Name'
-        self.content.foo.email = u'foo@foo.test'
+        self.content.foo.name = 'Foo Name'
+        self.content.foo.email = 'foo@foo.test'
 
-        self.request.form['field.foo.name'] = u'Foo Name'
-        self.request.form['field.foo.email'] = u'foo@foo.test'
+        self.request.form['field.foo.name'] = 'Foo Name'
+        self.request.form['field.foo.email'] = 'foo@foo.test'
         widget = self._WidgetFactory(self.field, self.request)
         widget.setRenderedValue(self.content.foo)
 
         self.assertEqual(widget.applyChanges(self.content), False)
         self.assertEqual(hasattr(self.content, 'foo'), True)
         self.assertEqual(isinstance(self.content.foo, TestContact), True)
-        self.assertEqual(self.content.foo.name, u'Foo Name')
-        self.assertEqual(self.content.foo.email, u'foo@foo.test')
+        self.assertEqual(self.content.foo.name, 'Foo Name')
+        self.assertEqual(self.content.foo.email, 'foo@foo.test')
 
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(ObjectWidgetTest),
+        unittest.defaultTestLoader.loadTestsFromTestCase(ObjectWidgetTest),
         doctest.DocFileSuite(
             '../objectwidget.rst',
-            setUp=testing.setUp, tearDown=testing.tearDown,
-            checker=checker),
+            setUp=testing.setUp, tearDown=testing.tearDown),
         doctest.DocTestSuite(),
     ))

@@ -12,39 +12,7 @@
 ##############################################################################
 """Compatibility between Python versions
 """
-import base64
-import sys
 
 
-PY3 = sys.version_info[0] >= 3
-
-if PY3:
-
-    from io import StringIO
-    unicode = str
-    imap = map
-    basestring = str
-
-    def toUnicode(obj):
-        return obj.decode() if isinstance(obj, bytes) else str(obj)
-
-    def safeBase64Encode(obj):
-        return base64.b64encode(
-            obj.encode()).strip().replace(b'=', b'_').decode()
-
-else:
-
-    from itertools import imap
-
-    from StringIO import StringIO
-    unicode = unicode
-    basestring = basestring
-
-    def toUnicode(obj):
-        if isinstance(obj, bytes):
-            return unicode(obj, 'utf-8')
-        else:
-            return unicode(obj)
-
-    def safeBase64Encode(obj):
-        return base64.b64encode(toUnicode(obj)).strip().replace('=', '_')
+def toStr(obj):
+    return obj.decode() if isinstance(obj, bytes) else str(obj)

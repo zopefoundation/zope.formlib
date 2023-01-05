@@ -10,9 +10,7 @@
 # FOR A PARTICULAR PURPOSE.
 #
 ##############################################################################
-from __future__ import print_function
 
-import re
 import unittest
 
 import pytz
@@ -36,7 +34,6 @@ import zope.formlib.form
 import zope.formlib.interfaces
 from zope.formlib import exception
 from zope.formlib.interfaces import IWidgetInputErrorView
-from zope.formlib.tests import support
 from zope.formlib.widgets import DatetimeDisplayWidget
 from zope.formlib.widgets import DatetimeWidget
 from zope.formlib.widgets import FloatWidget
@@ -69,7 +66,7 @@ def TestTemplate(self):
 
     if self.errors:
         for error in self.errors:
-            result.append("%s: %s" % (error.__class__.__name__, error))
+            result.append("{}: {}".format(error.__class__.__name__, error))
 
     for w in self.widgets:
         result.append(w())
@@ -168,22 +165,21 @@ def formSetUp(test):
         zope.formlib.form.render_submit_button, name='render')
 
     XMLConfig('ftesting.zcml', zope.formlib)
-    test.globs['print_function'] = print_function
 
 # Classes used in tests
 
 
 class IOrder(zope.interface.Interface):
-    identifier = zope.schema.Int(title=u"Identifier", readonly=True)
-    name = zope.schema.TextLine(title=u"Name")
-    min_size = zope.schema.Float(title=u"Minimum size")
-    max_size = zope.schema.Float(title=u"Maximum size")
-    now = zope.schema.Datetime(title=u"Now", readonly=True)
+    identifier = zope.schema.Int(title="Identifier", readonly=True)
+    name = zope.schema.TextLine(title="Name")
+    min_size = zope.schema.Float(title="Minimum size")
+    max_size = zope.schema.Float(title="Maximum size")
+    now = zope.schema.Datetime(title="Now", readonly=True)
 
 
 class IDescriptive(zope.interface.Interface):
-    title = zope.schema.TextLine(title=u"Title")
-    description = zope.schema.TextLine(title=u"Description")
+    title = zope.schema.TextLine(title="Title")
+    description = zope.schema.TextLine(title="Description")
 
 
 @zope.interface.implementer(IOrder)
@@ -196,7 +192,7 @@ class Order:
 
 @adapter(IOrder)
 @zope.interface.implementer(IDescriptive)
-class Descriptive(object):
+class Descriptive:
     def __init__(self, context):
         self.context = context
 
@@ -321,7 +317,7 @@ erros raised by the widgets getInputValue method.
     ...     def getInputValue(self):
     ...         raise zope.formlib.interfaces.WidgetInputError(
     ...         field_name='summary',
-    ...         widget_title=u'Summary')
+    ...         widget_title='Summary')
     >>> widget = Widget()
     >>> inputs = [(True, widget)]
     >>> widgets = zope.formlib.form.Widgets(inputs, 5)
@@ -351,7 +347,7 @@ in the formlib as a fallback if some widget doen't handle errors correct. (ri)
     >>> errors = zope.formlib.form.getWidgetsData(
     ...     widgets, 'form', {'summary':'value'})
     >>> errors #doctest: +ELLIPSIS
-    [<zope.formlib.interfaces.WidgetInputError instance at ...>]
+    [WidgetInputError(...))]
 
 """
 
@@ -554,13 +550,13 @@ With just label, with increasing complexity:
 
     >>> action = zope.formlib.form.Action(u"MyAction")
     >>> action.name
-    u'myaction'
+    'myaction'
 
     >>> action = zope.formlib.form.Action(u"8 Balls")
     >>> action.name
     '382042616c6c73'
 
-    >>> action = zope.formlib.form.Action(u'\u9001\u4fe1')
+    >>> action = zope.formlib.form.Action('\u9001\u4fe1')
     >>> action.name
     'e98081e4bfa1'
 
@@ -569,13 +565,13 @@ With just label, with increasing complexity:
 
     >>> action = zope.formlib.form.Action(_(u"MyAction"))
     >>> action.name
-    u'myaction'
+    'myaction'
 
     >>> action = zope.formlib.form.Action(_(u"8 Balls"))
     >>> action.name
     '382042616c6c73'
 
-    >>> action = zope.formlib.form.Action(_(u'\u9001\u4fe1'))
+    >>> action = zope.formlib.form.Action(_('\u9001\u4fe1'))
     >>> action.name
     'e98081e4bfa1'
 
@@ -597,7 +593,7 @@ With all lowercase name:
     >>> action.name
     'foobar'
 
-    >>> action = zope.formlib.form.Action(u'\u9001\u4fe1', name='foobar')
+    >>> action = zope.formlib.form.Action('\u9001\u4fe1', name='foobar')
     >>> action.name
     'foobar'
 
@@ -609,7 +605,7 @@ With all lowercase name:
     >>> action.name
     'foobar'
 
-    >>> action = zope.formlib.form.Action(_(u'\u9001\u4fe1'), name='foobar')
+    >>> action = zope.formlib.form.Action(_('\u9001\u4fe1'), name='foobar')
     >>> action.name
     'foobar'
 
@@ -631,7 +627,7 @@ With some uppercase name:
     >>> action.name
     'FooBar'
 
-    >>> action = zope.formlib.form.Action(u'\u9001\u4fe1', name='FooBar')
+    >>> action = zope.formlib.form.Action('\u9001\u4fe1', name='FooBar')
     >>> action.name
     'FooBar'
 
@@ -643,7 +639,7 @@ With some uppercase name:
     >>> action.name
     'FooBar'
 
-    >>> action = zope.formlib.form.Action(_(u'\u9001\u4fe1'), name='FooBar')
+    >>> action = zope.formlib.form.Action(_('\u9001\u4fe1'), name='FooBar')
     >>> action.name
     'FooBar'
 
@@ -689,7 +685,7 @@ interface invariant triggers an error message:
     >>> form = ValueForm(Content(), request)
     >>> form.update()
     >>> form.errors
-    (Invalid('value bigger than max',),)
+    (Invalid('value bigger than max'),)
 
 `checkInvariants` if the entered value is small enough, the error message is
 not triggered:
@@ -754,25 +750,10 @@ read the object from context:
 
 def test_suite():
     import doctest
-    checker = support.checker + zope.testing.renormalizing.RENormalizing([
-        (re.compile(r"\[WidgetInputError\('form.summary', 'summary',"
-                    r" ValidationError\('A error message'\)\)\]"),
-         r"[<zope.formlib.interfaces.WidgetInputError instance at ...>]"),
-        (re.compile(r"\[WidgetInputError\('summary', u'Summary', None\)\]"),
-            r"[<zope.formlib.interfaces.WidgetInputError instance at ...>]"),
-        (re.compile(r" ValueError\('invalid literal for float\(\):"
-                    r" (bob'|10/0'),\)"),
-            r"\n <exceptions.ValueError instance at ...>"),
-        (re.compile(r" ValueError\('could not convert string to float:"
-                    r" bob',\)"),
-            r"\n <exceptions.ValueError instance at ...>"),
-        (re.compile(r"\(Invalid\('value bigger than max',\),\)"),
-            r"(Invalid('value bigger than max'),)"),
-    ])
     return unittest.TestSuite((
         doctest.DocFileSuite(
             '../errors.rst',
-            setUp=formSetUp, tearDown=tearDown, checker=checker,
+            setUp=formSetUp, tearDown=tearDown,
             optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS,
         ),
         # The following test needs some zope.security test setup
@@ -785,12 +766,7 @@ def test_suite():
             '../form.rst',
             setUp=formSetUp, tearDown=tearDown,
             optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS,
-            checker=checker
         ),
-        doctest.DocTestSuite(
-            setUp=formSetUp, tearDown=tearDown,
-            checker=checker
-        ),
-        doctest.DocTestSuite(
-            'zope.formlib.errors', checker=checker),
+        doctest.DocTestSuite(setUp=formSetUp, tearDown=tearDown),
+        doctest.DocTestSuite('zope.formlib.errors'),
     ))

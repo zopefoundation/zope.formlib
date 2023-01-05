@@ -21,7 +21,7 @@ by adapting them to `IWidgetInputErrorView`:
     >>> message = getMultiAdapter((error, TestRequest()),
     ...         IWidgetInputErrorView).snippet()
     >>> message
-    u'<span class="error">You are wrong!</span>'
+    '<span class="error">You are wrong!</span>'
 
 Interface invariant methods raise `zope.interface.Invalid` exception. Test if
 this exception gets handled by the error_views.
@@ -32,7 +32,7 @@ this exception gets handled by the error_views.
     >>> mybase.errors = (myError,)
     >>> save = mybase.error_views()
     >>> next(save)
-    u'<span class="error">My error message</span>'
+    '<span class="error">My error message</span>'
 
 Now we need to set up the translation framework:
 
@@ -54,7 +54,7 @@ And yes, we can even handle an i18n message in an Invalid exception:
     >>> mybase.errors = (myError,)
     >>> save = mybase.error_views()
     >>> next(save)
-    u'<span class="error">[[my.domain][My i18n error message]]</span>'
+    '<span class="error">[[my.domain][My i18n error message]]</span>'
 
 Displaying widget input errors
 ==============================
@@ -64,10 +64,10 @@ Displaying widget input errors
     >>> from zope.formlib.interfaces import WidgetInputError
     >>> myError = WidgetInputError(
     ...     field_name='summary',
-    ...     widget_title=_(u'Summary'),
-    ...     errors=_(u'Foo'))
+    ...     widget_title=_('Summary'),
+    ...     errors=_('Foo'))
     >>> mybase = zope.formlib.form.FormBase(None, TestRequest())
     >>> mybase.errors = (myError,)
     >>> save = mybase.error_views()
     >>> next(save)
-    u'[[my.domain][Summary]]: <span class="error">[[my.domain][Foo]]</span>'
+    '[[my.domain][Summary]]: <span class="error">[[my.domain][Foo]]</span>'
