@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 ##############################################################################
 #
 # Copyright (c) 2001, 2002, 2004, 2005 Zope Foundation and Contributors.
@@ -26,7 +25,6 @@ from zope.schema import Password
 from zope.schema import TextLine
 
 from zope.formlib.interfaces import IInputWidget
-from zope.formlib.tests.support import checker
 from zope.formlib.tests.test_browserwidget import BrowserWidgetTest
 from zope.formlib.tests.test_browserwidget import SimpleInputWidgetTest
 from zope.formlib.widgets import ASCIIWidget
@@ -83,7 +81,7 @@ class TextWidgetTest(SimpleInputWidgetTest):
 
     The HTTP form submission contains an empty string for the field value:
 
-        >>> request = TestRequest(form={'field.foo':u''})
+        >>> request = TestRequest(form={'field.foo':''})
 
     A text widget configured for the field, where convert_missing_value is True
     (the default value)...
@@ -104,7 +102,7 @@ class TextWidgetTest(SimpleInputWidgetTest):
 
         >>> widget.convert_missing_value = False
         >>> widget.getInputValue()
-        u''
+        ''
 
     >>> tearDown()
     """
@@ -133,10 +131,10 @@ class TextWidgetTest(SimpleInputWidgetTest):
         self.verifyResult(self._widget.hidden(), check_list)
 
     def testRenderUTF8Input(self):
-        value = u"☃".encode('utf-8')  # results in \u2603
+        value = "☃".encode()  # results in \u2603
         self._widget.setRenderedValue(value)
         check_list = ('type="text"', 'id="field.foo"', 'name="field.foo"',
-                      u'value="\u2603"', 'size="20"')
+                      'value="\u2603"', 'size="20"')
         self.verifyResult(self._widget(), check_list)
 
 
@@ -170,7 +168,7 @@ class DateDisplayWidgetTest(BrowserWidgetTest):
     expected_class = "date"
 
     def setUp(self):
-        super(DateDisplayWidgetTest, self).setUp()
+        super().setUp()
         self._value = datetime.date(2004, 12, 0o1)
 
     def testDefaultDisplayStyle(self):
@@ -190,7 +188,7 @@ class DateDisplayWidgetTest(BrowserWidgetTest):
         self.verifyResult(self._widget(),
                           ["<span",
                            'class="%s"' % self.expected_class,
-                           u"01.12.04",
+                           "01.12.04",
                            "</span"])
 
     def testRenderMedium(self):
@@ -199,7 +197,7 @@ class DateDisplayWidgetTest(BrowserWidgetTest):
         self.verifyResult(self._widget(),
                           ["<span",
                            'class="%s"' % self.expected_class,
-                           u"01.12.2004",
+                           "01.12.2004",
                            "</span"])
 
     def testRenderLong(self):
@@ -208,8 +206,8 @@ class DateDisplayWidgetTest(BrowserWidgetTest):
         self.verifyResult(self._widget(),
                           ["<span",
                            'class="%s"' % self.expected_class,
-                           u"1 \u0434\u0435\u043a\u0430\u0431\u0440\u044f"
-                           u" 2004 \u0433.",
+                           "1 \u0434\u0435\u043a\u0430\u0431\u0440\u044f"
+                           " 2004 \u0433.",
                            "</span"])
 
     def testRenderFull(self):
@@ -218,8 +216,8 @@ class DateDisplayWidgetTest(BrowserWidgetTest):
         self.verifyResult(self._widget(),
                           ["<span",
                            'class="%s"' % self.expected_class,
-                           u"1 \u0434\u0435\u043a\u0430\u0431\u0440\u044f"
-                           u" 2004 \u0433.",
+                           "1 \u0434\u0435\u043a\u0430\u0431\u0440\u044f"
+                           " 2004 \u0433.",
                            "</span"])
 
 
@@ -230,27 +228,27 @@ class DatetimeDisplayWidgetTest(DateDisplayWidgetTest):
     expected_class = "dateTime"
 
     def setUp(self):
-        super(DatetimeDisplayWidgetTest, self).setUp()
+        super().setUp()
         self._value = datetime.datetime(2004, 12, 0o1, 14, 39, 0o1)
 
     def testRenderDefault(self):
-        super(DatetimeDisplayWidgetTest, self).testRenderDefault()
+        super().testRenderDefault()
         self.verifyResult(self._widget(), ["14:39:01"])
 
     def testRenderShort(self):
-        super(DatetimeDisplayWidgetTest, self).testRenderShort()
+        super().testRenderShort()
         self.verifyResult(self._widget(), ["14:39"])
 
     def testRenderMedium(self):
-        super(DatetimeDisplayWidgetTest, self).testRenderMedium()
+        super().testRenderMedium()
         self.verifyResult(self._widget(), ["14:39:01"])
 
     def testRenderLong(self):
-        super(DatetimeDisplayWidgetTest, self).testRenderLong()
+        super().testRenderLong()
         self.verifyResult(self._widget(), ["14:39:01 +000"])
 
     def testRenderFull(self):
-        super(DatetimeDisplayWidgetTest, self).testRenderFull()
+        super().testRenderFull()
         self.verifyResult(self._widget(), ["14:39:01 +000"])
 
 
@@ -260,7 +258,7 @@ class TextAreaDisplayWidgetTest(BrowserWidgetTest):
 
     # It uses the default DisplayWidget
     def testRender(self):
-        value = u"""
+        value = """
         texttexttexttexttexttextexttexttext\xE9\xE9\xE9\xE9\xE9\xE9\xE9\xE9\xE9
         texttexttexttexttextte\xE9\xE9\xE9\xE9\xE9xttexttexttexttexttexttexttex
         texttexttexttexttexttexttexttexttexttexttexttexttexttexttext
@@ -351,7 +349,7 @@ class PasswordDisplayWidgetTest(BrowserWidgetTest):
         self.assertEqual(None, self._widget._toFieldValue(''))
         # Now the password has been filled in, so the empty string
         # is regarded as the special value for UNCHANGED_PASSWORD.
-        self._widget.context.context.foo = u'existing password'
+        self._widget.context.context.foo = 'existing password'
         self.assertEqual(self._widget.context.UNCHANGED_PASSWORD,
                          self._widget._toFieldValue(''))
 
@@ -406,8 +404,8 @@ def test_w_nonrequired_and_missing_value_and_no_inout():
     'value' under these circumstances.
 
     >>> from zope.schema import TextLine
-    >>> field = TextLine(__name__='foo', title=u'on',
-    ...                  required=False, missing_value=u'')
+    >>> field = TextLine(__name__='foo', title='on',
+    ...                  required=False, missing_value='')
     >>> request = TestRequest()
     >>> widget = TextWidget(field, request)
 
@@ -439,7 +437,7 @@ def test_no_error_on_render_only():
     >>> widget = TextWidget(field, request)
     >>> ignored = widget()
     >>> str(widget.error())
-    u''
+    ''
 
 
     """
@@ -448,8 +446,8 @@ def test_no_error_on_render_only():
 def test_text_area_works_with_missing_value():
     """
     >>> from zope.schema import Text
-    >>> field = Text(__name__='foo', title=u'on',
-    ...              required=False, missing_value=u'')
+    >>> field = Text(__name__='foo', title='on',
+    ...              required=False, missing_value='')
     >>> request = TestRequest()
     >>> widget = TextAreaWidget(field, request)
     >>> def normalize(s):
@@ -475,18 +473,19 @@ def test_text_area_works_with_missing_value():
 
 
 def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(TextWidgetTest),
-        unittest.makeSuite(URIDisplayWidgetTest),
-        unittest.makeSuite(DateDisplayWidgetTest),
-        unittest.makeSuite(DatetimeDisplayWidgetTest),
-        unittest.makeSuite(TextAreaDisplayWidgetTest),
-        unittest.makeSuite(BytesAreaDisplayWidgetTest),
-        unittest.makeSuite(PasswordDisplayWidgetTest),
-        unittest.makeSuite(FileDisplayWidgetTest),
-        unittest.makeSuite(IntDisplayWidgetTest),
-        unittest.makeSuite(FloatDisplayWidgetTest),
-        unittest.makeSuite(BytesDisplayWidgetTest),
-        unittest.makeSuite(ASCIIDisplayWidgetTest),
-        doctest.DocTestSuite(checker=checker),
-    ))
+    loadTestsFromTestCase = unittest.defaultTestLoader.loadTestsFromTestCase
+    return unittest.TestSuite(
+        (loadTestsFromTestCase(TextWidgetTest),
+         loadTestsFromTestCase(URIDisplayWidgetTest),
+         loadTestsFromTestCase(DateDisplayWidgetTest),
+         loadTestsFromTestCase(DatetimeDisplayWidgetTest),
+         loadTestsFromTestCase(TextAreaDisplayWidgetTest),
+         loadTestsFromTestCase(BytesAreaDisplayWidgetTest),
+         loadTestsFromTestCase(PasswordDisplayWidgetTest),
+         loadTestsFromTestCase(FileDisplayWidgetTest),
+         loadTestsFromTestCase(IntDisplayWidgetTest),
+         loadTestsFromTestCase(FloatDisplayWidgetTest),
+         loadTestsFromTestCase(BytesDisplayWidgetTest),
+         loadTestsFromTestCase(ASCIIDisplayWidgetTest),
+         doctest.DocTestSuite(),
+         ))

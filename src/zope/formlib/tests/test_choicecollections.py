@@ -64,9 +64,3 @@ class ListOfChoicesWidgetTest(PlacelessSetup, unittest.TestCase):
         self.assertTrue(isinstance(widget, SelectWidget))
         self.assertEqual(widget.context, bound)
         self.assertEqual(widget.vocabulary, bound.value_type.vocabulary)
-
-
-def test_suite():
-    return unittest.TestSuite((
-        unittest.makeSuite(ListOfChoicesWidgetTest),
-    ))

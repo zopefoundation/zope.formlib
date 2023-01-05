@@ -42,7 +42,7 @@ class ITestContact(Interface):
 
 
 @implementer(ITestContact)
-class TestContact(object):
+class TestContact:
     pass
 
 
@@ -53,7 +53,7 @@ class Form(form.EditForm):
 class Test(PlacelessSetup, unittest.TestCase, VerifyResults):
 
     def setUp(self):
-        super(Test, self).setUp()
+        super().setUp()
         traversingSetUp()
         # XXX this whole test setup is rather involved. Is there a
         # simpler way to publish widget_macros.pt? Probably.
@@ -67,7 +67,7 @@ class Test(PlacelessSetup, unittest.TestCase, VerifyResults):
         widget_macros = os.path.join(os.path.dirname(zope.formlib.__file__),
                                      'widget_macros.pt')
 
-        f = open(widget_macros, 'r')
+        f = open(widget_macros)
         data = f.read()
         f.close()
         macro_template.write(data)
@@ -85,7 +85,7 @@ class Test(PlacelessSetup, unittest.TestCase, VerifyResults):
 
     def test_new(self):
         request = TestRequest()
-        field = Object(ITestContact, __name__=u'foo')
+        field = Object(ITestContact, __name__='foo')
 
         widget = ObjectWidget(field, request, TestContact)
 
@@ -98,16 +98,16 @@ class Test(PlacelessSetup, unittest.TestCase, VerifyResults):
 
     def test_edit(self):
         request = TestRequest(form={
-            'field.foo.name': u'fred',
-            'field.foo.email': u'fred@fred.com'
+            'field.foo.name': 'fred',
+            'field.foo.email': 'fred@fred.com'
         })
-        field = Object(ITestContact, __name__=u'foo')
+        field = Object(ITestContact, __name__='foo')
         widget = ObjectWidget(field, request, TestContact)
         self.assertEqual(int(widget.hasInput()), 1)
         o = widget.getInputValue()
         self.assertEqual(hasattr(o, 'name'), 1)
-        self.assertEqual(o.name, u'fred')
-        self.assertEqual(o.email, u'fred@fred.com')
+        self.assertEqual(o.name, 'fred')
+        self.assertEqual(o.email, 'fred@fred.com')
         check_list = (
             'input', 'name="field.foo.name"', 'value="fred"',
             'input', 'name="field.foo.email"', 'value="fred@fred.com"',
@@ -117,5 +117,5 @@ class Test(PlacelessSetup, unittest.TestCase, VerifyResults):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Test))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(Test))
     return suite

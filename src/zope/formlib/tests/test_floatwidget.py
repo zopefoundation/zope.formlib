@@ -40,22 +40,22 @@ class FloatWidgetTest(SimpleInputWidgetTest):
         del self._widget.request.form['field.foo']
         self.assertFalse(self._widget.hasInput())
         # widget has input, even if input is an empty string
-        self._widget.request.form['field.foo'] = u''
+        self._widget.request.form['field.foo'] = ''
         self.assertTrue(self._widget.hasInput())
-        self._widget.request.form['field.foo'] = u'123'
+        self._widget.request.form['field.foo'] = '123'
         self.assertTrue(self._widget.hasInput())
 
     def test_getInputValue(self):
-        self._widget.request.form['field.foo'] = u''
+        self._widget.request.form['field.foo'] = ''
         self.assertRaises(WidgetInputError, self._widget.getInputValue)
-        self._widget.request.form['field.foo'] = u'123.45'
+        self._widget.request.form['field.foo'] = '123.45'
         self.assertEqual(self._widget.getInputValue(), 123.45)
-        self._widget.request.form['field.foo'] = u'abc'
+        self._widget.request.form['field.foo'] = 'abc'
         self.assertRaises(ConversionError, self._widget.getInputValue)
 
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(FloatWidgetTest),
+        unittest.defaultTestLoader.loadTestsFromTestCase(FloatWidgetTest),
         doctest.DocTestSuite(),
     ))

@@ -28,11 +28,11 @@ from zope.formlib.widgets import BooleanRadioWidget
 
 
 class IFoo(Interface):
-    bar = Bool(title=u'Bar')
+    bar = Bool(title='Bar')
 
 
 @implementer(IFoo)
-class Foo(object):
+class Foo:
     def __init__(self):
         self.bar = True
 
@@ -68,7 +68,7 @@ class Test(FunctionalWidgetTestCase):
         foo = Foo()
         request = TestRequest()
         request.form['form.bar'] = 'off'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         Form(foo, request)()
 
         self.assertEqual(foo.bar, False)
@@ -82,7 +82,7 @@ class Test(FunctionalWidgetTestCase):
 
         # submit missing value for bar
         request.form['form.bar-empty-marker'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         Form(foo, request)()
 
@@ -101,7 +101,7 @@ class Test(FunctionalWidgetTestCase):
 
         # submit missing value for bar
         request.form['form.bar-empty-marker'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         html = Form(foo, request)()
 
@@ -114,7 +114,7 @@ class Test(FunctionalWidgetTestCase):
 
         # submit a value for bar isn't allowed
         request.form['form.bar'] = 'bogus'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         self.assertTrue('Invalid value' in html)
@@ -122,5 +122,5 @@ class Test(FunctionalWidgetTestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Test))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(Test))
     return suite

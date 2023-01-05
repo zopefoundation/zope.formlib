@@ -31,7 +31,7 @@ our tests::
   >>> from zope.browser.interfaces import ITerms
   >>> import zope.publisher.interfaces.browser
   >>> from zope.schema.vocabulary import SimpleTerm
-  >>> from zope.formlib._compat import toUnicode
+  >>> from zope.formlib._compat import toStr
   >>> @zope.interface.implementer(ITerms)
   ... class ListTerms:
   ...
@@ -39,10 +39,9 @@ our tests::
   ...         pass # We don't actually need the source or the request :)
   ...
   ...     def getTerm(self, value):
-  ...         title = toUnicode(value)
+  ...         title = toStr(value)
   ...         try:
-  ...             # This convoluted mess makes it Py2 and Py3 friendly.
-  ...             token = str(base64.b64encode(title.encode()).strip().decode())
+  ...             token = base64.b64encode(title.encode()).strip().decode()
   ...         except binascii.Error:
   ...             raise LookupError(token)
   ...         return SimpleTerm(value, token=token, title=title)
@@ -123,7 +122,7 @@ Since the field is required, an empty selection is not valid:
   >>> widget.getInputValue() #doctest: +IGNORE_EXCEPTION_DETAIL
   Traceback (most recent call last):
   ...
-  MissingInputError: ('field.dog', u'Dogs', None)
+  MissingInputError: ('field.dog', 'Dogs', None)
 
 Also, the widget is required in this case:
 
@@ -237,7 +236,7 @@ If you don't need ordering support through the web UI, then you can use
 the simpler `.SourceMultiSelectWidget`::
 
   >>> dogSource = SourceList([
-  ...     u'spot', u'bowser', u'prince', u'duchess', u'lassie'])
+  ...     'spot', 'bowser', 'prince', 'duchess', 'lassie'])
   >>> dogs = zope.schema.List(
   ...     __name__ = 'dogs',
   ...     title=u"Dogs",
@@ -395,11 +394,11 @@ Insted, we'll inspect the properties of the widget::
   no input
 
   >>> widget.choices() == [
-  ...     {'text': u'spot',    'value': 'c3BvdA=='},
-  ...     {'text': u'bowser',  'value': 'Ym93c2Vy'},
-  ...     {'text': u'prince',  'value': 'cHJpbmNl'},
-  ...     {'text': u'duchess', 'value': 'ZHVjaGVzcw=='},
-  ...     {'text': u'lassie',  'value': 'bGFzc2ll'}
+  ...     {'text': 'spot',    'value': 'c3BvdA=='},
+  ...     {'text': 'bowser',  'value': 'Ym93c2Vy'},
+  ...     {'text': 'prince',  'value': 'cHJpbmNl'},
+  ...     {'text': 'duchess', 'value': 'ZHVjaGVzcw=='},
+  ...     {'text': 'lassie',  'value': 'bGFzc2ll'}
   ... ]
   True
 
@@ -412,7 +411,7 @@ Let's try out selecting items. Select one item::
   >>> request.form['field.dogs'] = ['bGFzc2ll']
   >>> from pprint import pprint
   >>> pprint(widget.selected()) # doctest: +NORMALIZE_WHITESPACE
-  [{'text': u'lassie',  'value': 'bGFzc2ll'}]
+  [{'text': 'lassie',  'value': 'bGFzc2ll'}]
 
   >>> widget.getInputValue()
   ['lassie']
@@ -421,8 +420,8 @@ Select two items::
 
   >>> request.form['field.dogs'] = ['c3BvdA==', 'bGFzc2ll']
   >>> pprint(widget.selected())  # doctest: +NORMALIZE_WHITESPACE
-  [{'text': u'spot',    'value': 'c3BvdA=='},
-   {'text': u'lassie',  'value': 'bGFzc2ll'}]
+  [{'text': 'spot',    'value': 'c3BvdA=='},
+   {'text': 'lassie',  'value': 'bGFzc2ll'}]
 
   >>> widget.getInputValue()
   ['spot', 'lassie']
@@ -466,7 +465,7 @@ Let's try out selecting items. Select one item::
   >>> request.form['field.dogSet-empty-marker'] = '1'
   >>> request.form['field.dogSet'] = ['bGFzc2ll']
   >>> widget.getInputValue()
-  set(['lassie'])
+  {'lassie'}
 
 Select two items::
 
@@ -608,9 +607,9 @@ This shows that we haven't selected a dog. We get a search box that we can type
 seach strings into.  Let's supply a search string. We do this by providing data
 in the form and by "selecting" the submit button::
 
-  >>> request.form['field.dog.displayed'] = u'y'
-  >>> request.form['field.dog.query.string'] = u'o'
-  >>> request.form['field.dog.query'] = u'Search'
+  >>> request.form['field.dog.displayed'] = 'y'
+  >>> request.form['field.dog.query.string'] = 'o'
+  >>> request.form['field.dog.query'] = 'Search'
 
 Because the field is required, a non-selection is not valid. Thus,
 while the widget still
@@ -622,7 +621,7 @@ error when you `~zope.formlib.interfaces.IInputWidget.getInputValue`::
   >>> widget.getInputValue() # doctest: +IGNORE_EXCEPTION_DETAIL
   Traceback (most recent call last):
   ...
-  MissingInputError: ('dog', u'Dogs', None)
+  MissingInputError: ('dog', 'Dogs', None)
 
 If the field is not required::
 
@@ -668,11 +667,11 @@ Now if we render the widget, we'll see the search results::
 
 If we select an item::
 
-  >>> request.form['field.dog.displayed'] = u'y'
+  >>> request.form['field.dog.displayed'] = 'y'
   >>> del request.form['field.dog.query.string']
   >>> del request.form['field.dog.query']
-  >>> request.form['field.dog.query.selection'] = u'c3BvdA=='
-  >>> request.form['field.dog.query.apply'] = u'Apply'
+  >>> request.form['field.dog.query.selection'] = 'c3BvdA=='
+  >>> request.form['field.dog.query.apply'] = 'Apply'
 
 Then we'll show the newly selected value::
 
@@ -719,7 +718,7 @@ combines multiple sources::
   ... class MultiSource:
   ...
   ...     def __init__(self, *sources):
-  ...         self.sources = [(toUnicode(i), s) for (i, s) in enumerate(sources)]
+  ...         self.sources = [(toStr(i), s) for (i, s) in enumerate(sources)]
   ...
   ...     def __contains__(self, value):
   ...         for i, s in self.sources:
@@ -787,9 +786,9 @@ and cats::
 
 As before, we can perform a search::
 
-  >>> request.form['field.pet.displayed'] = u'y'
-  >>> request.form['field.pet.MQ__.string'] = u't'
-  >>> request.form['field.pet.MQ__'] = u'Search'
+  >>> request.form['field.pet.displayed'] = 'y'
+  >>> request.form['field.pet.MQ__.string'] = 't'
+  >>> request.form['field.pet.MQ__'] = 'Search'
 
 In which case, we'll get some results::
 
@@ -831,11 +830,11 @@ In which case, we'll get some results::
 
 from which we can choose::
 
-  >>> request.form['field.pet.displayed'] = u'y'
+  >>> request.form['field.pet.displayed'] = 'y'
   >>> del request.form['field.pet.MQ__.string']
   >>> del request.form['field.pet.MQ__']
-  >>> request.form['field.pet.MQ__.selection'] = u'dGFiYnk='
-  >>> request.form['field.pet.MQ__.apply'] = u'Apply'
+  >>> request.form['field.pet.MQ__.selection'] = 'dGFiYnk='
+  >>> request.form['field.pet.MQ__.apply'] = 'Apply'
 
 and get a selection::
 
@@ -938,9 +937,9 @@ input for each source.  In this case, we don't show any inputs
 
 As before, we can search one of the sources::
 
-  >>> request.form['field.pets.displayed'] = u'y'
-  >>> request.form['field.pets.MQ__.string'] = u't'
-  >>> request.form['field.pets.MQ__'] = u'Search'
+  >>> request.form['field.pets.displayed'] = 'y'
+  >>> request.form['field.pets.MQ__.string'] = 't'
+  >>> request.form['field.pets.MQ__'] = 'Search'
 
 In which case, we'll get some results::
 
@@ -974,12 +973,12 @@ In which case, we'll get some results::
 
 from which we can select some values::
 
-  >>> request.form['field.pets.displayed'] = u'y'
+  >>> request.form['field.pets.displayed'] = 'y'
   >>> del request.form['field.pets.MQ__.string']
   >>> del request.form['field.pets.MQ__']
   >>> request.form['field.pets.MQ__.selection'] = [
-  ...     u'dGFiYnk=', u'dGlnZXI=', u'dG9t']
-  >>> request.form['field.pets.MQ__.apply'] = u'Apply'
+  ...     'dGFiYnk=', 'dGlnZXI=', 'dG9t']
+  >>> request.form['field.pets.MQ__.apply'] = 'Apply'
 
 Which then leads to the selections appearing as widget selections::
 
@@ -1024,12 +1023,12 @@ We can get the selected values::
 We now see the values we selected.  We also have checkboxes and buttons that
 allow us to remove selections::
 
-  >>> request.form['field.pets.displayed'] = u'y'
-  >>> request.form['field.pets'] = [u'dGFiYnk=', u'dGlnZXI=', u'dG9t']
+  >>> request.form['field.pets.displayed'] = 'y'
+  >>> request.form['field.pets'] = ['dGFiYnk=', 'dGlnZXI=', 'dG9t']
   >>> del request.form['field.pets.MQ__.selection']
   >>> del request.form['field.pets.MQ__.apply']
-  >>> request.form['field.pets.checked'] = [u'dGFiYnk=', u'dG9t']
-  >>> request.form['field.pets.remove'] = u'Remove'
+  >>> request.form['field.pets.checked'] = ['dGFiYnk=', 'dG9t']
+  >>> request.form['field.pets.remove'] = 'Remove'
 
   >>> print(widget())
   <div class="value">
@@ -1070,9 +1069,9 @@ Usage::
 
   >>> from zope.schema.vocabulary import SimpleTerm
 
-  >>> values  = [u'a', u'b', u'c']
+  >>> values  = ['a', 'b', 'c']
   >>> tokens  = [ '0',  '1',  '2']
-  >>> titles  = [u'A', u'B', u'C']
+  >>> titles  = ['A', 'B', 'C']
 
   >>> terms = [SimpleTerm(values[i], token=tokens[i], title=titles[i]) \
   ...     for i in range(0,len(values))]
@@ -1109,13 +1108,13 @@ Usage::
 
   >>> len(vocab)
   3
-  >>> (u'a' in vocab) and (u'b' in vocab) and (u'c' in vocab)
+  >>> ('a' in vocab) and ('b' in vocab) and ('c' in vocab)
   True
   >>> [value for value in vocab] == terms
   True
-  >>> term = vocab.getTerm(u'b')
+  >>> term = vocab.getTerm('b')
   >>> (term.value, term.token, term.title)
-  (u'b', '1', u'B')
+  ('b', '1', 'B')
   >>> term = vocab.getTermByToken('2')
   >>> (term.value, term.token, term.title)
-  (u'c', '2', u'C')
+  ('c', '2', 'C')

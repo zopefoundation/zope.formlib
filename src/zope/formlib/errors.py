@@ -12,10 +12,7 @@
 ##############################################################################
 """Error related things.
 """
-try:
-    from html import escape
-except ImportError:     # pragma: NO COVER
-    from cgi import escape
+from html import escape
 
 from zope.component import adapter
 from zope.i18n import Message
@@ -31,7 +28,7 @@ from zope.formlib.interfaces import IWidgetInputErrorView
 
 @implementer(IWidgetInputErrorView)
 @adapter(Invalid, IBrowserRequest)
-class InvalidErrorView(object):
+class InvalidErrorView:
     """Display a validation error as a snippet of text."""
 
     def __init__(self, context, request):
@@ -44,12 +41,12 @@ class InvalidErrorView(object):
         >>> from zope.interface.exceptions import Invalid
         >>> error = Invalid("You made an error!")
         >>> InvalidErrorView(error, None).snippet()
-        u'<span class="error">You made an error!</span>'
+        '<span class="error">You made an error!</span>'
         """
         msg = self.context.args[0]
         if isinstance(msg, Message):
             msg = translate(msg, context=self.request)
-        return u'<span class="error">%s</span>' % escape(msg)
+        return '<span class="error">%s</span>' % escape(msg)
 
 
 @adapter(IInvalidCSRFTokenError, IBrowserRequest)

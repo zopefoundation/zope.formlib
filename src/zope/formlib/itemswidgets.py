@@ -69,7 +69,7 @@ def ChoiceCollectionInputWidget(field, value_type, request):
                                      IInputWidget)
 
 
-class TranslationHook(object):
+class TranslationHook:
     """A mixin class that provides the translation capabilities."""
 
     def translate(self, msgid):
@@ -86,12 +86,12 @@ class ItemsWidgetBase(TranslationHook, SimpleInputWidget):
         # only allow this to happen for a bound field
         assert field.context is not None
         self.vocabulary = vocabulary
-        super(ItemsWidgetBase, self).__init__(field, request)
+        super().__init__(field, request)
         self.empty_marker_name = self.name + "-empty-marker"
 
     def setPrefix(self, prefix):
         """Set the prefixes for the field names of the form."""
-        super(ItemsWidgetBase, self).setPrefix(prefix)
+        super().setPrefix(prefix)
         # names for other information from the form
         self.empty_marker_name = self.name + "-empty-marker"
 
@@ -150,7 +150,7 @@ class ItemsWidgetBase(TranslationHook, SimpleInputWidget):
             "or MultiDataHelper")
 
 
-class SingleDataHelper(object):
+class SingleDataHelper:
     """Mix-in helper class for getting the term from the HTML form.
 
     This is used when we expect a single input, i.e. the Choice field.
@@ -176,7 +176,7 @@ class SingleDataHelper(object):
             form_value = ''
         else:
             form_value = self.vocabulary.getTerm(value).token
-        return renderElement(u'input',
+        return renderElement('input',
                              type='hidden',
                              name=self.name,
                              id=self.name,
@@ -185,7 +185,7 @@ class SingleDataHelper(object):
                              extra=self.extra)
 
 
-class MultiDataHelper(object):
+class MultiDataHelper:
     """Mix-in helper class for getting the term from the HTML form.
 
     This is used when we expect a multiple inputs, i.e. Sequence fields with a
@@ -237,7 +237,7 @@ class ItemDisplayWidget(SingleDataHelper, ItemsWidgetBase):
     def __call__(self):
         """See IBrowserWidget."""
         value = self._getFormValue()
-        if value is None or value == u'':
+        if value is None or value == '':
             return self.translate(self._messageNoValue)
         else:
             term = self.vocabulary.getTerm(value)
@@ -326,7 +326,7 @@ class ItemsEditWidgetBase(SingleDataHelper, ItemsWidgetBase):
 
     def __init__(self, field, vocabulary, request):
         """Initialize the widget."""
-        super(ItemsEditWidgetBase, self).__init__(field, vocabulary, request)
+        super().__init__(field, vocabulary, request)
 
     def setPrefix(self, prefix):
         """Set the prefix of the input name.
@@ -334,7 +334,7 @@ class ItemsEditWidgetBase(SingleDataHelper, ItemsWidgetBase):
         Once we set the prefix of input field, we use the name of the input
         field and the postfix '-query' for the associated query view.
         """
-        super(ItemsEditWidgetBase, self).setPrefix(prefix)
+        super().setPrefix(prefix)
 
     def __call__(self):
         """See IBrowserWidget."""
@@ -475,16 +475,16 @@ class RadioWidget(SelectWidget):
         kw = {}
         if checked:
             kw['checked'] = 'checked'
-        id = '%s.%s' % (name, index)
-        elem = renderElement(u'input',
+        id = '{}.{}'.format(name, index)
+        elem = renderElement('input',
                              value=value,
                              name=name,
                              id=id,
                              cssClass=cssClass,
                              type='radio',
                              **kw)
-        return renderElement(u'label',
-                             contents='%s&nbsp;%s' % (elem, text),
+        return renderElement('label',
+                             contents='{}&nbsp;{}'.format(elem, text),
                              **{'for': id})
 
     def renderValue(self, value):
@@ -525,7 +525,7 @@ class ItemsMultiEditWidgetBase(MultiDataHelper, ItemsEditWidgetBase):
         items = []
         for item in self._getFormValue():
             items.append(
-                renderElement(u'input',
+                renderElement('input',
                               type='hidden',
                               name=self.name + ':list',
                               id=self.name,
@@ -543,7 +543,7 @@ class MultiSelectSetWidget(MultiSelectWidget):
     """Provide a selection list for the set to be selected."""
 
     def _toFieldValue(self, input):
-        value = super(MultiSelectSetWidget, self)._toFieldValue(input)
+        value = super()._toFieldValue(input)
         if isinstance(value, list):
             value = set(value)
         return value
@@ -553,7 +553,7 @@ class MultiSelectFrozenSetWidget(MultiSelectWidget):
     """Provide a selection list for the set to be selected."""
 
     def _toFieldValue(self, input):
-        value = super(MultiSelectFrozenSetWidget, self)._toFieldValue(input)
+        value = super()._toFieldValue(input)
         if isinstance(value, list):
             value = frozenset(value)
         return value
@@ -600,7 +600,7 @@ class MultiCheckBoxWidget(ItemsMultiEditWidgetBase):
 
     orientation = "vertical"
 
-    _joinButtonToMessageTemplate = u"%s&nbsp;%s"
+    _joinButtonToMessageTemplate = "%s&nbsp;%s"
 
     def renderValue(self, value):
         rendered_items = self.renderItems(value)
@@ -622,7 +622,7 @@ class MultiCheckBoxWidget(ItemsMultiEditWidgetBase):
         kw = {}
         if checked:
             kw['checked'] = 'checked'
-        id = '%s.%s' % (name, index)
+        id = '{}.{}'.format(name, index)
         elem = renderElement('input',
                              type="checkbox",
                              cssClass=cssClass,
@@ -631,6 +631,6 @@ class MultiCheckBoxWidget(ItemsMultiEditWidgetBase):
                              value=value,
                              **kw)
         contents = self._joinButtonToMessageTemplate % (elem, escape(text))
-        return renderElement(u'label',
+        return renderElement('label',
                              contents=contents,
                              **{'for': id})

@@ -37,7 +37,7 @@ class IBoolTest(Interface):
 
 
 @implementer(IBoolTest)
-class BoolTest(object):
+class BoolTest:
 
     def __init__(self):
         self.b1 = True
@@ -76,7 +76,7 @@ class Test(FunctionalWidgetTestCase):
         request = TestRequest()
         request.form['form.b1'] = ''
         request.form['form.b2'] = 'on'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         Form(foo, request)()
 
@@ -92,7 +92,7 @@ class Test(FunctionalWidgetTestCase):
         request = TestRequest()
         request.form['form.b1'] = 'true'
         request.form['form.b2'] = 'foo'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         Form(foo, request)()
 
@@ -117,5 +117,5 @@ class Test(FunctionalWidgetTestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Test))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(Test))
     return suite

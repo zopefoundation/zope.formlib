@@ -51,7 +51,7 @@ class IDatetimeTest(Interface):
 
 
 @implementer(IDatetimeTest)
-class DatetimeTest(object):
+class DatetimeTest:
 
     def __init__(self):
         self.d1 = datetime(2003, 4, 6, tzinfo=tzinfo(0))
@@ -106,10 +106,10 @@ class Test(FunctionalWidgetTestCase):
         foo = DatetimeTest()
         request = TestRequest()
 
-        request.form['form.d1'] = u'2003-02-01 00:00:00+00:00'
-        request.form['form.d2'] = u'2003-02-02 00:00:00+00:00'
-        request.form['form.d3'] = u'2003-10-15 00:00:00+00:00'
-        request.form['form.actions.apply'] = u''
+        request.form['form.d1'] = '2003-02-01 00:00:00+00:00'
+        request.form['form.d2'] = '2003-02-02 00:00:00+00:00'
+        request.form['form.d3'] = '2003-10-15 00:00:00+00:00'
+        request.form['form.actions.apply'] = ''
 
         Form(foo, request)()
 
@@ -125,7 +125,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.d2'] = ''
         request.form['form.d3-empty-marker'] = ''
 
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         Form(foo, request)()
 
         self.assertTrue(foo.d2 is None)  # default missing_value for dates
@@ -140,7 +140,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.d2'] = ''
         request.form['form.d3'] = ''
 
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         # confirm error msgs
@@ -157,8 +157,8 @@ class Test(FunctionalWidgetTestCase):
         request = TestRequest()
 
         # submit a value for d3 that isn't allowed
-        request.form['form.d3'] = u'2003-02-01 12:00:00+00:00'
-        request.form['form.actions.apply'] = u''
+        request.form['form.d3'] = '2003-02-01 12:00:00+00:00'
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         # Invalid value message for d3
@@ -170,8 +170,8 @@ class Test(FunctionalWidgetTestCase):
         request = TestRequest()
 
         # submit value for d1 that is too low
-        request.form['form.d1'] = u'2002-12-31 12:00:00+00:00'
-        request.form['form.actions.apply'] = u''
+        request.form['form.d1'] = '2002-12-31 12:00:00+00:00'
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         self.assertTrue(html.find('Value is too small') != -1)
@@ -180,8 +180,8 @@ class Test(FunctionalWidgetTestCase):
 
         request = TestRequest()
         # submit value for d1 that is too high
-        request.form['form.d1'] = u'2021-12-01 12:00:00+00:00'
-        request.form['form.actions.apply'] = u''
+        request.form['form.d1'] = '2021-12-01 12:00:00+00:00'
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         self.assertTrue(html.find('Value is too big') != -1)
@@ -201,7 +201,7 @@ class Test(FunctionalWidgetTestCase):
         # submit change with only d2 present -- note that required
         # field d1 is omitted, which should not cause a validation error
         request.form['form.d2'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         Form(foo, request)()
 
@@ -213,5 +213,5 @@ class Test(FunctionalWidgetTestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Test))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(Test))
     return suite

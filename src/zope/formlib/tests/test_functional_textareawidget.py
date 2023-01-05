@@ -35,18 +35,18 @@ class ITextTest(Interface):
 
     s2 = Text(
         required=False,
-        missing_value=u'')
+        missing_value='')
 
     s3 = Text(
         required=False)
 
 
 @implementer(ITextTest)
-class TextTest(object):
+class TextTest:
 
     def __init__(self):
         self.s1 = ''
-        self.s2 = u'foo'
+        self.s2 = 'foo'
         self.s3 = None
 
 
@@ -80,17 +80,17 @@ class Test(FunctionalWidgetTestCase):
         foo = TextTest()
         request = TestRequest()
 
-        request.form['form.s1'] = u'foo'
-        request.form['form.s2'] = u'bar'
-        request.form['form.s3'] = u'baz'
-        request.form['form.actions.apply'] = u''
+        request.form['form.s1'] = 'foo'
+        request.form['form.s2'] = 'bar'
+        request.form['form.s3'] = 'baz'
+        request.form['form.actions.apply'] = ''
 
         Form(foo, request)()
 
         # check new values in object
-        self.assertEqual(foo.s1, u'foo')
-        self.assertEqual(foo.s2, u'bar')
-        self.assertEqual(foo.s3, u'baz')
+        self.assertEqual(foo.s1, 'foo')
+        self.assertEqual(foo.s2, 'bar')
+        self.assertEqual(foo.s3, 'baz')
 
     def test_invalid_type(self):
         """Tests textarea widget's handling of invalid unicode input.
@@ -103,7 +103,7 @@ class Test(FunctionalWidgetTestCase):
 
         # submit invalid type for text
         request.form['form.s1'] = 123  # not unicode
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         html = Form(foo, request)()
 
@@ -116,16 +116,16 @@ class Test(FunctionalWidgetTestCase):
         request = TestRequest()
 
         # submit missing values for s2 and s3
-        request.form['form.s1'] = u'foo'
+        request.form['form.s1'] = 'foo'
         request.form['form.s2'] = ''
         request.form['form.s3'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         Form(foo, request)()
 
         # check new value in object
-        self.assertEqual(foo.s1, u'foo')
-        self.assertEqual(foo.s2, u'')   # default missing_value
+        self.assertEqual(foo.s1, 'foo')
+        self.assertEqual(foo.s2, '')   # default missing_value
         self.assertEqual(foo.s3, None)  # None is s3's missing_value
 
     def test_required_validation(self):
@@ -136,7 +136,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.s1'] = ''
         request.form['form.s2'] = ''
         request.form['form.s3'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
 
         html = Form(foo, request)()
 
@@ -151,16 +151,16 @@ class Test(FunctionalWidgetTestCase):
         request = TestRequest()
 
         # submit value for s1 that is too short
-        request.form['form.s1'] = u'a'
-        request.form['form.actions.apply'] = u''
+        request.form['form.s1'] = 'a'
+        request.form['form.actions.apply'] = ''
 
         html = Form(foo, request)()
 
         self.assertTrue('Value is too short' in html)
 
         # submit value for s1 that is too long
-        request.form['form.s1'] = u'12345678901'
-        request.form['form.actions.apply'] = u''
+        request.form['form.s1'] = '12345678901'
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         self.assertTrue('Value is too long' in html)
@@ -171,19 +171,19 @@ class Test(FunctionalWidgetTestCase):
 
         # confirm default values
         self.assertEqual(foo.s1, '')
-        self.assertEqual(foo.s2, u'foo')
+        self.assertEqual(foo.s2, 'foo')
         self.assertTrue(foo.s3 is None)
 
         # submit change with only s2 present -- note that required
         # field s1 is omitted, which should not cause a validation error
-        request.form['form.s2'] = u'bar'
-        request.form['form.actions.apply'] = u''
+        request.form['form.s2'] = 'bar'
+        request.form['form.actions.apply'] = ''
 
         Form(foo, request)()
 
         # check new values in object
         self.assertEqual(foo.s1, '')
-        self.assertEqual(foo.s2, u'bar')
+        self.assertEqual(foo.s2, 'bar')
         self.assertTrue(foo.s3 is None)
 
     def test_conversion(self):
@@ -191,11 +191,11 @@ class Test(FunctionalWidgetTestCase):
         request = TestRequest()
 
         # confirm that line terminators are converted correctly on post
-        request.form['form.s2'] = u'line1\r\nline2'  # CRLF per RFC 822
-        request.form['form.actions.apply'] = u''
+        request.form['form.s2'] = 'line1\r\nline2'  # CRLF per RFC 822
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
-        self.assertEqual(foo.s2, u'line1\nline2')
+        self.assertEqual(foo.s2, 'line1\nline2')
 
         # confirm conversion to HTML
 
@@ -206,5 +206,5 @@ class Test(FunctionalWidgetTestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Test))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(Test))
     return suite

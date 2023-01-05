@@ -19,8 +19,6 @@ from doctest import DocTestSuite
 from zope.formlib.widget import DisplayWidget
 from zope.formlib.widget import UnicodeDisplayWidget
 
-from .support import checker
-
 
 def test_implemented_interfaces():
     """Make sure that the display widget implements the correct interfaces.
@@ -51,9 +49,9 @@ def test_not_required():
 
     >>> from zope.publisher.browser import TestRequest
     >>> from zope.schema import TextLine
-    >>> field = TextLine(title = u'Title',
-    ...                  __name__ = u'title',
-    ...                  default = u'<My Title>')
+    >>> field = TextLine(title = 'Title',
+    ...                  __name__ = 'title',
+    ...                  default = '<My Title>')
     >>> widget = DisplayWidget(field, TestRequest())
     >>> widget.required
     False
@@ -67,9 +65,9 @@ def test_value_escaping():
     First we need to create a field that is the context of the display widget.
 
     >>> from zope.schema import TextLine
-    >>> field = TextLine(title = u'Title',
-    ...                  __name__ = u'title',
-    ...                  default = u'<My Title>')
+    >>> field = TextLine(title = 'Title',
+    ...                  __name__ = 'title',
+    ...                  default = '<My Title>')
 
     >>> field = field.bind(None)
 
@@ -82,21 +80,21 @@ def test_value_escaping():
     chosen.
 
     >>> widget()
-    u'&lt;My Title&gt;'
+    '&lt;My Title&gt;'
 
     Now let's set a value and make sure that, when output, it is also
     correctly escaped.
 
-    >>> widget.setRenderedValue(u'<Another Title>')
+    >>> widget.setRenderedValue('<Another Title>')
     >>> widget()
-    u'&lt;Another Title&gt;'
+    '&lt;Another Title&gt;'
 
     When the value is the missing_value, the empty string should be
     displayed::
 
     >>> from zope.publisher.browser import TestRequest
-    >>> field = TextLine(title = u'Title',
-    ...                  __name__ = u'title',
+    >>> field = TextLine(title = 'Title',
+    ...                  __name__ = 'title',
     ...                  required = False)
 
     >>> field = field.bind(None)
@@ -109,8 +107,8 @@ def test_value_escaping():
     If there's no default for the field and the value is missing on
     the bound object, the empty string should still be displayed::
 
-    >>> field = TextLine(title=u'Title',
-    ...                  __name__=u'title',
+    >>> field = TextLine(title='Title',
+    ...                  __name__='title',
     ...                  required=False)
 
     >>> class Thing:
@@ -128,9 +126,7 @@ def test_value_escaping():
 def test_suite():
     suite = unittest.TestSuite()
     suite.addTest(DocTestSuite(
-        checker=checker,
         extraglobs={"DisplayWidget": DisplayWidget}))
     suite.addTest(DocTestSuite(
-        checker=checker,
         extraglobs={"DisplayWidget": UnicodeDisplayWidget}))
     return suite

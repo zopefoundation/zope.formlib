@@ -51,7 +51,7 @@ class IDecimalTest(Interface):
 
 
 @implementer(IDecimalTest)
-class DecimalTest(object):
+class DecimalTest:
 
     def __init__(self):
         self.f1 = None
@@ -96,7 +96,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.f1'] = '1.123'
         request.form['form.f2'] = '2.23456789012345'
         request.form['form.f3'] = '11.1'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         Form(foo, request)()
 
         # check new values in object
@@ -111,7 +111,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.f1'] = ''
         request.form['form.f2'] = ''
         request.form['form.f3'] = '1.1'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         Form(foo, request)()
 
         # check new values in object
@@ -127,7 +127,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.f1'] = ''
         request.form['form.f2'] = ''
         request.form['form.f3'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         # confirm error msgs
@@ -141,7 +141,7 @@ class Test(FunctionalWidgetTestCase):
 
         # submit a value for f3 that isn't allowed
         request.form['form.f3'] = '10000'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         f3_index = html.find('form.f3')
@@ -154,7 +154,7 @@ class Test(FunctionalWidgetTestCase):
 
         # submit value for f1 that is too low
         request.form['form.f1'] = '-1'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         f1_index = html.find('form.f1')
@@ -165,7 +165,7 @@ class Test(FunctionalWidgetTestCase):
 
         # submit value for f1 that is too high
         request.form['form.f1'] = '1000.2'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         f1_index = html.find('form.f1')
@@ -186,7 +186,7 @@ class Test(FunctionalWidgetTestCase):
         # submit change with only f2 present -- note that required
         # field f1 is omitted, which should not cause a validation error
         request.form['form.f2'] = ''
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         Form(foo, request)()
 
         # check new value in object
@@ -200,7 +200,7 @@ class Test(FunctionalWidgetTestCase):
 
         # submit value for f1 that cannot be convert to an float
         request.form['form.f1'] = 'foo'
-        request.form['form.actions.apply'] = u''
+        request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
         f1_index = html.find('form.f1')
@@ -212,5 +212,5 @@ class Test(FunctionalWidgetTestCase):
 
 def test_suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(Test))
+    suite.addTest(unittest.defaultTestLoader.loadTestsFromTestCase(Test))
     return suite

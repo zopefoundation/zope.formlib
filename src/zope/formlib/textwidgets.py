@@ -21,9 +21,7 @@ from zope.datetime import parseDatetimetz
 from zope.i18n.format import DateTimeParseError
 from zope.interface import implementer
 
-from zope.formlib._compat import PY3
-from zope.formlib._compat import toUnicode
-from zope.formlib._compat import unicode
+from zope.formlib._compat import toStr
 from zope.formlib.i18n import _
 from zope.formlib.interfaces import ConversionError
 from zope.formlib.interfaces import ITextBrowserWidget
@@ -42,17 +40,17 @@ def escape(str):
 class TextWidget(SimpleInputWidget):
     """Text widget.
 
-    Single-line text (unicode) input
+    Single-line text input
 
     >>> from zope.publisher.browser import TestRequest
     >>> from zope.schema import TextLine
-    >>> field = TextLine(__name__='foo', title=u'on')
-    >>> request = TestRequest(form={'field.foo': u'Bob'})
+    >>> field = TextLine(__name__='foo', title='on')
+    >>> request = TestRequest(form={'field.foo': 'Bob'})
     >>> widget = TextWidget(field, request)
     >>> widget.hasInput()
     True
     >>> widget.getInputValue()
-    u'Bob'
+    'Bob'
 
     >>> def normalize(s):
     ...   return '\\n  '.join(filter(None, s.split(' ')))
@@ -92,10 +90,10 @@ class TextWidget(SimpleInputWidget):
     Check that HTML is correctly encoded and decoded:
 
     >>> request = TestRequest(
-    ...     form={'field.foo': u'<h1>&copy;</h1>'})
+    ...     form={'field.foo': '<h1>&copy;</h1>'})
     >>> widget = TextWidget(field, request)
     >>> widget.getInputValue()
-    u'<h1>&copy;</h1>'
+    '<h1>&copy;</h1>'
 
     >>> print(normalize( widget() ))
     <input
@@ -116,7 +114,7 @@ class TextWidget(SimpleInputWidget):
     convert_missing_value = True
 
     def __init__(self, *args):
-        super(TextWidget, self).__init__(*args)
+        super().__init__(*args)
 
     def __call__(self):
         value = self._getFormValue()
@@ -141,12 +139,12 @@ class TextWidget(SimpleInputWidget):
         if self.convert_missing_value and input == self._missing:
             value = self.context.missing_value
         else:
-            # We convert everything to unicode. This might seem a bit crude,
+            # We convert everything to str. This might seem a bit crude,
             # but anything contained in a TextWidget should be representable
             # as a string. Note that you always have the choice of overriding
             # the method.
             try:
-                value = toUnicode(input)
+                value = toStr(input)
             except ValueError as v:
                 raise ConversionError(_("Invalid text data"), v)
         return value
@@ -155,14 +153,14 @@ class TextWidget(SimpleInputWidget):
 class Text(SimpleInputWidget):
 
     def _toFieldValue(self, input):
-        return super(Text, self)._toFieldValue(input)
+        return super()._toFieldValue(input)
 
 
 class Bytes(SimpleInputWidget):
 
     def _toFieldValue(self, input):
-        value = super(Bytes, self)._toFieldValue(input)
-        if isinstance(value, unicode):
+        value = super()._toFieldValue(input)
+        if isinstance(value, str):
             try:
                 value = value.encode('ascii')
             except UnicodeError as v:
@@ -177,13 +175,13 @@ class BytesWidget(Bytes, TextWidget):
 
     >>> from zope.publisher.browser import TestRequest
     >>> from zope.schema import BytesLine
-    >>> field = BytesLine(__name__='foo', title=u'on')
-    >>> request = TestRequest(form={'field.foo': u'Bob'})
+    >>> field = BytesLine(__name__='foo', title='on')
+    >>> request = TestRequest(form={'field.foo': 'Bob'})
     >>> widget = BytesWidget(field, request)
     >>> widget.hasInput()
     True
     >>> widget.getInputValue()
-    'Bob'
+    b'Bob'
     """
 
 
@@ -198,29 +196,18 @@ class BytesDisplayWidget(DisplayWidget):
         return renderElement("pre", contents=escape(content))
 
 
-# for things which are of the str type on both Python 2 and 3
-if PY3:  # pragma NO COVER
-    NativeString = Text
-    NativeStringWidget = TextWidget
-    NativeStringDisplayWidget = DisplayWidget
-else:  # pragma NO COVER
-    NativeString = Bytes
-    NativeStringWidget = BytesWidget
-    NativeStringDisplayWidget = BytesDisplayWidget
-
-
-class ASCII(NativeString):
+class ASCII(Text):
     """ASCII"""
 
 
-class ASCIIWidget(NativeStringWidget):
+class ASCIIWidget(TextWidget):
     """ASCII widget.
 
     Single-line data (string) input
     """
 
 
-class ASCIIDisplayWidget(NativeStringDisplayWidget):
+class ASCIIDisplayWidget(DisplayWidget):
     """ASCII display widget"""
 
 
@@ -253,17 +240,17 @@ class URIDisplayWidget(DisplayWidget):
 class TextAreaWidget(SimpleInputWidget):
     """TextArea widget.
 
-    Multi-line text (unicode) input.
+    Multi-line text input.
 
     >>> from zope.publisher.browser import TestRequest
     >>> from zope.schema import Text
-    >>> field = Text(__name__='foo', title=u'on')
-    >>> request = TestRequest(form={'field.foo': u'Hello\\r\\nworld!'})
+    >>> field = Text(__name__='foo', title='on')
+    >>> request = TestRequest(form={'field.foo': 'Hello\\r\\nworld!'})
     >>> widget = TextAreaWidget(field, request)
     >>> widget.hasInput()
     True
     >>> widget.getInputValue()
-    u'Hello\\nworld!'
+    'Hello\\nworld!'
 
     >>> def normalize(s):
     ...   return '\\n  '.join(filter(None, s.split(' ')))
@@ -301,10 +288,10 @@ class TextAreaWidget(SimpleInputWidget):
     Check that HTML is correctly encoded and decoded:
 
     >>> request = TestRequest(
-    ...     form={'field.foo': u'<h1>&copy;</h1>'})
+    ...     form={'field.foo': '<h1>&copy;</h1>'})
     >>> widget = TextAreaWidget(field, request)
     >>> widget.getInputValue()
-    u'<h1>&copy;</h1>'
+    '<h1>&copy;</h1>'
 
     >>> print(normalize( widget() ))
     <textarea
@@ -319,7 +306,7 @@ class TextAreaWidget(SimpleInputWidget):
     works correctly::
 
     >>> from zope.schema import Text
-    >>> field = Text(__name__='description', title=u'Description')
+    >>> field = Text(__name__='description', title='Description')
 
     >>> from zope.formlib.interfaces import ConversionError
     >>> class TestTextAreaWidget(TextAreaWidget):
@@ -329,10 +316,10 @@ class TextAreaWidget(SimpleInputWidget):
     ...         return input
     ...
 
-    >>> request = TestRequest(form={'field.description': u'<p>bar</p>'})
+    >>> request = TestRequest(form={'field.description': '<p>bar</p>'})
     >>> widget = TestTextAreaWidget(field, request)
     >>> widget.getInputValue()
-    u'<p>bar</p>'
+    '<p>bar</p>'
     >>> print(normalize( widget() ))
     <textarea
       cols="60"
@@ -341,7 +328,7 @@ class TextAreaWidget(SimpleInputWidget):
       rows="15"
       >&lt;p&gt;bar&lt;/p&gt;</textarea>
 
-    >>> request = TestRequest(form={'field.description': u'<p>foo</p>'})
+    >>> request = TestRequest(form={'field.description': '<p>foo</p>'})
     >>> widget = TestTextAreaWidget(field, request)
     >>> try:
     ...     widget.getInputValue()
@@ -364,22 +351,22 @@ class TextAreaWidget(SimpleInputWidget):
     style = ''
 
     def _toFieldValue(self, value):
-        value = super(TextAreaWidget, self)._toFieldValue(value)
+        value = super()._toFieldValue(value)
         if value:
             try:
-                value = toUnicode(value)
+                value = toStr(value)
             except ValueError as v:
-                raise ConversionError(_("Invalid unicode data"), v)
+                raise ConversionError(_("Invalid test data"), v)
             else:
                 value = value.replace("\r\n", "\n")
         return value
 
     def _toFormValue(self, value):
-        value = super(TextAreaWidget, self)._toFormValue(value)
+        value = super()._toFormValue(value)
         if value:
             value = value.replace("\n", "\r\n")
         else:
-            value = u''
+            value = ''
 
         return value
 
@@ -402,25 +389,25 @@ class BytesAreaWidget(Bytes, TextAreaWidget):
 
     >>> from zope.publisher.browser import TestRequest
     >>> from zope.schema import Bytes
-    >>> field = Bytes(__name__='foo', title=u'on')
-    >>> request = TestRequest(form={'field.foo': u'Hello\\r\\nworld!'})
+    >>> field = Bytes(__name__='foo', title='on')
+    >>> request = TestRequest(form={'field.foo': 'Hello\\r\\nworld!'})
     >>> widget = BytesAreaWidget(field, request)
     >>> widget.hasInput()
     True
     >>> widget.getInputValue()
-    'Hello\\nworld!'
+    b'Hello\\nworld!'
     """
 
 
-class ASCIIAreaWidget(NativeString, TextAreaWidget):
+class ASCIIAreaWidget(Text, TextAreaWidget):
     """ASCIIArea widget.
 
     Multi-line string input.
 
     >>> from zope.publisher.browser import TestRequest
     >>> from zope.schema import ASCII
-    >>> field = ASCII(__name__='foo', title=u'on')
-    >>> request = TestRequest(form={'field.foo': u'Hello\\r\\nworld!'})
+    >>> field = ASCII(__name__='foo', title='on')
+    >>> request = TestRequest(form={'field.foo': 'Hello\\r\\nworld!'})
     >>> widget = ASCIIAreaWidget(field, request)
     >>> widget.hasInput()
     True
@@ -465,7 +452,7 @@ class PasswordWidget(TextWidget):
             existing = False
         if (not input) and existing:
             return self.context.UNCHANGED_PASSWORD
-        return super(PasswordWidget, self)._toFieldValue(input)
+        return super()._toFieldValue(input)
 
     def hidden(self):
         raise NotImplementedError(
@@ -501,7 +488,7 @@ class FileWidget(TextWidget):
                                  cssClass=self.cssClass,
                                  size=self.displayWidth,
                                  extra=self.extra)
-        return "%s %s" % (hidden, elem)
+        return "{} {}".format(hidden, elem)
 
     def _toFieldValue(self, input):
         if input is None or input == '':
@@ -532,7 +519,7 @@ class IntWidget(TextWidget):
     Let's make sure that zeroes are rendered properly:
 
     >>> from zope.schema import Int
-    >>> field = Int(__name__='foo', title=u'on')
+    >>> field = Int(__name__='foo', title='on')
     >>> widget = IntWidget(field, None)
     >>> widget.setRenderedValue(0)
 
@@ -582,7 +569,7 @@ class DecimalWidget(TextWidget):
         if value == self.context.missing_value:
             value = self._missing
         else:
-            return toUnicode(value)
+            return toStr(value)
 
 
 class DatetimeWidget(TextWidget):
@@ -609,7 +596,7 @@ class DateWidget(DatetimeWidget):
     """
 
     def _toFieldValue(self, input):
-        v = super(DateWidget, self)._toFieldValue(input)
+        v = super()._toFieldValue(input)
         if v != self.context.missing_value:
             v = v.date()
         return v
@@ -642,10 +629,10 @@ class DateI18nWidget(TextWidget):
                 return formatter.parse(input)
             except (DateTimeParseError, ValueError) as v:
                 raise ConversionError(_("Invalid datetime data"),
-                                      "%s (%r)" % (v, input))
+                                      "{} ({!r})".format(v, input))
 
     def _toFormValue(self, value):
-        value = super(DateI18nWidget, self)._toFormValue(value)
+        value = super()._toFormValue(value)
         if value:
             formatter = self.request.locale.dates.getFormatter(
                 self._category, (self.displayStyle or None))

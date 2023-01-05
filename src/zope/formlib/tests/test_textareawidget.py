@@ -56,6 +56,6 @@ class TextAreaWidgetTest(SimpleInputWidgetTest):
 
 def test_suite():
     return unittest.TestSuite((
-        unittest.makeSuite(TextAreaWidgetTest),
+        unittest.defaultTestLoader.loadTestsFromTestCase(TextAreaWidgetTest),
         doctest.DocTestSuite(),
     ))

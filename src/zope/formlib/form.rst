@@ -113,7 +113,7 @@ Now, we can display the form:
 If the request contains any form data, that will be reflected in the
 output:
 
-    >>> request.form['form.name'] = u'bob'
+    >>> request.form['form.name'] = 'bob'
     >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
@@ -192,13 +192,13 @@ If there are errors, we print them.  When we display the widgets, we
 also check for errors and show them if present.  Let's add a submit
 variable:
 
-    >>> request.form['form.min_size'] = u''
-    >>> request.form['form.max_size'] = u''
-    >>> request.form['submit'] = u'Submit'
+    >>> request.form['form.min_size'] = ''
+    >>> request.form['form.max_size'] = ''
+    >>> request.form['submit'] = 'Submit'
     >>> MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE
     There were errors:
-    ('min_size', u'Minimum size', RequiredMissing('min_size'))
-    ('max_size', u'Maximum size', RequiredMissing('max_size'))
+    ('min_size', 'Minimum size', RequiredMissing('min_size'))
+    ('max_size', 'Maximum size', RequiredMissing('max_size'))
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
@@ -209,17 +209,17 @@ variable:
     <span class="error">Required input is missing.</span>
     <input class="textType" id="form.color" name="form.color" size="20"
            type="text" value=""  />
-    {'name': u'bob'}
+    {'name': 'bob'}
 
 
 Note that we got an error because we omitted the values for min_size
 and max size.  If we provide an invalid value, we'll get an error too:
 
-    >>> request.form['form.min_size'] = u'bob'
+    >>> request.form['form.min_size'] = 'bob'
     >>> MyForm(None, request)() # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
     There were errors:
-    (u'Invalid floating point data', ...ValueError...)
-    ('max_size', u'Maximum size', RequiredMissing('max_size'))
+    ('Invalid floating point data', ...ValueError...)
+    ('max_size', 'Maximum size', RequiredMissing('max_size'))
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
     <input class="textType" id="form.min_size" name="form.min_size" size="10"
@@ -230,12 +230,12 @@ and max size.  If we provide an invalid value, we'll get an error too:
     <span class="error">Required input is missing.</span>
     <input class="textType" id="form.color" name="form.color" size="20"
            type="text" value=""  />
-    {'name': u'bob'}
+    {'name': 'bob'}
 
 If we provide valid data, we'll get the data back:
 
-    >>> request.form['form.min_size'] = u'42'
-    >>> request.form['form.max_size'] = u'142'
+    >>> request.form['form.min_size'] = '42'
+    >>> request.form['form.max_size'] = '142'
     >>> pprint(MyForm(None, request)(), width=1)
     ... # doctest: +NORMALIZE_WHITESPACE
     <input class="textType" id="form.name" name="form.name" size="20"
@@ -248,7 +248,7 @@ If we provide valid data, we'll get the data back:
            type="text" value=""  />
     {'max_size': 142.0,
      'min_size': 42.0,
-     'name': u'bob'}
+     'name': 'bob'}
 
 It's up to the form to decide what to do with the information.
 
@@ -323,13 +323,13 @@ If we display the form again, we'll get the same result:
            type="text" value="142.0"  />
     {'max_size': 142.0,
      'min_size': 42.0,
-     'name': u'bob'}
+     'name': 'bob'}
 
 But if we reduce the maximum below the minimum, we'll get an invariant
 error:
 
-    >>> request.form['form.min_size'] = u'42'
-    >>> request.form['form.max_size'] = u'14'
+    >>> request.form['form.min_size'] = '42'
+    >>> request.form['form.max_size'] = '14'
 
     >>> pprint(MyForm(None, request)(), width=1)
     ... # doctest: +NORMALIZE_WHITESPACE
@@ -343,16 +343,16 @@ error:
            type="text" value="14.0"  />
     {'max_size': 14.0,
      'min_size': 42.0,
-     'name': u'bob'}
+     'name': 'bob'}
 
 We can have field errors and invariant errors:
 
-    >>> request.form['form.name'] = u''
+    >>> request.form['form.name'] = ''
 
     >>> pprint(MyForm(None, request)(), width=1)
     ... # doctest: +NORMALIZE_WHITESPACE
     There were field errors:
-    ('name', u'Name', RequiredMissing('name'))
+    ('name', 'Name', RequiredMissing('name'))
     There were invariant errors:
     Maximum is less than Minimum
     <input class="textType" id="form.name" name="form.name" size="20"
@@ -368,12 +368,12 @@ We can have field errors and invariant errors:
 If the inputs for some fields tested by invariants are missing, the
 invariants are ignored:
 
-    >>> request.form['form.max_size'] = u''
+    >>> request.form['form.max_size'] = ''
 
     >>> pprint(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     There were field errors:
-    ('name', u'Name', RequiredMissing('name'))
-    ('max_size', u'Maximum size', RequiredMissing('max_size'))
+    ('name', 'Name', RequiredMissing('name'))
+    ('max_size', 'Maximum size', RequiredMissing('max_size'))
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value=""  />
     <span class="error">Required input is missing.</span>
@@ -539,10 +539,10 @@ object. We can use the `applyChanges` function for that:
 
 Now, if we submit the form with some data:
 
-    >>> request.form['form.name'] = u'bob'
-    >>> request.form['form.min_size'] = u'42'
-    >>> request.form['form.max_size'] = u'142'
-    >>> request.form['submit'] = u''
+    >>> request.form['form.name'] = 'bob'
+    >>> request.form['form.min_size'] = '42'
+    >>> request.form['form.max_size'] = '142'
+    >>> request.form['submit'] = ''
     >>> pprint(MyForm(order, request)(), width=1)
     ... # doctest: +NORMALIZE_WHITESPACE
     1
@@ -555,10 +555,10 @@ Now, if we submit the form with some data:
     Object updated
     {'max_size': 142.0,
      'min_size': 42.0,
-     'name': u'bob'}
+     'name': 'bob'}
 
     >>> order.name
-    u'bob'
+    'bob'
 
     >>> order.max_size
     142.0
@@ -581,7 +581,7 @@ changes were applied:
     No changes
     {'max_size': 142.0,
      'min_size': 42.0,
-     'name': u'bob'}
+     'name': 'bob'}
 
 because the new and old values are the same.
 
@@ -798,7 +798,7 @@ In this case, we didn't get any output about changes because the
 request form data didn't include a submit action that matched our
 action definition. Let's add one and try again:
 
-    >>> request.form['form.actions.edit'] = u''
+    >>> request.form['form.actions.edit'] = ''
     >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     No changes
     1
@@ -816,11 +816,11 @@ changes.
 
 Let's try changing some data:
 
-    >>> request.form['form.max_size'] = u'10/0'
+    >>> request.form['form.max_size'] = '10/0'
     >>> print(MyForm(order, request)())
     ... # doctest: +NORMALIZE_WHITESPACE
     There were errors:
-    (u'Invalid floating point data',...ValueError...)
+    ('Invalid floating point data',...ValueError...)
     1
     <input class="textType" id="form.name" name="form.name" size="20"
            type="text" value="bob"  />
@@ -834,7 +834,7 @@ Let's try changing some data:
 
 Oops, we had a typo, let's fix it:
 
-    >>> request.form['form.max_size'] = u'10.0'
+    >>> request.form['form.max_size'] = '10.0'
     >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     There were errors:
     Maximum is less than Minimum
@@ -850,7 +850,7 @@ Oops, we had a typo, let's fix it:
 
 Oh yeah, we need to reduce the minimum too: :)
 
-    >>> request.form['form.min_size'] = u'1.0'
+    >>> request.form['form.min_size'] = '1.0'
     >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     Object updated
     1
@@ -982,7 +982,7 @@ Now we can try out our form:
     <input type="submit" id="form.actions.edit" name="form.actions.edit"
            value="Edit" class="button" />
 
-    >>> request.form['form.min_size'] = u'20.0'
+    >>> request.form['form.min_size'] = '20.0'
     >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     There were 1 errors.
     Invalid: Maximum is less than Minimum
@@ -996,7 +996,7 @@ Now we can try out our form:
     <input type="submit" id="form.actions.edit" name="form.actions.edit"
            value="Edit" class="button" />
 
-    >>> request.form['form.max_size'] = u'30.0'
+    >>> request.form['form.max_size'] = '30.0'
     >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     Object updated
     1
@@ -1028,7 +1028,7 @@ option.
     ...     form_fields = form.Fields(IOrder)
     ...     form_fields = form_fields.omit('now')
 
-    >>> request.form['form.actions.apply'] = u''
+    >>> request.form['form.actions.apply'] = ''
     >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     No changes
     1
@@ -1041,7 +1041,7 @@ option.
     <input type="submit" id="form.actions.apply" name="form.actions.apply"
            value="Apply" class="button" />
 
-    >>> request.form['form.min_size'] = u'40.0'
+    >>> request.form['form.min_size'] = '40.0'
     >>> print(MyForm(order, request)()) # doctest: +NORMALIZE_WHITESPACE
     There were errors
     Invalid: Maximum is less than Minimum
@@ -1055,7 +1055,7 @@ option.
     <input type="submit" id="form.actions.apply" name="form.actions.apply"
            value="Apply" class="button" />
 
-    >>> request.form['form.max_size'] = u'50.0'
+    >>> request.form['form.max_size'] = '50.0'
     >>> print(MyForm(order, request)())
     ... # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
     Updated on ... ... ...  ...:...:...
@@ -1150,12 +1150,12 @@ the descriptive data:
     <input type="submit" id="form.actions.apply" name="form.actions.apply"
            value="Apply" class="button" />
 
-    >>> request.form['form.name'] = u'bob'
-    >>> request.form['form.min_size'] = u'10.0'
-    >>> request.form['form.max_size'] = u'20.0'
-    >>> request.form['form.title'] = u'Widgets'
-    >>> request.form['form.description'] = u'Need more widgets'
-    >>> request.form['form.actions.apply'] = u''
+    >>> request.form['form.name'] = 'bob'
+    >>> request.form['form.min_size'] = '10.0'
+    >>> request.form['form.max_size'] = '20.0'
+    >>> request.form['form.title'] = 'Widgets'
+    >>> request.form['form.description'] = 'Need more widgets'
+    >>> request.form['form.actions.apply'] = ''
     >>> myform = MyForm(order, request)
     >>> print(myform())
     ... # doctest: +NORMALIZE_WHITESPACE +ELLIPSIS
@@ -1184,7 +1184,7 @@ the descriptive data:
     AttributeError: Order instance has no attribute 'title'
 
     >>> Descriptive(order).title
-    u'Widgets'
+    'Widgets'
 
 Often, we'd like to get at the adapters used.  If `EditForm` is used,
 the adapters are available in the adapters attribute, which is a
@@ -1374,7 +1374,7 @@ Lets look at an example:
     ...     def setUpWidgets(self, ignore_request=False):
     ...         self.widgets = form.setUpWidgets(
     ...             self.form_fields, self.prefix, self.context, self.request,
-    ...             data=dict(identifier=42, name=u'sally'),
+    ...             data=dict(identifier=42, name='sally'),
     ...             ignore_request=ignore_request
     ...             )
 
@@ -1395,9 +1395,9 @@ If data are passed in the request, they override initial data for
 input fields:
 
     >>> request = TestRequest()
-    >>> request.form['form.name'] = u'fred'
-    >>> request.form['form.identifier'] = u'0'
-    >>> request.form['form.max_size'] = u'100'
+    >>> request.form['form.name'] = 'fred'
+    >>> request.form['form.identifier'] = '0'
+    >>> request.form['form.max_size'] = '100'
     >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     42
     <input class="textType" id="form.name" name="form.name"
@@ -1420,7 +1420,7 @@ our form fields:
     ...     def setUpWidgets(self, ignore_request=False):
     ...         self.widgets = form.setUpWidgets(
     ...             self.form_fields, self.prefix, self.context, self.request,
-    ...             data=dict(identifier=42, name=u'sally'),
+    ...             data=dict(identifier=42, name='sally'),
     ...             ignore_request=ignore_request
     ...             )
 
@@ -1449,7 +1449,7 @@ fake that quickly by forcing ignore_request to be `True`.
     ...     def setUpWidgets(self, ignore_request=False):
     ...         self.widgets = form.setUpWidgets(
     ...             self.form_fields, self.prefix, self.context, self.request,
-    ...             data=dict(identifier=42, name=u'sally'),
+    ...             data=dict(identifier=42, name='sally'),
     ...             ignore_request=True # =ignore_request
     ...             )
 
@@ -1605,13 +1605,13 @@ that reuses the most code is the following:
     ...     # can use @zope.cachedescriptors.property.Lazy for performance
     ...     def actions(self):
     ...         return list(self.primary_actions) + list(self.secondary_actions)
-    ...     @form.action(u'Edit', primary_actions)
+    ...     @form.action('Edit', primary_actions)
     ...     def handle_edit_action(self, action, data):
     ...         if form.applyChanges(self.context, self.form_fields, data):
     ...             self.status = 'Object updated'
     ...         else:
     ...             self.status = 'No changes'
-    ...     @form.action(u'Submit for review...', secondary_actions)
+    ...     @form.action('Submit for review...', secondary_actions)
     ...     def handle_review_action(self, action, data):
     ...         print("do something here")
     ...
@@ -1668,7 +1668,7 @@ Of course, getting the widget data still works.
     >>> form.getWidgetsData(widgets, '', data)
     []
     >>> data
-    {'name': u'foo'}
+    {'name': 'foo'}
 
 And the value from the request is also visible in the rendered form.
 
@@ -1771,13 +1771,13 @@ demonstrate the correct behavior:
 Here is the unexpected behavior that caused formlib to do the wrong thing:
 
   >>> IFooBar['title'].interface
-  <InterfaceClass __builtin__.IFoo>
+  <InterfaceClass builtins.IFoo>
 
 Note: If this behavior ever changes, the formlib can be simplified again.
 
   >>> @zope.interface.implementer(IFooBar)
   ... class FooBar(object):
-  ...     title = u'initial'
+  ...     title = 'initial'
   >>> foobar = FooBar()
 
   >>> class Blah(object):
@@ -1820,7 +1820,7 @@ schemas and fields. The formlib provides these annotations with the help of the
 applyData function, which returns a list of modification descriptions:
 
     >>> form.applyData(blah, form_fields, {'title': 'modified'})
-    {<InterfaceClass __builtin__.IFooBar>: ['title']}
+    {<InterfaceClass builtins.IFooBar>: ['title']}
 
 The events are annotated with these descriptions. We need a subscriber to log these
 infos:
@@ -1835,10 +1835,10 @@ infos:
     ...     form_fields = form.FormFields(IFooBar)
 
     >>> request = TestRequest()
-    >>> request.form['form.title'] = u'again modified'
-    >>> request.form['form.actions.apply'] = u''
+    >>> request.form['form.title'] = 'again modified'
+    >>> request.form['form.actions.apply'] = ''
     >>> MyForm(FooBar(), request)()
-    Modified: __builtin__.IFooBar ('title',)
+    Modified: builtins.IFooBar ('title',)
     ...
 
 Cleanup:
@@ -1870,12 +1870,12 @@ information.
     >>> request = TestRequest()
     >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     render was called
-    >>> request.form['form.actions.redirect'] = u''
+    >>> request.form['form.actions.redirect'] = ''
     >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     Action: redirect
 
     >>> request = TestRequest()
-    >>> request.form['form.actions.stay'] = u''
+    >>> request.form['form.actions.stay'] = ''
     >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     Action: stay
     render was called
@@ -1908,8 +1908,8 @@ This is a GET request for a form that specifies it can only validate POST
 requests::
 
     >>> request = TestRequest()
-    >>> request.form['form.title'] = u'Submitted Title'
-    >>> request.form['form.actions.handle'] = u''
+    >>> request.form['form.title'] = 'Submitted Title'
+    >>> request.form['form.actions.handle'] = ''
     >>> MyPOSTForm(None, request)() # doctest: +NORMALIZE_WHITESPACE +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
@@ -1919,8 +1919,8 @@ By setting the correct request method we validate input::
 
     >>> request = TestRequest()
     >>> request.method = 'POST'
-    >>> request.form['form.title'] = u'Submitted Title'
-    >>> request.form['form.actions.handle'] = u''
+    >>> request.form['form.title'] = 'Submitted Title'
+    >>> request.form['form.actions.handle'] = ''
     >>> print(MyPOSTForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     Action: handle {'title': 'Submitted Title'}
 
@@ -1941,15 +1941,15 @@ GET request::
 
     >>> request = TestRequest()
     >>> request.method = 'POST'
-    >>> request.form['form.actions.handle'] = u''
+    >>> request.form['form.actions.handle'] = ''
     >>> MyGETForm(None, request)() # doctest: +NORMALIZE_WHITESPACE +IGNORE_EXCEPTION_DETAIL
     Traceback (most recent call last):
     ...
     MethodNotAllowed: None, <zope.publisher.browser.TestRequest instance URL=http://127.0.0.1>
 
     >>> request = TestRequest()
-    >>> request.form['form.title'] = u'Submitted Title'
-    >>> request.form['form.actions.handle'] = u''
+    >>> request.form['form.title'] = 'Submitted Title'
+    >>> request.form['form.actions.handle'] = ''
     >>> print(MyGETForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     Action: handle {'title': 'Submitted Title'}
 
@@ -1968,14 +1968,14 @@ methods are accepted::
 
     >>> request = TestRequest()
     >>> request.method = 'POST'
-    >>> request.form['form.title'] = u'Submitted Title'
-    >>> request.form['form.actions.handle'] = u''
+    >>> request.form['form.title'] = 'Submitted Title'
+    >>> request.form['form.actions.handle'] = ''
     >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     Action: handle {'title': 'Submitted Title'}
 
     >>> request = TestRequest()
-    >>> request.form['form.title'] = u'Submitted Title'
-    >>> request.form['form.actions.handle'] = u''
+    >>> request.form['form.title'] = 'Submitted Title'
+    >>> request.form['form.actions.handle'] = ''
     >>> print(MyForm(None, request)()) # doctest: +NORMALIZE_WHITESPACE
     Action: handle {'title': 'Submitted Title'}
 
@@ -2049,7 +2049,7 @@ hidden form field "__csrftoken__"::
     >>> request.form['__csrftoken__'] = csrftoken
     >>> myform = MyForm(None, request)
     >>> _ = myform()
-    Action: handle {'title': u'Submitted title'}
+    Action: handle {'title': 'Submitted title'}
 
 If for some reason the cookie is not set, the form will raise an error::
 
@@ -2102,7 +2102,7 @@ this by inventing a token value here in the test ourselves::
     >>> request.form['__csrftoken__'] = csrftoken
     >>> myform = MyForm(None, request)
     >>> _ = myform()
-    Action: handle {'title': u'Submitted title'}
+    Action: handle {'title': 'Submitted title'}
 
 It is possible to have multiple forms in one page. Of course only one of
 these forms can be submitted at one point in time, but the CSRF token should

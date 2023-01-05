@@ -11,7 +11,7 @@ First define the interface for a person:
   >>> class IPerson(Interface):
   ...     """Interface for Persons."""
   ...
-  ...     name = TextLine(title=u'Name', description=u'The first name')
+  ...     name = TextLine(title='Name', description='The first name')
 
 Let's define the class:
 
@@ -27,11 +27,11 @@ Let's define the interface family:
   >>> class IFamily(Interface):
   ...     """The familiy interface."""
   ...
-  ...     mother = Object(title=u'Mother',
+  ...     mother = Object(title='Mother',
   ...                     required=False,
   ...                     schema=IPerson)
   ...
-  ...     father = Object(title=u'Father',
+  ...     father = Object(title='Father',
   ...                     required=False,
   ...                     schema=IPerson)
 
@@ -62,8 +62,8 @@ Let's make an instance of Family with `None` attributes:
 
 Let's make an instance of Family with None attributes:
 
-  >>> mother = Person(u'Margrith')
-  >>> father = Person(u'Joe')
+  >>> mother = Person('Margrith')
+  >>> father = Person('Joe')
   >>> family = Family(mother, father)
   >>> IPerson.providedBy(family.mother)
   True
@@ -110,13 +110,13 @@ Let's define a request and provide input value for the mothers name used
 in the family object:
 
   >>> request = TestRequest(HTTP_ACCEPT_LANGUAGE='pl')
-  >>> request.form['field.mother.name'] = u'Margrith Ineichen'
+  >>> request.form['field.mother.name'] = 'Margrith Ineichen'
 
 Before we update the object let's check the value name of the mother
 instance on the family object:
 
   >>> family.mother.name
-  u'Margrith'
+  'Margrith'
 
 Now let's initialize a `.ObjectWidget` with the right attributes:
 
@@ -140,7 +140,7 @@ directly to the family attribute mother. For more information see the method
 Test the updated mother's name value on the object family:
 
   >>> family.mother.name
-  u'Margrith Ineichen'
+  'Margrith Ineichen'
 
   >>> IPerson.providedBy(family.mother)
   True

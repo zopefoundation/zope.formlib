@@ -15,41 +15,16 @@
 """
 import re
 
-from zope.testing import renormalizing
 
-
-checker = renormalizing.RENormalizing([
-    # Python 3 unicode removed the "u".
-    (re.compile("u('.*?')"),
-     r"\1"),
-    (re.compile('u(".*?")'),
-     r"\1"),
-    # Python 3 bytes adds the "b".
-    (re.compile("b('.*?')"),
-     r"\1"),
-    (re.compile('b(".*?")'),
-     r"\1"),
-    # Python 3 changed the set representation.
-    (re.compile(r"set\(\[(.*)\]\)"),
-     r"{\1}"),
-    # Python 3 renames builtins.
-    (re.compile("__builtin__"),
-     r"builtins"),
-    # Python 3 adds module name to exceptions.
-    (re.compile("zope.schema.interfaces.SchemaNotProvided"),
-     r"SchemaNotProvided"),
-])
-
-
-class VerifyResults(object):
+class VerifyResults:
     """Mix-in for test classes with helpers for checking string data."""
 
     def verifyResult(self, result, check_list, inorder=False):
         start = 0
         for check in check_list:
             pos = result.find(check, start)
-            self.assertTrue(pos >= 0,
-                            "%r not found in %r" % (check, result[start:]))
+            self.assertTrue(pos >= 0, "{!r} not found in {!r}".format(
+                check, result[start:]))
             if inorder:
                 start = pos + len(check)
 
