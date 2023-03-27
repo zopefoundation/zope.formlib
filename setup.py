@@ -12,7 +12,7 @@
 #
 ##############################################################################
 # This package is developed by the Zope Toolkit project, documented here:
-# http://docs.zope.org/zopetoolkit
+# https://zopetoolkit.readthedocs.io/
 # When developing and releasing this package, please follow the documented
 # Zope Toolkit policies as described by this documentation.
 ##############################################################################
@@ -32,7 +32,7 @@ def read(*rnames):
 setup(name='zope.formlib',
       version='6.0.dev0',
       author='Zope Foundation and Contributors',
-      author_email='zope-dev@zope.org',
+      author_email='zope-dev@zope.dev',
       description='Form generation and validation library for Zope',
       long_description=(
           read('README.rst')
@@ -102,7 +102,5 @@ setup(name='zope.formlib',
       ],
       include_package_data=True,
       zip_safe=False,
-      python_requires=','.join([
-          '>=3.7',
-      ]),
+      python_requires='>=3.7',
       )
