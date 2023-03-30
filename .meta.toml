@@ -2,7 +2,7 @@
 # https://github.com/zopefoundation/meta/tree/master/config/pure-python
 [meta]
 template = "pure-python"
-commit-id = "d03ad585"
+commit-id = "66322213"
 
 [python]
 with-pypy = true
@@ -34,6 +34,7 @@ testenv-setenv = [
 
 [manifest]
 additional-rules = [
+    "include *.yaml",
     "recursive-include src *.js",
     "recursive-include src *.pt",
     "recursive-include src *.rst",
