@@ -5,8 +5,7 @@
 6.1 (unreleased)
 ================
 
-- Nothing changed yet.
-
+- Extract widgets to own ZCML file to ease overriding them all.
 
 6.0 (2023-03-27)
 ================
