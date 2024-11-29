@@ -7,6 +7,10 @@
 
 - Extract widgets to own ZCML file to ease overriding them all.
 
+- Add support for Python 3.12, 3.13.
+
+- Drop support for Python 3.7.
+
 6.0 (2023-03-27)
 ================
 

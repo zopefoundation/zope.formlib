@@ -112,7 +112,7 @@ class Test(FunctionalWidgetTestCase):
         Form(foo, request)()
 
         # confirm b1 is not missing
-        self.assertTrue(foo.b1 != Bool.missing_value)
+        self.assertNotEqual(foo.b1, Bool.missing_value)
 
 
 def test_suite():

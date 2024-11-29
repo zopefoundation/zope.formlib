@@ -181,8 +181,8 @@ class Test(FunctionalWidgetTestCase):
         i2_index = html.find('form.i2')
         i3_index = html.find('form.i3')
         self.assertTrue(i1_index < html.find('missing') < i2_index)
-        self.assertTrue(html.find('missing', i2_index) == -1)
-        self.assertTrue(html.find('missing', i3_index) == -1)
+        self.assertEqual(html.find('missing', i2_index), -1)
+        self.assertEqual(html.find('missing', i3_index), -1)
 
     def test_invalid_allowed_value(self):
         foo = IntTest()
@@ -196,8 +196,8 @@ class Test(FunctionalWidgetTestCase):
 
         i3_index = html.find('form.i3')
         invalid_index = html.find('Invalid')
-        self.assertTrue(invalid_index != -1)
-        self.assertTrue(invalid_index > i3_index)
+        self.assertNotEqual(invalid_index, -1)
+        self.assertGreater(invalid_index, i3_index)
 
     def test_min_max_validation(self):
         foo = IntTest()
@@ -209,7 +209,7 @@ class Test(FunctionalWidgetTestCase):
 
         html = Form(foo, request)()
 
-        self.assertTrue('Value is too small' in html)
+        self.assertIn('Value is too small', html)
 
         # submit value for i1 that is too high
         request.form['form.i1'] = '11'
@@ -217,13 +217,13 @@ class Test(FunctionalWidgetTestCase):
 
         html = Form(foo, request)()
 
-        self.assertTrue('Value is too big' in html)
+        self.assertIn('Value is too big', html)
 
     def test_omitted_value(self):
         foo = IntTest()
         request = TestRequest()
 
-        self.assertTrue(foo.i1 is None)
+        self.assertIsNone(foo.i1)
         self.assertEqual(foo.i2, 1)
         self.assertEqual(foo.i3, 2)
 
@@ -235,8 +235,8 @@ class Test(FunctionalWidgetTestCase):
         Form(foo, request)()
 
         # check new value in object
-        self.assertTrue(foo.i1 is None)
-        self.assertTrue(foo.i2 is None)
+        self.assertIsNone(foo.i1)
+        self.assertIsNone(foo.i2)
         self.assertEqual(foo.i3, 2)
 
     def test_conversion(self):
@@ -248,7 +248,7 @@ class Test(FunctionalWidgetTestCase):
 
         html = Form(foo, request)()
 
-        self.assertTrue('Invalid integer data' in html)
+        self.assertIn('Invalid integer data', html)
 
 
 def test_suite():

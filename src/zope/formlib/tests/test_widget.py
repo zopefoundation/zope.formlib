@@ -222,4 +222,4 @@ class TestCustomWidgetFactory:
 
 
 def test_suite():
-    return TestSuite((DocTestSuite(setUp=setUp, tearDown=tearDown)))
+    return TestSuite(DocTestSuite(setUp=setUp, tearDown=tearDown))
