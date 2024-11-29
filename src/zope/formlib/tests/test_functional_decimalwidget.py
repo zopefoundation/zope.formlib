@@ -133,7 +133,7 @@ class Test(FunctionalWidgetTestCase):
         # confirm error msgs
         f3_index = html.find('form.f3')
         missing_index = html.find('Required input is missing')
-        self.assertTrue(missing_index > f3_index)
+        self.assertGreater(missing_index, f3_index)
 
     def test_invalid_allowed_value(self):
         foo = DecimalTest()
@@ -146,7 +146,7 @@ class Test(FunctionalWidgetTestCase):
 
         f3_index = html.find('form.f3')
         invalid_index = html.find('Invalid')
-        self.assertTrue(invalid_index > f3_index)
+        self.assertGreater(invalid_index, f3_index)
 
     def test_min_max_validation(self):
         foo = DecimalTest()
@@ -160,8 +160,8 @@ class Test(FunctionalWidgetTestCase):
         f1_index = html.find('form.f1')
         f2_index = html.find('form.f2')
         too_small_index = html.find('Value is too small')
-        self.assertTrue(too_small_index > f1_index)
-        self.assertTrue(html.find('Value is too small', f2_index) == -1)
+        self.assertGreater(too_small_index, f1_index)
+        self.assertEqual(html.find('Value is too small', f2_index), -1)
 
         # submit value for f1 that is too high
         request.form['form.f1'] = '1000.2'
@@ -171,15 +171,15 @@ class Test(FunctionalWidgetTestCase):
         f1_index = html.find('form.f1')
         f2_index = html.find('form.f2')
         too_high_index = html.find('Value is too big')
-        self.assertTrue(too_high_index > f1_index)
-        self.assertTrue(html.find('Value is too small', f2_index) == -1)
+        self.assertGreater(too_high_index, f1_index)
+        self.assertEqual(html.find('Value is too small', f2_index), -1)
 
     def test_omitted_value(self):
         foo = DecimalTest()
         request = TestRequest()
 
         # confirm default values
-        self.assertTrue(foo.f1 is None)
+        self.assertIsNone(foo.f1)
         self.assertEqual(foo.f2, decimal.Decimal("1.1"))
         self.assertEqual(foo.f3, decimal.Decimal("2.1"))
 
@@ -190,8 +190,8 @@ class Test(FunctionalWidgetTestCase):
         Form(foo, request)()
 
         # check new value in object
-        self.assertTrue(foo.f1 is None)
-        self.assertTrue(foo.f2 is None)
+        self.assertIsNone(foo.f1)
+        self.assertIsNone(foo.f2)
         self.assertEqual(foo.f3, decimal.Decimal("2.1"))
 
     def test_conversion(self):
@@ -206,8 +206,8 @@ class Test(FunctionalWidgetTestCase):
         f1_index = html.find('form.f1')
         f2_index = html.find('form.f2')
         invalid_index = html.find('Invalid decimal data')
-        self.assertTrue(invalid_index > f1_index)
-        self.assertTrue(html.find('Invalid decimal data', f2_index) == -1)
+        self.assertGreater(invalid_index, f1_index)
+        self.assertEqual(html.find('Invalid decimal data', f2_index), -1)
 
 
 def test_suite():

@@ -917,7 +917,7 @@ class FormBase(zope.publisher.browser.BrowserPage):
                     if isinstance(title, zope.i18n.Message):
                         title = zope.i18n.translate(
                             title, context=self.request)
-                    yield '{}: {}'.format(title, view.snippet())
+                    yield f'{title}: {view.snippet()}'
                 else:
                     yield view.snippet()
 

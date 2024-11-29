@@ -488,7 +488,7 @@ class FileWidget(TextWidget):
                                  cssClass=self.cssClass,
                                  size=self.displayWidth,
                                  extra=self.extra)
-        return "{} {}".format(hidden, elem)
+        return f"{hidden} {elem}"
 
     def _toFieldValue(self, input):
         if input is None or input == '':
@@ -629,7 +629,7 @@ class DateI18nWidget(TextWidget):
                 return formatter.parse(input)
             except (DateTimeParseError, ValueError) as v:
                 raise ConversionError(_("Invalid datetime data"),
-                                      "{} ({!r})".format(v, input))
+                                      f"{v} ({input!r})")
 
     def _toFormValue(self, value):
         value = super()._toFormValue(value)

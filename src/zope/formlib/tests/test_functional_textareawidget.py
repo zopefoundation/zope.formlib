@@ -156,14 +156,14 @@ class Test(FunctionalWidgetTestCase):
 
         html = Form(foo, request)()
 
-        self.assertTrue('Value is too short' in html)
+        self.assertIn('Value is too short', html)
 
         # submit value for s1 that is too long
         request.form['form.s1'] = '12345678901'
         request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
-        self.assertTrue('Value is too long' in html)
+        self.assertIn('Value is too long', html)
 
     def test_omitted_value(self):
         foo = TextTest()
@@ -172,7 +172,7 @@ class Test(FunctionalWidgetTestCase):
         # confirm default values
         self.assertEqual(foo.s1, '')
         self.assertEqual(foo.s2, 'foo')
-        self.assertTrue(foo.s3 is None)
+        self.assertIsNone(foo.s3)
 
         # submit change with only s2 present -- note that required
         # field s1 is omitted, which should not cause a validation error
@@ -184,7 +184,7 @@ class Test(FunctionalWidgetTestCase):
         # check new values in object
         self.assertEqual(foo.s1, '')
         self.assertEqual(foo.s2, 'bar')
-        self.assertTrue(foo.s3 is None)
+        self.assertIsNone(foo.s3)
 
     def test_conversion(self):
         foo = TextTest()

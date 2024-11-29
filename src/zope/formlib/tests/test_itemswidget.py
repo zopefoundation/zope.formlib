@@ -129,7 +129,7 @@ class ItemDisplayWidgetTest(ItemsWidgetBaseTest):
 
     def test_setVocabulary(self):
         widget = self._makeWidget()
-        self.assertTrue(widget.vocabulary is not None)
+        self.assertIsNotNone(widget.vocabulary)
         self.assertEqual(widget.vocabulary, self._field.vocabulary)
 
     def test__call__(self):
@@ -552,7 +552,7 @@ class ItemsMultiEditWidgetBaseTest(ItemsEditWidgetBaseTest):
         widget.setPrefix('field.')
         field_value = widget.getInputValue()
         self.assertEqual(field_value, frozenset(['two', 'three']))
-        self.assertTrue(isinstance(field_value, frozenset))
+        self.assertIsInstance(field_value, frozenset)
 
 
 class MultiSelectWidgetTest(ItemsMultiEditWidgetBaseTest):

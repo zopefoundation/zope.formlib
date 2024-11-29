@@ -87,8 +87,8 @@ class Test(FunctionalWidgetTestCase):
         Form(foo, request)()
 
         # confirm use of missing_value as new object value
-        self.assertTrue(IFoo['bar'].missing_value is None)
-        self.assertTrue(foo.bar is None)
+        self.assertIsNone(IFoo['bar'].missing_value)
+        self.assertIsNone(foo.bar)
 
         # restore bar required state
         IFoo['bar'].required = True
@@ -106,7 +106,7 @@ class Test(FunctionalWidgetTestCase):
         html = Form(foo, request)()
 
         # confirm error msgs
-        self.assertTrue('Required input is missing' in html)
+        self.assertIn('Required input is missing', html)
 
     def test_invalid_allowed_value(self):
         foo = Foo()
@@ -117,7 +117,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
-        self.assertTrue('Invalid value' in html)
+        self.assertIn('Invalid value', html)
 
 
 def test_suite():
