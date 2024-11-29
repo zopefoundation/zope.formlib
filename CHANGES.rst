@@ -2,7 +2,7 @@
  Changes
 =========
 
-6.1 (unreleased)
+6.1 (2024-11-29)
 ================
 
 - Extract widgets to own ZCML file to ease overriding them all.
