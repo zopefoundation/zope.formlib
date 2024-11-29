@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # zope.formlib documentation build configuration file, created by
 # sphinx-quickstart on Thu Jun  8 07:02:25 2017.
@@ -21,7 +20,10 @@
 # sys.path.insert(0, os.path.abspath('.'))
 import os
 import sys
+
 import pkg_resources
+
+
 # Use the python versions instead of the cython compiled versions
 # for better documentation extraction and ease of tweaking docs.
 os.environ['PURE_PYTHON'] = '1'
@@ -49,18 +51,15 @@ extensions = [
 templates_path = ['_templates']
 
 # The suffix(es) of source filenames.
-# You can specify multiple suffix as a list of string:
-#
-# source_suffix = ['.rst', '.md']
-source_suffix = '.rst'
+source_suffix = {'.rst': 'restructuredtext'}
 
 # The master toctree document.
 master_doc = 'index'
 
 # General information about the project.
-project = u'zope.formlib'
-copyright = u'2017, Zope Foundation contributors'
-author = u'Zope Foundation contributors'
+project = 'zope.formlib'
+copyright = '2017, Zope Foundation contributors'
+author = 'Zope Foundation contributors'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -76,14 +75,15 @@ release = rqmt.version
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = 'en'
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
-# The reST default role (used for this markup: `text`) to use for all documents.
+# The reST default role (used for this markup: `text`) to use for all
+# documents.
 default_role = 'obj'
 
 # If true, '()' will be appended to :func: etc. cross-reference text.
@@ -116,7 +116,7 @@ html_theme = 'sphinx_rtd_theme'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+# html_static_path = ['_static']
 
 
 # -- Options for HTMLHelp output ------------------------------------------
@@ -149,8 +149,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'zopeformlib.tex', u'zope.formlib Documentation',
-     u'Zopefoundation', 'manual'),
+    (master_doc, 'zopeformlib.tex', 'zope.formlib Documentation',
+     'Zopefoundation', 'manual'),
 ]
 
 
@@ -159,7 +159,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'zopeformlib', u'zope.formlib Documentation',
+    (master_doc, 'zopeformlib', 'zope.formlib Documentation',
      [author], 1)
 ]
 
@@ -170,22 +170,20 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'zopeformlib', u'zope.formlib Documentation',
+    (master_doc, 'zopeformlib', 'zope.formlib Documentation',
      author, 'zopeformlib', 'One line description of project.',
      'Miscellaneous'),
 ]
 
 
-
-
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
-    'https://docs.python.org/': None,
-    'https://zopebrowser.readthedocs.io/en/latest': None,
-    'https://zopecomponent.readthedocs.io/en/latest': None,
-    'https://zopeinterface.readthedocs.io/en/latest': None,
-    'https://zopepublisher.readthedocs.io/en/latest': None,
-    'https://zopeschema.readthedocs.io/en/latest': None,
+    'python': ('https://docs.python.org/', None),
+    'zopebrowser': ('https://zopebrowser.readthedocs.io/en/latest', None),
+    'zopecomponent': ('https://zopecomponent.readthedocs.io/en/latest', None),
+    'zopeinterface': ('https://zopeinterface.readthedocs.io/en/latest', None),
+    'zopepublisher': ('https://zopepublisher.readthedocs.io/en/latest', None),
+    'zopeschema': ('https://zopeschema.readthedocs.io/en/latest', None),
 }
 
 extlinks = {

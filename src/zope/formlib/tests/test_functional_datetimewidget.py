@@ -100,7 +100,7 @@ class Test(FunctionalWidgetTestCase):
                          foo.d1)
         self.assertEqual(self.getDateForField('d2', html),
                          foo.d2)
-        self.assertTrue(self.getDateForField('d3', html) is None)
+        self.assertIsNone(self.getDateForField('d3', html))
 
     def test_submit_editform(self):
         foo = DatetimeTest()
@@ -128,7 +128,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = ''
         Form(foo, request)()
 
-        self.assertTrue(foo.d2 is None)  # default missing_value for dates
+        self.assertIsNone(foo.d2)  # default missing_value for dates
         # 2000-1-1 is missing_value for d3
         self.assertEqual(foo.d3, datetime(2000, 1, 1, tzinfo=tzinfo(0)))
 
@@ -147,10 +147,12 @@ class Test(FunctionalWidgetTestCase):
 
         # only Required input is missing after d1
         d1_index = html.find('form.d1')
-        self.assertTrue(html.find('Required input is missing', d1_index) != -1)
+        self.assertNotEqual(
+            html.find(
+                'Required input is missing', d1_index), -1)
         # but not after d2 or further
         d2_index = html.find('form.d2')
-        self.assertTrue(html.find('Required input is missing', d2_index) == -1)
+        self.assertEqual(html.find('Required input is missing', d2_index), -1)
 
     def test_invalid_value(self):
         foo = DatetimeTest()
@@ -163,7 +165,7 @@ class Test(FunctionalWidgetTestCase):
 
         # Invalid value message for d3
         d3_index = html.find('form.d3')
-        self.assertTrue(html.find('Invalid', d3_index) != -1)
+        self.assertNotEqual(html.find('Invalid', d3_index), -1)
 
     def test_min_max_validation(self):
         foo = DatetimeTest()
@@ -174,9 +176,9 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
-        self.assertTrue(html.find('Value is too small') != -1)
+        self.assertNotEqual(html.find('Value is too small'), -1)
         d2_index = html.find('form.d2')
-        self.assertTrue(html.find('Value is too small', d2_index) == -1)
+        self.assertEqual(html.find('Value is too small', d2_index), -1)
 
         request = TestRequest()
         # submit value for d1 that is too high
@@ -184,9 +186,9 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
-        self.assertTrue(html.find('Value is too big') != -1)
+        self.assertNotEqual(html.find('Value is too big'), -1)
         d2_index = html.find('form.d2')
-        self.assertTrue(html.find('Value is too big', d2_index) == -1)
+        self.assertEqual(html.find('Value is too big', d2_index), -1)
 
     def test_omitted_value(self):
         foo = DatetimeTest()
@@ -195,7 +197,7 @@ class Test(FunctionalWidgetTestCase):
         # remember default values
         d1 = foo.d1
         d2 = foo.d2
-        self.assertTrue(d2 is not None)
+        self.assertIsNotNone(d2)
         d3 = foo.d3
 
         # submit change with only d2 present -- note that required
@@ -207,7 +209,7 @@ class Test(FunctionalWidgetTestCase):
 
         # check new value in object
         self.assertEqual(foo.d1, d1)
-        self.assertTrue(foo.d2 is None)
+        self.assertIsNone(foo.d2)
         self.assertEqual(foo.d3, d3)
 
 

@@ -612,20 +612,20 @@ def renderTag(tag, **kw):
                     % key,
                     DeprecationWarning, stacklevel=2)
                 value = key
-            attr_list.append('{}={}'.format(key, quoteattr(toStr(value))))
+            attr_list.append(f'{key}={quoteattr(toStr(value))}')
 
     if attr_list:
         attr_str = " ".join(attr_list)
-        return "<{} {}{}".format(tag, attr_str, extra)
+        return f"<{tag} {attr_str}{extra}"
     else:
-        return "<{}{}".format(tag, extra)
+        return f"<{tag}{extra}"
 
 
 def renderElement(tag, **kw):
     contents = kw.pop('contents', None)
     if contents is not None:
         # Do not quote contents, since it often contains generated HTML.
-        return "{}>{}</{}>".format(renderTag(tag, **kw), contents, tag)
+        return f"{renderTag(tag, **kw)}>{contents}</{tag}>"
     else:
         return renderTag(tag, **kw) + " />"
 

@@ -87,7 +87,7 @@ class Test(FunctionalWidgetTestCase):
         foo = FileTest()
         request = TestRequest()
 
-        self.assertTrue(foo.f1 is None)
+        self.assertIsNone(foo.f1)
         self.assertEqual(foo.f2, 'foo')
 
         # submit a sample text file
@@ -132,8 +132,8 @@ class Test(FunctionalWidgetTestCase):
         f1_index = html.find('form.f1')
         f2_index = html.find('form.f2')
         missing_index = html.find('Required input is missing')
-        self.assertTrue(missing_index > f1_index)
-        self.assertTrue(html.find('Required input is missing', f2_index) == -1)
+        self.assertGreater(missing_index, f1_index)
+        self.assertEqual(html.find('Required input is missing', f2_index), -1)
 
     def test_empty_file(self):
         foo = FileTest()
@@ -150,7 +150,7 @@ class Test(FunctionalWidgetTestCase):
         Form(foo, request)()
 
         # new value for f1 should be field.missing_value (i.e, None)
-        self.assertTrue(foo.f1 is None)
+        self.assertIsNone(foo.f1)
 
 
 def test_suite():

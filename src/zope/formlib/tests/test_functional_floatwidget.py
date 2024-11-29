@@ -132,8 +132,8 @@ class Test(FunctionalWidgetTestCase):
         # confirm error msgs
         f3_index = html.find('form.f3')
         missing_index = html.find('missing')
-        self.assertTrue(missing_index > f3_index)
-        self.assertTrue(missing_index != -1)
+        self.assertGreater(missing_index, f3_index)
+        self.assertNotEqual(missing_index, -1)
 
     def test_invalid_allowed_value(self):
         foo = FloatTest()
@@ -144,7 +144,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
-        self.assertTrue('Invalid' in html)
+        self.assertIn('Invalid', html)
 
     def test_min_max_validation(self):
         foo = FloatTest()
@@ -155,7 +155,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
-        self.assertTrue('Value is too small' in html)
+        self.assertIn('Value is too small', html)
 
         request = TestRequest()
 
@@ -163,14 +163,14 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
-        self.assertTrue('Value is too big' in html)
+        self.assertIn('Value is too big', html)
 
     def test_omitted_value(self):
         foo = FloatTest()
         request = TestRequest()
 
         # confirm default values
-        self.assertTrue(foo.f1 is None)
+        self.assertIsNone(foo.f1)
         self.assertEqual(foo.f2, 1.1)
         self.assertEqual(foo.f3, 2.1)
 
@@ -181,8 +181,8 @@ class Test(FunctionalWidgetTestCase):
         Form(foo, request)()
 
         # check new value in object
-        self.assertTrue(foo.f1 is None)
-        self.assertTrue(foo.f2 is None)
+        self.assertIsNone(foo.f1)
+        self.assertIsNone(foo.f2)
         self.assertEqual(foo.f3, 2.1)
 
     def test_conversion(self):
@@ -194,7 +194,7 @@ class Test(FunctionalWidgetTestCase):
         request.form['form.actions.apply'] = ''
         html = Form(foo, request)()
 
-        self.assertTrue('Invalid floating point data' in html)
+        self.assertIn('Invalid floating point data', html)
 
 
 def test_suite():

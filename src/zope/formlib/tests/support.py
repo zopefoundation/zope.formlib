@@ -23,8 +23,12 @@ class VerifyResults:
         start = 0
         for check in check_list:
             pos = result.find(check, start)
-            self.assertTrue(pos >= 0, "{!r} not found in {!r}".format(
-                check, result[start:]))
+            self.assertGreaterEqual(
+                pos,
+                0,
+                "{!r} not found in {!r}".format(
+                    check, result[start:])
+            )
             if inorder:
                 start = pos + len(check)
 

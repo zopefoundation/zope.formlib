@@ -475,7 +475,7 @@ class RadioWidget(SelectWidget):
         kw = {}
         if checked:
             kw['checked'] = 'checked'
-        id = '{}.{}'.format(name, index)
+        id = f'{name}.{index}'
         elem = renderElement('input',
                              value=value,
                              name=name,
@@ -484,7 +484,7 @@ class RadioWidget(SelectWidget):
                              type='radio',
                              **kw)
         return renderElement('label',
-                             contents='{}&nbsp;{}'.format(elem, text),
+                             contents=f'{elem}&nbsp;{text}',
                              **{'for': id})
 
     def renderValue(self, value):
@@ -622,7 +622,7 @@ class MultiCheckBoxWidget(ItemsMultiEditWidgetBase):
         kw = {}
         if checked:
             kw['checked'] = 'checked'
-        id = '{}.{}'.format(name, index)
+        id = f'{name}.{index}'
         elem = renderElement('input',
                              type="checkbox",
                              cssClass=cssClass,

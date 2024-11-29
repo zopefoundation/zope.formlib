@@ -67,7 +67,7 @@ def TestTemplate(self):
 
     if self.errors:
         for error in self.errors:
-            result.append("{}: {}".format(error.__class__.__name__, error))
+            result.append(f"{error.__class__.__name__}: {error}")
 
     for w in self.widgets:
         result.append(w())

@@ -123,7 +123,7 @@ class ErrorContainer(Exception):
 
     def __str__(self):
         return "\n".join(
-            ["{}: {}".format(error.__class__.__name__, error)
+            [f"{error.__class__.__name__}: {error}"
              for error in self.args]
         )
 

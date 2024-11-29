@@ -292,7 +292,7 @@ class SequenceDisplayWidget(DisplayWidget):
             widget.setRenderedValue(item)
             s = widget()
             if self.itemTag:
-                s = "<{}>{}</{}>".format(self.itemTag, s, self.itemTag)
+                s = f"<{self.itemTag}>{s}</{self.itemTag}>"
             parts.append(s)
         contents = "\n".join(parts)
         if self.tag:
