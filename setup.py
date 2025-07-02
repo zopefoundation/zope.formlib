@@ -20,7 +20,6 @@
 """
 import os
 
-from setuptools import find_packages
 from setuptools import setup
 
 
@@ -61,15 +60,12 @@ setup(name='zope.formlib',
           'Framework :: Zope :: 3',
       ],
       url='https://github.com/zopefoundation/zope.formlib',
-      packages=find_packages('src'),
-      package_dir={'': 'src'},
-      namespace_packages=['zope'],
       extras_require={
           'test': [
               'zope.configuration',
               'zope.schema >= 6.1',
               'zope.testing',
-              'zope.testrunner',
+              'zope.testrunner >= 6.4',
           ],
           'docs': [
               'Sphinx',
