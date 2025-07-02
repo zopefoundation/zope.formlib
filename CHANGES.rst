@@ -5,7 +5,7 @@
 6.2 (unreleased)
 ================
 
-- Nothing changed yet.
+- Drop support for Python 3.8.
 
 
 6.1 (2024-11-29)
