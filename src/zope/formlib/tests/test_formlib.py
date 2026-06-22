@@ -11,6 +11,7 @@
 #
 ##############################################################################
 
+import re
 import unittest
 
 import pytz
@@ -767,6 +768,16 @@ def test_suite():
             '../form.rst',
             setUp=formSetUp, tearDown=tearDown,
             optionflags=doctest.NORMALIZE_WHITESPACE | doctest.ELLIPSIS,
+            # Python 3.15 changed pprint to put each item of a wrapped
+            # collection on its own line, indent it, and append a trailing
+            # comma after the last item.  Normalize the whitespace around
+            # brackets and drop the trailing comma so the expected output
+            # matches on all supported Python versions.
+            checker=zope.testing.renormalizing.RENormalizing([
+                (re.compile(r',(\s*[}\])])'), r'\1'),
+                (re.compile(r'([{[(])\s+'), r'\1'),
+                (re.compile(r'\s+([}\])])'), r'\1'),
+            ]),
         ),
         doctest.DocTestSuite(setUp=formSetUp, tearDown=tearDown),
         doctest.DocTestSuite('zope.formlib.errors'),

@@ -9,6 +9,8 @@
 
 - Add support for Python 3.14.
 
+- Fix tests to accommodate the changed ``pprint`` output on Python 3.15.
+
 - Drop support for Python 3.9.
 
 
