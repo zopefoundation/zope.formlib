@@ -39,7 +39,6 @@ maintainers = [
     {name = "Plone Foundation and contributors",email = "zope-dev@zope.dev"},
 ]
 dependencies = [
-    "setuptools",
     "pytz",
     "zope.browser>=1.1",
     "zope.browserpage>=3.11.0",
