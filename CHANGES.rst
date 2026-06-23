@@ -2,16 +2,22 @@
  Changes
 =========
 
-7.1 (unreleased)
+7.2 (unreleased)
 ================
 
-- Move package metadata from setup.py to pyproject.toml.
+- Nothing changed yet.
+
+
+7.1 (2026-06-23)
+================
+
+- Drop support for Python 3.9.
 
 - Add support for Python 3.14.
 
 - Fix tests to accommodate the changed ``pprint`` output on Python 3.15.
 
-- Drop support for Python 3.9.
+- Move package metadata from setup.py to pyproject.toml.
 
 
 7.0 (2025-09-12)
