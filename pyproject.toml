@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "zope.formlib"
-version = "7.1.dev0"
+version = "7.1"
 description = "Form generation and validation library for Zope"
 license = "ZPL-2.1"
 classifiers = [
