@@ -5,7 +5,9 @@
 7.2 (unreleased)
 ================
 
-- Nothing changed yet.
+- Fix ``IFormAPI.checkInvariants`` to declare the ``context`` parameter,
+  matching the ``zope.formlib.form.checkInvariants`` implementation
+  (`#27 <https://github.com/zopefoundation/zope.formlib/issues/27>`_).
 
 
 7.1 (2026-06-23)

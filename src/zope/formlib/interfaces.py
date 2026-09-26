@@ -567,13 +567,17 @@ class IFormAPI(Interface):
 
         """
 
-    def checkInvariants(form_fields, form_data):
+    def checkInvariants(form_fields, form_data, context):
         """Check schema invariants for input data
 
         For each schema that was used to define the form fields and
         that had invariants relevent to the fields, the invariants are
         checked. Invariants that refer to fields not included in the
         form fields are ignored.
+
+        The context is used to look up values for fields that are part
+        of a schema's invariants but were not submitted as part of the
+        form data.
 
         A list of errors is returned.
         """

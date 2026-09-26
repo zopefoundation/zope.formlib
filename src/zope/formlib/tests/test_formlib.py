@@ -750,6 +750,23 @@ read the object from context:
 """
 
 
+def IFormAPI_checkInvariants_matches_form_checkInvariants_signature():
+    """
+`IFormAPI.checkInvariants` and `zope.formlib.form.checkInvariants` need to
+declare the same parameters, otherwise `verifyObject` reports the module as
+not implementing the interface it claims to provide, see
+https://github.com/zopefoundation/zope.formlib/issues/27 :
+
+    >>> import inspect
+    >>> tuple(inspect.signature(zope.formlib.form.checkInvariants).parameters)
+    ('form_fields', 'form_data', 'context')
+
+    >>> info = zope.formlib.interfaces.IFormAPI['checkInvariants']
+    >>> info.getSignatureInfo()['positional']
+    ('form_fields', 'form_data', 'context')
+"""
+
+
 def test_suite():
     import doctest
     return unittest.TestSuite((
