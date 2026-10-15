@@ -17,7 +17,7 @@
   <adapter factory=".tests.test_formlib.Descriptive" />
   <class class=".tests.test_formlib.Descriptive">
     <require
-      interface=".tests.test_formlib.IDescriptive" 
+      interface=".tests.test_formlib.IDescriptive"
       permission="zope.View"
       />
   </class>
