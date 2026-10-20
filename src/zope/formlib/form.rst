@@ -2005,8 +2005,8 @@ Issues to research:
 
 * Is the name "__csrftoken__ acceptable?
 
-* I do not see a scheme for having a token per form without keep server-
-  side, which I try to avoid.
+* I do not see a scheme for having a token per form without keep
+  server-side, which I try to avoid.
 
 * One cannot *submit* a form as the very first request to that form, as the
   token will not have been set just yet. I think this acceptable.
